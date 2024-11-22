@@ -261,7 +261,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                             <MoreSVG className="hover:opacity-70 cursor-pointer transition duration-300" />
                         </button>
                     </div>
-                    <div className="w-full flex flex-col h-[71.7%] gap-4 overflow-auto scrollbar-hidden">
+                    <div className="w-full flex flex-col h-[68%] gap-4 overflow-auto scrollbar-hidden">
                         {selectedPost !== null && selectedPost.caption &&
                             <div>
                                 <div className="w-full px-6 mt-4 text-[15px]">
