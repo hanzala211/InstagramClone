@@ -148,7 +148,7 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
                                 image={selectedImage[currentIndex]}
                                 crop={crop}
                                 zoom={zoom}
-                                aspect={1.2}
+                                aspect={1}
                                 onCropChange={setCrop}
                                 onZoomChange={setZoom}
                                 onCropComplete={onCropComplete}
