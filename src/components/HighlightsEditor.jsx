@@ -16,7 +16,7 @@ export function HighlightsEditor({ highLightsModal, setHighLightsModal }) {
     const [sendLoading, setSendLoading] = useState(false)
     const navigate = useNavigate()
     useEffect(() => {
-        setSelectedIDs((prev) => [...prev, ...highLightStories])
+        setSelectedIDs((prev) => [...prev])
     }, [])
     function handleClose() {
         setSelectStatus(false)
