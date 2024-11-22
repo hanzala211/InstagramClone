@@ -8,7 +8,14 @@ export function UserProvider({ children }) {
     const [message, setMessage] = useState("");
     const [note, setNote] = useState([]);
     const [stories, setStories] = useState([]);
-    return <UserContext.Provider value={{ userData, setUserData, mainLoading, setMainLoading, userPosts, setUserPosts, message, setMessage, note, setNote, stories, setStories }}>{children}</UserContext.Provider>
+    const [archives, setArchives] = useState([])
+    const [currentStory, setCurrentStory] = useState(0);
+    const [loadingArchives, setLoadingArchives] = useState(false);
+    const [highlights, setHighlights] = useState([]);
+    const [highLightStories, setHighLightStories] = useState([])
+    const [currentHighLight, setCurrentHighLight] = useState(0)
+    const [userSaves, setUserSaves] = useState([]);
+    return <UserContext.Provider value={{ userData, setUserData, mainLoading, setMainLoading, userPosts, setUserPosts, message, setMessage, note, setNote, stories, setStories, archives, setArchives, loadingArchives, setLoadingArchives, currentStory, setCurrentStory, highlights, setHighlights, highLightStories, setHighLightStories, currentHighLight, setCurrentHighLight, userSaves, setUserSaves }}>{children}</UserContext.Provider>
 }
 export function useUser() {
     const context = useContext(UserContext);
@@ -28,7 +35,11 @@ const SearchContext = createContext();
 export function SearchProvider({ children }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [searchData, setSearchData] = useState([]);
-    return <SearchContext.Provider value={{ searchQuery, setSearchQuery, searchData, setSearchData }}>{children}</SearchContext.Provider>
+    const [selectedProfile, setSelectedProfile] = useState([]);
+    const [searchUserPosts, setSearchUserPosts] = useState([])
+    const [searchUserStatus, setSearchUserStatus] = useState([])
+    const [searchUserHighLights, setSearchUserHighLights] = useState([]);
+    return <SearchContext.Provider value={{ searchQuery, setSearchQuery, searchData, setSearchData, selectedProfile, setSelectedProfile, searchUserPosts, setSearchUserPosts, searchUserStatus, setSearchUserStatus, searchUserHighLights, setSearchUserHighLights }}>{children}</SearchContext.Provider>
 }
 export function useSearch() {
     const context = useContext(SearchContext);

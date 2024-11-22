@@ -3,7 +3,7 @@ import { usePost, useUser } from "../context/UserContext";
 import { EditPost } from "./EditPost";
 import { IoCloseSharp } from "react-icons/io5";
 
-export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPostOpen }) {
+export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPostOpen, isMyPost }) {
     const { userData, setMessage } = useUser();
     const { selectedPost, setSelectedPost } = usePost();
     const [isEditingOpen, setIsEditingOpen] = useState(false)
@@ -76,12 +76,15 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
                 }`}
             onClick={() => handleClose()}
         ></div>
-        <div className={`bg-[#262626] w-96 rounded-2xl h-[14.5rem] fixed z-[1000000] opacity-0 transition duration-300 inset-0 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 ${!isPostSettingOpen ? "pointer-events-none" : "opacity-100"}`}>
-            <button className="text-red-600 w-full p-3 text-[14px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]" onClick={() => deletePost()}>Delete</button>
-            <button className="w-full p-3 border-b-[1px] text-[14px] active:opacity-70 font-semibold border-[#363636]" onClick={() => {
-                setIsEditingOpen(true)
-                setIsPostSettingOpen(false)
-            }}>Edit</button>
+        <div className={`bg-[#262626] w-96 rounded-2xl fixed z-[1000000] opacity-0 transition duration-300 inset-0 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 ${!isPostSettingOpen ? "pointer-events-none" : "opacity-100"} ${isMyPost ? "h-[14.5rem]" : "h-[8.5rem]"}`}>
+            {isMyPost && <>
+                <button className="text-red-600 w-full p-3 text-[14px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]" onClick={() => deletePost()}>Delete</button>
+                <button className="w-full p-3 border-b-[1px] text-[14px] active:opacity-70 font-semibold border-[#363636]" onClick={() => {
+                    setIsEditingOpen(true)
+                    setIsPostSettingOpen(false)
+                }}>Edit</button>
+            </>
+            }
             <button className="w-full p-3 border-b-[1px] text-[14px] active:opacity-70 font-semibold border-[#363636]">Copy Link</button>
             <button className="w-full p-3 border-b-[1px] text-[14px] active:opacity-70 font-semibold border-[#363636]">About this Account</button>
             <button className="w-full p-3 text-[14px] font-semibold active:opacity-70" onClick={() => setIsPostSettingOpen(false)}>Cancel</button>

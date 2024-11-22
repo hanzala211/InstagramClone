@@ -131,7 +131,7 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
         }
     }
     return <>
-        <div className={`overlay opacity-0 transition-all duration-500 ${!isEditOpen ? "pointer-events-none" : "backdrop-blur-sm opacity-100"}`} onClick={() => {
+        <div className={`overlay opacity-0 transition-all z-[10] duration-500 ${!isEditOpen ? "pointer-events-none" : "backdrop-blur-sm opacity-100"}`} onClick={() => {
             handleClose()
         }}></div>
         <IoCloseSharp className={`absolute text-[40px] top-8 z-[10000] right-[2rem] cursor-pointer opacity-0 transition duration-200 ${isEditOpen ? "opacity-100" : ""}`} onClick={() => handleClose()} />

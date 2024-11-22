@@ -9,8 +9,9 @@ export function Layout({ token }) {
     const { mainLoading, setMainLoading, setUserData, message, setMessage, userData } = useUser();
     useEffect(() => {
         async function fetchUser() {
-            setMainLoading(true)
             try {
+                setMainLoading(true)
+                setUserData([])
                 const response = await fetch("https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/auth/me", {
                     method: "GET",
                     headers: {
@@ -19,6 +20,7 @@ export function Layout({ token }) {
                     redirect: "follow"
                 })
                 const result = await response.json();
+                console.log(result)
                 setUserData({
                     status: result.status,
                     data: {
@@ -36,6 +38,11 @@ export function Layout({ token }) {
         }
         if (token !== null) {
             fetchUser();
+        } else {
+            setMainLoading(true);
+            setTimeout(() => {
+                setMainLoading(false)
+            }, 1000)
         }
     }, [token])
     useEffect(() => {
@@ -49,7 +56,7 @@ export function Layout({ token }) {
             <SideBarProvider>
                 <SideBar />
             </SideBarProvider>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-10 w-full">
                 <Outlet />
                 <Footer />
             </div>

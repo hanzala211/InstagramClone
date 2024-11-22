@@ -57,7 +57,7 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
             onClick={() => handleClose()}
         />
         <div
-            className={`overlay opacity-0 transition-all duration-500 ${!creatingStory ? "pointer-events-none" : "backdrop-blur-sm opacity-100"
+            className={`overlay opacity-0 z-[50] transition-all duration-500 ${!creatingStory ? "pointer-events-none" : "backdrop-blur-sm opacity-100"
                 }`}
             onClick={() => handleClose()}
         ></div>

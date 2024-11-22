@@ -11,7 +11,7 @@ const NoteTooltip = ({ isProfile, noteValue, setNoteValue, note, className, note
                 {!noteLoading ? (
                     isProfile ? (
                         <span
-                            className={`text-[#A8A8A8] text-[12px] ${note && note.length !== 0 ? "text-white text-[14px]" : ""
+                            className={`text-[#A8A8A8] text-[12px] ${note && note.length !== 0 ? "text-white text-[15px] px-2" : ""
                                 } ${className} text-center`}
                             style={{
                                 wordWrap: "break-word",

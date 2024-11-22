@@ -1,22 +1,36 @@
 import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5"
-import { CommentSVG, MoreCommentsSVG, MoreSVG, NotificationIcon, SaveSVG, ShareIcon } from "../assets/Constants";
+import { CommentSVG, MoreCommentsSVG, MoreSVG, SaveSVG, ShareIcon, UnSave } from "../assets/Constants";
 import { PostSettings } from "./PostSettings";
 import { usePost, useUser } from "../context/UserContext";
 import { Link } from "react-router-dom";
 import { Skeleton } from "./Skeleton";
+import { LikedComponent } from "./LikeComponent";
 
-export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, comments, setComments, page, setPage, totalPages, setTotalPages }) {
+export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, comments, setComments }) {
     const { selectedPost, setSelectedPost } = usePost()
     const [commentValue, setCommentValue] = useState("");
     const [isAnimating, setIsAnimating] = useState(false);
     const [isPostSettingOpen, setIsPostSettingOpen] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
-    const { userData } = useUser();
+    const { userData, setUserData } = useUser();
     const commentRef = useRef(null);
     const [commentsLoading, setCommentsLoading] = useState(false);
-
+    const [isSaved, setIsSaved] = useState(false);
+    const [isMyPost, setIsMyPost] = useState(false);
+    useEffect(() => {
+        if (selectedPost?.postBy?._id !== undefined) {
+            setIsMyPost(selectedPost?.postBy._id === userData.data.user._id)
+        } else {
+            setIsMyPost(selectedPost?.postBy === userData.data.user._id)
+        }
+    }, [selectedPost?._id])
+    useEffect(() => {
+        if (selectedPost?._id) {
+            setIsSaved(userData.data.user.savedPosts.includes(selectedPost?._id))
+        }
+    }, [selectedPost?._id])
     useEffect(() => {
         const body = document.querySelector("body");
         body.style.overflowY = isPostOpen ? "hidden" : "auto";
@@ -30,32 +44,42 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         }
     }, [commentValue])
     useEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
         async function fetchComments() {
             try {
                 setCommentsLoading(true);
+                setComments([]);
                 const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/comments/${selectedPost._id}?page=${page}&limit=10`, {
                     method: "GET",
                     headers: {
                         "Authorization": `${userData.data.token}`,
                     },
-                    redirect: "follow"
+                    redirect: "follow",
+                    signal
                 })
                 const result = await response.json()
-                setTotalPages(result.data.totalPages)
-                setComments((prev) => [
-                    ...prev,
-                    ...result.data.comments
-                ])
+                if (!signal.aborted) {
+                    setTotalPages(result.data.totalPages);
+                    setComments((prev) => [...prev, ...result.data.comments]);
+                }
             } catch (error) {
-                console.error(error);
+                if (error.name !== "AbortError") {
+                    console.error("Fetch failed:", error);
+                }
             } finally {
-                setCommentsLoading(false);
+                if (!signal.aborted) {
+                    setCommentsLoading(false);
+                }
             }
         }
         if (selectedPost !== null) {
             fetchComments();
         }
-    }, [selectedPost, page])
+        return () => {
+            controller.abort();
+        };
+    }, [page, selectedPost?._id, currentPost, userData.data.token])
     function handleClose() {
         setIsPostOpen(false)
         setTimeout(() => {
@@ -94,22 +118,22 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
 
         if (diffInMilliseconds >= WEEK) {
             const weeks = Math.floor(diffInMilliseconds / WEEK);
-            return `${weeks} week${weeks > 1 ? "s" : ""}`;
+            return `${weeks} w`;
         } else if (diffInMilliseconds >= DAY) {
             const days = Math.floor(diffInMilliseconds / DAY);
             const hours = Math.floor((diffInMilliseconds % DAY) / HOUR);
             return hours > 0
-                ? `${days} day${days > 1 ? "s" : ""}, ${hours} hour${hours > 1 ? "s" : ""}`
-                : `${days} day${days > 1 ? "s" : ""}`;
+                ? `${days} d ${hours} h`
+                : `${days} d`;
         } else if (diffInMilliseconds >= HOUR) {
             const hours = Math.floor(diffInMilliseconds / HOUR);
             const minutes = Math.floor((diffInMilliseconds % HOUR) / MINUTE);
             return minutes > 0
-                ? `${hours} hour${hours > 1 ? "s" : ""} ${minutes} minute${minutes > 1 ? "s" : ""}`
+                ? `${hours} h ${minutes} m`
                 : `${hours} hour${hours > 1 ? "s" : ""}`;
         } else {
             const minutes = Math.floor(diffInMilliseconds / MINUTE);
-            return `${minutes} minute${minutes > 1 ? "s" : ""}`;
+            return `${minutes} m`;
         }
     }
     async function postComment() {
@@ -131,6 +155,50 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
             console.error(error)
         } finally {
             setIsDisabled(commentValue.length === 0);
+        }
+    }
+    async function savePost() {
+        try {
+            setIsSaved((prev) => !prev)
+            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/save/${selectedPost._id}`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `${userData.data.token}`
+                },
+                redirect: "follow"
+            })
+            const result = await response.json();
+            setUserData((prev) => ({
+                ...prev, data: {
+                    ...prev.data, user: {
+                        ...prev.data.user, savedPosts: prev.data.user.savedPosts.includes(result.savedPosts[0]) ? [...prev.data.user.savedPosts] : [...prev.data.user.savedPosts, ...result.savedPosts]
+                    }
+                }
+            }))
+        } catch (error) {
+            console.error(error)
+        }
+    }
+    async function unSavePost() {
+        try {
+            setIsSaved((prev) => !prev)
+            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/unsave/${selectedPost._id}`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `${userData.data.token}`
+                },
+                redirect: "follow"
+            })
+            const result = await response.json();
+            setUserData((prev) => ({
+                ...prev, data: {
+                    ...prev.data, user: {
+                        ...prev.data.user, savedPosts: prev.data.user.savedPosts.includes(result.savedPosts[0]) ? prev.data.user.savedPosts.filter((item) => item !== result.savedPosts[0]) : [...prev.data.user.savedPosts, ...result.savedPosts]
+                    }
+                }
+            }))
+        } catch (error) {
+            console.error(error)
         }
     }
     return <>
@@ -161,8 +229,8 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                 <div className="w-[40%] h-full bg-[#000000] relative">
                     <div className="flex justify-between items-center p-5 border-b-[1px] border-[#262626]">
                         <div className="flex flex-row gap-4 items-center ">
-                            <img src={postData.data.user.profilePic} alt="Profile Picture" className="w-12 rounded-full" />
-                            <p className="text-[15px] font-semibold">{postData.data.user.userName}</p>
+                            <img src={postData?.profilePic} alt="Profile Picture" className="w-12 rounded-full" />
+                            <p className="text-[15px] font-semibold">{postData?.userName}</p>
                         </div>
                         <button onClick={() => {
                             setIsPostSettingOpen(true)
@@ -175,17 +243,17 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                             <div>
                                 <div className="w-full px-6 mt-4 text-[15px]">
                                     <div className="flex flex-row gap-4 items-start">
-                                        <img src={postData.data.user.profilePic} alt="Profile Picture" className="w-9 rounded-full" />
-                                        <p><Link className="text-[14px] font-semibold hover:opacity-50 mr-3">{postData.data.user.userName}</Link>{selectedPost !== null && selectedPost.caption}</p>
+                                        <img src={postData?.profilePic} alt="Profile Picture" className="w-9 rounded-full" />
+                                        <p><Link className="text-[14px] font-semibold hover:opacity-50 mr-3">{postData?.userName}</Link>{selectedPost !== null && selectedPost.caption}</p>
                                     </div>
                                 </div>
                             </div>
                         }
-                        <div className="flex flex-col gap-4 ml-2">
-                            {commentsLoading ? <div className="">{Array.from({ length: 20 }, (_, i) => <Skeleton key={i} />)}</div> : (
+                        <div className="flex flex-col gap-4 ml-5">
+                            {commentsLoading ? <div className="flex flex-col gap-4">{Array.from({ length: 20 }, (_, i) => <Skeleton key={i} />)}</div> : (
                                 comments?.map((item, i) => {
                                     return (
-                                        <div key={i} className="flex gap-4 ml-4">
+                                        <div key={i} className="flex gap-4 ml-2">
                                             <img
                                                 src={item.user.profilePic}
                                                 alt={item.user.userName}
@@ -214,19 +282,22 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                     <div className="absolute bottom-0 z-[100] border-t-[1px] h-[10rem] border-[#262626] w-full">
                         <div className="flex justify-between pt-5 px-5 ">
                             <div className="flex flex-row gap-5">
-                                <NotificationIcon className="hover:stroke-gray-600 hover:opacity-80 transition-all duration-150 cursor-pointer" />
+                                <LikedComponent postData={postData} selectedPost={selectedPost} setSelectedPost={setSelectedPost} />
                                 <button onClick={() => commentRef.current.focus()}>
                                     <CommentSVG className="hover:stroke-gray-600 hover:opacity-80 transition-all duration-150 cursor-pointer" />
                                 </button>
-                                <ShareIcon className="hover:stroke-gray-600 hover:opacity-80 transition-all duration-150 cursor-pointer" />
                             </div>
-                            <button>
-                                <SaveSVG className="hover:stroke-gray-30000 hover:opacity-80 transition-all duration-150 cursor-pointer stroke-[rgb(245,245,245)]" />
-                            </button>
+                            {!isSaved ?
+                                <button onClick={() => savePost()}>
+                                    <SaveSVG className="hover:stroke-gray-300 hover:opacity-80 transition-all duration-150 cursor-pointer stroke-[rgb(245,245,245)]" />
+                                </button>
+                                :
+                                <button onClick={() => unSavePost()}><UnSave className="hover:stroke-gray-300 hover:opacity-80 transition-all duration-150 cursor-pointer stroke-[rgb(245,245,245)]" /></button>
+                            }
                         </div>
                         <div>
                             {selectedPost !== null && <div className="mt-2 px-5">
-                                <button className="text-[15px] font-semibold">{selectedPost.likes.length} likes</button>
+                                <button className="text-[15px] font-semibold">{selectedPost.likeCount} likes</button>
                                 <p className="text-[12px] text-[#A8A8A8]">{formatDate(selectedPost.createdAt)} ago</p>
                             </div>}
                         </div>
@@ -238,6 +309,6 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                 </div>
             </div>
         </div>
-        <PostSettings isPostSettingOpen={isPostSettingOpen} setIsPostSettingOpen={setIsPostSettingOpen} setIsPostOpen={setIsPostOpen} />
+        <PostSettings isPostSettingOpen={isPostSettingOpen} isMyPost={isMyPost} setIsPostSettingOpen={setIsPostSettingOpen} setIsPostOpen={setIsPostOpen} />
     </>
 }

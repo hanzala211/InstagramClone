@@ -109,7 +109,7 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
                 onClick={() => handleClose()}
             />
             <div
-                className={`overlay opacity-0 transition-all duration-500 ${!isCreating ? "pointer-events-none" : "backdrop-blur-sm opacity-100"
+                className={`overlay opacity-0 transition-all z-[50] duration-500 ${!isCreating ? "pointer-events-none" : "backdrop-blur-sm opacity-100"
                     }`}
                 onClick={() => handleClose()}
             ></div>

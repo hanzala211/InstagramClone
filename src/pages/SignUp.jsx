@@ -1,17 +1,17 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { Footer } from "../components/Footer";
 import { Loader } from "../components/Loader";
 
 export function SignUp() {
-    const { setMainLoading, setUserData, userData } = useUser();
+    const { setUserData, userData } = useUser();
     const [emailAddress, setEmailAddress] = useState("");
     const [signupPassword, setSignupPassword] = useState("");
     const [fullName, setFullName] = useState("");
     const [userName, setUserName] = useState("");
-    const navigate = useNavigate();
     const [loading, setLoading] = useState(false)
+    const [succesMessage, setSuccessMessage] = useState("");
     async function fetchData() {
         const data = JSON.stringify({
             "fullName": fullName,
@@ -21,6 +21,7 @@ export function SignUp() {
         });
         try {
             setLoading(true);
+            setSuccessMessage("");
             const response = await fetch("https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/auth/signup", {
                 method: "POST",
                 headers: {
@@ -30,15 +31,12 @@ export function SignUp() {
                 redirect: "follow"
             })
             const result = await response.json();
-            console.log(result)
-            setUserData(result);
             if (result.status === "success") {
-                setMainLoading(true);
                 setEmailAddress("")
                 setSignupPassword("")
                 setFullName("")
                 setUserName("")
-                navigate("/home");
+                setSuccessMessage(result.status)
             } else {
                 console.error("Login failed");
             }
@@ -82,10 +80,11 @@ export function SignUp() {
                         </div>
                         <p className="text-center mx-[2.5rem] text-[13px] text-[#A8A8A8]">People who use our service may have uploaded your contact information to Instagram. Learn more</p></> : <div className="mt-10"><Loader /></div>}
                     {userData?.status === "fail" && <p className="text-red-500">{userData.data}</p>}
+                    {succesMessage === "success" && <p className="text-green-600 uppercase">{succesMessage}</p>}
                 </div>
                 <div className="flex items-center justify-center border-[2px] border-[#363636] py-6 w-[23.7rem] gap-1">
                     <p>Have an account?</p>
-                    <Link to="/login" onClick={() => setUserData()} className="text-[#3897F1]">Log in</Link>
+                    <Link to="/login" onClick={() => setUserData([])} className="text-[#3897F1]">Log in</Link>
                 </div>
                 <p>Get the app.</p>
                 <div className="flex gap-2">

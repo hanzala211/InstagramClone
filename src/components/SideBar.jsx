@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import { CreateIcon, CreatePosts, ExploreIcon, HomeIcon, InstagramSvg, MessageIcon, moreArr, MoreIcon, NotificationIcon, SearchIcon } from "../assets/Constants";
+import { ActiveHome, CreateIcon, ExploreIcon, HomeIcon, InstagramSvg, MessageIcon, moreArr, MoreIcon, NotificationIcon, SearchIcon } from "../assets/Constants";
 import { useEffect, useRef, useState } from "react";
 import { useSearch, useSideBar, useUser } from "../context/UserContext";
 import { SearchBox } from "./SearchBox";
@@ -18,14 +18,17 @@ export function SideBar() {
     const searchBoxRef = useRef(null);
     const fileInputRef = useRef(null);
     const [selectedImage, setSelectedImage] = useState(null);
-    const { searchData } = useSearch();
     const [createStory, setCreateStory] = useState(false);
+    const { setSearchQuery, setSearchData } = useSearch()
     function handleClick(e) {
         if (checkref.current && dropdownRef.current && !checkref.current.contains(e.target) && !dropdownRef.current.contains(e.target)) {
             setIsOpen(false);
         }
         if (searchRef.current && searchBoxRef.current && !searchRef.current.contains(e.target) && !searchBoxRef.current.contains(e.target)) {
             setIsSearching(false)
+            setSearchQuery("")
+            setSearchData([]);
+
         }
     }
     function handleFileChange(event) {
@@ -61,7 +64,7 @@ export function SideBar() {
                     `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 py-3 rounded-md ${isActive ? "font-bold" : ""} ${isSearching ? "w-10 h-10" : ""}`
                 }
             >{({ isActive }) => {
-                return <><HomeIcon className={`group-hover:scale-110 transition-transform duration-150  stroke-[#F5F5F5] ${isActive && !isSearching ? "fill-white" : "fill-none"}`} />
+                return <>{isActive && !isSearching ? <ActiveHome className={`group-hover:scale-110 transition-transform duration-150`} /> : <HomeIcon className={`group-hover:scale-110 transition-transform duration-150 stroke-[#F5F5F5]`} />}
                     <p className={`text-[15px] ${isSearching ? "hidden" : ""}`}>Home</p></>
             }}
             </NavLink >
@@ -85,7 +88,7 @@ export function SideBar() {
                 <ExploreIcon className="group-hover:scale-110 transition-transform duration-150" />
                 <p className={`text-[15px] ${isSearching ? "hidden" : ""}`}>Explore</p>
             </NavLink>
-            <NavLink
+            {/* <NavLink
                 end
                 to="/direct/inbox"
                 className={({ isActive }) =>
@@ -104,7 +107,7 @@ export function SideBar() {
             >
                 <NotificationIcon className="group-hover:scale-110 transition-transform duration-150" />
                 <p className={`text-[15px] ${isSearching ? "hidden" : ""}`}>Notifications</p>
-            </NavLink>
+            </NavLink> */}
             <NavLink
                 onClick={() => setIsCreating(true)}
                 className={`gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 py-3 rounded-md ${isSearching ? "w-10 h-10" : ""}`}
@@ -154,14 +157,6 @@ export function SideBar() {
                         </Link>
                     })}
                 </div>
-                <div className="border-b-[2px] border-[#353535] px-2 py-2.5">
-                    <Link
-                        end
-                        className="gap-4 items-center group w-full py-3 hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex p-4 rounded-md"
-                    >
-                        <p className="text-[14px]">Switch accounts</p>
-                    </Link>
-                </div>
                 <div className="px-2 py-2.5">
                     <Link
                         to="/login"
@@ -169,8 +164,11 @@ export function SideBar() {
                         className="gap-4 items-center group w-full py-3 hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex p-4 rounded-md"
                         onClick={() => {
                             setMainLoading(true)
-                            setUserData({})
+                            setUserData([])
                             localStorage.removeItem("token")
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 500)
                         }}
                     >
                         <p className="text-[14px]">Log out</p>
