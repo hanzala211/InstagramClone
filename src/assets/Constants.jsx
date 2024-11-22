@@ -98,23 +98,11 @@ export function UnSave({ className }) {
 }
 export const moreArr = [
     {
-        icon: <SettingsIcon className="18" />,
-        title: "Settings",
-        path: "/accounts/edit/"
-    },
-    {
-        icon: <ActivityIcon />,
-        title: "Your Activity",
-        path: "/your_activity/interactions/likes/"
-    },
-    {
         icon: <SaveIcon />,
         title: "Saved",
-        path: "/user/saved"
     },
     {
         icon: <ReportIcon />,
         title: "Report a problem",
-        path: "#"
     }
 ]

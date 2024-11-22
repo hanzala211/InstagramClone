@@ -207,7 +207,7 @@ export function Profile() {
                 <div className="flex flex-col gap-6">
                     <div className="flex gap-6 items-center">
                         <Link className="text-[20px] flex items-center gap-1">{userData?.data?.user.userName}
-                            {userData.data.user.followers.length > 10 && <MdVerified className="fill-[#0095F6]" />}
+                            {userData !== undefined && userData?.data.user.followers.length > 10 && <MdVerified className="fill-[#0095F6]" />}
                         </Link>
                         <div className="flex gap-3 items-center">
                             <button className="bg-[#363636] px-5 py-1.5 rounded-[0.5rem] text-[14px] hover:bg-[rgb(38,38,38)] transition duration-150" onClick={() => setIsEditOpen(true)}>Edit Profile</button>
