@@ -145,7 +145,6 @@ export function SearchProfile() {
                 </div>
                 <div className="absolute left-[59%] -translate-x-1/2 flex gap-10">
                     <NavLink end to={`/search/${selectedProfile.userName}/`} className={({ isActive }) => `flex items-center tracking-wider py-3 gap-1 text-[12px] ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><PostsIcon /> POSTS</NavLink >
-                    <NavLink to={`/search/${selectedProfile.userName}/tagged/`} className={({ isActive }) => `flex items-center tracking-wider py-3 text-[12px] gap-1  ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><TaggedUser /> TAGGED</NavLink>
                 </div>
                 <div className="mt-[3.5rem]">
                     {!postsLoading ? <Outlet /> : <Loader height="h-[34vh]" />}
