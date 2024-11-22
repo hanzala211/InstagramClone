@@ -23,7 +23,6 @@ export function SearchBox({ refere, isSearching }) {
                     signal
                 })
                 const result = await response.json();
-                console.log(result)
                 if (result.message !== "No user found with this username." && result.data !== "Page Not Found") {
                     setSearchData((prev) => [...prev, ...result.data])
                 }

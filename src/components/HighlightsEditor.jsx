@@ -75,7 +75,7 @@ export function HighlightsEditor({ highLightsModal, setHighLightsModal }) {
                 console.error(error);
             }
         }
-        Promise.all(highLightStories.map((item) => removeHighLights(item._id))).then((res) => console.log(res))
+        Promise.all(highLightStories.map((item) => removeHighLights(item._id)))
         try {
             const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/highlights/${highlights[currentHighLight]._id}`, {
                 method: "PUT",
@@ -103,14 +103,12 @@ export function HighlightsEditor({ highLightsModal, setHighLightsModal }) {
                 })
                 return addStory.json();
             }
-            Promise.all(selectedIDs.map((item) => sendStories(item._id))).then((res) => console.log(res))
+            Promise.all(selectedIDs.map((item) => sendStories(item._id)))
             async function postProfile() {
                 const formData = new FormData();
                 const blobImage = await fetch(selectedIDs[currentID].imageUrl).then((req) => req.blob());
-                console.log(blobImage)
                 formData.append("image", blobImage, "profileImage")
                 try {
-                    console.log("isBlob")
                     const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/highlights/${result.highlight._id}/profile-pic`, {
                         method: "POST",
                         headers: {
@@ -120,12 +118,10 @@ export function HighlightsEditor({ highLightsModal, setHighLightsModal }) {
                         redirect: "follow"
                     })
                     const postResult = await response.json();
-                    console.log(postResult)
                 } catch (error) {
                     console.error(error);
                 }
             }
-            console.log("calling PostPRofile")
             postProfile();
         } catch (error) {
             console.error(error)

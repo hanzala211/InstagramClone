@@ -50,7 +50,6 @@ export function LikedComponent({ postData, setSelectedPost, selectedPost }) {
             if (result.message !== "Post disliked successfully.") {
                 setIsLiked((prev) => !prev)
             }
-            console.log(result)
         } catch (error) {
             console.error(error)
         }

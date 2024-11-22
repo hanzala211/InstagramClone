@@ -44,7 +44,6 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
                 redirect: "follow"
             })
             const resultAwait = await response.json();
-            console.log(resultAwait)
         } catch (error) {
             console.error(error)
         } finally {

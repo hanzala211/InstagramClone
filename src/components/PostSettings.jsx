@@ -62,7 +62,6 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
                 redirect: "follow"
             })
             const result = await response.json();
-            console.log(result)
         } catch (error) {
             console.error(error)
         } finally {

@@ -22,7 +22,6 @@ export function NoteEditor({ setIsNoteEditOpen }) {
                 redirect: "follow"
             })
             const result = await response.json()
-            console.log(result)
             setMessage(result.message)
         } catch (error) {
             console.error(error)

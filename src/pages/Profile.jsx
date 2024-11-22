@@ -41,7 +41,6 @@ export function Profile() {
                 });
                 const result = await response.json();
                 setUserPosts(result.data)
-                console.log(result)
             } catch (error) {
                 console.error(error);
             } finally {
@@ -63,7 +62,6 @@ export function Profile() {
                     redirect: "follow"
                 })
                 const result = await response.json();
-                console.log(result)
                 setUserSaves(result.data)
             } catch (error) {
                 console.error(error)
@@ -135,7 +133,6 @@ export function Profile() {
                     redirect: "follow"
                 })
                 const result = await response.json();
-                console.log(result);
                 setHighlights(result.highlights)
                 // const allStories = result.highlights.reduce((acc, item) => {
                 //     return [...acc, ...item.stories];

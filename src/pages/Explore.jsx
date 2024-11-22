@@ -39,7 +39,6 @@ export function Explore() {
                 }
             })
             const result = await response.json();
-            console.log(result)
             setExplorePagePosts((prev) => {
                 const newItems = result.data.filter(
                     (item) => !prev.some((prevItem) => prevItem._id === item._id)

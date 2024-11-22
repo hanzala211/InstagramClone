@@ -57,7 +57,7 @@ export function HighLightsModal({ setIsCreatingHighLight, isCreatingHighLight })
                     })
                     return addStory.json();
                 }
-                Promise.all(selectedIDs.map((item) => sendStories(item._id))).then((res) => console.log(res))
+                Promise.all(selectedIDs.map((item) => sendStories(item._id)))
                 async function postProfile() {
                     const formData = new FormData();
                     const blobImage = await fetch(selectedIDs[currentID].imageUrl).then((req) => req.blob());
@@ -72,7 +72,6 @@ export function HighLightsModal({ setIsCreatingHighLight, isCreatingHighLight })
                             redirect: "follow"
                         })
                         const postResult = await response.json();
-                        console.log(postResult)
                     } catch (error) {
                         console.error(error);
                     }

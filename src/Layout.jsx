@@ -20,7 +20,6 @@ export function Layout({ token }) {
                     redirect: "follow"
                 })
                 const result = await response.json();
-                console.log(result)
                 setUserData({
                     status: result.status,
                     data: {
