@@ -100,6 +100,7 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
         } finally {
             setIsDisabled(false);
             setShareLoading(false)
+            setCaptionValue("")
         }
     }
     return (
