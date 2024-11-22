@@ -47,7 +47,6 @@ export function Story({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSe
             return `${minutes} m`;
         }
     }
-    console.log(highLightStories)
     return <section className="bg-[#1A1A1A] relative w-[100vw] h-[100vh] p-4 flex justify-between flex-row items-start">
         <img src="/images/instagramiconswhite.png" alt="Instagram Icon" className="w-28" />
         <div className="w-[32rem] rounded-xl">
