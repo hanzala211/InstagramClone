@@ -155,6 +155,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
             console.error(error)
         } finally {
             setIsDisabled(commentValue.length === 0);
+            setCommentValue("")
         }
     }
     async function savePost() {
