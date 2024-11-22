@@ -19,6 +19,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
     const [commentsLoading, setCommentsLoading] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [isMyPost, setIsMyPost] = useState(false);
+    const [isCommented, setIsCommented] = useState(false);
     useEffect(() => {
         if (selectedPost?.postBy?._id !== undefined) {
             setIsMyPost(selectedPost?.postBy._id === userData.data.user._id)
@@ -49,7 +50,6 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         async function fetchComments() {
             try {
                 setCommentsLoading(true);
-                setComments([]);
                 const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/comments/${selectedPost._id}?page=${page}&limit=10`, {
                     method: "GET",
                     headers: {
@@ -59,10 +59,8 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                     signal
                 })
                 const result = await response.json()
-                if (!signal.aborted) {
-                    setTotalPages(result.data.totalPages);
-                    setComments((prev) => [...prev, ...result.data.comments]);
-                }
+                setTotalPages(result.data.totalPages);
+                setComments((prev) => [...prev, ...result.data.comments]);
             } catch (error) {
                 if (error.name !== "AbortError") {
                     console.error("Fetch failed:", error);
@@ -79,7 +77,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         return () => {
             controller.abort();
         };
-    }, [page, selectedPost?._id, currentPost, userData.data.token])
+    }, [page, selectedPost?._id, currentPost, userData.data.token, isCommented])
     function handleClose() {
         setIsPostOpen(false)
         setTimeout(() => {
@@ -156,6 +154,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         } finally {
             setIsDisabled(commentValue.length === 0);
             setCommentValue("")
+            setIsCommented((prev) => !prev)
         }
     }
     async function savePost() {

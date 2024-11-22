@@ -42,8 +42,8 @@ export function Home() {
         fetchHomePosts()
     }, [])
     async function fetchHomePosts() {
+        setCount((prev) => prev + 1)
         try {
-            setCount((prev) => prev + 1)
             const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/home?limit=5`, {
                 method: "GET",
                 headers: {
@@ -234,7 +234,7 @@ export function Home() {
     }
 
     return <><section className="w-full max-w-[40%] mx-auto">
-        <div className={`flex flex-col gap-2  w-full ${isPostsLoading || homePosts.length === 0 ? "h-[90vh]" : ""} `}>
+        <div className={`flex flex-col gap-2 w-full ${isPostsLoading || homePosts.length === 0 ? "h-[90vh]" : ""} ${homePosts.length < 1 ? "h-[90vh]" : ""}`}>
             {!isPostsLoading ?
                 <InfiniteScroll dataLength={homePosts.length} loader={homePosts.length > 0 && <Loader height="h-[10vh]" />} next={fetchHomePosts} hasMore={count < 10} >
                     {

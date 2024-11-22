@@ -26,6 +26,7 @@ export function SearchBox({ refere, isSearching }) {
                 if (result.message !== "No user found with this username." && result.data !== "Page Not Found") {
                     setSearchData((prev) => [...prev, ...result.data])
                 }
+                console.log(result)
             } catch (error) {
                 if (error.name !== "AbortError") {
                     console.error(error)

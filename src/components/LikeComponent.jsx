@@ -7,16 +7,21 @@ export function LikedComponent({ postData, setSelectedPost, selectedPost }) {
     const [isLiked, setIsLiked] = useState(false)
     useEffect(() => {
         if (selectedPost?.likes) {
-            setIsLiked(selectedPost.likes.includes(userData.data.user?._id));
+            setIsLiked(selectedPost.likes.includes(userData?.data.user._id));
         }
     }, [selectedPost, postData?._id])
     async function likePost() {
         try {
-            setSelectedPost((prev) => ({
-                ...prev, likeCount: prev.likeCount + 1, likes: prev.likes.includes(userData.data.user._id)
-                    ? prev.likes
-                    : [...prev.likes, userData.data.user._id]
-            }))
+            setSelectedPost((prev) => {
+                const hasLiked = prev.likes.some((item) => item === userData.data.user._id);
+                return {
+                    ...prev,
+                    likeCount: hasLiked ? prev.likeCount - 1 : prev.likeCount + 1,
+                    likes: hasLiked
+                        ? prev.likes.filter((item) => item !== userData.data.user._id)
+                        : [...prev.likes, userData.data.user._id],
+                };
+            });
             const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/like/${selectedPost._id}`, {
                 method: "POST",
                 headers: {
@@ -34,11 +39,16 @@ export function LikedComponent({ postData, setSelectedPost, selectedPost }) {
     }
     async function unLikePost() {
         try {
-            setSelectedPost((prev) => ({
-                ...prev, likeCount: prev.likeCount - 1, likes: prev.likes.includes(postData._id)
-                    ? prev.likes.filter((item) => item !== postData._id)
-                    : [...prev.likes, postData._id]
-            }))
+            setSelectedPost((prev) => {
+                const hasLiked = prev.likes.some((item) => item === userData.data.user._id);
+                return {
+                    ...prev,
+                    likeCount: hasLiked ? prev.likeCount - 1 : prev.likeCount + 1,
+                    likes: hasLiked
+                        ? prev.likes.filter((item) => item !== userData.data.user._id) // Remove like
+                        : [...prev.likes, userData.data.user._id], // Add like
+                };
+            });
             const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/dislike/${selectedPost._id}`, {
                 method: "POST",
                 headers: {
