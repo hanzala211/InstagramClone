@@ -234,11 +234,11 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
             className={`fixed opacity-0 top-[51%] -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100" : "pointer-events-none"
                 }`}
         >
-            <div className="w-[80rem] h-[55rem] flex">
+            <div className="w-[80rem] h-[48rem] flex">
                 <div className="w-[60%] h-full relative overflow-hidden">
                     <div className={`w-full flex h-full ${isAnimating ? "transition-transform duration-300 ease-in-out" : ""} `} style={{ transform: `translateX(${-currentIndex * 100}%)` }}>
                         {selectedPost !== null ? selectedPost.imageUrls.map((item, i) => {
-                            return <img src={item} key={i} alt="Posts" className="object-cover h-full" />
+                            return <img src={item} key={i} alt="Posts" className="object-cover h-full w-full" />
                         }) : ""}
                     </div>
                     {selectedPost !== null && selectedPost.imageUrls.length > 1 ? <> {selectedPost !== null && currentIndex !== selectedPost.imageUrls.length - 1 && <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleIncrease}><FaArrowRight className="fill-black" /></button>}
