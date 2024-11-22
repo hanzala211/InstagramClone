@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { CommentSVG, Like, SaveSVG, UnLike, UnSave } from "../assets/Constants";
 import { useEffect, useState } from "react";
-import { usePost, useUser } from "../context/UserContext";
+import { usePost, useSearch, useUser } from "../context/UserContext";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Loader } from "../components/Loader";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
@@ -9,7 +9,8 @@ import { RiUserFollowFill } from "react-icons/ri";
 import { Post } from "../components/Post";
 
 export function Home() {
-    const { userData, setUserData } = useUser()
+    const { userData, setUserData, setMainLoading } = useUser()
+    const { setSelectedProfile } = useSearch();
     const [count, setCount] = useState(0);
     const [homePosts, setHomePosts] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
@@ -232,9 +233,25 @@ export function Home() {
             console.error(error);
         }
     }
-
+    async function fetchUserDataOnClick(username) {
+        try {
+            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/search/${username}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `${userData.data.token}`
+                },
+                redirect: "follow"
+            })
+            const result = await response.json();
+            setSelectedProfile(result.data[0])
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setMainLoading(false)
+        }
+    }
     return <><section className="w-full max-w-[40%] mx-auto">
-        <div className={`flex flex-col gap-2 w-full ${isPostsLoading || homePosts.length === 0 ? "h-[90vh]" : ""} ${homePosts.length < 1 ? "h-[90vh]" : ""}`}>
+        <div className={`flex flex-col gap-2 w-full ${isPostsLoading || homePosts.length === 0 ? "h-[90vh]" : ""} ${homePosts.length < 2 ? "h-[90vh]" : ""}`}>
             {!isPostsLoading ?
                 <InfiniteScroll dataLength={homePosts.length} loader={homePosts.length > 0 && <Loader height="h-[10vh]" />} next={fetchHomePosts} hasMore={count < 10} >
                     {
@@ -243,7 +260,10 @@ export function Home() {
                                 <div className="flex flex-row items-center gap-2">
                                     <img src={item?.user.profilePic} className="rounded-full w-10" alt="" />
                                     <div className="flex flex-row gap-1 items-center">
-                                        <h2 className="font-semibold text-[12px]">{item?.user.userName}</h2>
+                                        <Link to={`/search/${item?.user.userName}/`} onClick={() => {
+                                            fetchUserDataOnClick(item?.user.userName)
+                                            setMainLoading(true)
+                                        }} className="font-semibold text-[12px] hover:opacity-70 transition duration-200">{item?.user.userName}</Link>
                                         <p className="text-[#A8A8A8]">•</p>
                                         <p className="text-[#a8a8a8] text-[13px] font-medium">{formatDate(item.createdAt)}</p>
                                     </div>
@@ -284,9 +304,9 @@ export function Home() {
                                     <p className="text-[14px] font-medium">{item.likeCount} likes</p>
                                     <div className="w-full text-[15px]">
                                         <p className="text-[13px] text-[#a8a8a1]">
-                                            <Link className="text-[14px] text-white font-semibold hover:opacity-50 mr-2">
+                                            <p className="text-[14px] text-white font-semibold mr-2">
                                                 {item.user.userName}
-                                            </Link>
+                                            </p>
                                             {item.caption !== null && item.caption}
                                         </p>
                                     </div>

@@ -6,12 +6,13 @@ import { useSearch, useUser } from "../context/UserContext";
 import { Loader } from "../components/Loader";
 import { PostsIcon, TaggedUser } from "../assets/Constants";
 import { HighLights } from "../components/Highlights";
+import { LoadingPage } from "./LoadingPage";
 
 
 export function SearchProfile() {
     const [postsLoading, setPostsLoading] = useState(false);
     const { setSearchUserPosts, selectedProfile, searchUserStatus, setSearchUserStatus, searchUserHighLights, setSearchUserHighLights } = useSearch();
-    const { userData, setUserData, setHighLightStories, setCurrentHighLight, setCurrentStory } = useUser()
+    const { userData, setUserData, setHighLightStories, setCurrentHighLight, setCurrentStory, mainLoading } = useUser()
     const [isFollowed, setIsFollowed] = useState(false);
     const [searchUserNotes, setSearchUserNotes] = useState([])
     useEffect(() => {
@@ -102,49 +103,54 @@ export function SearchProfile() {
             return num.toString();
         }
     }
-    return <section className="w-full max-w-[70%] mx-auto">
-        <div className="w-[62rem] pb-9 pt-12 border-b-[2px] border-[#262626]">
-            <div className="flex gap-20 ml-16 items-center relative">
-                {searchUserNotes.length > 0 &&
-                    <div className="absolute -top-1 left-[7%] z-[1] cursor-pointer">
-                        <NoteTooltip isProfile={true} note={searchUserNotes[0]} />
-                    </div>
-                }
-                <Link to={searchUserStatus.length > 0 ? `/search/stories/${selectedProfile.userName}/${searchUserStatus[0]._id}/` : ""} className={`p-2 ${searchUserStatus.length > 0 ? "relative rounded-full multicolor-border" : ""}`} onClick={() => setCurrentStory(0)}>
-                    <img src={selectedProfile.profilePic} alt="User Profile" className="rounded-full w-40" />
-                </Link>
-                <div className="flex flex-col gap-6">
-                    <div className="flex gap-6 items-center">
-                        <Link className="text-[20px] flex items-center gap-1">{selectedProfile.userName}
-                            {selectedProfile.followers.length > 10 && <MdVerified className="fill-[#0095F6]" />}
+    return <>
+        {!mainLoading ?
+
+            <section className="w-full max-w-[70%] mx-auto">
+                <div className="w-[62rem] pb-9 pt-12 border-b-[2px] border-[#262626]">
+                    <div className="flex gap-20 ml-16 items-center relative">
+                        {searchUserNotes.length > 0 &&
+                            <div className="absolute -top-1 left-[7%] z-[1] cursor-pointer">
+                                <NoteTooltip isProfile={true} note={searchUserNotes[0]} />
+                            </div>
+                        }
+                        <Link to={searchUserStatus.length > 0 ? `/search/stories/${selectedProfile.userName}/${searchUserStatus[0]._id}/` : ""} className={`p-2 ${searchUserStatus.length > 0 ? "relative rounded-full multicolor-border" : ""}`} onClick={() => setCurrentStory(0)}>
+                            <img src={selectedProfile.profilePic} alt="User Profile" className="rounded-full w-40" />
                         </Link>
-                        {isFollowed ? <button className="bg-[#363636] px-7 py-1 rounded-lg" onClick={() => unfollowUser()}>Unfollow</button> : <button className="bg-[#0095F6] px-7 py-1 rounded-lg" onClick={() => followUser()}>Follow</button>}
+                        <div className="flex flex-col gap-6">
+                            <div className="flex gap-6 items-center">
+                                <Link className="text-[20px] flex items-center gap-1">{selectedProfile.userName}
+                                    {selectedProfile.followers.length > 10 && <MdVerified className="fill-[#0095F6]" />}
+                                </Link>
+                                {isFollowed ? <button className="bg-[#363636] px-7 py-1 rounded-lg" onClick={() => unfollowUser()}>Unfollow</button> : <button className="bg-[#0095F6] px-7 py-1 rounded-lg" onClick={() => followUser()}>Follow</button>}
+                            </div>
+                            <div className="flex gap-10 items-center">
+                                <p className="flex gap-1.5"><span className="font-semibold">{formatNumber(selectedProfile.postCount)}</span>posts</p>
+                                <p className="flex gap-1.5"><span className="font-semibold">{formatNumber(selectedProfile.followersCount)}</span>followers</p>
+                                <p className="flex gap-1.5"><span className="font-semibold">{formatNumber(selectedProfile.followingCount)}</span>following</p>
+                            </div>
+                            <div>
+                                <p className="font-semibold text-[14px]">{selectedProfile.fullName}</p>
+                                <p className="font-semibold text-[14px] text-[#a8a8a8] w-[200px] line-clamp-4 break-words">{selectedProfile.bio}</p>
+                            </div>
+                        </div>
                     </div>
-                    <div className="flex gap-10 items-center">
-                        <p className="flex gap-1.5"><span className="font-semibold">{formatNumber(selectedProfile.postCount)}</span>posts</p>
-                        <p className="flex gap-1.5"><span className="font-semibold">{formatNumber(selectedProfile.followersCount)}</span>followers</p>
-                        <p className="flex gap-1.5"><span className="font-semibold">{formatNumber(selectedProfile.followingCount)}</span>following</p>
-                    </div>
-                    <div>
-                        <p className="font-semibold text-[14px]">{selectedProfile.fullName}</p>
-                        <p className="font-semibold text-[14px] text-[#a8a8a8] w-[200px] line-clamp-4 break-words">{selectedProfile.bio}</p>
+                    <div className="flex gap-10 ml-5 mt-16 h-[7.3rem] overflow-x-auto scrollbar-hidden">
+                        {searchUserHighLights.length > 0 && searchUserHighLights.map((item, i, arr) => <Link to={`/search/stories/highlight/${arr[i]._id}/`} key={i} onClick={() => {
+                            setHighLightStories(searchUserHighLights[i].stories)
+                            setCurrentStory(0)
+                            setCurrentHighLight(i)
+                        }}><HighLights title={item.name} image={item.profilePic} /></Link>)}
                     </div>
                 </div>
-            </div>
-            <div className="flex gap-10 ml-5 mt-16 h-[7.3rem] overflow-x-auto scrollbar-hidden">
-                {searchUserHighLights.length > 0 && searchUserHighLights.map((item, i, arr) => <Link to={`/search/stories/highlight/${arr[i]._id}/`} key={i} onClick={() => {
-                    setHighLightStories(searchUserHighLights[i].stories)
-                    setCurrentStory(0)
-                    setCurrentHighLight(i)
-                }}><HighLights title={item.name} image={item.profilePic} /></Link>)}
-            </div>
-        </div>
-        <div className="absolute left-[59%] -translate-x-1/2 flex gap-10">
-            <NavLink end to={`/search/${selectedProfile.userName}/`} className={({ isActive }) => `flex items-center tracking-wider py-3 gap-1 text-[12px] ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><PostsIcon /> POSTS</NavLink >
-            <NavLink to={`/search/${selectedProfile.userName}/tagged/`} className={({ isActive }) => `flex items-center tracking-wider py-3 text-[12px] gap-1  ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><TaggedUser /> TAGGED</NavLink>
-        </div>
-        <div className="mt-[3.5rem]">
-            {!postsLoading ? <Outlet /> : <Loader height="h-[34vh]" />}
-        </div>
-    </section>
+                <div className="absolute left-[59%] -translate-x-1/2 flex gap-10">
+                    <NavLink end to={`/search/${selectedProfile.userName}/`} className={({ isActive }) => `flex items-center tracking-wider py-3 gap-1 text-[12px] ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><PostsIcon /> POSTS</NavLink >
+                    <NavLink to={`/search/${selectedProfile.userName}/tagged/`} className={({ isActive }) => `flex items-center tracking-wider py-3 text-[12px] gap-1  ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><TaggedUser /> TAGGED</NavLink>
+                </div>
+                <div className="mt-[3.5rem]">
+                    {!postsLoading ? <Outlet /> : <Loader height="h-[34vh]" />}
+                </div>
+            </section>
+            : <LoadingPage />}
+    </>
 }

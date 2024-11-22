@@ -3,8 +3,8 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5"
 import { CommentSVG, MoreCommentsSVG, MoreSVG, SaveSVG, ShareIcon, UnSave } from "../assets/Constants";
 import { PostSettings } from "./PostSettings";
-import { usePost, useUser } from "../context/UserContext";
-import { Link } from "react-router-dom";
+import { usePost, useSearch, useUser } from "../context/UserContext";
+import { Link, useNavigate } from "react-router-dom";
 import { Skeleton } from "./Skeleton";
 import { LikedComponent } from "./LikeComponent";
 
@@ -14,12 +14,14 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
     const [isAnimating, setIsAnimating] = useState(false);
     const [isPostSettingOpen, setIsPostSettingOpen] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
-    const { userData, setUserData } = useUser();
+    const { userData, setUserData, setMainLoading } = useUser();
     const commentRef = useRef(null);
     const [commentsLoading, setCommentsLoading] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [isMyPost, setIsMyPost] = useState(false);
     const [isCommented, setIsCommented] = useState(false);
+    const { setSelectedProfile } = useSearch()
+    const navigate = useNavigate();
     useEffect(() => {
         if (selectedPost?.postBy?._id !== undefined) {
             setIsMyPost(selectedPost?.postBy._id === userData.data.user._id)
@@ -134,6 +136,23 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
             return `${minutes} m`;
         }
     }
+    async function fetchUserDataOnClick(username) {
+        try {
+            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/search/${username}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `${userData.data.token}`
+                },
+                redirect: "follow"
+            })
+            const result = await response.json();
+            setSelectedProfile(result.data[0])
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setMainLoading(false)
+        }
+    }
     async function postComment() {
         try {
             setIsDisabled(true);
@@ -230,7 +249,11 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                     <div className="flex justify-between items-center p-5 border-b-[1px] border-[#262626]">
                         <div className="flex flex-row gap-4 items-center ">
                             <img src={postData?.profilePic} alt="Profile Picture" className="w-12 rounded-full" />
-                            <p className="text-[15px] font-semibold">{postData?.userName}</p>
+                            <Link to={userData?.data.user._id !== postData?._id ? `/search/${postData?.userName}/` : `/${userData?.data.user.userName}/`} onClick={() => {
+                                fetchUserDataOnClick(postData?.userName)
+                                setMainLoading(true)
+                                setSelectedPost(null)
+                            }} className="text-[15px] font-semibold hover:opacity-70 transition duration-200">{postData?.userName}</Link>
                         </div>
                         <button onClick={() => {
                             setIsPostSettingOpen(true)
@@ -244,16 +267,16 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                 <div className="w-full px-6 mt-4 text-[15px]">
                                     <div className="flex flex-row gap-4 items-start">
                                         <img src={postData?.profilePic} alt="Profile Picture" className="w-9 rounded-full" />
-                                        <p><Link className="text-[14px] font-semibold hover:opacity-50 mr-3">{postData?.userName}</Link>{selectedPost !== null && selectedPost.caption}</p>
+                                        <p><Link className="text-[14px] font-semibold mr-3 cursor-default">{postData?.userName}</Link>{selectedPost !== null && selectedPost.caption}</p>
                                     </div>
                                 </div>
                             </div>
                         }
-                        <div className="flex flex-col gap-4 ml-5 pt-5">
+                        <div className="flex flex-col gap-4 ml-5 pt-2">
                             {commentsLoading ? <div className="flex flex-col gap-4">{Array.from({ length: 20 }, (_, i) => <Skeleton key={i} />)}</div> : (
                                 comments?.map((item, i) => {
                                     return (
-                                        <div key={i} className="flex gap-4 ml-2">
+                                        <div key={i} className="flex gap-4 ml-1">
                                             <img
                                                 src={item.user.profilePic}
                                                 alt={item.user.userName}
@@ -308,7 +331,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
         <PostSettings isPostSettingOpen={isPostSettingOpen} isMyPost={isMyPost} setIsPostSettingOpen={setIsPostSettingOpen} setIsPostOpen={setIsPostOpen} />
     </>
 }

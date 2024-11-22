@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { Footer } from "../components/Footer";
 import { Loader } from "../components/Loader";
@@ -12,6 +12,7 @@ export function SignUp() {
     const [userName, setUserName] = useState("");
     const [loading, setLoading] = useState(false)
     const [succesMessage, setSuccessMessage] = useState("");
+    const navigate = useNavigate()
     async function fetchData() {
         const data = JSON.stringify({
             "fullName": fullName,
@@ -31,12 +32,15 @@ export function SignUp() {
                 redirect: "follow"
             })
             const result = await response.json();
+            setUserData(result);
             if (result.status === "success") {
                 setEmailAddress("")
                 setSignupPassword("")
                 setFullName("")
                 setUserName("")
                 setSuccessMessage(result.status)
+                navigate("/home");
+                localStorage.setItem("token", JSON.stringify(result.data.token))
             } else {
                 console.error("Login failed");
             }

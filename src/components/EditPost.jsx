@@ -17,7 +17,7 @@ export function EditPost({ croppedImage, currentIndex, handleDecrease, handleInc
             </div>
             <textarea className="bg-transparent h-[10rem] text-white outline-none resize-none w-full mt-4" maxLength={2000} value={captionValue} onChange={(e) => setCaptionValue(e.target.value)}></textarea>
             <div className="flex justify-end">
-                <p className="text-[#737373] text-[13px] font-semibold">{captionValue.length}/2000</p>
+                <p className="text-[#737373] text-[13px] font-semibold">{captionValue?.length}/2000</p>
             </div>
         </div>
     </div>
