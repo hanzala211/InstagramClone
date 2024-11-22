@@ -47,6 +47,7 @@ export function Story({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSe
             return `${minutes} m`;
         }
     }
+    console.log(highLightStories)
     return <section className="bg-[#1A1A1A] relative w-[100vw] h-[100vh] p-4 flex justify-between flex-row items-start">
         <img src="/images/instagramiconswhite.png" alt="Instagram Icon" className="w-28" />
         <div className="w-[32rem] rounded-xl">
@@ -87,7 +88,7 @@ export function Story({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSe
                     </button>}
                 </div>
             </div>
-            <img src={isOwnProfile ? stories[currentStory].imageUrl : isArchive ? archives[currentStory].imageUrl : isHighLight || isSearchHighLight ? highLightStories[currentStory].imageUrl : isSearchUser ? searchUserStatus[currentStory].imageUrl : ""} alt="Story" className="w-full rounded-xl" />
+            <img src={isOwnProfile ? stories[currentStory]?.imageUrl : isArchive ? archives[currentStory]?.imageUrl : isHighLight || isSearchHighLight ? highLightStories[currentStory]?.imageUrl : isSearchUser ? searchUserStatus[currentStory]?.imageUrl : ""} alt="Story" className="w-full rounded-xl" />
         </div>
         <button onClick={() => {
             navigate(-1)

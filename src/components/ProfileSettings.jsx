@@ -93,6 +93,11 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
                         }
                     }
                 })
+                setIsEditOpen(false)
+                setTimeout(() => {
+                    setSuccessMessage("")
+                    setErrorMessage("")
+                }, 900)
             }
             else {
                 setErrorMessage(result.message)
@@ -156,8 +161,8 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
                 </div>
                 <div>
                     <h3 className="text-[20px] font-semibold mt-3">Bio</h3>
-                    <textarea type="text" placeholder="Bio" minLength={10} maxLength={150} className="w-full py-3 px-4 bg-[#424242] outline-none mt-2 rounded-xl resize-none" value={changeBio} onChange={(e) => setChangeBio(e.target.value)} />
-                    <p className="text-[#A8A8A8] text-[15px] mt-2 ml-1">Please keep responses within 150 characters.</p>
+                    <textarea type="text" placeholder="Bio" minLength={10} maxLength={50} className="w-full py-3 px-4 bg-[#424242] outline-none mt-2 rounded-xl resize-none" value={changeBio} onChange={(e) => setChangeBio(e.target.value)} />
+                    <p className="text-[#A8A8A8] text-[15px] mt-2 ml-1">Please keep responses within 50 characters.</p>
                 </div>
                 <div>
                     <h3 className="text-[20px] mb-2 ml-1 font-semibold mt-4">Private</h3>
