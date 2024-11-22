@@ -131,7 +131,7 @@ export function SearchProfile() {
                             </div>
                             <div>
                                 <p className="font-semibold text-[14px]">{selectedProfile.fullName}</p>
-                                <p className="font-semibold text-[14px] text-[#a8a8a8] w-[200px] line-clamp-4 break-words">{selectedProfile.bio}</p>
+                                <p className="font-semibold text-[14px] text-[#a8a8a8] w-[200px] break-words">{selectedProfile.bio}</p>
                             </div>
                         </div>
                     </div>

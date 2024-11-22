@@ -218,7 +218,7 @@ export function Profile() {
                     </div>
                     <div>
                         <p className="font-semibold text-[14px]">{userData.data.user.fullName}</p>
-                        <p className="font-semibold text-[14px] text-[#a8a8a8] w-[200px] line-clamp-4 break-words">{userData.data.user.bio}</p>
+                        <p className="font-semibold text-[14px] text-[#a8a8a8] w-[200px] break-words">{userData.data.user.bio}</p>
                     </div>
                 </div>
             </div>
