@@ -1,27 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5"
-import { CommentSVG, MoreCommentsSVG, MoreSVG, SaveSVG, ShareIcon, UnSave } from "../assets/Constants";
+import { CommentSVG, MoreCommentsSVG, MoreSVG } from "../assets/Constants";
 import { PostSettings } from "./PostSettings";
 import { usePost, useSearch, useUser } from "../context/UserContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Skeleton } from "./Skeleton";
 import { LikedComponent } from "./LikeComponent";
+import { SavedComponent } from "./SavedComponent";
 
 export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, comments, setComments }) {
     const { selectedPost, setSelectedPost } = usePost()
+    const { userData, setUserData, setMainLoading, formatDate } = useUser();
+    const { setSelectedProfile } = useSearch()
     const [commentValue, setCommentValue] = useState("");
     const [isAnimating, setIsAnimating] = useState(false);
     const [isPostSettingOpen, setIsPostSettingOpen] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
-    const { userData, setUserData, setMainLoading } = useUser();
-    const commentRef = useRef(null);
     const [commentsLoading, setCommentsLoading] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [isMyPost, setIsMyPost] = useState(false);
     const [isCommented, setIsCommented] = useState(false);
-    const { setSelectedProfile } = useSearch()
-    const navigate = useNavigate();
+    const commentRef = useRef(null);
 
     useEffect(() => {
         if (selectedPost?.postBy?._id !== undefined) {
@@ -29,9 +29,6 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         } else {
             setIsMyPost(selectedPost?.postBy === userData.data.user._id)
         }
-    }, [selectedPost?._id])
-
-    useEffect(() => {
         if (selectedPost?._id) {
             setIsSaved(userData.data.user.savedPosts.includes(selectedPost?._id))
         }
@@ -63,6 +60,126 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         };
     }, [page, selectedPost?._id, currentPost, userData.data.token, isCommented])
 
+
+
+    function handleClose() {
+        setIsPostOpen(false)
+        setTimeout(() => {
+            setCurrentPost(null)
+            setCurrentIndex(0);
+            setSelectedPost(null);
+            setCommentValue("")
+            setComments([]);
+            setTotalPages(null);
+            setPage(1)
+        }, 200)
+        setIsPostSettingOpen(false)
+    }
+
+    function handleIncrease() {
+        setIsAnimating(true);
+        setCurrentIndex((prev) => prev + 1)
+        setTimeout(() => {
+            setIsAnimating(false)
+        }, 400);
+    }
+
+    function handleDecrease() {
+        setIsAnimating(true);
+        setCurrentIndex((prev) => prev - 1)
+        setTimeout(() => {
+            setIsAnimating(false)
+        }, 400);
+    }
+
+    async function fetchUserDataOnClick(username) {
+        try {
+            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/search/${username}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `${userData.data.token}`
+                },
+                redirect: "follow"
+            })
+            const result = await response.json();
+            setSelectedProfile(result.data[0])
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setMainLoading(false)
+        }
+    }
+
+    async function postComment() {
+        try {
+            setIsDisabled(true);
+            const respone = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/comment/${selectedPost._id}`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `${userData.data.token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "comment": commentValue
+                }),
+                redirect: "follow"
+            })
+            const result = await respone.json();
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setIsDisabled(commentValue.length === 0);
+            setCommentValue("")
+            setIsCommented((prev) => !prev)
+        }
+    }
+
+    async function savePost() {
+        try {
+            setIsSaved((prev) => !prev)
+            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/save/${selectedPost._id}`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `${userData.data.token}`
+                },
+                redirect: "follow"
+            })
+            const result = await response.json();
+            setUserData((prev) => ({
+                ...prev, data: {
+                    ...prev.data, user: {
+                        ...prev.data.user, savedPosts: prev.data.user.savedPosts.includes(result.savedPosts[0]) ? [...prev.data.user.savedPosts] : [...prev.data.user.savedPosts, ...result.savedPosts]
+                    }
+                }
+            }))
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    async function unSavePost() {
+        try {
+            setIsSaved((prev) => !prev)
+            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/unsave/${selectedPost._id}`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `${userData.data.token}`
+                },
+                redirect: "follow"
+            })
+            const result = await response.json();
+            setUserData((prev) => ({
+                ...prev, data: {
+                    ...prev.data, user: {
+                        ...prev.data.user, savedPosts: prev.data.user.savedPosts.includes(result.savedPosts[0]) ? prev.data.user.savedPosts.filter((item) => item !== result.savedPosts[0]) : [...prev.data.user.savedPosts, ...result.savedPosts]
+                    }
+                }
+            }))
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     async function fetchComments(signal) {
         try {
             setCommentsLoading(true);
@@ -88,147 +205,6 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         }
     }
 
-    function handleClose() {
-        setIsPostOpen(false)
-        setTimeout(() => {
-            setCurrentPost(null)
-            setCurrentIndex(0);
-            setSelectedPost(null);
-            setCommentValue("")
-            setComments([]);
-            setTotalPages(null);
-            setPage(1)
-        }, 200)
-        setIsPostSettingOpen(false)
-    }
-
-    function handleIncrease() {
-        setIsAnimating(true);
-        setCurrentIndex((prev) => prev + 1)
-        setTimeout(() => {
-            setIsAnimating(false)
-        }, 400);
-    }
-    function handleDecrease() {
-        setIsAnimating(true);
-        setCurrentIndex((prev) => prev - 1)
-        setTimeout(() => {
-            setIsAnimating(false)
-        }, 400);
-    }
-    function formatDate(dateString) {
-        const now = new Date();
-        const targetDate = new Date(dateString);
-        const diffInMilliseconds = Math.abs(targetDate - now);
-        const MINUTE = 60 * 1000;
-        const HOUR = 60 * MINUTE;
-        const DAY = 24 * HOUR;
-        const WEEK = 7 * DAY;
-
-        if (diffInMilliseconds >= WEEK) {
-            const weeks = Math.floor(diffInMilliseconds / WEEK);
-            return `${weeks} w`;
-        } else if (diffInMilliseconds >= DAY) {
-            const days = Math.floor(diffInMilliseconds / DAY);
-            const hours = Math.floor((diffInMilliseconds % DAY) / HOUR);
-            return hours > 0
-                ? `${days} d ${hours} h`
-                : `${days} d`;
-        } else if (diffInMilliseconds >= HOUR) {
-            const hours = Math.floor(diffInMilliseconds / HOUR);
-            const minutes = Math.floor((diffInMilliseconds % HOUR) / MINUTE);
-            return minutes > 0
-                ? `${hours} h ${minutes} m`
-                : `${hours} hour${hours > 1 ? "s" : ""}`;
-        } else {
-            const minutes = Math.floor(diffInMilliseconds / MINUTE);
-            return `${minutes} m`;
-        }
-    }
-    async function fetchUserDataOnClick(username) {
-        try {
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/search/${username}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            setSelectedProfile(result.data[0])
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setMainLoading(false)
-        }
-    }
-    async function postComment() {
-        try {
-            setIsDisabled(true);
-            const respone = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/comment/${selectedPost._id}`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `${userData.data.token}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "comment": commentValue
-                }),
-                redirect: "follow"
-            })
-            const result = await respone.json();
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setIsDisabled(commentValue.length === 0);
-            setCommentValue("")
-            setIsCommented((prev) => !prev)
-        }
-    }
-    async function savePost() {
-        try {
-            setIsSaved((prev) => !prev)
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/save/${selectedPost._id}`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            setUserData((prev) => ({
-                ...prev, data: {
-                    ...prev.data, user: {
-                        ...prev.data.user, savedPosts: prev.data.user.savedPosts.includes(result.savedPosts[0]) ? [...prev.data.user.savedPosts] : [...prev.data.user.savedPosts, ...result.savedPosts]
-                    }
-                }
-            }))
-        } catch (error) {
-            console.error(error)
-        }
-    }
-    async function unSavePost() {
-        try {
-            setIsSaved((prev) => !prev)
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/unsave/${selectedPost._id}`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            setUserData((prev) => ({
-                ...prev, data: {
-                    ...prev.data, user: {
-                        ...prev.data.user, savedPosts: prev.data.user.savedPosts.includes(result.savedPosts[0]) ? prev.data.user.savedPosts.filter((item) => item !== result.savedPosts[0]) : [...prev.data.user.savedPosts, ...result.savedPosts]
-                    }
-                }
-            }))
-        } catch (error) {
-            console.error(error)
-        }
-    }
     return (
         <>
             <IoCloseSharp
@@ -238,7 +214,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
             <div
                 className={`overlay z-[100] opacity-0 transition-all duration-500 ${!isPostOpen ? "pointer-events-none" : "backdrop-blur-sm opacity-100"
                     }`}
-                onClick={() => handleClose()}
+                onClick={handleClose}
             ></div>
             <div
                 className={`fixed opacity-0 top-[51%] -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100" : "pointer-events-none"
@@ -319,13 +295,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                         <CommentSVG className="hover:stroke-gray-600 hover:opacity-80 transition-all duration-150 cursor-pointer" />
                                     </button>
                                 </div>
-                                {!isSaved ?
-                                    <button onClick={() => savePost()}>
-                                        <SaveSVG className="hover:stroke-gray-300 hover:opacity-80 transition-all duration-150 cursor-pointer stroke-[rgb(245,245,245)]" />
-                                    </button>
-                                    :
-                                    <button onClick={() => unSavePost()}><UnSave className="hover:stroke-gray-300 hover:opacity-80 transition-all duration-150 cursor-pointer stroke-[rgb(245,245,245)]" /></button>
-                                }
+                                <SavedComponent isSaved={isSaved} savePost={savePost} unSavePost={unSavePost} />
                             </div>
                             <div>
                                 {selectedPost !== null && <div className="mt-2 px-5">

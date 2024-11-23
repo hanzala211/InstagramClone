@@ -9,17 +9,23 @@ import { CreateStory } from "./CreateStory";
 
 export function SideBar() {
     const { isSearching, setIsSearching } = useSideBar();
-    const [isOpen, setIsOpen] = useState(false);
+    const { setSearchQuery, setSearchData } = useSearch()
     const { userData, setUserData, setMainLoading } = useUser();
+    const [isOpen, setIsOpen] = useState(false);
     const [isCreating, setIsCreating] = useState(false);
-    const checkref = useRef(null);
-    const dropdownRef = useRef(null);
-    const searchRef = useRef(null);
-    const searchBoxRef = useRef(null);
-    const fileInputRef = useRef(null);
     const [selectedImage, setSelectedImage] = useState(null);
     const [createStory, setCreateStory] = useState(false);
-    const { setSearchQuery, setSearchData } = useSearch()
+    const checkref = useRef(null);
+    const searchRef = useRef(null);
+    const fileInputRef = useRef(null);
+    const searchBoxRef = useRef(null);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        window.addEventListener("click", handleClick)
+        return () => window.removeEventListener("click", handleClick)
+    }, [])
+
     function handleClick(e) {
         if (checkref.current && dropdownRef.current && !checkref.current.contains(e.target) && !dropdownRef.current.contains(e.target)) {
             setIsOpen(false);
@@ -31,6 +37,7 @@ export function SideBar() {
 
         }
     }
+
     function handleFileChange(event) {
         const files = Array.from(event.target.files);
         const imageUrls = files
@@ -42,13 +49,11 @@ export function SideBar() {
             alert("Please select an image file")
         }
     }
+
     function handleFile() {
         fileInputRef.current.click();
     }
-    useEffect(() => {
-        window.addEventListener("click", handleClick)
-        return () => window.removeEventListener("click", handleClick)
-    }, [])
+
     return <><aside className={`px-4 py-10 transition-[width] duration-300 ${isSearching ? "w-[4%] border-r-0" : "w-[17%] border-r-[2px] border-[#262626]"} fixed left-0 top-0 h-[100vh] `}>
         {!isSearching && <Link to="/home"><img src="/images/instagramiconswhite.png" alt="Instagram Logo" className="w-[6.5rem] ml-2 mb-9" /></Link>}
         {isSearching && <NavLink to="/home"

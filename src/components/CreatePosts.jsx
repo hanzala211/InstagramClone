@@ -9,6 +9,7 @@ import { useUser } from "../context/UserContext";
 import { EditPost } from "./EditPost";
 
 export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelectedImage, setIsCreating, handleFileChange, handleFile }) {
+    const { userData } = useUser();
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
@@ -20,7 +21,7 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
     const [isDisabled, setIsDisabled] = useState(false);
     const [isShared, setIsShared] = useState(false);
     const [shareLoading, setShareLoading] = useState(false);
-    const { userData } = useUser();
+
     useEffect(() => {
         const body = document.querySelector("body");
         body.style.overflowY = isCreating ? "hidden" : "auto";
@@ -36,6 +37,7 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
             setIsShared(false);
         }, 800)
     }
+
     const onCropComplete = (croppedArea, croppedAreaPixels) => {
         setCroppedAreaPixels(croppedAreaPixels);
     };
@@ -55,12 +57,15 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
             }, 500)
         }
     };
+
     function handleIncrease() {
         setCurrentIndex((prev) => prev + 1)
     }
+
     function handleDecrease() {
         setCurrentIndex((prev) => prev - 1)
     }
+
     async function createPost() {
         const formData = new FormData();
         try {

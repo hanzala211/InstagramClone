@@ -4,7 +4,6 @@ import { useUser } from "../context/UserContext";
 import { Loader } from "./Loader";
 
 export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
-    const fileInputRef = useRef(null);
     const { setUserData } = useUser();
     const [selectedImage, setSelectedImage] = useState(null);
     const [changeUserName, setChangeUserName] = useState(userData.data.user.userName);
@@ -18,6 +17,8 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
     const [errorMessage, setErrorMessage] = useState("")
     const [successMessage, setSuccessMessage] = useState("");
     const [isDisabled, setIsDisabled] = useState(false);
+    const fileInputRef = useRef(null);
+
     const isChanged =
         changeUserName !== initialData.userName ||
         changeBio !== initialData.bio ||
@@ -32,9 +33,11 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
             selectedImage: null
         })
     }, [userData.data.user.userName, userData.data.user.bio, userData.data.user.isPublic])
+
     function handleClick() {
         fileInputRef.current.click();
     }
+
     function handleClose() {
         setIsEditOpen(false)
         setTimeout(() => {
@@ -51,6 +54,7 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
             public: !userData.data.user.isPublic,
         })
     }
+
     function handleFileChange(event) {
         const file = event.target.files[0];
         if (file && file.type.startsWith("image/")) {
@@ -58,6 +62,7 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
         }
         fileInputRef.current.value = null;
     }
+
     async function changeData() {
         const raw = JSON.stringify({
             "userName": changeUserName,
@@ -135,6 +140,7 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
             setIsDisabled(false)
         }
     }
+
     return <>
         <div className={`overlay opacity-0 transition-all z-[10] duration-500 ${!isEditOpen ? "pointer-events-none" : "backdrop-blur-sm opacity-100"}`} onClick={() => {
             handleClose()

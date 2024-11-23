@@ -5,11 +5,13 @@ import { useUser } from "../context/UserContext";
 export function LikedComponent({ postData, setSelectedPost, selectedPost }) {
     const { userData } = useUser()
     const [isLiked, setIsLiked] = useState(false)
+
     useEffect(() => {
         if (selectedPost?.likes) {
             setIsLiked(selectedPost.likes.includes(userData?.data.user._id));
         }
     }, [selectedPost, postData?._id])
+
     async function likePost() {
         try {
             setSelectedPost((prev) => {
@@ -37,6 +39,7 @@ export function LikedComponent({ postData, setSelectedPost, selectedPost }) {
             console.error(error)
         }
     }
+
     async function unLikePost() {
         try {
             setSelectedPost((prev) => {
@@ -64,6 +67,7 @@ export function LikedComponent({ postData, setSelectedPost, selectedPost }) {
             console.error(error)
         }
     }
+
     return <>
         {!isLiked ?
             <button onClick={() => likePost()}><Like className={`hover:opacity-80 transition-all duration-150 cursor-pointer`} /></button>

@@ -5,12 +5,13 @@ import Pintura from "./Pintura";
 import { useUser } from "../context/UserContext";
 
 export function CreateStory({ creatingStory, setIsCreatingStory }) {
+    const { userData } = useUser();
     const [selectedImage, setSelectedImage] = useState(null)
-    const fileInputRef = useRef(null)
     const [result, setResult] = useState(null);
     const [isUploading, setIsUploading] = useState(false);
     const [uploaded, setUploaded] = useState(false);
-    const { userData } = useUser();
+    const fileInputRef = useRef(null)
+
     function handleClose() {
         setIsCreatingStory(false);
         setTimeout(() => {
@@ -20,6 +21,7 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
             setResult(null);
         }, 500)
     }
+
     function handleFileChange(event) {
         const file = event.target.files[0];
         if (file && file.type.startsWith("image/")) {
@@ -27,9 +29,11 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
         }
         fileInputRef.current.value = null;
     }
+
     function handleFile() {
         fileInputRef.current.click();
     }
+
     async function uploadStory() {
         const formdata = new FormData();
         const blobImage = await fetch(result).then((req) => req.blob())
@@ -50,6 +54,7 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
             setUploaded(true);
         }
     }
+
     return <>
         <IoCloseSharp
             className={`fixed text-[35px] top-8 right-9 z-[100000] cursor-pointer opacity-0 ${creatingStory ? "opacity-100" : "pointer-events-none"}`}

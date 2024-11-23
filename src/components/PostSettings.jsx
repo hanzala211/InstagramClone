@@ -11,20 +11,25 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
     const [captionValue, setCaptionValue] = useState(selectedPost !== null ? selectedPost?.caption : "");
     const [isShared, setIsShared] = useState(false)
     const [shareLoading, setShareLoading] = useState(false);
+
     useEffect(() => {
         setCaptionValue(selectedPost !== null ? selectedPost.caption : "");
     }, [isEditingOpen])
+
     function handleClose() {
         setIsPostSettingOpen(false)
         setIsEditingOpen(false)
         setIsShared(false);
     }
+
     function handleIncrease() {
         setCurrentIndex((prev) => prev + 1)
     }
+
     function handleDecrease() {
         setCurrentIndex((prev) => prev - 1)
     }
+
     async function deletePost() {
         try {
             const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/${selectedPost._id}`, {
@@ -44,6 +49,7 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
             setIsPostOpen(false)
         }
     }
+
     async function updatePost() {
         try {
             setShareLoading(true);

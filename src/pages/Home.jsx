@@ -10,6 +10,7 @@ import { Post } from "../components/Post";
 
 export function Home() {
     const { userData, setUserData, setMainLoading } = useUser()
+    const { selectedPost, setSelectedPost } = usePost()
     const { setSelectedProfile } = useSearch();
     const [count, setCount] = useState(0);
     const [homePosts, setHomePosts] = useState([])
@@ -19,53 +20,29 @@ export function Home() {
     const [savedPosts, setSavedPosts] = useState(Array(homePosts.length).fill(false));
     const [likedPosts, setLikedPosts] = useState(Array(homePosts.length).fill(false));
     const [isPostOpen, setIsPostOpen] = useState(false)
-    const { selectedPost, setSelectedPost } = usePost()
     const [currentPost, setCurrentPost] = useState(null)
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0);
     const [comments, setComments] = useState([])
+
     useEffect(() => {
         if (homePosts !== null) {
             const updatedLikedPosts = homePosts.map((post) => post.likes.includes(userData?.data.user._id))
             setLikedPosts(updatedLikedPosts)
         }
-    }, [homePosts, userData])
-    useEffect(() => {
         if (homePosts !== null) {
             const updatedSavedPosts = homePosts.map((post) =>
                 userData.data.user.savedPosts.includes(post._id)
             );
             setSavedPosts(updatedSavedPosts);
         }
-    }, [homePosts, userData]);
+    }, [homePosts, userData])
+
     useEffect(() => {
         setIsPostsLoading(true)
         fetchHomePosts()
     }, [])
-    async function fetchHomePosts() {
-        setCount((prev) => prev + 1)
-        try {
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/home?limit=5`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json()
-            setHomePosts((prev) => {
-                const newItems = result.data.filter(
-                    (item) => !prev.some((prevItem) => prevItem._id === item._id)
-                );
-                return [...prev, ...newItems];
-            });
 
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setIsPostsLoading(false)
-        }
-    }
     function handleIncrease() {
         setIsAnimating(true);
         setCurrentIndex((prev) => prev + 1)
@@ -73,6 +50,7 @@ export function Home() {
             setIsAnimating(false)
         }, 400);
     }
+
     function handleDecrease() {
         setIsAnimating(true);
         setCurrentIndex((prev) => prev - 1)
@@ -80,6 +58,34 @@ export function Home() {
             setIsAnimating(false)
         }, 400);
     }
+
+    function formatDate(dateString) {
+        const now = new Date();
+        const targetDate = new Date(dateString);
+        const diffInMilliseconds = Math.abs(targetDate - now);
+        const MINUTE = 60 * 1000;
+        const HOUR = 60 * MINUTE;
+        const DAY = 24 * HOUR;
+        const WEEK = 7 * DAY;
+
+        if (diffInMilliseconds >= WEEK) {
+            const weeks = Math.floor(diffInMilliseconds / WEEK);
+            return `${weeks} w`;
+        } else if (diffInMilliseconds >= DAY) {
+            const days = Math.floor(diffInMilliseconds / DAY);
+            const hours = Math.floor((diffInMilliseconds % DAY) / HOUR);
+            return hours > 0
+                ? `${days} d ${hours} h`
+                : `${days} d`;
+        } else if (diffInMilliseconds >= HOUR) {
+            const hours = Math.floor(diffInMilliseconds / HOUR);
+            return `${hours} h`;
+        } else {
+            const minutes = Math.floor(diffInMilliseconds / MINUTE);
+            return `${minutes} m`;
+        }
+    }
+
     async function savePost(id, index) {
         try {
             setSavedPosts((prev) => {
@@ -112,6 +118,7 @@ export function Home() {
             console.error(error)
         }
     }
+
     async function unSavePost(id, index) {
         try {
             setSavedPosts((prev) => {
@@ -143,6 +150,32 @@ export function Home() {
             console.error(error)
         }
     }
+
+    async function fetchHomePosts() {
+        setCount((prev) => prev + 1)
+        try {
+            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/home?limit=5`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `${userData.data.token}`
+                },
+                redirect: "follow"
+            })
+            const result = await response.json()
+            setHomePosts((prev) => {
+                const newItems = result.data.filter(
+                    (item) => !prev.some((prevItem) => prevItem._id === item._id)
+                );
+                return [...prev, ...newItems];
+            });
+
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setIsPostsLoading(false)
+        }
+    }
+
     async function likePost(id, index) {
         try {
             setLikedPosts((prev) => {
@@ -175,32 +208,7 @@ export function Home() {
             console.error(error);
         }
     }
-    function formatDate(dateString) {
-        const now = new Date();
-        const targetDate = new Date(dateString);
-        const diffInMilliseconds = Math.abs(targetDate - now);
-        const MINUTE = 60 * 1000;
-        const HOUR = 60 * MINUTE;
-        const DAY = 24 * HOUR;
-        const WEEK = 7 * DAY;
 
-        if (diffInMilliseconds >= WEEK) {
-            const weeks = Math.floor(diffInMilliseconds / WEEK);
-            return `${weeks} w`;
-        } else if (diffInMilliseconds >= DAY) {
-            const days = Math.floor(diffInMilliseconds / DAY);
-            const hours = Math.floor((diffInMilliseconds % DAY) / HOUR);
-            return hours > 0
-                ? `${days} d ${hours} h`
-                : `${days} d`;
-        } else if (diffInMilliseconds >= HOUR) {
-            const hours = Math.floor(diffInMilliseconds / HOUR);
-            return `${hours} h`;
-        } else {
-            const minutes = Math.floor(diffInMilliseconds / MINUTE);
-            return `${minutes} m`;
-        }
-    }
     async function unLikePost(id, index) {
         try {
             setLikedPosts((prev) => {
@@ -233,6 +241,7 @@ export function Home() {
             console.error(error);
         }
     }
+
     async function fetchUserDataOnClick(username) {
         try {
             const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/search/${username}`, {
@@ -250,6 +259,7 @@ export function Home() {
             setMainLoading(false)
         }
     }
+
     return <><section className="w-full max-w-[40%] mx-auto">
         <div className={`flex flex-col gap-2 w-full ${isPostsLoading || homePosts.length === 0 ? "h-[90vh]" : ""} ${homePosts.length < 2 ? "h-[90vh]" : ""}`}>
             {!isPostsLoading ?

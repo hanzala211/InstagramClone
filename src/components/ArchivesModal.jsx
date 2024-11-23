@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
 
 export function ArchivesModal({ selectStatus, setSelectCover, selectedIDs, selectCover, setSelectStatus, isCreatingHighLight, handleClose, setSelectedIDs, left }) {
+    const { userData } = useUser()
     const [loadingArchives, setLoadingArchives] = useState(false)
     const [archives, setArchives] = useState([]);
-    const { userData } = useUser()
+
     useEffect(() => {
         async function fetchArchive() {
             try {
@@ -31,16 +32,19 @@ export function ArchivesModal({ selectStatus, setSelectCover, selectedIDs, selec
         }
         fetchArchive()
     }, [])
+
     function formatDate(num) {
         const date = new Date(num);
         const day = date.getDate();
         return `${day}`
     }
+
     function formatMonth(num) {
         const date = new Date(num);
         const month = date.toLocaleString('default', { month: "short" });
         return `${month} `
     }
+
     return <>
         <div className={`w-full max-w-[30vw] overflow-hidden bg-[#262626] rounded-xl h-[75vh] fixed inset-0 z-[100] top-1/2 ${left} -translate-x-1/2 -translate-y-1/2 opacity-0 transition duration-500 ${selectStatus && !selectCover ? "opacity-100" : "pointer-events-none"}`}>
             <div className="text-center w-full py-3 border-b-[1px] border-[#363636]">

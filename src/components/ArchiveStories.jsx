@@ -4,16 +4,19 @@ import { Loader } from "./Loader";
 
 export function ArchiveStories() {
     const { archives, loadingArchives, setCurrentStory } = useUser()
+
     function formatDate(num) {
         const date = new Date(num);
         const day = date.getDate();
         return `${day}`
     }
+
     function formatMonth(num) {
         const date = new Date(num);
         const month = date.toLocaleString('default', { month: "short" });
         return `${month} `
     }
+
     return <>
         {!loadingArchives ?
             <div className="grid grid-cols-4 gap-5">

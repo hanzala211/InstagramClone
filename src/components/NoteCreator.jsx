@@ -6,6 +6,7 @@ import { Loader } from "./Loader";
 export function NoteCreator({ handleClose, isNoteOpen, noteValue, setNoteValue, noteFunction, shareLoading }) {
     const { userData } = useUser();
     const isDisabled = noteValue.length === 0;
+
     return <>
         <div
             className={`overlay opacity-0 z-[10] transition-all duration-500 ${!isNoteOpen ? "pointer-events-none" : "backdrop-blur-sm opacity-100"

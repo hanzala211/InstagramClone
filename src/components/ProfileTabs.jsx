@@ -30,18 +30,6 @@ export function ProfileTabs({ isPosts, isTagged, isSaved, isSearchPosts }) {
         }
     }, [currentPost])
 
-    function formatNumber(num) {
-        if (num >= 1_000_000_000) {
-            return (num / 1_000_000_000).toFixed(1) + 'B';
-        } else if (num >= 1_000_000) {
-            return (num / 1_000_000).toFixed(1) + ' M';
-        } else if (num >= 1_000) {
-            return (num / 1_000).toFixed(1) + 'K';
-        } else {
-            return num.toString();
-        }
-    }
-
     function handleIncrease() {
         setCurrentPost((prev) => prev + 1)
         setCurrentIndex(0)
@@ -66,7 +54,7 @@ export function ProfileTabs({ isPosts, isTagged, isSaved, isSearchPosts }) {
             <p className="text-[13px]">{isPosts ? "When you share photos, they will appear on your profile." : isTagged ? "When people tag you in photos, they'll appear here." : isSaved ? "When you save posts, they will appear on your profile" : ""}</p>
         </div> :
             <div className="xl:max-w-[90%] h-auto grid xl:grid-cols-3 grid-cols-2 gap-[15px]">
-                {isPosts ? reversedPosts.map((item, i, arr) => <PostModal key={i} i={i} arr={arr} item={item} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} formatNumber={formatNumber} />) : isTagged ? reversedPosts.map((item, i, arr) => <PostModal key={i} i={i} arr={arr} item={item} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} formatNumber={formatNumber} />) : isSaved ? reversedSavedPosts.map((item, i, arr) => <PostModal key={i} i={i} arr={arr} item={item} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} formatNumber={formatNumber} />) : isSearchPosts ? reversedUserPosts.map((item, i, arr) => <PostModal key={i} i={i} arr={arr} item={item} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} formatNumber={formatNumber} />) : ""}
+                {isPosts ? reversedPosts.map((item, i, arr) => <PostModal key={i} i={i} arr={arr} item={item} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} />) : isTagged ? reversedPosts.map((item, i, arr) => <PostModal key={i} i={i} arr={arr} item={item} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} />) : isSaved ? reversedSavedPosts.map((item, i, arr) => <PostModal key={i} i={i} arr={arr} item={item} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} />) : isSearchPosts ? reversedUserPosts.map((item, i, arr) => <PostModal key={i} i={i} arr={arr} item={item} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} />) : ""}
             </div>}
         <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={isPosts ? userData.data.user : isSearchPosts ? selectedProfile : isSaved ? userSaves[currentPost]?.postBy : ""} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} page={page} setPage={setPage} totalPages={totalPages} setTotalPages={setTotalPages} comments={comments} setComments={setComments} />
         {selectedPost !== null &&

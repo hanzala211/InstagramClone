@@ -15,9 +15,11 @@ export function HighlightsEditor({ highLightsModal, setHighLightsModal }) {
     const [currentID, setCurrentID] = useState(0)
     const [sendLoading, setSendLoading] = useState(false)
     const navigate = useNavigate()
+
     useEffect(() => {
         setSelectedIDs((prev) => [...prev])
     }, [])
+
     function handleClose() {
         setSelectStatus(false)
         setSelectCover(false)
@@ -26,6 +28,7 @@ export function HighlightsEditor({ highLightsModal, setHighLightsModal }) {
         setHighLightsModal(false)
         setIsEditing(false)
     }
+
     async function deleteHighlight() {
         try {
             const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/highlights/${highlights[currentHighLight]._id}`, {
@@ -45,16 +48,19 @@ export function HighlightsEditor({ highLightsModal, setHighLightsModal }) {
             navigate(-1)
         }
     }
+
     function formatDate(num) {
         const date = new Date(num);
         const day = date.getDate();
         return `${day}`
     }
+
     function formatMonth(num) {
         const date = new Date(num);
         const month = date.toLocaleString('default', { month: "short" });
         return `${month} `
     }
+
     async function editHighLight() {
         async function removeHighLights(storyID) {
             try {
@@ -75,6 +81,7 @@ export function HighlightsEditor({ highLightsModal, setHighLightsModal }) {
                 console.error(error);
             }
         }
+
         Promise.all(highLightStories.map((item) => removeHighLights(item._id)))
         try {
             const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/highlights/${highlights[currentHighLight]._id}`, {
@@ -131,6 +138,7 @@ export function HighlightsEditor({ highLightsModal, setHighLightsModal }) {
             handleClose()
         }
     }
+
     return <>
         <div
             className={`overlay opacity-0 z-[50] transition-all duration-500 ${!highLightsModal && !isEditing ? "pointer-events-none" : "opacity-100"

@@ -12,6 +12,7 @@ import { NoteEditor } from "../components/NoteEditor";
 import { HighLightsModal } from "../components/HighLightsModal";
 
 export function Profile() {
+    const { userData, setUserPosts, note, setNote, setMessage, setStories, stories, setCurrentStory, highlights, setHighlights, setHighLightStories, setCurrentHighLight, setUserSaves, formatNumber } = useUser();
     const [postsLoading, setPostsLoading] = useState(false);
     const [noteValue, setNoteValue] = useState("");
     const [isEditOpen, setIsEditOpen] = useState(false);
@@ -21,77 +22,24 @@ export function Profile() {
     const [noteLoading, setNoteLoading] = useState(false);
     const [isCreatingHighLight, setIsCreatingHighLight] = useState(false);
     const noteEditorRef = useRef(null);
-    const { userData, setUserPosts, note, setNote, setMessage, setStories, stories, setCurrentStory, highlights, setHighlights, setHighLightStories, setCurrentHighLight, setUserSaves } = useUser();
+
+    useEffect(() => {
+        fetchPosts();
+        fetchSaves();
+        fetchNote();
+        getStatus();
+        if (highlights.length === 0) {
+            getHighLights()
+        }
+    }, [])
+
     useEffect(() => {
         const body = document.querySelector("body");
         body.style.overflowY = isEditOpen ? "hidden" : "auto";
 
         return () => body.style.overflowY = "auto"
     }, [isEditOpen])
-    useEffect(() => {
-        async function fetchPosts() {
-            try {
-                setPostsLoading(true);
-                const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/my-posts`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `${userData.data.token}`
-                    },
-                    redirect: "follow"
-                });
-                const result = await response.json();
-                setUserPosts(result.data)
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setTimeout(() => {
-                    setPostsLoading(false);
-                }, 500);
-            }
-        }
-        fetchPosts();
-    }, [])
-    useEffect(() => {
-        async function fetchSaves() {
-            try {
-                const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/saved-posts`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `${userData.data.token}`
-                    },
-                    redirect: "follow"
-                })
-                const result = await response.json();
-                setUserSaves(result.data)
-            } catch (error) {
-                console.error(error)
-            }
-        }
-        fetchSaves();
-    }, [])
-    useEffect(() => {
-        async function fetchNote() {
-            try {
-                setNoteLoading(true);
-                const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/note`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `${userData.data.token}`
-                    },
-                    redirect: "follow"
-                })
-                const result = await response.json();
-                if (result.message !== "Note not found or expired.") {
-                    setNote(result.note)
-                }
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setNoteLoading(false);
-            }
-        }
-        fetchNote()
-    }, [])
+
     useEffect(() => {
         function handleClickOutside(event) {
             if (noteEditorRef.current && !noteEditorRef.current.contains(event.target)) {
@@ -103,49 +51,102 @@ export function Profile() {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [setIsNoteEditOpen]);
-    useEffect(() => {
-        async function getStatus() {
-            try {
-                const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/story`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `${userData.data.token}`
-                    },
-                    redirect: "follow"
-                })
-                const result = await response.json();
-                setStories(result.stories)
-            } catch (error) {
-                console.error(error)
+
+    async function getHighLights() {
+        try {
+            setHighLightStories([]);
+            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/highlights`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `${userData.data.token}`
+                },
+                redirect: "follow"
+            })
+            const result = await response.json();
+            setHighlights(result.highlights)
+            // const allStories = result.highlights.reduce((acc, item) => {
+            //     return [...acc, ...item.stories];
+            // }, []);
+            // setHighLightStories(allStories);
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    async function getStatus() {
+        try {
+            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/story`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `${userData.data.token}`
+                },
+                redirect: "follow"
+            })
+            const result = await response.json();
+            setStories(result.stories)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    async function fetchNote() {
+        try {
+            setNoteLoading(true);
+            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/note`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `${userData.data.token}`
+                },
+                redirect: "follow"
+            })
+            const result = await response.json();
+            if (result.message !== "Note not found or expired.") {
+                setNote(result.note)
             }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setNoteLoading(false);
         }
-        getStatus()
-    }, [])
-    useEffect(() => {
-        async function getHighLights() {
-            try {
-                setHighLightStories([]);
-                const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/highlights`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `${userData.data.token}`
-                    },
-                    redirect: "follow"
-                })
-                const result = await response.json();
-                setHighlights(result.highlights)
-                // const allStories = result.highlights.reduce((acc, item) => {
-                //     return [...acc, ...item.stories];
-                // }, []);
-                // setHighLightStories(allStories);
-            } catch (error) {
-                console.error(error)
-            }
+    }
+
+    async function fetchSaves() {
+        try {
+            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/saved-posts`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `${userData.data.token}`
+                },
+                redirect: "follow"
+            })
+            const result = await response.json();
+            setUserSaves(result.data)
+        } catch (error) {
+            console.error(error)
         }
-        if (highlights.length === 0) {
-            getHighLights()
+    }
+
+    async function fetchPosts() {
+        try {
+            setPostsLoading(true);
+            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/my-posts`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `${userData.data.token}`
+                },
+                redirect: "follow"
+            });
+            const result = await response.json();
+            setUserPosts(result.data)
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setTimeout(() => {
+                setPostsLoading(false);
+            }, 500);
         }
-    }, [])
+    }
+
     async function createNote() {
         try {
             setShareLoading(true);
@@ -171,21 +172,12 @@ export function Profile() {
             setIsNoteOpen(false);
         }
     }
+
     function handleCloseNote() {
         setIsNoteOpen(false)
         setNoteValue("");
     }
-    function formatNumber(num) {
-        if (num >= 1_000_000_000) {
-            return (num / 1_000_000_000).toFixed(1) + 'B';
-        } else if (num >= 1_000_000) {
-            return (num / 1_000_000).toFixed(1) + ' M';
-        } else if (num >= 1_000) {
-            return (num / 1_000).toFixed(1) + 'K';
-        } else {
-            return num.toString();
-        }
-    }
+
     return <section className="w-full max-w-[70%] mx-auto">
         <div className="w-[62rem] pb-9 pt-12 border-b-[2px] border-[#262626]">
             <div className="flex gap-20 ml-16 items-center relative">

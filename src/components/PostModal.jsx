@@ -1,8 +1,10 @@
 import { FaHeart } from "react-icons/fa";
 import { PiCopySimpleLight } from "react-icons/pi";
 import { TbMessageCircleFilled } from "react-icons/tb";
+import { useUser } from "../context/UserContext";
 
-export function PostModal({ arr, i, setSelectedPost, setIsPostOpen, setCurrentPost, item, formatNumber }) {
+export function PostModal({ arr, i, setSelectedPost, setIsPostOpen, setCurrentPost, item }) {
+    const { formatNumber } = useUser();
     return <div className="w-[20rem] h-[20rem] cursor-pointer group relative overflow-hidden" onClick={() => {
         setSelectedPost(arr[i]);
         setIsPostOpen(true)

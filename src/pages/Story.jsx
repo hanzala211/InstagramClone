@@ -8,45 +8,19 @@ import { useState } from "react";
 import { HighlightsEditor } from "../components/HighlightsEditor";
 
 export function Story({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSearchHighLight }) {
-    const { stories, userData, archives, setCurrentStory, currentStory, highLightStories } = useUser();
+    const { stories, userData, archives, setCurrentStory, currentStory, highLightStories, formatDate } = useUser();
     const { searchUserStatus, selectedProfile, searchUserHighLights } = useSearch()
     const [highLightsModal, setHighLightsModal] = useState(false)
     const navigate = useNavigate();
+
     function handleIncrease() {
         setCurrentStory((prev) => prev + 1);
     }
+
     function handleDecrease() {
         setCurrentStory((prev) => prev - 1);
     }
-    function formatDate(dateString) {
-        const now = new Date();
-        const targetDate = new Date(dateString);
-        const diffInMilliseconds = Math.abs(targetDate - now);
-        const MINUTE = 60 * 1000;
-        const HOUR = 60 * MINUTE;
-        const DAY = 24 * HOUR;
-        const WEEK = 7 * DAY;
 
-        if (diffInMilliseconds >= WEEK) {
-            const weeks = Math.floor(diffInMilliseconds / WEEK);
-            return `${weeks} w`;
-        } else if (diffInMilliseconds >= DAY) {
-            const days = Math.floor(diffInMilliseconds / DAY);
-            const hours = Math.floor((diffInMilliseconds % DAY) / HOUR);
-            return hours > 0
-                ? `${days} d ${hours} h`
-                : `${days} d`;
-        } else if (diffInMilliseconds >= HOUR) {
-            const hours = Math.floor(diffInMilliseconds / HOUR);
-            const minutes = Math.floor((diffInMilliseconds % HOUR) / MINUTE);
-            return minutes > 0
-                ? `${hours} h ${minutes} m`
-                : `${hours} hour${hours > 1 ? "s" : ""}`;
-        } else {
-            const minutes = Math.floor(diffInMilliseconds / MINUTE);
-            return `${minutes} m`;
-        }
-    }
     return <section className="bg-[#1A1A1A] relative w-[100vw] h-[100vh] p-4 flex justify-between flex-row items-start">
         <img src="/images/instagramiconswhite.png" alt="Instagram Icon" className="w-28" />
         <div className="w-[32rem] rounded-xl">

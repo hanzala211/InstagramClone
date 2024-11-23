@@ -7,44 +7,47 @@ export function SearchBox({ refere, isSearching }) {
     const { userData } = useUser()
     const { searchQuery, setSearchQuery, searchData, setSearchData, setSelectedProfile } = useSearch();
     const [searchLoading, setSearchLoading] = useState(false);
+
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
-        async function fetchSearch() {
-            try {
-                setSearchLoading(true)
-                setSearchData([]);
-                const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/search/${searchQuery}`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `${userData.data.token}`
-                    },
-                    redirect: "follow",
-                    signal
-                })
-                const result = await response.json();
-                if (result.status !== "fail") {
-                    setSearchData((prev) => [...prev, ...result.data])
-                }
-                console.log(result)
-            } catch (error) {
-                if (error.name !== "AbortError") {
-                    console.error(error)
-                }
-            } finally {
-                setTimeout(() => {
-                    setSearchLoading(false);
-                }, 1500)
-            }
-        }
         if (searchQuery.length > 1) {
-            fetchSearch();
+            fetchSearch(signal);
         } else if (searchQuery.length === 0) {
             setSearchData([]);
         }
         return () => abortController.abort();
 
     }, [searchQuery])
+
+    async function fetchSearch(signal) {
+        try {
+            setSearchLoading(true)
+            setSearchData([]);
+            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/search/${searchQuery}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `${userData.data.token}`
+                },
+                redirect: "follow",
+                signal
+            })
+            const result = await response.json();
+            if (result.status !== "fail") {
+                setSearchData((prev) => [...prev, ...result.data])
+            }
+            console.log(result)
+        } catch (error) {
+            if (error.name !== "AbortError") {
+                console.error(error)
+            }
+        } finally {
+            setTimeout(() => {
+                setSearchLoading(false);
+            }, 1500)
+        }
+    }
+
     return <div ref={refere} className={`fixed pl-2 left-16 top-0 h-[100vh] transition-[width] overflow-auto scrollbar-hidden duration-300 ${!isSearching ? "w-0 pointer-events-none" : "border-r-[1px] border-[#262626] w-[19vw] "}`}>
         <div className={`px-4 pt-9 pb-6 flex gap-9 flex-col ${!isSearching ? "hidden" : "border-b-[1px] border-[#262626]"}`}>
             <h2 className="font-semibold text-[25px]">Search</h2>

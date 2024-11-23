@@ -13,6 +13,7 @@ export function HighLightsModal({ setIsCreatingHighLight, isCreatingHighLight })
     const [selectCover, setSelectCover] = useState(false);
     const { userData } = useUser()
     const [sendLoading, setSendLoading] = useState(false)
+
     useEffect(() => {
         const body = document.querySelector("body");
         body.style.overflow = selectStatus ? "hidden" : "auto";
@@ -20,6 +21,7 @@ export function HighLightsModal({ setIsCreatingHighLight, isCreatingHighLight })
             body.style.overflow = "auto"
         }
     }, [selectStatus])
+
     function handleClose() {
         setIsCreatingHighLight(false)
         setSelectStatus(false)
@@ -85,16 +87,19 @@ export function HighLightsModal({ setIsCreatingHighLight, isCreatingHighLight })
             handleClose();
         }
     }
+
     function formatDate(num) {
         const date = new Date(num);
         const day = date.getDate();
         return `${day}`
     }
+
     function formatMonth(num) {
         const date = new Date(num);
         const month = date.toLocaleString('default', { month: "short" });
         return `${month} `
     }
+
     return <>
         <div
             className={`overlay opacity-0 z-[50] transition-all duration-500 ${!isCreatingHighLight ? "pointer-events-none" : "backdrop-blur-sm opacity-100"

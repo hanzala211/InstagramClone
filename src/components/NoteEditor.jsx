@@ -10,6 +10,7 @@ export function NoteEditor({ setIsNoteEditOpen }) {
     const [shareLoading, setShareLoading] = useState(false);
     const [isNoteOpen, setIsNoteOpen] = useState(false)
     const [noteValue, setNoteValue] = useState("");
+
     async function deleteNote() {
         try {
             setDeleteLoading(true);
@@ -31,6 +32,7 @@ export function NoteEditor({ setIsNoteEditOpen }) {
             setDeleteLoading(false);
         }
     }
+
     async function updateNote() {
         try {
             setShareLoading(true);
@@ -56,10 +58,12 @@ export function NoteEditor({ setIsNoteEditOpen }) {
             setIsNoteEditOpen(false);
         }
     }
+
     function handleCloseNote() {
         setIsNoteOpen(false)
         setNoteValue("");
     }
+
     return <div className="absolute w-[20rem] h-[20rem] px-4 flex items-center flex-col justify-evenly bg-[#262626] rounded-xl -left-80 top-[5.2rem] z-[100]">
         <div className="absolute top-[8%] left-[43%] cursor-pointer">
             <NoteTooltip isProfile={true} note={note} className="text-[18px]" />

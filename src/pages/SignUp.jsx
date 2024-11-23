@@ -13,6 +13,7 @@ export function SignUp() {
     const [loading, setLoading] = useState(false)
     const [succesMessage, setSuccessMessage] = useState("");
     const navigate = useNavigate()
+
     async function fetchData() {
         const data = JSON.stringify({
             "fullName": fullName,
@@ -50,6 +51,7 @@ export function SignUp() {
             setLoading(false);
         }
     }
+
     return <>
         <section className="flex justify-center items-center w-full h-[90vh]">
             <div className="flex flex-col gap-3 items-center">

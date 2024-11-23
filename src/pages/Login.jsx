@@ -13,14 +13,16 @@ export function Login() {
     const [password, setPassword] = useState("");
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
+    const [loading, setLoading] = useState(false)
     const inputRef = useRef(null);
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false)
+
     useEffect(() => {
         setTimeout(() => {
             setMainLoading(false)
         }, 1000)
     }, [])
+
     useEffect(() => {
         const interval = setInterval(() => {
             setIsAnimating(true);

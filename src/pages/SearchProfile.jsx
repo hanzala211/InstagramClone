@@ -4,41 +4,28 @@ import { Link, NavLink, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSearch, useUser } from "../context/UserContext";
 import { Loader } from "../components/Loader";
-import { PostsIcon, TaggedUser } from "../assets/Constants";
+import { PostsIcon } from "../assets/Constants";
 import { HighLights } from "../components/Highlights";
 import { LoadingPage } from "./LoadingPage";
 
 
 export function SearchProfile() {
-    const [postsLoading, setPostsLoading] = useState(false);
     const { setSearchUserPosts, selectedProfile, searchUserStatus, setSearchUserStatus, searchUserHighLights, setSearchUserHighLights } = useSearch();
-    const { userData, setUserData, setHighLightStories, setCurrentHighLight, setCurrentStory, mainLoading } = useUser()
+    const { userData, setUserData, setHighLightStories, setCurrentHighLight, setCurrentStory, mainLoading, formatNumber } = useUser()
+    const [postsLoading, setPostsLoading] = useState(false);
     const [isFollowed, setIsFollowed] = useState(false);
     const [searchUserNotes, setSearchUserNotes] = useState([])
+
     useEffect(() => {
         if (userData?.data.user.following) {
             setIsFollowed(userData.data.user.following.includes(selectedProfile?._id))
         }
     }, [selectedProfile._id, userData.data.user.following])
+
     useEffect(() => {
-        async function fetchPosts(postID) {
-            try {
-                setPostsLoading(true);
-                const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/${postID}`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `${userData.data.token}`
-                    },
-                    redirect: "follow"
-                })
-                const result = await response.json();
-                return result.data;
-            } catch (error) {
-                console.error(error)
-            }
-        }
         Promise.all(selectedProfile?.posts.map((item) => fetchPosts(item))).then(res => setSearchUserPosts(res)).finally(() => setPostsLoading(false))
     }, [selectedProfile.posts, userData.data.token])
+
     useEffect(() => {
         if (selectedProfile?.highlights) {
             setSearchUserHighLights(selectedProfile.highlights);
@@ -50,6 +37,24 @@ export function SearchProfile() {
             setSearchUserNotes(selectedProfile.notes)
         }
     }, [selectedProfile])
+
+    async function fetchPosts(postID) {
+        try {
+            setPostsLoading(true);
+            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/${postID}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `${userData.data.token}`
+                },
+                redirect: "follow"
+            })
+            const result = await response.json();
+            return result.data;
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     async function followUser() {
         try {
             setUserData((prev) => ({
@@ -71,6 +76,7 @@ export function SearchProfile() {
             console.error(error)
         }
     }
+
     async function unfollowUser() {
         try {
             setUserData((prev) => ({
@@ -92,17 +98,7 @@ export function SearchProfile() {
             console.error(error)
         }
     }
-    function formatNumber(num) {
-        if (num >= 1_000_000_000) {
-            return (num / 1_000_000_000).toFixed(1) + 'B';
-        } else if (num >= 1_000_000) {
-            return (num / 1_000_000).toFixed(1) + ' M';
-        } else if (num >= 1_000) {
-            return (num / 1_000).toFixed(1) + 'K';
-        } else {
-            return num.toString();
-        }
-    }
+
     return <>
         {!mainLoading ?
 

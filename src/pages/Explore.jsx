@@ -8,10 +8,10 @@ import { TbMessageCircleFilled } from "react-icons/tb";
 import { Post } from "../components/Post";
 
 export function Explore() {
+    const { userData, formatNumber } = useUser();
+    const { setSelectedPost, selectedPost } = usePost()
     const [explorePagePosts, setExplorePagePosts] = useState([]);
     const [isPostsLoading, setIsPostsLoading] = useState(false);
-    const { setSelectedPost, selectedPost } = usePost()
-    const { userData } = useUser();
     const [currentPost, setCurrentPost] = useState(0);
     const [isPostOpen, setIsPostOpen] = useState(false);
     const [count, setCount] = useState(0);
@@ -24,11 +24,13 @@ export function Explore() {
         setIsPostsLoading(true)
         fetchPosts();
     }, [])
+
     useEffect(() => {
         if (currentPost !== null && currentPost < explorePagePosts.length) {
             setSelectedPost(explorePagePosts[currentPost])
         }
     }, [currentPost])
+
     async function fetchPosts() {
         setCount((prev) => prev + 1)
         try {
@@ -51,17 +53,7 @@ export function Explore() {
             setIsPostsLoading(false)
         }
     }
-    function formatNumber(num) {
-        if (num >= 1_000_000_000) {
-            return (num / 1_000_000_000).toFixed(1) + 'B';
-        } else if (num >= 1_000_000) {
-            return (num / 1_000_000).toFixed(1) + ' M';
-        } else if (num >= 1_000) {
-            return (num / 1_000).toFixed(1) + 'K';
-        } else {
-            return num.toString();
-        }
-    }
+
     function handleIncrease() {
         setCurrentPost((prev) => prev + 1)
         setCurrentIndex(0)
@@ -69,6 +61,7 @@ export function Explore() {
         setPage(1);
         setTotalPages(null)
     }
+
     function handleDecrease() {
         setCurrentPost((prev) => prev - 1)
         setCurrentIndex(0)
@@ -76,6 +69,7 @@ export function Explore() {
         setPage(1);
         setTotalPages(null)
     }
+
     return <><section className={`w-full max-w-[65%] mt-10 mx-auto ${isPostsLoading || explorePagePosts.length === 0 ? "h-[85vh]" : ""} ${explorePagePosts.length < 6 ? "h-[95vh]" : ""}`}>
         {explorePagePosts.length === 0 && !isPostsLoading ? (
             <p className="text-center text-lg text-gray-500">
