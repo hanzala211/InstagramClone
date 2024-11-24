@@ -259,7 +259,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                 </div>
                             }
                             <div className="flex flex-col gap-4 ml-5 pt-2">
-                                {commentsLoading ? <div className="flex flex-col gap-4">{Array.from({ length: 20 }, (_, i) => <Skeleton key={i} />)}</div> : (
+                                {commentsLoading ? <div className="flex flex-col gap-4">{Array.from({ length: 20 }, (_, i) => <Skeleton key={i} np/>)}</div> : (
                                     comments?.map((item, i) => (
                                         <div key={i} className="flex gap-4 ml-1">
                                             <img
