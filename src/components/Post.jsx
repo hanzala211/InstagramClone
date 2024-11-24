@@ -259,7 +259,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                 </div>
                             }
                             <div className="flex flex-col gap-4 ml-5 pt-2">
-                                {commentsLoading ? <div className="flex flex-col gap-4">{Array.from({ length: 20 }, (_, i) => <Skeleton key={i} np/>)}</div> : (
+                                {commentsLoading ? <div className="flex flex-col gap-4">{Array.from({ length: 20 }, (_, i) => <Skeleton key={i} np />)}</div> : (
                                     comments?.map((item, i) => (
                                         <div key={i} className="flex gap-4 ml-1">
                                             <img
@@ -269,7 +269,11 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                             />
                                             <div className="flex flex-col gap-1">
                                                 <p className="text-[15px]">
-                                                    <Link className="text-[13px] mr-2 font-semibold hover:opacity-50 transition duration-150">
+                                                    <Link to={userData?.data.user._id !== item?.user._id ? `/search/${item?.user.userName}/` : `/${userData?.data.user.userName}/`} onClick={() => {
+                                                        fetchUserDataOnClick(item?.user.userName)
+                                                        setMainLoading(true)
+                                                        setSelectedPost(null)
+                                                    }} className="text-[13px] mr-2 font-semibold hover:opacity-50 transition duration-150">
                                                         {item.user.userName}
                                                     </Link>
                                                     {item.comment}

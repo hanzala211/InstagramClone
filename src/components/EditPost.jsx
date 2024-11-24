@@ -2,7 +2,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 export function EditPost({ croppedImage, currentIndex, handleDecrease, handleIncrease, loading, isCaption, setCaptionValue, userData, captionValue }) {
     return <div className="w-full flex flex-row h-full">
-        <div className="w-[70%] h-full overflow-hidden relative">
+        <div className="w-[65%] h-full overflow-hidden relative">
             <img src={croppedImage[currentIndex]} alt="Selected Images" className="object-cover w-full h-full" />
             {(!croppedImage || croppedImage.length > 1) && !loading && isCaption ?
                 <>
@@ -10,7 +10,7 @@ export function EditPost({ croppedImage, currentIndex, handleDecrease, handleInc
                     {currentIndex !== 0 && <button className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleDecrease}><FaArrowLeft className="fill-black" /></button>}
                 </> : ""}
         </div>
-        <div className="w-[30%] px-4 py-5 border-l-[2px] border-[#363636]">
+        <div className="w-[35%] px-4 py-5 border-l-[2px] border-[#363636]">
             <div className="flex flex-row gap-4 items-center">
                 <img src={userData.data.user.profilePic} className="w-8 rounded-full" alt="Profile Pic" />
                 <p className="text-[14px] font-semibold">{userData.data.user.userName}</p>
