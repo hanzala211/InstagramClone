@@ -75,6 +75,7 @@ export function Profile() {
 
     async function getStatus() {
         try {
+
             const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/story`, {
                 method: "GET",
                 headers: {

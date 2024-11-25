@@ -284,7 +284,7 @@ export function Home() {
                                             return <img src={item} key={i} alt="Posts" className="w-96 object-cover" />
                                         }) : ""}
                                     </div>
-                                    {item.imageUrls.length > 1 ? <> {item !== null && currentIndex !== selectedPost.imageUrls.length - 1 && <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleIncrease}><FaArrowRight className="fill-black" /></button>}
+                                    {item?.imageUrls.length > 1 ? <> {item !== null && currentIndex !== selectedPost?.imageUrls.length - 1 && <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleIncrease}><FaArrowRight className="fill-black" /></button>}
                                         {currentIndex !== 0 && <button className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleDecrease}><FaArrowLeft className="fill-black" /></button>}
                                     </> : ""}
                                 </div>
