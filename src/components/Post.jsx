@@ -191,7 +191,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
     return (
         <>
             <IoCloseSharp
-                className={`fixed text-[35px] top-8 right-9 z-[100000] cursor-pointer opacity-0 ${isPostOpen ? "opacity-100" : "pointer-events-none"}`}
+                className={`fixed xl:text-[35px] text-[25px] xl:top-8 lg:top-5 top-2 xl:right-9 lg:right-5 right-2 z-[100000] cursor-pointer opacity-0 ${isPostOpen ? "opacity-100" : "pointer-events-none"}`}
                 onClick={handleClose}
             />
             <div
@@ -200,7 +200,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                 onClick={handleClose}
             ></div>
             <div
-                className={`fixed opacity-0 top-1/2 -translate-y-1/2 w-full xl:max-w-[80rem] max-w-[65rem] box-border xl:h-[48rem] h-[40rem] -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100" : "pointer-events-none"
+                className={`fixed opacity-0 top-1/2 -translate-y-1/2 w-full xl:max-w-[80rem] lg:max-w-[58rem] max-w-[50rem] box-border xl:h-[48rem] lg:h-[35rem] h-[30rem] -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100" : "pointer-events-none"
                     }`}
             >
                 <div className="h-full flex">
