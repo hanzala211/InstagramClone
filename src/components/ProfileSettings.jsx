@@ -26,12 +26,6 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
         selectedImage !== null;
 
     useEffect(() => {
-        window.addEventListener("click", (ev) => {
-            console.log(ev.target)
-        })
-    })
-
-    useEffect(() => {
         setInitialDate({
             userName: userData.data.user.userName,
             bio: userData.data.user.bio,

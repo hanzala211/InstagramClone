@@ -19,6 +19,7 @@ export function Home() {
     const [homePosts, setHomePosts] = useState([])
     const [currentIndex, setCurrentIndex] = useState(Array(homePosts.length).fill(0));
     const [totalIndex, setTotalIndex] = useState(Array(homePosts.length).fill(0))
+    const [currentPostIndex, setCurrentPostIndex] = useState(0)
     const [isAnimating, setIsAnimating] = useState(false);
     const [isPostsLoading, setIsPostsLoading] = useState(false)
     const [savedPosts, setSavedPosts] = useState(Array(homePosts.length).fill(false));
@@ -244,7 +245,7 @@ export function Home() {
                                             {!likedPosts[index] ?
                                                 <button onClick={() => likePost(item._id, i)}><Like className={`hover:opacity-80 transition-all duration-150 cursor-pointer`} /></button>
                                                 : <button onClick={() => unLikePost(item._id, i)}><UnLike className={`hover:opacity-80 fill-red-700 transition-all duration-150 cursor-pointer`} /></button>}
-                                            <CommentHome setCurrentIndex={setCurrentIndex} item={item} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} setSelectedPost={setSelectedPost} i={index} />
+                                            <CommentHome setCurrentIndex={setCurrentPostIndex} item={item} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} setSelectedPost={setSelectedPost} i={index} />
                                         </div>
                                         {!savedPosts[index] ?
                                             <button onClick={() => savePost(item._id, i)}>
@@ -279,6 +280,6 @@ export function Home() {
             }
         </div>
     </section>
-        <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={homePosts[currentPost]?.user} page={page} setPage={setPage} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} totalPages={totalPages} setTotalPages={setTotalPages} comments={comments} setComments={setComments} />
+        <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={homePosts[currentPost]?.user} page={page} setPage={setPage} currentIndex={currentPostIndex} setCurrentIndex={setCurrentPostIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} totalPages={totalPages} setTotalPages={setTotalPages} comments={comments} setComments={setComments} />
     </>
 }
