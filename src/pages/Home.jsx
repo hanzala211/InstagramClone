@@ -49,6 +49,12 @@ export function Home() {
     }, [homePosts])
 
     useEffect(() => {
+        if (homePosts) {
+            setCurrentIndex(Array(homePosts.length).fill(0))
+        }
+    }, [homePosts.length])
+
+    useEffect(() => {
         setIsPostsLoading(true)
         setCount((prev) => prev + 1);
         fetchHomePosts(userData, setHomePosts, setIsPostsLoading)
@@ -259,7 +265,7 @@ export function Home() {
     return <><section className="w-full max-w-[40%] mx-auto">
         <div className={`flex flex-col gap-2 w-full ${isPostsLoading || homePosts.length === 0 ? "h-[90vh]" : ""} ${homePosts.length < 2 ? "h-[90vh]" : ""}`}>
             {!isPostsLoading ?
-                <InfiniteScroll dataLength={homePosts.length} loader={homePosts.length > 0 && <Loader height="h-[10vh]" />} next={fetchHomePosts} hasMore={count < 10} >
+                <InfiniteScroll dataLength={homePosts.length} loader={homePosts.length > 0 && <Loader height="h-[10vh]" />} next={fetchHomePosts} hasMore={count < 5} >
                     {
                         homePosts.length > 0 ? homePosts.map((item, index) => {
                             return <div key={index} className="flex flex-col gap-2 mt-7 border-b-[2px] border-[#262626] pb-4">
