@@ -26,6 +26,12 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
         selectedImage !== null;
 
     useEffect(() => {
+        window.addEventListener("click", (ev) => {
+            console.log(ev.target)
+        })
+    })
+
+    useEffect(() => {
         setInitialDate({
             userName: userData.data.user.userName,
             bio: userData.data.user.bio,
@@ -142,13 +148,11 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
     }
 
     return <>
-        <div className={`overlay opacity-0 transition-all z-[10] duration-500 ${!isEditOpen ? "pointer-events-none" : "backdrop-blur-sm opacity-100"}`} onClick={() => {
-            handleClose()
-        }}></div>
-        <IoCloseSharp className={`absolute text-[40px] top-8 z-[10000] right-[2rem] cursor-pointer opacity-0 transition duration-200 ${isEditOpen ? "opacity-100" : ""}`} onClick={() => handleClose()} />
-        <div className={`fixed inset-0 flex items-center justify-center z-[150] transition-opacity duration-500 ${isEditOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        <div className={`overlay opacity-0 transition-all z-[150] duration-500 ${!isEditOpen ? "pointer-events-none" : "backdrop-blur-sm opacity-100"}`} onClick={handleClose}></div>
+        <IoCloseSharp className={`absolute text-[40px] top-8 z-[10000] right-[2rem] cursor-pointer opacity-0 transition duration-200 ${isEditOpen ? "opacity-100" : ""}`} onClick={handleClose} />
+        <div className={`fixed inset-0 flex items-center left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 justify-center z-[150] w-full max-w-[45rem] h-[75vh] transition-opacity duration-500 ${isEditOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         >
-            <div className="bg-[#262626] rounded-3xl px-10 py-10 w-full max-w-[45rem] max-h-[90vh] overflow-y-auto scrollbar-hidden">
+            <div className="bg-[#262626] w-full h-full overflow-auto scrollbar-hidden  rounded-3xl px-10 py-10">
                 <h2 className="text-[25px] font-semibold">Edit Profile</h2>
                 <div className="flex flex-row items-center justify-between bg-[#424242] rounded-2xl my-5 px-4 py-2 w-full">
                     <div className="flex gap-4 items-center">
