@@ -81,18 +81,18 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
                 }`}
             onClick={() => handleClose()}
         ></div>
-        <div className={`bg-[#262626] w-96 rounded-2xl fixed z-[1000000] opacity-0 transition duration-300 inset-0 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 text-[11px] ${!isPostSettingOpen ? "pointer-events-none" : "opacity-100"} ${isMyPost ? "h-[14.5rem]" : "h-[8.5rem]"}`}>
+        <div className={`bg-[#262626] xl:w-96 w-80 rounded-2xl fixed z-[1000000] opacity-0 transition duration-300 inset-0 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 ${!isPostSettingOpen ? "pointer-events-none" : "opacity-100"} ${isMyPost ? "xl:h-[14.5rem] h-[12.5rem]" : "xl:h-[8.5rem] h-[7.5rem]"}`}>
             {isMyPost && <>
-                <button className="text-red-600 w-full p-3 text-[14px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]" onClick={() => deletePost()}>Delete</button>
-                <button className="w-full p-3 border-b-[1px] text-[14px] active:opacity-70 font-semibold border-[#363636]" onClick={() => {
+                <button className="text-red-600 w-full p-3 xl:text-[14px] text-[11px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]" onClick={() => deletePost()}>Delete</button>
+                <button className="w-full p-3 border-b-[1px] xl:text-[14px] text-[11px]  active:opacity-70 font-semibold border-[#363636]" onClick={() => {
                     setIsEditingOpen(true)
                     setIsPostSettingOpen(false)
                 }}>Edit</button>
             </>
             }
-            <button className="w-full p-3 border-b-[1px] text-[14px] active:opacity-70 font-semibold border-[#363636]">Copy Link</button>
-            <button className="w-full p-3 border-b-[1px] text-[14px] active:opacity-70 font-semibold border-[#363636]">About this Account</button>
-            <button className="w-full p-3 text-[14px] font-semibold active:opacity-70" onClick={() => setIsPostSettingOpen(false)}>Cancel</button>
+            <button className="w-full p-3 border-b-[1px] xl:text-[14px] text-[11px] active:opacity-70 font-semibold border-[#363636]">Copy Link</button>
+            <button className="w-full p-3 border-b-[1px] xl:text-[14px] text-[11px] active:opacity-70 font-semibold border-[#363636]">About this Account</button>
+            <button className="w-full p-3 xl:text-[14px] text-[11px] font-semibold active:opacity-70" onClick={() => setIsPostSettingOpen(false)}>Cancel</button>
         </div>
         <div
             className={`overlay opacity-0 transition-all z-[110] backdrop-blur-sm duration-500 ${!isEditingOpen ? "pointer-events-none" : "opacity-100"
