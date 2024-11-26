@@ -5,7 +5,7 @@ import { Footer } from "../components/Footer";
 import { Loader } from "../components/Loader";
 
 export function SignUp() {
-    const { setUserData, userData } = useUser();
+    const { setUserData, userData, setMainLoading } = useUser();
     const [emailAddress, setEmailAddress] = useState("");
     const [signupPassword, setSignupPassword] = useState("");
     const [fullName, setFullName] = useState("");
@@ -22,6 +22,7 @@ export function SignUp() {
             "password": signupPassword
         });
         try {
+            setMainLoading(true)
             setLoading(true);
             setUserData({})
             setSuccessMessage("");
@@ -50,6 +51,7 @@ export function SignUp() {
             console.error(error);
         } finally {
             setLoading(false);
+            setMainLoading(false)
         }
     }
 

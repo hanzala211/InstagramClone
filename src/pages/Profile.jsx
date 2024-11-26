@@ -180,12 +180,12 @@ export function Profile() {
         setNoteValue("");
     }
 
-    return <section className="w-full max-w-[65%] mx-auto">
+    return <section className="w-full max-w-[60%] mx-auto">
         <div className="w-full max-w-[61rem] pb-9 pt-20 border-b-[2px] border-[#262626]">
-            <div className="flex gap-20 ml-16 items-center relative">
-                <div className="absolute -top-1 left-[7%] z-[1] cursor-pointer" onClick={() => {
+            <div className="flex flex-col xl:flex-row w-full gap-20 ml-10 items-center relative">
+                <div className="absolute xl:-top-1 lg:left-[45%] xl:left-[7%] z-[1] cursor-pointer" onClick={() => {
                     if (note.length === 0) {
-                        setIsNoteOpen(true)
+                        setIsNoteOpen(true);
                     } else {
                         setIsNoteEditOpen(true);
                     }
@@ -193,16 +193,20 @@ export function Profile() {
                     {!isNoteEditOpen ? <NoteTooltip isProfile={true} note={note} noteLoading={noteLoading} /> : <div ref={noteEditorRef}><NoteEditor setIsNoteEditOpen={setIsNoteEditOpen} /></div>}
                 </div>
                 <Link to={stories.length > 0 ? `/stories/${userData.data.user.userName}/${stories[0]._id}/` : ""} className={`p-2 ${stories.length > 0 ? "relative rounded-full multicolor-border" : ""}`} onClick={() => setCurrentStory(0)}>
-                    <img src={userData?.data?.user.profilePic} alt="User Profile" className="rounded-full w-40" />
+                    <img src={userData?.data?.user.profilePic} alt="User Profile" className="rounded-full w-32 lg:w-40" />
                 </Link>
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 mt-6 xl:mt-0">
                     <div className="flex gap-6 items-center">
                         <Link className="text-[20px] flex items-center gap-1">{userData?.data?.user.userName}
                             {userData !== undefined && userData?.data.user.followers.length > 10 && <MdVerified className="fill-[#0095F6]" />}
                         </Link>
                         <div className="flex gap-3 items-center">
-                            <button className="bg-[#363636] px-5 py-1.5 rounded-[0.5rem] text-[14px] hover:bg-[rgb(38,38,38)] transition duration-150" onClick={() => setIsEditOpen(true)}>Edit Profile</button>
-                            <Link to="/archive/stories/" className="bg-[#363636] px-5 py-1.5 rounded-[0.5rem] text-[14px] hover:bg-[rgb(38,38,38)] transition duration-150">View Archive</Link>
+                            <button className="bg-[#363636] px-4 py-1 rounded-[0.5rem] text-[14px] hover:bg-[rgb(38,38,38)] transition duration-150 lg:px-5 lg:py-1.5" onClick={() => setIsEditOpen(true)}>
+                                Edit Profile
+                            </button>
+                            <Link to="/archive/stories/" className="bg-[#363636] px-4 py-1 rounded-[0.5rem] text-[14px] hover:bg-[rgb(38,38,38)] transition duration-150 lg:px-5 lg:py-1.5">
+                                View Archive
+                            </Link>
                         </div>
                     </div>
                     <div className="flex gap-10 items-center">
@@ -217,24 +221,39 @@ export function Profile() {
                 </div>
             </div>
             <div className="flex gap-10 ml-5 mt-16 h-36 overflow-x-auto scrollbar-hidden">
-                {highlights.length > 0 && highlights.map((item, i, arr) => <Link to={`/stories/highlight/${arr[i]._id}/`} key={i} onClick={() => {
-                    setHighLightStories(highlights[i].stories)
-                    setCurrentStory(0)
-                    setCurrentHighLight(i)
-                }}><HighLights title={item.name} image={item.profilePic} /></Link>)}
+                {highlights.length > 0 && highlights.map((item, i, arr) => (
+                    <Link to={`/stories/highlight/${arr[i]._id}/`} key={i} onClick={() => {
+                        setHighLightStories(highlights[i].stories);
+                        setCurrentStory(0);
+                        setCurrentHighLight(i);
+                    }}>
+                        <HighLights title={item.name} image={item.profilePic} />
+                    </Link>
+                ))}
                 <HighLights title="New" onClick={() => setIsCreatingHighLight(true)} />
             </div>
         </div>
-        <div className="absolute xl:left-[56%] left-[60%] -translate-x-1/2 flex gap-10">
-            <NavLink end to={`/${userData?.data?.user.userName || userData.data.userName}/`} className={({ isActive }) => `flex items-center tracking-wider py-3 gap-1 text-[12px] ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><PostsIcon /> POSTS</NavLink >
-            <NavLink to={`/${userData?.data?.user.userName || userData.data.userName}/saved/`} className={({ isActive }) => `flex items-center tracking-wider py-3 text-[12px] gap-1 ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><SavedIcon /> SAVED</NavLink>
-            <NavLink to={`/${userData?.data?.user.userName || userData.data.userName}/tagged/`} className={({ isActive }) => `flex items-center tracking-wider py-3 text-[12px] gap-1  ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><TaggedUser /> TAGGED</NavLink>
+
+        <div className="absolute xl:left-[57%] left-[60%] -translate-x-1/2 flex flex-row gap-10 mt-0">
+            <NavLink end to={`/${userData?.data?.user.userName || userData.data.userName}/`} className={({ isActive }) => `flex items-center tracking-wider py-3 gap-1 text-[12px] ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}>
+                <PostsIcon /> POSTS
+            </NavLink>
+            <NavLink to={`/${userData?.data?.user.userName || userData.data.userName}/saved/`} className={({ isActive }) => `flex items-center tracking-wider py-3 text-[12px] gap-1 ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}>
+                <SavedIcon /> SAVED
+            </NavLink>
+            <NavLink to={`/${userData?.data?.user.userName || userData.data.userName}/tagged/`} className={({ isActive }) => `flex items-center tracking-wider py-3 text-[12px] gap-1 ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}>
+                <TaggedUser /> TAGGED
+            </NavLink>
         </div>
+
         <div className="mt-[4rem]">
-            {!postsLoading ? <Outlet /> : <Loader />}
+            {!postsLoading ? <Outlet /> : <Loader height="h-[34vh]" />}
         </div>
+
         <ProfileSettings userData={userData} isEditOpen={isEditOpen} setIsEditOpen={setIsEditOpen} />
         <NoteCreator handleClose={handleCloseNote} isNoteOpen={isNoteOpen} noteValue={noteValue} setNoteValue={setNoteValue} setIsNoteOpen={setIsNoteOpen} note={note} setNote={setNote} noteFunction={createNote} shareLoading={shareLoading} />
         <HighLightsModal isCreatingHighLight={isCreatingHighLight} setIsCreatingHighLight={setIsCreatingHighLight} />
-    </section >
+    </section>
+
+
 }

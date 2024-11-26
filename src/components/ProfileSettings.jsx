@@ -98,11 +98,6 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
                         }
                     }
                 })
-                setIsEditOpen(false)
-                setTimeout(() => {
-                    setSuccessMessage("")
-                    setErrorMessage("")
-                }, 900)
             }
             else {
                 setErrorMessage(result.message)
@@ -130,6 +125,11 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
                             }
                         }
                     })
+                    setIsEditOpen(false)
+                    setTimeout(() => {
+                        setSuccessMessage("")
+                        setErrorMessage("")
+                    }, 900)
                 } else {
                     setErrorMessage(result.data);
                 }

@@ -63,35 +63,57 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
         <div
             className={`overlay opacity-0 z-[50] transition-all duration-500 ${!creatingStory ? "pointer-events-none" : "backdrop-blur-sm opacity-100"
                 }`}
-            onClick={() => handleClose()}
+            onClick={handleClose}
         ></div>
         <div
-            className={`fixed opacity-0 top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${creatingStory ? "opacity-100" : "pointer-events-none"
-                } border-y-[1px] border-[#363636]`}
+            className={`fixed opacity-0 top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${creatingStory ? "opacity-100" : "pointer-events-none"} border-y-[1px] border-[#363636] 
+        lg:block xl:w-[40vw] h-[72vh] sm:w-[60vw] `}
         >
-            <p className="text-[18px] absolute -top-9 left-1/2 -translate-x-1/2">
+            <p className="text-[18px] absolute -top-9 left-1/2 -translate-x-1/2 sm:text-[16px] md:text-[18px]">
                 {!isUploading ? "Create New Story" : !uploaded ? "Story Sharing" : "Story Shared"}
             </p>
-            {selectedImage === null ? <div className="bg-[#262626] px-10 py-10 w-[36vw] h-[72vh] flex items-center justify-center flex-col gap-2">
-                <CreatePosts />
-                <p className="text-[20px]">Drag photos and videos here</p>
-                <button
-                    onClick={handleFile}
-                    className="bg-[#0095F6] hover:bg-opacity-70 transition-all duration-200 px-3 py-2 text-[14px] rounded-lg"
-                >
-                    Select From Computer
-                </button>
-                <input
-                    type="file"
-                    accept="image/*"
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    style={{ display: "none" }}
-                />
-            </div> : !isUploading ? <div className="bg-[#262626] w-[36vw] h-[72vh] flex items-center justify-center flex-col gap-2"><Pintura selectedImage={selectedImage} setSelectedImage={setSelectedImage} setResult={setResult} result={result} uploadStory={uploadStory} setIsUploading={setIsUploading} /></div> : <div className="bg-[#262626] w-[36vw] h-[72vh] flex items-center justify-center flex-col gap-2">
-                {!uploaded ? <img src="/images/sharedLoader.gif" alt="loading" className="w-32" /> : <img src="/images/sharedPost.gif" alt="loaded" className="w-32" />}
-                {!uploaded ? "" : <p className="text-[20px] font-semibold mt-5">Your story has been shared.</p>}
-            </div>}
-        </div >
+
+            <div className="bg-[#262626] flex items-center justify-center flex-col gap-2 w-full h-full px-5 py-5">
+                {selectedImage === null ? (
+                    <>
+                        <CreatePosts />
+                        <p className="text-[20px] sm:text-[18px]">Drag photos and videos here</p>
+                        <button
+                            onClick={handleFile}
+                            className="bg-[#0095F6] hover:bg-opacity-70 transition-all duration-200 px-3 py-2 text-[14px] rounded-lg sm:px-2 sm:py-1 sm:text-[12px]"
+                        >
+                            Select From Computer
+                        </button>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            style={{ display: "none" }}
+                        />
+                    </>
+                ) : !isUploading ? (
+                    <Pintura
+                        selectedImage={selectedImage}
+                        setSelectedImage={setSelectedImage}
+                        setResult={setResult}
+                        result={result}
+                        uploadStory={uploadStory}
+                        setIsUploading={setIsUploading}
+                    />
+                ) : (
+                    <>
+                        {!uploaded ? (
+                            <img src="/images/sharedLoader.gif" alt="loading" className="w-32 sm:w-24" />
+                        ) : (
+                            <img src="/images/sharedPost.gif" alt="loaded" className="w-32 sm:w-24" />
+                        )}
+                        {!uploaded ? "" : <p className="text-[20px] font-semibold mt-5 sm:text-[18px]">Your story has been shared.</p>}
+                    </>
+                )}
+            </div>
+        </div>
+
+
     </>
 }

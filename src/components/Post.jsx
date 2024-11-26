@@ -12,7 +12,7 @@ import { fetchUserDataOnClick, formatDate } from "../utils/helper";
 
 export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, comments, setComments }) {
     const { selectedPost, setSelectedPost } = usePost()
-    const { userData, setUserData, setMainLoading } = useUser();
+    const { userData, setUserData, setMainLoading, setMessage } = useUser();
     const { setSelectedProfile } = useSearch()
     const [commentValue, setCommentValue] = useState("");
     const [isAnimating, setIsAnimating] = useState(false);
@@ -108,12 +108,16 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                 redirect: "follow"
             })
             const result = await respone.json();
+            if (result.status !== "fail") {
+                setMessage("Commented Successfully")
+                setCommentValue("")
+                setIsCommented((prev) => !prev)
+            }
         } catch (error) {
             console.error(error)
+            setMessage("Failed")
         } finally {
             setIsDisabled(commentValue.length === 0);
-            setCommentValue("")
-            setIsCommented((prev) => !prev)
         }
     }
 
@@ -128,15 +132,21 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                 redirect: "follow"
             })
             const result = await response.json();
-            setUserData((prev) => ({
-                ...prev, data: {
-                    ...prev.data, user: {
-                        ...prev.data.user, savedPosts: prev.data.user.savedPosts.includes(result.savedPosts[0]) ? [...prev.data.user.savedPosts] : [...prev.data.user.savedPosts, ...result.savedPosts]
+            if (result.status !== "fail") {
+
+                setUserData((prev) => ({
+                    ...prev, data: {
+                        ...prev.data, user: {
+                            ...prev.data.user, savedPosts: prev.data.user.savedPosts.includes(result.savedPosts[0]) ? [...prev.data.user.savedPosts] : [...prev.data.user.savedPosts, ...result.savedPosts]
+                        }
                     }
-                }
-            }))
+                }))
+                setMessage("Post Saved Successfully")
+            }
         } catch (error) {
             console.error(error)
+            setMessage("Failed")
+            setIsSaved((prev) => !prev)
         }
     }
 
@@ -151,15 +161,20 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                 redirect: "follow"
             })
             const result = await response.json();
-            setUserData((prev) => ({
-                ...prev, data: {
-                    ...prev.data, user: {
-                        ...prev.data.user, savedPosts: prev.data.user.savedPosts.includes(result.savedPosts[0]) ? prev.data.user.savedPosts.filter((item) => item !== result.savedPosts[0]) : [...prev.data.user.savedPosts, ...result.savedPosts]
+            if (result.status !== "fail") {
+                setUserData((prev) => ({
+                    ...prev, data: {
+                        ...prev.data, user: {
+                            ...prev.data.user, savedPosts: prev.data.user.savedPosts.includes(result.savedPosts[0]) ? prev.data.user.savedPosts.filter((item) => item !== result.savedPosts[0]) : [...prev.data.user.savedPosts, ...result.savedPosts]
+                        }
                     }
-                }
-            }))
+                }))
+                setMessage("Post Unsaved Successfully")
+            }
         } catch (error) {
             console.error(error)
+            setMessage("Failed")
+            setIsSaved((prev) => !prev)
         }
     }
 
@@ -176,7 +191,12 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
             })
             const result = await response.json()
             setTotalPages(result.data.totalPages);
-            setComments((prev) => [...prev, ...result.data.comments]);
+            setComments((prev) => {
+                const newComments = result.data.comments.filter((newComment) => {
+                    return !prev.some((existingComment) => existingComment._id === newComment._id);
+                });
+                return [...newComments, ...prev];
+            });
         } catch (error) {
             if (error.name !== "AbortError") {
                 console.error("Fetch failed:", error);
@@ -210,36 +230,59 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                 return <img src={item} key={i} alt="Posts" className="object-cover h-full w-full" />
                             }) : ""}
                         </div>
-                        {selectedPost !== null && selectedPost.imageUrls.length > 1 ? <> {selectedPost !== null && currentIndex !== selectedPost.imageUrls.length - 1 && <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleIncrease}><FaArrowRight className="fill-black" /></button>}
-                            {currentIndex !== 0 && <button className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleDecrease}><FaArrowLeft className="fill-black" /></button>}
-                        </> : ""}
+                        {selectedPost !== null && selectedPost.imageUrls.length > 1 ? (
+                            <>
+                                {currentIndex !== selectedPost.imageUrls.length - 1 && (
+                                    <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleIncrease}>
+                                        <FaArrowRight className="fill-black" />
+                                    </button>
+                                )}
+                                {currentIndex !== 0 && (
+                                    <button className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleDecrease}>
+                                        <FaArrowLeft className="fill-black" />
+                                    </button>
+                                )}
+                            </>
+                        ) : ""}
                     </div>
                     <div className="w-[40%] h-full bg-[#000000] relative">
                         <div className="flex justify-between items-center p-5 border-b-[1px] border-[#262626]">
-                            <Link to={userData?.data.user._id !== postData?._id ? `/search/${postData?.userName}/` : `/${userData?.data.user.userName}/`} onClick={() => {
-                                fetchUserDataOnClick(postData?.userName)
-                                setMainLoading(true)
-                                setSelectedPost(null)
-                            }} className="text-[15px] flex flex-row gap-4 items-center font-semibold"> <img src={postData?.profilePic} alt="Profile Picture" className="w-12 rounded-full" /><p className="hover:opacity-70 transition duration-200">{postData?.userName}</p></Link>
-                            <button onClick={() => {
-                                setIsPostSettingOpen(true)
-                            }}>
+                            <Link
+                                to={userData?.data.user._id !== postData?._id ? `/search/${postData?.userName}/` : `/${userData?.data.user.userName}/`}
+                                onClick={() => {
+                                    fetchUserDataOnClick(postData?.userName);
+                                    setMainLoading(true);
+                                    setSelectedPost(null);
+                                }}
+                                className="text-[15px] flex flex-row gap-4 items-center font-semibold"
+                            >
+                                <img src={postData?.profilePic} alt="Profile Picture" className="w-12 rounded-full" />
+                                <p className="hover:opacity-70 transition duration-200">{postData?.userName}</p>
+                            </Link>
+                            <button onClick={() => setIsPostSettingOpen(true)}>
                                 <MoreSVG className="hover:opacity-70 cursor-pointer transition duration-300" />
                             </button>
                         </div>
-                        <div className="w-full flex flex-col xl:h-[68%] h-[20%] gap-4 overflow-auto scrollbar-hidden">
-                            {selectedPost !== null && selectedPost.caption &&
+                        <div className="w-full flex flex-col xl:h-[67.5%] lg:h-[55%] h-[48%] gap-4 overflow-auto scrollbar-hidden">
+                            {selectedPost !== null && selectedPost.caption && (
                                 <div>
                                     <div className="w-full px-6 mt-4 text-[15px]">
                                         <div className="flex flex-row gap-4 items-start">
                                             <img src={postData?.profilePic} alt="Profile Picture" className="w-9 rounded-full" />
-                                            <p><Link className="text-[14px] font-semibold mr-3 cursor-default">{postData?.userName}</Link>{selectedPost !== null && selectedPost.caption}</p>
+                                            <p>
+                                                <Link className="text-[14px] font-semibold mr-3 cursor-default">{postData?.userName}</Link>
+                                                {selectedPost.caption}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
-                            }
+                            )}
                             <div className="flex flex-col gap-4 ml-5 pt-2">
-                                {commentsLoading ? <div className="flex flex-col gap-4">{Array.from({ length: 20 }, (_, i) => <Skeleton key={i} np />)}</div> : (
+                                {commentsLoading ? (
+                                    <div className="flex flex-col gap-4">
+                                        {Array.from({ length: 20 }, (_, i) => <Skeleton key={i} np />)}
+                                    </div>
+                                ) : (
                                     comments?.map((item, i) => (
                                         <div key={i} className="flex gap-4 ml-1">
                                             <img
@@ -249,25 +292,34 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                             />
                                             <div className="flex flex-col gap-1">
                                                 <p className="text-[15px]">
-                                                    <Link to={userData?.data.user._id !== item?.user._id ? `/search/${item?.user.userName}/` : `/${userData?.data.user.userName}/`} onClick={() => {
-                                                        fetchUserDataOnClick(item?.user.userName, userData, setSelectedProfile, setMainLoading)
-                                                        setMainLoading(true)
-                                                        setSelectedPost(null)
-                                                    }} className="text-[13px] mr-2 font-semibold hover:opacity-50 transition duration-150">
+                                                    <Link
+                                                        to={
+                                                            userData?.data.user._id !== item?.user._id
+                                                                ? `/search/${item?.user.userName}/`
+                                                                : `/${userData?.data.user.userName}/`
+                                                        }
+                                                        onClick={() => {
+                                                            setMainLoading(true);
+                                                            fetchUserDataOnClick(item?.user.userName, userData, null, setSelectedProfile, setMainLoading);
+                                                            setSelectedPost(null);
+                                                        }}
+                                                        className="text-[13px] mr-2 font-semibold hover:opacity-50 transition duration-150"
+                                                    >
                                                         {item.user.userName}
                                                     </Link>
                                                     {item.comment}
                                                 </p>
-                                                <p className="text-[12px] text-[#A8A8A8]">
-                                                    {formatDate(item.createdAt)}
-                                                </p>
+                                                <p className="text-[12px] text-[#A8A8A8]">{formatDate(item.createdAt)}</p>
                                             </div>
                                         </div>
-                                    )
-                                    )
+                                    ))
                                 )}
                                 <div className="w-full flex justify-center items-center mb-2">
-                                    {page !== totalPages && !commentsLoading && comments !== null && comments?.length !== 0 ? <button className="hover:opacity-55 transition-all duration-150" onClick={() => setPage((prev) => prev + 1)}><MoreCommentsSVG /></button> : ""}
+                                    {page !== totalPages && !commentsLoading && comments !== null && comments?.length !== 0 ? (
+                                        <button className="hover:opacity-55 transition-all duration-150" onClick={() => setPage((prev) => prev + 1)}>
+                                            <MoreCommentsSVG />
+                                        </button>
+                                    ) : ""}
                                 </div>
                             </div>
                         </div>
@@ -282,20 +334,41 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                 <SavedComponent isSaved={isSaved} savePost={savePost} unSavePost={unSavePost} />
                             </div>
                             <div>
-                                {selectedPost !== null && <div className="mt-2 px-5">
-                                    <button className="text-[15px] font-semibold">{selectedPost.likeCount} likes</button>
-                                    <p className="text-[12px] text-[#A8A8A8]">{formatDate(selectedPost.createdAt)} ago</p>
-                                </div>}
+                                {selectedPost !== null && (
+                                    <div className="mt-2 px-5">
+                                        <button className="text-[15px] font-semibold">{selectedPost.likeCount} likes</button>
+                                        <p className="text-[12px] text-[#A8A8A8]">{formatDate(selectedPost.createdAt)} ago</p>
+                                    </div>
+                                )}
                             </div>
                             <div className="mt-5 border-t-[1px] flex items-center border-[#262626] px-5 py-2">
-                                <input ref={commentRef} type="text" value={commentValue} onChange={(e) => setCommentValue(e.target.value)} placeholder="Add a comment...." className="w-[90%] bg-transparent outline-none placeholder:text-[14px]" />
-                                <button className={`text-[#0095F6] ml-5 text-[12px] transition-all duration-150 ${isDisabled ? "opacity-50 " : "cursor-pointer hover:opacity-70"}`} disabled={isDisabled} onClick={() => postComment()}>POST</button>
+                                <input
+                                    ref={commentRef}
+                                    type="text"
+                                    value={commentValue}
+                                    onChange={(e) => setCommentValue(e.target.value)}
+                                    placeholder="Add a comment...."
+                                    className="w-[90%] bg-transparent outline-none placeholder:text-[14px]"
+                                />
+                                <button
+                                    className={`text-[#0095F6] ml-5 text-[12px] transition-all duration-150 ${isDisabled ? "opacity-50 " : "cursor-pointer hover:opacity-70"}`}
+                                    disabled={isDisabled}
+                                    onClick={() => postComment()}
+                                >
+                                    POST
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div >
-            <PostSettings isPostSettingOpen={isPostSettingOpen} isMyPost={isMyPost} setIsPostSettingOpen={setIsPostSettingOpen} setIsPostOpen={setIsPostOpen} />
+            <PostSettings
+                isPostSettingOpen={isPostSettingOpen}
+                isMyPost={isMyPost}
+                setIsPostSettingOpen={setIsPostSettingOpen}
+                setIsPostOpen={setIsPostOpen}
+            />
         </>
-    )
+    );
+
 }

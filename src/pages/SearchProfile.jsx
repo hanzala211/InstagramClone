@@ -10,11 +10,12 @@ import { LoadingPage } from "./LoadingPage";
 import { formatNumber } from "../utils/helper";
 
 export function SearchProfile() {
-    const { setSearchUserPosts, selectedProfile, searchUserStatus, setSearchUserStatus, searchUserHighLights, setSearchUserHighLights } = useSearch();
-    const { userData, setUserData, setHighLightStories, setCurrentHighLight, setCurrentStory, mainLoading } = useUser()
+    const { setSearchUserPosts, selectedProfile, searchUserStatus, setSearchUserStatus, searchUserHighLights, setSearchUserHighLights, setSelectedProfile } = useSearch();
+    const { userData, setUserData, setHighLightStories, setCurrentHighLight, setCurrentStory, mainLoading, setMessage } = useUser()
     const [postsLoading, setPostsLoading] = useState(false);
     const [isFollowed, setIsFollowed] = useState(false);
     const [searchUserNotes, setSearchUserNotes] = useState([])
+    const [isDisabled, setIsDisabled] = useState(false)
 
     useEffect(() => {
         if (userData?.data.user.following) {
@@ -60,10 +61,15 @@ export function SearchProfile() {
             setUserData((prev) => ({
                 ...prev, data: {
                     ...prev.data, user: {
-                        ...prev.data.user, following: [...prev.data.user.following, selectedProfile?._id]
+                        ...prev.data.user, following: [...prev.data.user.following, selectedProfile?._id], followingCount: prev.data.user.followingCount + 1
                     }
                 }
             }))
+            setIsDisabled(true)
+            setSelectedProfile((prev) => ({
+                ...prev, followersCount: prev.followersCount + 1
+            }))
+            setIsDisabled(true);
             const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/follow/${selectedProfile._id}`, {
                 method: "POST",
                 headers: {
@@ -74,6 +80,9 @@ export function SearchProfile() {
             const result = await response.json();
         } catch (error) {
             console.error(error)
+        } finally {
+            setIsDisabled(false)
+            setMessage("User Followed Successfully")
         }
     }
 
@@ -82,9 +91,13 @@ export function SearchProfile() {
             setUserData((prev) => ({
                 ...prev, data: {
                     ...prev.data, user: {
-                        ...prev.data.user, following: [prev.data.user.following.filter((item) => item !== selectedProfile._id)]
+                        ...prev.data.user, following: [prev.data.user.following.filter((item) => item !== selectedProfile._id)], followingCount: prev.data.user.followingCount - 1
                     }
                 }
+            }))
+            setIsDisabled(true)
+            setSelectedProfile((prev) => ({
+                ...prev, followersCount: prev.followersCount - 1
             }))
             const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/unfollow/${selectedProfile._id}`, {
                 method: "POST",
@@ -96,29 +109,38 @@ export function SearchProfile() {
             const result = await response.json();
         } catch (error) {
             console.error(error)
+        } finally {
+            setIsDisabled(false)
+            setMessage("User Unfollowed Successfully")
         }
     }
 
     return <>
         {!mainLoading ?
-
-            <section className="w-full max-w-[65%] mx-auto">
+            <section className="w-full max-w-[60%] mx-auto">
                 <div className="w-full max-w-[61rem] pb-9 pt-20 border-b-[2px] border-[#262626]">
-                    <div className="flex gap-20 ml-16 items-center relative">
+                    <div className="flex flex-col xl:flex-row w-full gap-10 xl:gap-20 ml-10 items-center relative">
                         {searchUserNotes.length > 0 &&
-                            <div className="absolute -top-1 left-[7%] z-[1] cursor-pointer">
+                            <div className="absolute xl:-top-1 left-[7%] z-[1] cursor-pointer">
                                 <NoteTooltip isProfile={true} note={searchUserNotes[0]} />
                             </div>
                         }
-                        <Link to={searchUserStatus.length > 0 ? `/search/stories/${selectedProfile.userName}/${searchUserStatus[0]._id}/` : ""} className={`p-2 ${searchUserStatus.length > 0 ? "relative rounded-full multicolor-border" : ""}`} onClick={() => setCurrentStory(0)}>
-                            <img src={selectedProfile.profilePic} alt="User Profile" className="rounded-full w-40" />
+                        <Link to={searchUserStatus.length > 0 ? `/search/stories/${selectedProfile.userName}/${searchUserStatus[0]._id}/` : ""}
+                            className={`p-2 ${searchUserStatus.length > 0 ? "relative rounded-full multicolor-border" : ""}`}
+                            onClick={() => setCurrentStory(0)}>
+                            <img src={selectedProfile.profilePic} alt="User Profile" className="rounded-full w-32 xl:w-40" />
                         </Link>
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-6 mt-6 xl:mt-0">
                             <div className="flex gap-6 items-center">
-                                <Link className="text-[20px] flex items-center gap-1">{selectedProfile.userName}
+                                <Link className="text-[20px] flex items-center gap-1">
+                                    {selectedProfile.userName}
                                     {selectedProfile?.followers.length > 10 && <MdVerified className="fill-[#0095F6]" />}
                                 </Link>
-                                {isFollowed ? <button className="bg-[#363636] px-7 py-1 rounded-lg" onClick={() => unfollowUser()}>Unfollow</button> : <button className="bg-[#0095F6] px-7 py-1 rounded-lg" onClick={() => followUser()}>Follow</button>}
+                                {isFollowed ?
+                                    <button disabled={isDisabled} className={`bg-[#363636] px-7 py-1 rounded-lg ${isDisabled ? "opacity-50" : ""}`} onClick={() => unfollowUser()}>Unfollow</button>
+                                    :
+                                    <button disabled={isDisabled} className={`bg-[#0095F6] px-7 py-1 rounded-lg ${isDisabled ? "opacity-50" : ""}`} onClick={() => followUser()}>Follow</button>
+                                }
                             </div>
                             <div className="flex gap-10 items-center">
                                 <p className="flex gap-1.5"><span className="font-semibold">{formatNumber(selectedProfile.postCount)}</span>posts</p>
@@ -132,20 +154,28 @@ export function SearchProfile() {
                         </div>
                     </div>
                     <div className="flex gap-10 ml-5 mt-16 h-[7.3rem] overflow-x-auto scrollbar-hidden">
-                        {searchUserHighLights.length > 0 && searchUserHighLights.map((item, i, arr) => <Link to={`/search/stories/highlight/${arr[i]._id}/`} key={i} onClick={() => {
-                            setHighLightStories(searchUserHighLights[i].stories)
-                            setCurrentStory(0)
-                            setCurrentHighLight(i)
-                        }}><HighLights title={item.name} image={item.profilePic} /></Link>)}
+                        {searchUserHighLights.length > 0 && searchUserHighLights.map((item, i, arr) =>
+                            <Link to={`/search/stories/highlight/${arr[i]._id}/`} key={i} onClick={() => {
+                                setHighLightStories(searchUserHighLights[i].stories)
+                                setCurrentStory(0)
+                                setCurrentHighLight(i)
+                            }}>
+                                <HighLights title={item.name} image={item.profilePic} />
+                            </Link>
+                        )}
                     </div>
                 </div>
-                <div className="absolute left-[56%] -translate-x-1/2 flex gap-10">
-                    <NavLink end to={`/search/${selectedProfile.userName}/`} className={({ isActive }) => `flex items-center tracking-wider py-3 gap-1 text-[12px] ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><PostsIcon /> POSTS</NavLink >
+                <div className="absolute xl:left-[57%] left-[60%] -translate-x-1/2 flex gap-10">
+                    <NavLink end to={`/search/${selectedProfile.userName}/`}
+                        className={({ isActive }) => `flex items-center tracking-wider py-3 gap-1 text-[12px] ${isActive ? "font-semibold border-t-[2px]" : "text-[#A8A8A8]"}`}>
+                        <PostsIcon /> POSTS
+                    </NavLink>
                 </div>
                 <div className="mt-[4rem]">
                     {!postsLoading ? <Outlet /> : <Loader height="h-[34vh]" />}
                 </div>
             </section>
+
             : <LoadingPage />}
     </>
 }

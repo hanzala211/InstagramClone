@@ -64,8 +64,8 @@ export function NoteEditor({ setIsNoteEditOpen }) {
         setNoteValue("");
     }
 
-    return <div className="absolute w-[20rem] h-[20rem] px-4 flex items-center flex-col justify-evenly bg-[#262626] rounded-xl -left-80 top-[5.2rem] z-[100]">
-        <div className="absolute top-[8%] left-[43%] cursor-pointer">
+    return <div className="absolute w-[20rem] h-[20rem] px-4 flex items-center flex-col justify-evenly bg-[#262626] rounded-xl -left-80 top-[5.2rem] z-[100] lg:left-0 lg:top-0 lg:w-[18rem] lg:h-[18rem]">
+        <div className="absolute top-[8%] left-[43%] cursor-pointer lg:top-[5%] lg:left-[50%] lg:transform lg:-translate-x-1/2">
             <NoteTooltip isProfile={true} note={note} className="text-[18px]" />
         </div>
         <img src={userData?.data?.user.profilePic} alt="User Profile" className="rounded-full w-40" />
@@ -77,4 +77,5 @@ export function NoteEditor({ setIsNoteEditOpen }) {
             <NoteCreator isNoteOpen={isNoteOpen} handleClose={handleCloseNote} noteValue={noteValue} noteFunction={updateNote} setNoteValue={setNoteValue} shareLoading={shareLoading} />
         </div>
     </div>
+
 }

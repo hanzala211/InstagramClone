@@ -121,14 +121,13 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
             ></div>
 
             <div
-                className={`fixed opacity-0 top-[51%] -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isCreating ? "opacity-100" : "pointer-events-none"
-                    } border-y-[1px] border-[#363636]`}
+                className={`fixed opacity-0 top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isCreating ? "opacity-100" : "pointer-events-none"} border-y-[1px] border-[#363636]`}
             >
                 <p className="text-[18px] absolute -top-9 left-1/2 -translate-x-1/2">
                     {!isCaption ? "Create New Post" : !isShared ? "Share" : !shareLoading ? "Post shared" : "Post sharing"}
                 </p>
                 {!selectedImage || selectedImage.length === 0 ? (
-                    <div className="bg-[#262626] px-10 py-10 w-[36vw] h-[72vh] flex items-center justify-center flex-col gap-2">
+                    <div className="bg-[#262626] flex items-center justify-center flex-col gap-2 w-full sm:w-[60vw] xl:w-[40vw] h-[72vh] px-5 py-5">
                         <CreatePosts />
                         <p className="text-[20px]">Drag photos and videos here</p>
                         <button
@@ -147,7 +146,7 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
                         />
                     </div>
                 ) : (
-                    <div className={`bg-[#262626] w-[36vw] h-[72vh] transition-all duration-300 flex flex-col ${isCaption && !isShared ? "w-[55vw]" : ""}`}>
+                    <div className={`bg-[#262626] w-full md:w-[90vw] xl:w-[60vw] xl:h-[80vh] md:h-[75vh] transition-all duration-300 flex flex-col ${isCaption && !isShared ? "w-[55vw]" : ""}`}>
                         <div className="relative w-full h-full">
                             {!loading && !isCaption ? <ReactCropper
                                 image={selectedImage[currentIndex]}

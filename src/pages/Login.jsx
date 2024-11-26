@@ -66,6 +66,7 @@ export function Login() {
         } catch (error) {
             console.error(error);
         } finally {
+            setMainLoading(false)
             setLoading(false);
         }
     }

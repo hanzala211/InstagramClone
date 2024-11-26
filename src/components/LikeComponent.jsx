@@ -3,7 +3,7 @@ import { Like, UnLike } from "../assets/Constants";
 import { useUser } from "../context/UserContext";
 
 export function LikedComponent({ postData, setSelectedPost, selectedPost }) {
-    const { userData } = useUser()
+    const { userData, setMessage } = useUser()
     const [isLiked, setIsLiked] = useState(false)
 
     useEffect(() => {
@@ -34,6 +34,8 @@ export function LikedComponent({ postData, setSelectedPost, selectedPost }) {
             const result = await response.json();
             if (result.message !== "Post liked successfully.") {
                 setIsLiked((prev) => !prev)
+            } else {
+                setMessage(result.message)
             }
         } catch (error) {
             console.error(error)
@@ -62,6 +64,8 @@ export function LikedComponent({ postData, setSelectedPost, selectedPost }) {
             const result = await response.json();
             if (result.message !== "Post disliked successfully.") {
                 setIsLiked((prev) => !prev)
+            } else {
+                setMessage(result.message)
             }
         } catch (error) {
             console.error(error)

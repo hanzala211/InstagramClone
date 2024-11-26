@@ -5,7 +5,7 @@ import { formatNumber } from "../utils/helper";
 
 export function PostModal({ arr, i, setSelectedPost, setIsPostOpen, setCurrentPost, item }) {
 
-    return <div className="w-full max-w-[25rem] h-full max-h-[20rem] cursor-pointer group relative overflow-hidden" onClick={() => {
+    return <div className="w-full max-w-[25rem] h-full max-h-[25rem] cursor-pointer group relative overflow-hidden" onClick={() => {
         setSelectedPost(arr[i]);
         setIsPostOpen(true)
         setCurrentPost(i);

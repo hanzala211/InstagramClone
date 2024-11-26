@@ -64,7 +64,7 @@ export function Layout({ token }) {
                 <Outlet />
                 <Footer />
             </div>
-            <div className={`fixed px-5 w-full flex items-center text-[15px] transition-all duration-300 bg-[#262626] ${message !== "" ? "h-[3rem] bottom-0" : "-bottom-16 h-[0rem]"}`}>
+            <div className={`fixed z-[5000000] px-5 w-full flex items-center text-[15px] transition-all duration-300 bg-[#262626] ${message !== "" ? "h-[3rem] bottom-0" : "-bottom-16 h-[0rem]"}`}>
                 {message}
             </div>
         </section> : <LoadingPage />}
