@@ -6,9 +6,10 @@ import { PiCopySimpleLight } from "react-icons/pi";
 import { FaArrowLeft, FaArrowRight, FaHeart } from "react-icons/fa";
 import { TbMessageCircleFilled } from "react-icons/tb";
 import { Post } from "../components/Post";
+import { formatNumber } from "../utils/helper";
 
 export function Explore() {
-    const { userData, formatNumber } = useUser();
+    const { userData } = useUser();
     const { setSelectedPost, selectedPost } = usePost()
     const [explorePagePosts, setExplorePagePosts] = useState([]);
     const [isPostsLoading, setIsPostsLoading] = useState(false);
