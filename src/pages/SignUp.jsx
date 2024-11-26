@@ -23,6 +23,7 @@ export function SignUp() {
         });
         try {
             setLoading(true);
+            setUserData({})
             setSuccessMessage("");
             const response = await fetch("https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/auth/signup", {
                 method: "POST",
@@ -85,9 +86,9 @@ export function SignUp() {
                             }}>Sign up</Link>
                         </div>
                         <p className="text-center mx-[2.5rem] text-[13px] text-[#A8A8A8]">People who use our service may have uploaded your contact information to Instagram. Learn more</p></> : <div className="mt-10"><Loader /></div>}
-                    {userData?.status === "fail" && <p className="text-red-500">{userData.data}</p>}
                     {succesMessage === "success" && <p className="text-green-600 uppercase">{succesMessage}</p>}
                 </div>
+                {userData?.status === "fail" && <p className="text-red-500">{userData.data}</p>}
                 <div className="flex items-center justify-center border-[2px] border-[#363636] py-6 w-[23.7rem] gap-1">
                     <p>Have an account?</p>
                     <Link to="/login" onClick={() => setUserData([])} className="text-[#3897F1]">Log in</Link>
