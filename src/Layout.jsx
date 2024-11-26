@@ -1,4 +1,4 @@
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import { SideBar } from "./components/SideBar";
 import { SideBarProvider, useSearch, useUser } from "./context/UserContext";
 import { LoadingPage } from "./pages/LoadingPage";
@@ -10,13 +10,10 @@ export function Layout({ token }) {
     const { mainLoading, setMainLoading, setUserData, message, setMessage } = useUser();
     const { setSelectedProfile } = useSearch();
     const params = useParams()
-    const navigate = useNavigate()
 
     useEffect(() => {
         if (token !== null) {
             fetchUser();
-        } else {
-            navigate("/login")
         }
     }, [token])
 
