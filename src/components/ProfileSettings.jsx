@@ -146,8 +146,8 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
             handleClose()
         }}></div>
         <IoCloseSharp className={`absolute text-[40px] top-8 z-[10000] right-[2rem] cursor-pointer opacity-0 transition duration-200 ${isEditOpen ? "opacity-100" : ""}`} onClick={() => handleClose()} />
-        <div className={`fixed opacity-0 top-1/2 -translate-y-1/2 transition-all duration-500 z-[150] ${isEditOpen ? "opacity-100" : "pointer-events-none"}`}>
-            <div className="bg-[#262626] rounded-3xl px-10 py-10 w-[40vw] h-[80vh]">
+        <div className={`fixed opacity-0 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-full max-w-[45rem] transition-all duration-500 z-[150] ${isEditOpen ? "opacity-100" : "pointer-events-none"}`}>
+            <div className="bg-[#262626] rounded-3xl px-10 py-10 ">
                 <h2 className="text-[25px] font-semibold">Edit Profile</h2>
                 <div className="flex flex-row items-center justify-between bg-[#424242] rounded-2xl my-5 px-4 py-2 w-full">
                     <div className="flex gap-4 items-center">
