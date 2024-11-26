@@ -10,9 +10,10 @@ import NoteTooltip from "../components/Note";
 import { NoteCreator } from "../components/NoteCreator";
 import { NoteEditor } from "../components/NoteEditor";
 import { HighLightsModal } from "../components/HighLightsModal";
+import { formatNumber } from "../utils/helper";
 
 export function Profile() {
-    const { userData, setUserPosts, note, setNote, setMessage, setStories, stories, setCurrentStory, highlights, setHighlights, setHighLightStories, setCurrentHighLight, setUserSaves, formatNumber } = useUser();
+    const { userData, setUserPosts, note, setNote, setMessage, setStories, stories, setCurrentStory, highlights, setHighlights, setHighLightStories, setCurrentHighLight, setUserSaves } = useUser();
     const [postsLoading, setPostsLoading] = useState(false);
     const [noteValue, setNoteValue] = useState("");
     const [isEditOpen, setIsEditOpen] = useState(false);
@@ -180,7 +181,7 @@ export function Profile() {
     }
 
     return <section className="w-full max-w-[70%] mx-auto">
-        <div className="w-[62rem] pb-9 pt-12 border-b-[2px] border-[#262626]">
+        <div className="w-full max-w-[64rem] pb-9 pt-20 border-b-[2px] border-[#262626]">
             <div className="flex gap-20 ml-16 items-center relative">
                 <div className="absolute -top-1 left-[7%] z-[1] cursor-pointer" onClick={() => {
                     if (note.length === 0) {
@@ -224,7 +225,7 @@ export function Profile() {
                 <HighLights title="New" onClick={() => setIsCreatingHighLight(true)} />
             </div>
         </div>
-        <div className="absolute left-[56.5%] -translate-x-1/2 flex gap-10">
+        <div className="absolute xl:left-[54%] left-[60%] -translate-x-1/2 flex gap-10">
             <NavLink end to={`/${userData?.data?.user.userName || userData.data.userName}/`} className={({ isActive }) => `flex items-center tracking-wider py-3 gap-1 text-[12px] ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><PostsIcon /> POSTS</NavLink >
             <NavLink to={`/${userData?.data?.user.userName || userData.data.userName}/saved/`} className={({ isActive }) => `flex items-center tracking-wider py-3 text-[12px] gap-1 ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><SavedIcon /> SAVED</NavLink>
             <NavLink to={`/${userData?.data?.user.userName || userData.data.userName}/tagged/`} className={({ isActive }) => `flex items-center tracking-wider py-3 text-[12px] gap-1  ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><TaggedUser /> TAGGED</NavLink>

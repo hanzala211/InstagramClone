@@ -8,11 +8,11 @@ import { Link } from "react-router-dom";
 import { Skeleton } from "./Skeleton";
 import { LikedComponent } from "./LikeComponent";
 import { SavedComponent } from "./SavedComponent";
-import { fetchUserDataOnClick } from "../utils/helper";
+import { fetchUserDataOnClick, formatDate } from "../utils/helper";
 
 export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, comments, setComments }) {
     const { selectedPost, setSelectedPost } = usePost()
-    const { userData, setUserData, setMainLoading, formatDate } = useUser();
+    const { userData, setUserData, setMainLoading } = useUser();
     const { setSelectedProfile } = useSearch()
     const [commentValue, setCommentValue] = useState("");
     const [isAnimating, setIsAnimating] = useState(false);

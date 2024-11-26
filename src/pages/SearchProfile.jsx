@@ -7,11 +7,11 @@ import { Loader } from "../components/Loader";
 import { PostsIcon } from "../assets/Constants";
 import { HighLights } from "../components/Highlights";
 import { LoadingPage } from "./LoadingPage";
-
+import { formatNumber } from "../utils/helper";
 
 export function SearchProfile() {
     const { setSearchUserPosts, selectedProfile, searchUserStatus, setSearchUserStatus, searchUserHighLights, setSearchUserHighLights } = useSearch();
-    const { userData, setUserData, setHighLightStories, setCurrentHighLight, setCurrentStory, mainLoading, formatNumber } = useUser()
+    const { userData, setUserData, setHighLightStories, setCurrentHighLight, setCurrentStory, mainLoading } = useUser()
     const [postsLoading, setPostsLoading] = useState(false);
     const [isFollowed, setIsFollowed] = useState(false);
     const [searchUserNotes, setSearchUserNotes] = useState([])
@@ -103,7 +103,7 @@ export function SearchProfile() {
         {!mainLoading ?
 
             <section className="w-full max-w-[70%] mx-auto">
-                <div className="w-[62rem] pb-9 pt-12 border-b-[2px] border-[#262626]">
+                <div className="w-full max-w-[64rem] pb-9 pt-20 border-b-[2px] border-[#262626]">
                     <div className="flex gap-20 ml-16 items-center relative">
                         {searchUserNotes.length > 0 &&
                             <div className="absolute -top-1 left-[7%] z-[1] cursor-pointer">
@@ -139,10 +139,10 @@ export function SearchProfile() {
                         }}><HighLights title={item.name} image={item.profilePic} /></Link>)}
                     </div>
                 </div>
-                <div className="absolute left-[59%] -translate-x-1/2 flex gap-10">
+                <div className="absolute left-[55%] -translate-x-1/2 flex gap-10">
                     <NavLink end to={`/search/${selectedProfile.userName}/`} className={({ isActive }) => `flex items-center tracking-wider py-3 gap-1 text-[12px] ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><PostsIcon /> POSTS</NavLink >
                 </div>
-                <div className="mt-[3.5rem]">
+                <div className="mt-[4rem]">
                     {!postsLoading ? <Outlet /> : <Loader height="h-[34vh]" />}
                 </div>
             </section>

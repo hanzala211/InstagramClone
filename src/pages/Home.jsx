@@ -9,15 +9,16 @@ import { RiUserFollowFill } from "react-icons/ri";
 import { Post } from "../components/Post";
 import { fetchUserDataOnClick } from "../utils/helper";
 import { CommentHome } from "../components/CommentHome";
-import { fetchHomePosts } from "../utils/helper";
+import { fetchHomePosts, formatDate } from "../utils/helper";
 
 export function Home() {
     const { userData, setUserData, setMainLoading } = useUser()
-    const { selectedPost, setSelectedPost } = usePost()
+    const { setSelectedPost } = usePost()
     const { setSelectedProfile } = useSearch();
     const [count, setCount] = useState(0);
     const [homePosts, setHomePosts] = useState([])
-    const [currentIndex, setCurrentIndex] = useState(0)
+    const [currentIndex, setCurrentIndex] = useState(Array(homePosts.length).fill(0));
+    const [totalIndex, setTotalIndex] = useState(Array(homePosts.length).fill(0))
     const [isAnimating, setIsAnimating] = useState(false);
     const [isPostsLoading, setIsPostsLoading] = useState(false)
     const [savedPosts, setSavedPosts] = useState(Array(homePosts.length).fill(false));
@@ -39,6 +40,12 @@ export function Home() {
             );
             setSavedPosts(updatedSavedPosts);
         }
+        if (homePosts !== null) {
+            const updatedCurrentIndex = homePosts.map((post) => post?.imageUrls.length)
+            setCurrentIndex(Array(updatedCurrentIndex.length).fill(0))
+            setTotalIndex(updatedCurrentIndex)
+        }
+
     }, [homePosts, userData])
 
     useEffect(() => {
@@ -47,47 +54,28 @@ export function Home() {
         fetchHomePosts(userData, setHomePosts, setIsPostsLoading)
     }, [])
 
-    function handleIncrease() {
+    function handleIncrease(index) {
         setIsAnimating(true);
-        setCurrentIndex((prev) => prev + 1)
+        setCurrentIndex((prev) => {
+            const updated = [...prev];
+            updated[index]++;
+            return updated;
+        })
         setTimeout(() => {
             setIsAnimating(false)
         }, 400);
     }
 
-    function handleDecrease() {
+    function handleDecrease(index) {
         setIsAnimating(true);
-        setCurrentIndex((prev) => prev - 1)
+        setCurrentIndex((prev) => {
+            const updated = [...prev];
+            updated[index]--;
+            return updated;
+        })
         setTimeout(() => {
             setIsAnimating(false)
         }, 400);
-    }
-
-    function formatDate(dateString) {
-        const now = new Date();
-        const targetDate = new Date(dateString);
-        const diffInMilliseconds = Math.abs(targetDate - now);
-        const MINUTE = 60 * 1000;
-        const HOUR = 60 * MINUTE;
-        const DAY = 24 * HOUR;
-        const WEEK = 7 * DAY;
-
-        if (diffInMilliseconds >= WEEK) {
-            const weeks = Math.floor(diffInMilliseconds / WEEK);
-            return `${weeks} w`;
-        } else if (diffInMilliseconds >= DAY) {
-            const days = Math.floor(diffInMilliseconds / DAY);
-            const hours = Math.floor((diffInMilliseconds % DAY) / HOUR);
-            return hours > 0
-                ? `${days} d ${hours} h`
-                : `${days} d`;
-        } else if (diffInMilliseconds >= HOUR) {
-            const hours = Math.floor(diffInMilliseconds / HOUR);
-            return `${hours} h`;
-        } else {
-            const minutes = Math.floor(diffInMilliseconds / MINUTE);
-            return `${minutes} m`;
-        }
     }
 
     async function savePost(id, index) {
@@ -227,8 +215,8 @@ export function Home() {
             {!isPostsLoading ?
                 <InfiniteScroll dataLength={homePosts.length} loader={homePosts.length > 0 && <Loader height="h-[10vh]" />} next={fetchHomePosts} hasMore={count < 10} >
                     {
-                        homePosts.length > 0 ? homePosts.map((item, i) => {
-                            return <div key={i} className="flex flex-col gap-2 mt-7 border-b-[2px] border-[#262626] pb-4">
+                        homePosts.length > 0 ? homePosts.map((item, index) => {
+                            return <div key={index} className="flex flex-col gap-2 mt-7 border-b-[2px] border-[#262626] pb-4">
                                 <div className="flex flex-row items-center gap-2">
                                     <img src={item?.user.profilePic} className="rounded-full w-10" alt="" />
                                     <div className="flex flex-row gap-1 items-center">
@@ -241,24 +229,24 @@ export function Home() {
                                     </div>
                                 </div>
                                 <div className="w-full rounded-md bg-[#000000] border-[1px] border-[#2B2B2D] relative overflow-hidden">
-                                    <div className={`w-full h-full flex items-start ${isAnimating ? "transition-transform duration-300 ease-in-out" : ""} `} style={{ transform: `translateX(${-currentIndex * 100}%)` }}>
+                                    <div className={`w-full h-full flex items-start ${isAnimating ? "transition-transform duration-300 ease-in-out" : ""} `} style={{ transform: `translateX(${-currentIndex[index] * 100}%)` }}>
                                         {item !== null ? item.imageUrls.map((item, i) => {
                                             return <img src={item} key={i} alt="Posts" className="w-full object-cover" />
                                         }) : ""}
                                     </div>
-                                    {item?.imageUrls.length > 1 ? <> {item !== null && currentIndex !== selectedPost?.imageUrls.length - 1 && <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleIncrease}><FaArrowRight className="fill-black" /></button>}
-                                        {currentIndex !== 0 && <button className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleDecrease}><FaArrowLeft className="fill-black" /></button>}
+                                    {item?.imageUrls.length > 1 ? <> {item !== null && currentIndex[index] !== totalIndex[index] - 1 && <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={() => handleIncrease(index)}><FaArrowRight className="fill-black" /></button>}
+                                        {currentIndex[index] !== 0 && <button className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={() => handleDecrease(index)}><FaArrowLeft className="fill-black" /></button>}
                                     </> : ""}
                                 </div>
                                 <div className="flex flex-col gap-2 w-full">
                                     <div className="flex flex-row justify-between">
                                         <div className="flex flex-row gap-3">
-                                            {!likedPosts[i] ?
+                                            {!likedPosts[index] ?
                                                 <button onClick={() => likePost(item._id, i)}><Like className={`hover:opacity-80 transition-all duration-150 cursor-pointer`} /></button>
                                                 : <button onClick={() => unLikePost(item._id, i)}><UnLike className={`hover:opacity-80 fill-red-700 transition-all duration-150 cursor-pointer`} /></button>}
-                                            <CommentHome setCurrentIndex={setCurrentIndex} item={item} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} setSelectedPost={setSelectedPost} i={i} />
+                                            <CommentHome setCurrentIndex={setCurrentIndex} item={item} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} setSelectedPost={setSelectedPost} i={index} />
                                         </div>
-                                        {!savedPosts[i] ?
+                                        {!savedPosts[index] ?
                                             <button onClick={() => savePost(item._id, i)}>
                                                 <SaveSVG className="hover:stroke-gray-300 hover:opacity-80 transition-all duration-150 cursor-pointer stroke-[rgb(245,245,245)]" />
                                             </button>

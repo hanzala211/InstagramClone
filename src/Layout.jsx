@@ -55,7 +55,7 @@ export function Layout({ token }) {
 
     return <>
         {!mainLoading ? <section className="flex flex-row w-full items-center">
-            <div className="w-[23%] left-0 top-0 h-[100vh]"></div>
+            <div className="w-[17%] left-0 top-0 h-[100vh]"></div>
             <SideBarProvider>
                 <SideBar />
             </SideBarProvider>

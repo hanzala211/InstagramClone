@@ -6,9 +6,10 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { MoreSVG } from "../assets/Constants";
 import { useState } from "react";
 import { HighlightsEditor } from "../components/HighlightsEditor";
+import { formatDate } from "../utils/helper";
 
 export function Story({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSearchHighLight }) {
-    const { stories, userData, archives, setCurrentStory, currentStory, highLightStories, formatDate } = useUser();
+    const { stories, userData, archives, setCurrentStory, currentStory, highLightStories } = useUser();
     const { searchUserStatus, selectedProfile, searchUserHighLights } = useSearch()
     const [highLightsModal, setHighLightsModal] = useState(false)
     const navigate = useNavigate();
