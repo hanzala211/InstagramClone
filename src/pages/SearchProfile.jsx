@@ -116,7 +116,7 @@ export function SearchProfile() {
                         <div className="flex flex-col gap-6">
                             <div className="flex gap-6 items-center">
                                 <Link className="text-[20px] flex items-center gap-1">{selectedProfile.userName}
-                                    {selectedProfile.followers.length > 10 && <MdVerified className="fill-[#0095F6]" />}
+                                    {selectedProfile?.followers.length > 10 && <MdVerified className="fill-[#0095F6]" />}
                                 </Link>
                                 {isFollowed ? <button className="bg-[#363636] px-7 py-1 rounded-lg" onClick={() => unfollowUser()}>Unfollow</button> : <button className="bg-[#0095F6] px-7 py-1 rounded-lg" onClick={() => followUser()}>Follow</button>}
                             </div>

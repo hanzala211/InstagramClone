@@ -1,16 +1,18 @@
 export async function fetchUserDataOnClick(
 	username,
 	userData,
+	token,
 	setSelectedProfile,
 	setMainLoading
 ) {
+	setMainLoading(true);
 	try {
 		const response = await fetch(
 			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/search/${username}`,
 			{
 				method: 'GET',
 				headers: {
-					Authorization: `${userData.data.token}`,
+					Authorization: `${userData !== null ? userData.data.token : token}`,
 				},
 				redirect: 'follow',
 			}
@@ -20,7 +22,9 @@ export async function fetchUserDataOnClick(
 	} catch (error) {
 		console.error(error);
 	} finally {
-		setMainLoading(false);
+		setTimeout(() => {
+			setMainLoading(false);
+		}, 1000);
 	}
 }
 export async function fetchHomePosts(

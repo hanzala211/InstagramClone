@@ -216,14 +216,11 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                     </div>
                     <div className="w-[40%] h-full bg-[#000000] relative">
                         <div className="flex justify-between items-center p-5 border-b-[1px] border-[#262626]">
-                            <div className="flex flex-row gap-4 items-center ">
-                                <img src={postData?.profilePic} alt="Profile Picture" className="w-12 rounded-full" />
-                                <Link to={userData?.data.user._id !== postData?._id ? `/search/${postData?.userName}/` : `/${userData?.data.user.userName}/`} onClick={() => {
-                                    fetchUserDataOnClick(postData?.userName)
-                                    setMainLoading(true)
-                                    setSelectedPost(null)
-                                }} className="text-[15px] font-semibold hover:opacity-70 transition duration-200">{postData?.userName}</Link>
-                            </div>
+                            <Link to={userData?.data.user._id !== postData?._id ? `/search/${postData?.userName}/` : `/${userData?.data.user.userName}/`} onClick={() => {
+                                fetchUserDataOnClick(postData?.userName)
+                                setMainLoading(true)
+                                setSelectedPost(null)
+                            }} className="text-[15px] flex flex-row gap-4 items-center font-semibold"> <img src={postData?.profilePic} alt="Profile Picture" className="w-12 rounded-full" /><p className="hover:opacity-70 transition duration-200">{postData?.userName}</p></Link>
                             <button onClick={() => {
                                 setIsPostSettingOpen(true)
                             }}>

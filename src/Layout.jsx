@@ -1,21 +1,19 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import { SideBar } from "./components/SideBar";
-import { SideBarProvider, useUser } from "./context/UserContext";
+import { SideBarProvider, useSearch, useUser } from "./context/UserContext";
 import { LoadingPage } from "./pages/LoadingPage";
 import { Footer } from "./components/Footer";
 import { useEffect } from "react";
+import { fetchUserDataOnClick } from "./utils/helper";
 
 export function Layout({ token }) {
     const { mainLoading, setMainLoading, setUserData, message, setMessage } = useUser();
+    const { setSelectedProfile } = useSearch();
+    const params = useParams()
 
     useEffect(() => {
         if (token !== null) {
             fetchUser();
-        } else {
-            setMainLoading(true);
-            setTimeout(() => {
-                setMainLoading(false)
-            }, 1000)
         }
     }, [token])
 
@@ -50,6 +48,9 @@ export function Layout({ token }) {
             console.error(error)
         } finally {
             setMainLoading(false);
+            if (params) {
+                fetchUserDataOnClick(params.username, null, token, setSelectedProfile, setMainLoading)
+            }
         }
     }
 
