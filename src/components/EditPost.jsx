@@ -15,9 +15,9 @@ export function EditPost({ croppedImage, currentIndex, handleDecrease, handleInc
                 <img src={userData.data.user.profilePic} className="w-8 rounded-full" alt="Profile Pic" />
                 <p className="text-[14px] font-semibold">{userData.data.user.userName}</p>
             </div>
-            <textarea className="bg-transparent h-[10rem] text-white outline-none resize-none w-full mt-4" maxLength={2000} value={captionValue} onChange={(e) => setCaptionValue(e.target.value)}></textarea>
+            <textarea className="bg-transparent border-b-[1px] h-[10rem] text-white outline-none resize-none w-full mt-4" maxLength={100} value={captionValue} placeholder="Write a Caption" onChange={(e) => setCaptionValue(e.target.value)}></textarea>
             <div className="flex justify-end">
-                <p className="text-[#737373] text-[13px] font-semibold">{captionValue?.length}/2000</p>
+                <p className="text-[#737373] text-[13px] font-semibold">{captionValue?.length}/100</p>
             </div>
         </div>
     </div>

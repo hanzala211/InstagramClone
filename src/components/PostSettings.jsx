@@ -81,7 +81,7 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
                 }`}
             onClick={() => handleClose()}
         ></div>
-        <div className={`bg-[#262626] w-96 rounded-2xl fixed z-[1000000] opacity-0 transition duration-300 inset-0 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 ${!isPostSettingOpen ? "pointer-events-none" : "opacity-100"} ${isMyPost ? "h-[14.5rem]" : "h-[8.5rem]"}`}>
+        <div className={`bg-[#262626] w-96 rounded-2xl fixed z-[1000000] opacity-0 transition duration-300 inset-0 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 text-[11px] ${!isPostSettingOpen ? "pointer-events-none" : "opacity-100"} ${isMyPost ? "h-[14.5rem]" : "h-[8.5rem]"}`}>
             {isMyPost && <>
                 <button className="text-red-600 w-full p-3 text-[14px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]" onClick={() => deletePost()}>Delete</button>
                 <button className="w-full p-3 border-b-[1px] text-[14px] active:opacity-70 font-semibold border-[#363636]" onClick={() => {
@@ -107,7 +107,7 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
             className={`fixed opacity-0 top-[51%] -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isEditingOpen ? "opacity-100" : "pointer-events-none"
                 } border-y-[1px] border-[#363636]`}
         >
-            <div className={`bg-[#262626] w-[70vw] h-[93vh] transition-all duration-300 flex flex-col opacity-0 ${isEditingOpen ? "opacity-100" : "pointer-events-none"}`}>
+            <div className={`bg-[#262626] w-[70vw] transition-all duration-300 flex flex-col opacity-0 ${isEditingOpen ? "opacity-100" : "pointer-events-none"}`}>
                 <EditPost croppedImage={selectedPost !== null ? selectedPost.imageUrls : []} handleIncrease={handleIncrease} handleDecrease={handleDecrease} currentIndex={currentIndex} isCaption={isEditingOpen} captionValue={captionValue} setCaptionValue={setCaptionValue} userData={userData} loading={false} />
             </div>
             <button className="text-[#0095F6] absolute z-[200] -top-7 right-0 hover:text-white text-[15px]" onClick={() => updatePost()}>Update</button>
