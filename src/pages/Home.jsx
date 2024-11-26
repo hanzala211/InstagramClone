@@ -273,7 +273,7 @@ export function Home() {
                                     <img src={item?.user.profilePic} className="rounded-full w-10" alt="" />
                                     <div className="flex flex-row gap-1 items-center">
                                         <Link to={`/search/${item?.user.userName}/`} onClick={() => {
-                                            fetchUserDataOnClick(item?.user.userName, userData, setSelectedProfile, setMainLoading)
+                                            fetchUserDataOnClick(item?.user.userName, userData, null, setSelectedProfile, setMainLoading)
                                             setMainLoading(true)
                                         }} className="font-semibold text-[12px] hover:opacity-70 transition duration-200">{item?.user.userName}</Link>
                                         <p className="text-[#A8A8A8]">•</p>

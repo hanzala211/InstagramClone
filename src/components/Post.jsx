@@ -249,7 +249,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                             <Link
                                 to={userData?.data.user._id !== postData?._id ? `/search/${postData?.userName}/` : `/${userData?.data.user.userName}/`}
                                 onClick={() => {
-                                    fetchUserDataOnClick(postData?.userName);
+                                    fetchUserDataOnClick(postData?.userName, userData, null, setSelectedProfile, setMainLoading);
                                     setMainLoading(true);
                                     setSelectedPost(null);
                                 }}
