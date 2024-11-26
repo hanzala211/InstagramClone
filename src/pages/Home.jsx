@@ -12,7 +12,7 @@ import { CommentHome } from "../components/CommentHome";
 import { fetchHomePosts, formatDate } from "../utils/helper";
 
 export function Home() {
-    const { userData, setUserData, setMainLoading } = useUser()
+    const { userData, setUserData, setMainLoading, setMessage } = useUser()
     const { setSelectedPost } = usePost()
     const { setSelectedProfile } = useSearch();
     const [count, setCount] = useState(0);
@@ -43,11 +43,10 @@ export function Home() {
         }
         if (homePosts !== null) {
             const updatedCurrentIndex = homePosts.map((post) => post?.imageUrls.length)
-            setCurrentIndex(Array(updatedCurrentIndex.length).fill(0))
             setTotalIndex(updatedCurrentIndex)
         }
 
-    }, [homePosts, userData])
+    }, [homePosts])
 
     useEffect(() => {
         setIsPostsLoading(true)
@@ -59,9 +58,9 @@ export function Home() {
         setIsAnimating(true);
         setCurrentIndex((prev) => {
             const updated = [...prev];
-            updated[index]++;
+            updated[index] = updated[index] + 1 < totalIndex[index] ? updated[index] + 1 : updated[index];
             return updated;
-        })
+        });
         setTimeout(() => {
             setIsAnimating(false)
         }, 400);
@@ -71,9 +70,9 @@ export function Home() {
         setIsAnimating(true);
         setCurrentIndex((prev) => {
             const updated = [...prev];
-            updated[index]--;
+            updated[index] = updated[index] - 1 >= 0 ? updated[index] - 1 : updated[index];
             return updated;
-        })
+        });
         setTimeout(() => {
             setIsAnimating(false)
         }, 400);
@@ -95,18 +94,21 @@ export function Home() {
                 redirect: "follow"
             })
             const result = await response.json();
-            setUserData((prev) => ({
-                ...prev,
-                data: {
-                    ...prev.data,
-                    user: {
-                        ...prev.data.user,
-                        savedPosts: result.savedPosts.includes(id)
-                            ? [...prev.data.user.savedPosts, id]
-                            : [...prev.data.user.savedPosts],
+            if (result.status !== "fail") {
+                setUserData((prev) => ({
+                    ...prev,
+                    data: {
+                        ...prev.data,
+                        user: {
+                            ...prev.data.user,
+                            savedPosts: result.savedPosts.includes(id)
+                                ? [...prev.data.user.savedPosts, id]
+                                : [...prev.data.user.savedPosts],
+                        },
                     },
-                },
-            }));
+                }));
+                setMessage("Post Saved Successfully")
+            }
         } catch (error) {
             console.error(error)
         }
@@ -127,18 +129,21 @@ export function Home() {
                 redirect: "follow"
             })
             const result = await response.json();
-            setUserData((prev) => ({
-                ...prev,
-                data: {
-                    ...prev.data,
-                    user: {
-                        ...prev.data.user,
-                        savedPosts: prev.data.user.savedPosts.filter(
-                            (postId) => postId !== id
-                        ),
+            if (result.status !== "fail") {
+                setUserData((prev) => ({
+                    ...prev,
+                    data: {
+                        ...prev.data,
+                        user: {
+                            ...prev.data.user,
+                            savedPosts: prev.data.user.savedPosts.filter(
+                                (postId) => postId !== id
+                            ),
+                        },
                     },
-                },
-            }));
+                }));
+                setMessage("Post Unsaved Successfully")
+            }
         } catch (error) {
             console.error(error)
         }
@@ -172,6 +177,26 @@ export function Home() {
             });
 
             const result = await response.json();
+            if (result.message !== "Post liked successfully.") {
+                setLikedPosts((prev) => {
+                    const updated = [...prev];
+                    updated[index] = false;
+                    return updated;
+                });
+                setHomePosts((prev) => {
+                    const updatedPosts = [...prev];
+                    updatedPosts[index] = {
+                        ...updatedPosts[index],
+                        likeCount: updatedPosts[index].likeCount - 1,
+                        likes: updatedPosts[index].likes.includes(userData.data.user._id)
+                            ? updatedPosts[index].likes
+                            : [...updatedPosts[index].likes, userData.data.user._id],
+                    };
+                    return updatedPosts;
+                });
+            } else {
+                setMessage(result.message)
+            }
         } catch (error) {
             console.error(error);
         }
@@ -205,6 +230,26 @@ export function Home() {
             });
 
             const result = await response.json();
+            if (result.message !== "Post disliked successfully.") {
+                setLikedPosts((prev) => {
+                    const updated = [...prev];
+                    updated[index] = false;
+                    return updated;
+                });
+                setHomePosts((prev) => {
+                    const updatedPosts = [...prev];
+                    updatedPosts[index] = {
+                        ...updatedPosts[index],
+                        likeCount: updatedPosts[index].likeCount + 1,
+                        likes: updatedPosts[index].likes.includes(userData.data.user._id)
+                            ? updatedPosts[index].likes
+                            : [...updatedPosts[index].likes, userData.data.user._id],
+                    };
+                    return updatedPosts;
+                });
+            } else {
+                setMessage(result.message)
+            }
         } catch (error) {
             console.error(error);
         }
@@ -243,16 +288,16 @@ export function Home() {
                                     <div className="flex flex-row justify-between">
                                         <div className="flex flex-row gap-3">
                                             {!likedPosts[index] ?
-                                                <button onClick={() => likePost(item._id, i)}><Like className={`hover:opacity-80 transition-all duration-150 cursor-pointer`} /></button>
-                                                : <button onClick={() => unLikePost(item._id, i)}><UnLike className={`hover:opacity-80 fill-red-700 transition-all duration-150 cursor-pointer`} /></button>}
+                                                <button onClick={() => likePost(item._id, index)}><Like className={`hover:opacity-80 transition-all duration-150 cursor-pointer`} /></button>
+                                                : <button onClick={() => unLikePost(item._id, index)}><UnLike className={`hover:opacity-80 fill-red-700 transition-all duration-150 cursor-pointer`} /></button>}
                                             <CommentHome setCurrentIndex={setCurrentPostIndex} item={item} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} setSelectedPost={setSelectedPost} i={index} />
                                         </div>
                                         {!savedPosts[index] ?
-                                            <button onClick={() => savePost(item._id, i)}>
+                                            <button onClick={() => savePost(item._id, index)}>
                                                 <SaveSVG className="hover:stroke-gray-300 hover:opacity-80 transition-all duration-150 cursor-pointer stroke-[rgb(245,245,245)]" />
                                             </button>
                                             :
-                                            <button onClick={() => unSavePost(item._id, i)}><UnSave className="hover:stroke-gray-300 hover:opacity-80 transition-all duration-150 cursor-pointer stroke-[rgb(245,245,245)]" /></button>
+                                            <button onClick={() => unSavePost(item._id, index)}><UnSave className="hover:stroke-gray-300 hover:opacity-80 transition-all duration-150 cursor-pointer stroke-[rgb(245,245,245)]" /></button>
                                         }
                                     </div>
                                     <p className="text-[14px] font-medium">{item.likeCount} likes</p>

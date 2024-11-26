@@ -133,7 +133,6 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
             })
             const result = await response.json();
             if (result.status !== "fail") {
-
                 setUserData((prev) => ({
                     ...prev, data: {
                         ...prev.data, user: {

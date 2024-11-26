@@ -12,7 +12,6 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
     const [isShared, setIsShared] = useState(false)
     const [shareLoading, setShareLoading] = useState(false);
 
-    console.log(userPosts)
 
     useEffect(() => {
         setCaptionValue(selectedPost !== null ? selectedPost.caption : "");
@@ -50,6 +49,7 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
                     }
                 }
             }))
+            setUserPosts((prev) => (prev.filter((item) => item._id !== selectedPost._id)))
         } catch (error) {
             console.error(error)
         } finally {

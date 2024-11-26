@@ -146,7 +146,7 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
                         />
                     </div>
                 ) : (
-                    <div className={`bg-[#262626] w-full md:w-[90vw] xl:w-[60vw] xl:h-[80vh] md:h-[75vh] transition-all duration-300 flex flex-col ${isCaption && !isShared ? "w-[55vw]" : ""}`}>
+                    <div className={`bg-[#262626] w-full md:w-[90vw] xl:w-[73rem] xl:h-[50rem] md:h-[75vh] transition-all duration-300 flex flex-col ${isCaption && !isShared ? "w-[55vw]" : ""}`}>
                         <div className="relative w-full h-full">
                             {!loading && !isCaption ? <ReactCropper
                                 image={selectedImage[currentIndex]}
