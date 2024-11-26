@@ -200,10 +200,10 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                 onClick={handleClose}
             ></div>
             <div
-                className={`fixed opacity-0 top-[51%] -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100" : "pointer-events-none"
+                className={`fixed opacity-0 top-1/2 -translate-y-1/2 w-full xl:max-w-[80rem] max-w-[65rem] box-border xl:h-[48rem] h-[40rem] -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100" : "pointer-events-none"
                     }`}
             >
-                <div className="w-[80rem] h-[48rem] flex">
+                <div className="h-full flex">
                     <div className="w-[60%] h-full relative overflow-hidden">
                         <div className={`w-full flex h-full ${isAnimating ? "transition-transform duration-300 ease-in-out" : ""} `} style={{ transform: `translateX(${-currentIndex * 100}%)` }}>
                             {selectedPost !== null ? selectedPost.imageUrls.map((item, i) => {
@@ -230,7 +230,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                 <MoreSVG className="hover:opacity-70 cursor-pointer transition duration-300" />
                             </button>
                         </div>
-                        <div className="w-full flex flex-col h-[68%] gap-4 overflow-auto scrollbar-hidden">
+                        <div className="w-full flex flex-col xl:h-[68%] h-[20%] gap-4 overflow-auto scrollbar-hidden">
                             {selectedPost !== null && selectedPost.caption &&
                                 <div>
                                     <div className="w-full px-6 mt-4 text-[15px]">
