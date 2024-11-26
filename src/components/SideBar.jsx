@@ -57,14 +57,12 @@ export function SideBar() {
     return <><aside className={`px-4 py-10 transition-[width] duration-300 ${isSearching ? "w-[4%] border-r-0" : "w-[17%] border-r-[2px] border-[#262626]"} fixed left-0 top-0 h-[100vh] `}>
         {!isSearching && <Link to="/home"><img src="/images/instagramiconswhite.png" alt="Instagram Logo" className="w-[6.5rem] ml-2 mb-9" /></Link>}
         {isSearching && <NavLink to="/home"
-            end
             className={({ isActive }) =>
                 `group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-block py-2 px-2 rounded-md mb-9 ${isActive ? "font-bold" : ""}`
             }><InstagramSvg className="group-hover:scale-110 transition-transform duration-150" /></NavLink>}
         <div className="flex flex-col gap-3">
             <NavLink
                 to="/home"
-                end
                 className={({ isActive }) =>
                     `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 py-3 rounded-md ${isActive ? "font-bold" : ""} ${isSearching ? "w-10 h-10" : ""}`
                 }
@@ -84,7 +82,6 @@ export function SideBar() {
                 <p className={`text-[15px] ${isSearching ? "hidden" : ""} `}>Search</p>
             </NavLink>
             <NavLink
-                end
                 to="/explore"
                 className={({ isActive }) =>
                     `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 py-3 rounded-md ${isActive ? "font-bold" : ""} ${isSearching ? "w-10 h-10" : ""}`
@@ -168,7 +165,6 @@ export function SideBar() {
                 <div className="px-2 py-2.5">
                     <Link
                         to="/login"
-                        end
                         className="gap-4 items-center group w-full py-3 hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex p-4 rounded-md"
                         onClick={() => {
                             setMainLoading(true)

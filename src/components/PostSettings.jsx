@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { usePost, useUser } from "../context/UserContext";
 import { EditPost } from "./EditPost";
 import { IoCloseSharp } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPostOpen, isMyPost }) {
     const { userData, setMessage, setUserData, userPosts, setUserPosts } = useUser();
