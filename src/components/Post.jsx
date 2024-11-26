@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { Skeleton } from "./Skeleton";
 import { LikedComponent } from "./LikeComponent";
 import { SavedComponent } from "./SavedComponent";
+import { fetchUserDataOnClick } from "../utils/helper";
 
 export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, comments, setComments }) {
     const { selectedPost, setSelectedPost } = usePost()
@@ -90,24 +91,6 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         setTimeout(() => {
             setIsAnimating(false)
         }, 400);
-    }
-
-    async function fetchUserDataOnClick(username) {
-        try {
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/search/${username}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            setSelectedProfile(result.data[0])
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setMainLoading(false)
-        }
     }
 
     async function postComment() {
@@ -270,7 +253,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                             <div className="flex flex-col gap-1">
                                                 <p className="text-[15px]">
                                                     <Link to={userData?.data.user._id !== item?.user._id ? `/search/${item?.user.userName}/` : `/${userData?.data.user.userName}/`} onClick={() => {
-                                                        fetchUserDataOnClick(item?.user.userName)
+                                                        fetchUserDataOnClick(item?.user.userName, userData, setSelectedProfile, setMainLoading)
                                                         setMainLoading(true)
                                                         setSelectedPost(null)
                                                     }} className="text-[13px] mr-2 font-semibold hover:opacity-50 transition duration-150">

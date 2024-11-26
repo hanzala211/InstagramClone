@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { CommentSVG, Like, SaveSVG, UnLike, UnSave } from "../assets/Constants";
+import { Like, SaveSVG, UnLike, UnSave } from "../assets/Constants";
 import { useEffect, useState } from "react";
 import { usePost, useSearch, useUser } from "../context/UserContext";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -7,6 +7,9 @@ import { Loader } from "../components/Loader";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { RiUserFollowFill } from "react-icons/ri";
 import { Post } from "../components/Post";
+import { fetchUserDataOnClick } from "../utils/helper";
+import { CommentHome } from "../components/CommentHome";
+import { fetchHomePosts } from "../utils/helper";
 
 export function Home() {
     const { userData, setUserData, setMainLoading } = useUser()
@@ -40,7 +43,8 @@ export function Home() {
 
     useEffect(() => {
         setIsPostsLoading(true)
-        fetchHomePosts()
+        setCount((prev) => prev + 1);
+        fetchHomePosts(userData, setHomePosts, setIsPostsLoading)
     }, [])
 
     function handleIncrease() {
@@ -151,31 +155,6 @@ export function Home() {
         }
     }
 
-    async function fetchHomePosts() {
-        setCount((prev) => prev + 1)
-        try {
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/home?limit=5`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json()
-            setHomePosts((prev) => {
-                const newItems = result.data.filter(
-                    (item) => !prev.some((prevItem) => prevItem._id === item._id)
-                );
-                return [...prev, ...newItems];
-            });
-
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setIsPostsLoading(false)
-        }
-    }
-
     async function likePost(id, index) {
         try {
             setLikedPosts((prev) => {
@@ -242,23 +221,6 @@ export function Home() {
         }
     }
 
-    async function fetchUserDataOnClick(username) {
-        try {
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/search/${username}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            setSelectedProfile(result.data[0])
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setMainLoading(false)
-        }
-    }
 
     return <><section className="w-full max-w-[40%] mx-auto">
         <div className={`flex flex-col gap-2 w-full ${isPostsLoading || homePosts.length === 0 ? "h-[90vh]" : ""} ${homePosts.length < 2 ? "h-[90vh]" : ""}`}>
@@ -271,7 +233,7 @@ export function Home() {
                                     <img src={item?.user.profilePic} className="rounded-full w-10" alt="" />
                                     <div className="flex flex-row gap-1 items-center">
                                         <Link to={`/search/${item?.user.userName}/`} onClick={() => {
-                                            fetchUserDataOnClick(item?.user.userName)
+                                            fetchUserDataOnClick(item?.user.userName, userData, setSelectedProfile, setMainLoading)
                                             setMainLoading(true)
                                         }} className="font-semibold text-[12px] hover:opacity-70 transition duration-200">{item?.user.userName}</Link>
                                         <p className="text-[#A8A8A8]">•</p>
@@ -279,9 +241,9 @@ export function Home() {
                                     </div>
                                 </div>
                                 <div className="w-full rounded-md bg-[#000000] border-[1px] border-[#2B2B2D] relative overflow-hidden">
-                                    <div className={`w-full h-full flex items-center justify-center  ${isAnimating ? "transition-transform duration-300 ease-in-out" : ""} `} style={{ transform: `translateX(${-currentIndex * 100}%)` }}>
+                                    <div className={`w-full h-full flex items-start ${isAnimating ? "transition-transform duration-300 ease-in-out" : ""} `} style={{ transform: `translateX(${-currentIndex * 100}%)` }}>
                                         {item !== null ? item.imageUrls.map((item, i) => {
-                                            return <img src={item} key={i} alt="Posts" className="w-96 object-cover" />
+                                            return <img src={item} key={i} alt="Posts" className="w-full object-cover" />
                                         }) : ""}
                                     </div>
                                     {item?.imageUrls.length > 1 ? <> {item !== null && currentIndex !== selectedPost?.imageUrls.length - 1 && <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleIncrease}><FaArrowRight className="fill-black" /></button>}
@@ -294,14 +256,7 @@ export function Home() {
                                             {!likedPosts[i] ?
                                                 <button onClick={() => likePost(item._id, i)}><Like className={`hover:opacity-80 transition-all duration-150 cursor-pointer`} /></button>
                                                 : <button onClick={() => unLikePost(item._id, i)}><UnLike className={`hover:opacity-80 fill-red-700 transition-all duration-150 cursor-pointer`} /></button>}
-                                            <button onClick={() => {
-                                                setIsPostOpen(true)
-                                                setCurrentPost(i)
-                                                setCurrentIndex(0)
-                                                setSelectedPost(item)
-                                            }}>
-                                                <CommentSVG className="hover:stroke-gray-600 hover:opacity-80 transition-all duration-150 cursor-pointer" />
-                                            </button>
+                                            <CommentHome setCurrentIndex={setCurrentIndex} item={item} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} setSelectedPost={setSelectedPost} i={i} />
                                         </div>
                                         {!savedPosts[i] ?
                                             <button onClick={() => savePost(item._id, i)}>
