@@ -102,8 +102,8 @@ export function SearchProfile() {
     return <>
         {!mainLoading ?
 
-            <section className="w-full max-w-[70%] mx-auto">
-                <div className="w-full max-w-[64rem] pb-9 pt-20 border-b-[2px] border-[#262626]">
+            <section className="w-full max-w-[65%] mx-auto">
+                <div className="w-full max-w-[61rem] pb-9 pt-20 border-b-[2px] border-[#262626]">
                     <div className="flex gap-20 ml-16 items-center relative">
                         {searchUserNotes.length > 0 &&
                             <div className="absolute -top-1 left-[7%] z-[1] cursor-pointer">
@@ -139,7 +139,7 @@ export function SearchProfile() {
                         }}><HighLights title={item.name} image={item.profilePic} /></Link>)}
                     </div>
                 </div>
-                <div className="absolute left-[55%] -translate-x-1/2 flex gap-10">
+                <div className="absolute left-[56%] -translate-x-1/2 flex gap-10">
                     <NavLink end to={`/search/${selectedProfile.userName}/`} className={({ isActive }) => `flex items-center tracking-wider py-3 gap-1 text-[12px] ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><PostsIcon /> POSTS</NavLink >
                 </div>
                 <div className="mt-[4rem]">

@@ -180,8 +180,8 @@ export function Profile() {
         setNoteValue("");
     }
 
-    return <section className="w-full max-w-[70%] mx-auto">
-        <div className="w-full max-w-[64rem] pb-9 pt-20 border-b-[2px] border-[#262626]">
+    return <section className="w-full max-w-[65%] mx-auto">
+        <div className="w-full max-w-[61rem] pb-9 pt-20 border-b-[2px] border-[#262626]">
             <div className="flex gap-20 ml-16 items-center relative">
                 <div className="absolute -top-1 left-[7%] z-[1] cursor-pointer" onClick={() => {
                     if (note.length === 0) {
@@ -225,7 +225,7 @@ export function Profile() {
                 <HighLights title="New" onClick={() => setIsCreatingHighLight(true)} />
             </div>
         </div>
-        <div className="absolute xl:left-[54%] left-[60%] -translate-x-1/2 flex gap-10">
+        <div className="absolute xl:left-[56%] left-[60%] -translate-x-1/2 flex gap-10">
             <NavLink end to={`/${userData?.data?.user.userName || userData.data.userName}/`} className={({ isActive }) => `flex items-center tracking-wider py-3 gap-1 text-[12px] ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><PostsIcon /> POSTS</NavLink >
             <NavLink to={`/${userData?.data?.user.userName || userData.data.userName}/saved/`} className={({ isActive }) => `flex items-center tracking-wider py-3 text-[12px] gap-1 ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><SavedIcon /> SAVED</NavLink>
             <NavLink to={`/${userData?.data?.user.userName || userData.data.userName}/tagged/`} className={({ isActive }) => `flex items-center tracking-wider py-3 text-[12px] gap-1  ${isActive ? "font-semibold border-t-[2px]" : "text-[##A8A8A8]"}`}><TaggedUser /> TAGGED</NavLink>

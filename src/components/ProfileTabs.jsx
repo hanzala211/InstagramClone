@@ -47,7 +47,7 @@ export function ProfileTabs({ isPosts, isTagged, isSaved, isSearchPosts }) {
     }
 
     return <>
-        {(isPosts && userPosts.length === 0) || (isTagged && userPosts.length === 0) || (isSaved && reversedSavedPosts.length === 0) || (isSearchPosts && searchUserPosts.length === 0) ? <div className="max-w-[90%] flex flex-col gap-4 items-center justify-center xl:h-[34vh] h-[23vh]">
+        {(isPosts && userPosts.length === 0) || (isTagged && userPosts.length === 0) || (isSaved && reversedSavedPosts.length === 0) || (isSearchPosts && searchUserPosts.length === 0) ? <div className="max-w-[95%] flex flex-col gap-4 items-center justify-center xl:h-[34vh] h-[23vh]">
             {isPosts ? <SharePhotosIcon /> : isTagged ? <TaggedIcon /> : isSaved ? <IoSaveOutline className="text-[50px]" />
                 : isSearchPosts ? <SharePhotosIcon /> : ""}
             <h1 className="text-[25px] font-extrabold">{isPosts ? "Share photos" : isTagged ? "Photos of you" : isSaved ? "Saved Posts" : isSearchPosts ? "No posts yet" : ""}</h1>
