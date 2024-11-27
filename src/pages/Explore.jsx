@@ -21,6 +21,7 @@ export function Explore() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [comments, setComments] = useState([]);
+    const [hasMore, setHasMore] = useState(true)
 
     useEffect(() => {
         setIsPostsLoading(true)
@@ -34,25 +35,38 @@ export function Explore() {
     }, [currentPost])
 
     async function fetchPosts() {
-        setCount((prev) => prev + 1)
         try {
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/explore?limit=15`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${userData.data.token}`
+            setCount((prev) => prev + 1)
+            const response = await fetch(
+                `https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/explore?limit=6`,
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `${userData.data.token}`,
+                    },
+                    redirect: 'follow',
                 }
-            })
+            );
             const result = await response.json();
-            setExplorePagePosts((prev) => {
-                const newItems = result.data.filter(
-                    (item) => !prev.some((prevItem) => prevItem._id === item._id)
-                );
-                return [...prev, ...newItems];
-            });
+            if (result.status !== 'fail') {
+                setExplorePagePosts((prev) => {
+                    const newItems = result.data.filter(
+                        (item) => !prev.some((prevItem) => prevItem._id === item._id)
+                    );
+                    if (newItems.length === 0) {
+                        setHasMore(false);
+                        return [...prev];
+                    } else {
+                        return [...prev, ...newItems];
+                    }
+                });
+            } else {
+                setHasMore(false);
+            }
         } catch (error) {
-            console.error(error)
+            console.error(error);
         } finally {
-            setIsPostsLoading(false)
+            setIsPostsLoading(false);
         }
     }
 
@@ -77,7 +91,7 @@ export function Explore() {
             <p className="text-center text-lg text-gray-500">
                 No posts available. Check back later!
             </p>
-        ) : (
+        ) : isPostsLoading ? <Loader /> : (
             <InfiniteScroll
                 dataLength={explorePagePosts.length}
                 next={fetchPosts}
@@ -86,7 +100,7 @@ export function Explore() {
                         <Loader height="h-[5vh]" />
                     </div>
                 }
-                hasMore={count < 8}
+                hasMore={count < 8 && hasMore}
             >
                 <div className={`flex flex-wrap gap-2`}>
                     {explorePagePosts.map((item, index) => (

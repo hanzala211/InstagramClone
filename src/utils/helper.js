@@ -27,10 +27,12 @@ export async function fetchUserDataOnClick(
 		}, 1000);
 	}
 }
+
 export async function fetchHomePosts(
 	userData,
 	setHomePosts,
-	setIsPostsLoading
+	setIsPostsLoading,
+	setHasMore
 ) {
 	try {
 		const response = await fetch(
@@ -44,18 +46,28 @@ export async function fetchHomePosts(
 			}
 		);
 		const result = await response.json();
-		setHomePosts((prev) => {
-			const newItems = result.data.filter(
-				(item) => !prev.some((prevItem) => prevItem._id === item._id)
-			);
-			return [...prev, ...newItems];
-		});
+		if (result.status !== 'fail') {
+			setHomePosts((prev) => {
+				const newItems = result.data.filter(
+					(item) => !prev.some((prevItem) => prevItem._id === item._id)
+				);
+				if (newItems.length === 0) {
+					setHasMore(false);
+					return [...prev];
+				} else {
+					return [...prev, ...newItems];
+				}
+			});
+		} else {
+			setHasMore(false);
+		}
 	} catch (error) {
 		console.error(error);
 	} finally {
 		setIsPostsLoading(false);
 	}
 }
+
 export function formatNumber(num) {
 	if (num >= 1_000_000_000) {
 		return (num / 1_000_000_000).toFixed(1) + 'B';

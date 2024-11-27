@@ -30,6 +30,7 @@ export function Home() {
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0);
     const [comments, setComments] = useState([])
+    const [hasMore, setHasMore] = useState(true)
 
     useEffect(() => {
         if (homePosts !== null) {
@@ -58,7 +59,7 @@ export function Home() {
     useEffect(() => {
         setIsPostsLoading(true)
         setCount((prev) => prev + 1);
-        fetchHomePosts(userData, setHomePosts, setIsPostsLoading)
+        fetchHomePosts(userData, setHomePosts, setIsPostsLoading, setHasMore)
     }, [])
 
     function handleIncrease(index) {
@@ -262,11 +263,13 @@ export function Home() {
         }
     }
 
-
     return <><section className="w-full max-w-[40%] mx-auto">
         <div className={`flex flex-col gap-2 w-full ${isPostsLoading || homePosts.length === 0 ? "h-[90vh]" : ""} ${homePosts.length < 2 ? "h-[90vh]" : ""}`}>
             {!isPostsLoading ?
-                <InfiniteScroll dataLength={homePosts.length} loader={homePosts.length > 0 && <Loader height="h-[10vh]" />} next={fetchHomePosts} hasMore={count < 5} >
+                <InfiniteScroll dataLength={homePosts.length} loader={homePosts.length > 0 && <Loader height="h-[10vh]" />} next={() => {
+                    console.log("Fetching")
+                    fetchHomePosts(userData, setHomePosts, setIsPostsLoading, setHasMore)
+                }} hasMore={count < 5 && hasMore} >
                     {
                         homePosts.length > 0 ? homePosts.map((item, index) => {
                             return <div key={index} className="flex flex-col gap-2 mt-7 border-b-[2px] border-[#262626] pb-4">
