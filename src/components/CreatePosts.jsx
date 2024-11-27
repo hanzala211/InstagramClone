@@ -8,12 +8,20 @@ import { Loader } from "../components/Loader";
 import { useUser } from "../context/UserContext";
 import { EditPost } from "./EditPost";
 
-export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelectedImage, setIsCreating, handleFileChange, handleFile }) {
+export function CreatePost({
+    isCreating,
+    fileInputRef,
+    selectedImage,
+    setSelectedImage,
+    setIsCreating,
+    handleFileChange,
+    handleFile,
+}) {
     const { userData } = useUser();
-    const [crop, setCrop] = useState({ x: 0, y: 0 });
-    const [zoom, setZoom] = useState(1);
-    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-    const [croppedImage, setCroppedImage] = useState(null);
+    const [crop, setCrop] = useState([]);
+    const [zoom, setZoom] = useState([]);
+    const [croppedAreas, setCroppedAreas] = useState([]);
+    const [croppedImages, setCroppedImages] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loading, setLoading] = useState(false);
     const [isCaption, setIsCaption] = useState(false);
@@ -26,8 +34,8 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
         const body = document.querySelector("body");
         body.style.overflowY = isCreating ? "hidden" : "auto";
 
-        return () => body.style.overflowY = "auto"
-    }, [isCreating])
+        return () => (body.style.overflowY = "auto");
+    }, [isCreating]);
 
     function handleClose() {
         setIsCreating(false);
@@ -35,35 +43,36 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
         setTimeout(() => {
             setIsCaption(false);
             setIsShared(false);
-        }, 800)
+        }, 800);
     }
 
     const onCropComplete = (croppedArea, croppedAreaPixels) => {
-        setCroppedAreaPixels(croppedAreaPixels);
+        setCroppedAreas((prev) => {
+            const updatedAreas = [...prev];
+            updatedAreas[currentIndex] = croppedAreaPixels;
+            return updatedAreas;
+        });
     };
 
     const onCropImage = async () => {
-        if (selectedImage && croppedAreaPixels) {
-            const croppedImageUrl = await getCroppedImg(
-                selectedImage,
-                croppedAreaPixels
-            );
-            setCroppedImage(croppedImageUrl);
+        if (selectedImage && croppedAreas.length) {
+            const croppedImageUrls = await getCroppedImg(selectedImage, croppedAreas);
+            setCroppedImages(croppedImageUrls);
             setLoading(true);
             setCurrentIndex(0);
             setTimeout(() => {
                 setIsCaption(true);
                 setLoading(false);
-            }, 500)
+            }, 500);
         }
     };
 
     function handleIncrease() {
-        setCurrentIndex((prev) => prev + 1)
+        setCurrentIndex((prev) => prev + 1);
     }
 
     function handleDecrease() {
-        setCurrentIndex((prev) => prev - 1)
+        setCurrentIndex((prev) => prev - 1);
     }
 
     async function createPost() {
@@ -72,46 +81,53 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
             setShareLoading(true);
             setIsDisabled(true);
             setIsShared(true);
-            await Promise.all(croppedImage.map(async (item, index) => {
-                const response = await fetch(item);
-                const blob = await response.blob();
-                formData.append("images", blob, `image${index}.jpg`);
-            }));
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `${userData.data.token}`,
-                },
-                body: formData,
-                redirect: "follow"
-            })
+            await Promise.all(
+                croppedImages.map(async (item, index) => {
+                    const response = await fetch(item);
+                    const blob = await response.blob();
+                    formData.append("images", blob, `image${index}.jpg`);
+                })
+            );
+            const response = await fetch(
+                `https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `${userData.data.token}`,
+                    },
+                    body: formData,
+                    redirect: "follow",
+                }
+            );
             const result = await response.json();
             if (captionValue.length > 0) {
-                const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/caption/${result.post._id}`, {
-                    method: "PUT",
-                    headers: {
-                        "Authorization": `${userData.data.token}`,
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        "caption": captionValue
-                    }),
-                    redirect: "follow"
-                })
-                const captionResult = await response.json();
+                await fetch(
+                    `https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/caption/${result.post._id}`,
+                    {
+                        method: "PUT",
+                        headers: {
+                            Authorization: `${userData.data.token}`,
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ caption: captionValue }),
+                        redirect: "follow",
+                    }
+                );
             }
         } catch (error) {
-            console.error(error)
+            console.error(error);
         } finally {
             setIsDisabled(false);
-            setShareLoading(false)
-            setCaptionValue("")
+            setShareLoading(false);
+            setCaptionValue("");
         }
     }
+
     return (
         <>
             <IoCloseSharp
-                className={`fixed text-[35px] top-8 right-9 z-[100000] cursor-pointer opacity-0 ${isCreating ? "opacity-100" : "pointer-events-none"}`}
+                className={`fixed text-[35px] top-8 right-9 z-[100000] cursor-pointer opacity-0 ${isCreating ? "opacity-100" : "pointer-events-none"
+                    }`}
                 onClick={() => handleClose()}
             />
             <div
@@ -121,10 +137,17 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
             ></div>
 
             <div
-                className={`fixed opacity-0 top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isCreating ? "opacity-100" : "pointer-events-none"} border-y-[1px] border-[#363636]`}
+                className={`fixed opacity-0 top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isCreating ? "opacity-100" : "pointer-events-none"
+                    } border-y-[1px] border-[#363636]`}
             >
                 <p className="text-[18px] absolute -top-9 left-1/2 -translate-x-1/2">
-                    {!isCaption ? "Create New Post" : !isShared ? "Share" : !shareLoading ? "Post shared" : "Post sharing"}
+                    {!isCaption
+                        ? "Create New Post"
+                        : !isShared
+                            ? "Share"
+                            : !shareLoading
+                                ? "Post shared"
+                                : "Post sharing"}
                 </p>
                 {!selectedImage || selectedImage.length === 0 ? (
                     <div className="bg-[#262626] flex items-center justify-center flex-col gap-2 w-full sm:w-[60vw] xl:w-[40vw] h-[72vh] px-5 py-5">
@@ -146,38 +169,82 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
                         />
                     </div>
                 ) : (
-                    <div className={`bg-[#262626] w-full md:w-[90vw] xl:w-[73rem] xl:h-[50rem] md:h-[75vh] transition-all duration-300 flex flex-col ${isCaption && !isShared ? "w-[55vw]" : ""}`}>
+                    <div
+                        className={`bg-[#262626] w-full md:w-[90vw] xl:w-[73rem] xl:h-[50rem] md:h-[75vh] transition-all duration-300 flex flex-col`}
+                    >
                         <div className="relative w-full h-full">
-                            {!loading && !isCaption ? <ReactCropper
-                                image={selectedImage[currentIndex]}
-                                crop={crop}
-                                zoom={zoom}
-                                aspect={1}
-                                onCropChange={setCrop}
-                                onZoomChange={setZoom}
-                                onCropComplete={onCropComplete}
-                            /> : isCaption && !isShared ? <EditPost croppedImage={croppedImage} currentIndex={currentIndex} handleDecrease={handleDecrease} handleIncrease={handleIncrease} loading={loading} isCaption={isCaption} setCaptionValue={setCaptionValue} captionValue={captionValue} userData={userData} /> : isShared ? <div className={`bg-[#262626] w-full h-[72vh] flex flex-col justify-center items-center`}>
-                                {shareLoading ? <img src="/images/sharedLoader.gif" alt="loading" className="w-32" /> : <img src="/images/sharedPost.gif" alt="loaded" className="w-32" />}
-                                {shareLoading ? "" : <p className="text-[20px] font-semibold mt-5">Your post has been shared.</p>}
-                            </div> : <Loader />}
-                            {(!selectedImage || selectedImage.length > 1) && !loading && !isCaption ?
+                            {!loading && !isCaption ? (
+                                <ReactCropper
+                                    image={selectedImage[currentIndex]}
+                                    crop={crop[currentIndex] || { x: 0, y: 0 }}
+                                    zoom={zoom[currentIndex] || 1}
+                                    aspect={1}
+                                    onCropChange={(newCrop) =>
+                                        setCrop((prev) => {
+                                            const updatedCrop = [...prev];
+                                            updatedCrop[currentIndex] = newCrop;
+                                            return updatedCrop;
+                                        })
+                                    }
+                                    onZoomChange={(newZoom) =>
+                                        setZoom((prev) => {
+                                            const updatedZoom = [...prev];
+                                            updatedZoom[currentIndex] = newZoom;
+                                            return updatedZoom;
+                                        })
+                                    }
+                                    onCropComplete={onCropComplete}
+                                />
+                            ) : isCaption && !isShared ? (
+                                <EditPost
+                                    croppedImage={croppedImages}
+                                    currentIndex={currentIndex}
+                                    handleDecrease={handleDecrease}
+                                    handleIncrease={handleIncrease}
+                                    loading={loading}
+                                    isCaption={isCaption}
+                                    setCaptionValue={setCaptionValue}
+                                    captionValue={captionValue}
+                                    userData={userData}
+                                />
+                            ) : isShared ? (
+                                <div
+                                    className={`bg-[#262626] w-full h-[72vh] flex flex-col justify-center items-center`}
+                                >
+                                    {shareLoading ? (
+                                        <img
+                                            src="/images/sharedLoader.gif"
+                                            alt="loading"
+                                            className="w-32"
+                                        />
+                                    ) : (
+                                        <img
+                                            src="/images/sharedPost.gif"
+                                            alt="loaded"
+                                            className="w-32"
+                                        />
+                                    )}
+                                    {shareLoading ? (
+                                        ""
+                                    ) : (
+                                        <p className="text-[20px] font-semibold mt-5">
+                                            Your post has been shared.
+                                        </p>
+                                    )}
+                                </div>
+                            ) : (
+                                <Loader />
+                            )}
+                            {(!selectedImage || selectedImage.length > 1) && !isCaption && (
                                 <>
                                     {currentIndex !== selectedImage.length - 1 && <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleIncrease}><FaArrowRight className="fill-black" /></button>}
                                     {currentIndex !== 0 && <button className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleDecrease}><FaArrowLeft className="fill-black" /></button>}
-                                </> : ""}
+                                </>
+                            )}
                         </div>
-                        {!isCaption ? <button
-                            onClick={onCropImage}
-                            className="mt-4 absolute -right-2 -top-14  duration-200 px-3 py-2 text-[20px] rounded-lg"
-                        >
-                            <FaArrowRight />
-                        </button> : !isShared ? <button
-                            className="mt-4 absolute text-[#0095F6] hover:text-white -right-2 -top-14  duration-200 px-3 py-2 text-[15px] font-semibold rounded-lg"
-                            onClick={createPost}
-                            disabled={isDisabled}
-                        >
-                            Share
-                        </button> : ""}
+                        {!isCaption && !isShared &&
+                            <button className="absolute -top-7 right-0 text-[20px]" onClick={onCropImage}><FaArrowRight /></button>}
+                        {!isShared && isCaption && <button className="absolute -top-7 right-0 text-[15px] text-[#0096f4] hover:text-white" onClick={createPost}>Share</button>}
                     </div>
                 )}
             </div>

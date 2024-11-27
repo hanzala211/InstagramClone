@@ -1,7 +1,7 @@
-export const getCroppedImg = (images, croppedAreaPixels) => {
+export const getCroppedImg = (images, croppedAreas) => {
 	return new Promise((resolve, reject) => {
 		const croppedImages = [];
-		images.forEach((imageSrc) => {
+		images.forEach((imageSrc, index) => {
 			const image = new Image();
 			image.src = imageSrc;
 
@@ -9,7 +9,7 @@ export const getCroppedImg = (images, croppedAreaPixels) => {
 				const canvas = document.createElement('canvas');
 				const ctx = canvas.getContext('2d');
 
-				const { x, y, width, height } = croppedAreaPixels;
+				const { x, y, width, height } = croppedAreas[index];
 				canvas.width = width;
 				canvas.height = height;
 
