@@ -310,9 +310,10 @@ export function Home() {
                                     <p className="text-[14px] font-medium">{item.likeCount} likes</p>
                                     <div className="w-full text-[15px]">
                                         <p className="text-[13px] text-[#a8a8a1]">
-                                            <p className="text-[14px] text-white font-semibold mr-2">
-                                                {item.user.userName}
-                                            </p>
+                                            <Link to={`/search/${item?.user.userName}/`} onClick={() => {
+                                                fetchUserDataOnClick(item?.user.userName, userData, null, setSelectedProfile, setMainLoading)
+                                                setMainLoading(true)
+                                            }} className="font-semibold text-[12px] text-white hover:opacity-70 transition duration-200">{item?.user.userName}</Link>
                                             {item.caption !== null && item.caption}
                                         </p>
                                     </div>
