@@ -106,7 +106,7 @@ export function HighLightsModal({ setIsCreatingHighLight, isCreatingHighLight })
                 }`}
             onClick={handleClose}
         ></div>
-        <div className={`fixed inset-0 z-50 top-[40%] left-[40%] ${isCreatingHighLight && !selectStatus ? "opacity-100" : "opacity-0 pointer-events-none"} transition-all duration-500`}>
+        <div className={`fixed inset-0 z-50 top-[40%] left-[40%] w-[30%] h-[19%] ${isCreatingHighLight && !selectStatus ? "opacity-100" : "opacity-0 pointer-events-none"} transition-all duration-500`}>
             <div className="bg-[#262626] w-full max-w-[400px] rounded-xl">
                 <div className="text-center w-full py-3 border-b-[1px] border-[#363636] relative">
                     <p>New highlight</p>
