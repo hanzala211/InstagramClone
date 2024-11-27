@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearch, useUser } from "../context/UserContext";
 import { Skeleton } from "./Skeleton";
 import { Link } from "react-router-dom";
+import { UserModal } from "./UserModal";
 
 export function SearchBox({ refere, isSearching }) {
     const { userData } = useUser()
@@ -11,7 +12,7 @@ export function SearchBox({ refere, isSearching }) {
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
-        if (searchQuery.length > 1) {
+        if (searchQuery.length > 0) {
             setSearchLoading(true);
             fetchSearch(signal);
         } else if (searchQuery.length === 0) {
@@ -65,16 +66,8 @@ export function SearchBox({ refere, isSearching }) {
                 <p className="text-sm text-gray-500">Type to find what you're looking for...</p>
             </div>
             <div className="flex flex-col gap-2">
-                {searchQuery.length > 0 && searchLoading ? Array.from(({ length: 30 }), (_, i) => <div key={i} className="ml-3 mt-5"><Skeleton /></div>) : searchData.map((item, i) => {
-                    return <Link to={`/search/${item.userName}/`} key={i} onClick={() => {
-                        setSelectedProfile(item)
-                    }} className="flex items-center gap-3 px-3 hover:bg-[#626262] hover:bg-opacity-50 py-2 transition-all duration-300">
-                        <img src={item.profilePic} alt="ProfileImage" className="w-10 rounded-full" />
-                        <div className="flex flex-col gap-0.5">
-                            <p className="text-[13px] font-semibold">{item.userName}</p>
-                            <p className="text-[#A8A8A8] text-[12px]">{item.fullName}</p>
-                        </div>
-                    </Link>
+                {searchLoading ? Array.from(({ length: 30 }), (_, i) => <div key={i} className="ml-3 mt-5"><Skeleton /></div>) : searchData.map((item, i) => {
+                    return <UserModal key={i} item={item} isSearchModal={true} setSelectedProfile={setSelectedProfile} />
                 })}
             </div>
         </div>

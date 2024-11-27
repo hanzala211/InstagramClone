@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { usePost, useUser } from "../context/UserContext";
+import { useUser } from "../context/UserContext";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Loader } from "../components/Loader";
 import { PiCopySimpleLight } from "react-icons/pi";
@@ -7,6 +7,7 @@ import { FaArrowLeft, FaArrowRight, FaHeart } from "react-icons/fa";
 import { TbMessageCircleFilled } from "react-icons/tb";
 import { Post } from "../components/Post";
 import { formatNumber } from "../utils/helper";
+import { usePost } from "../context/PostContext";
 
 export function Explore() {
     const { userData } = useUser();

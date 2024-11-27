@@ -6,12 +6,12 @@ import { SelectedHighLights } from "./SelectedHighLights";
 
 
 export function HighLightsModal({ setIsCreatingHighLight, isCreatingHighLight }) {
+    const { userData } = useUser()
     const [highlightName, setHighlightName] = useState("");
     const [selectStatus, setSelectStatus] = useState(false);
     const [selectedIDs, setSelectedIDs] = useState([]);
     const [currentID, setCurrentID] = useState(0)
     const [selectCover, setSelectCover] = useState(false);
-    const { userData } = useUser()
     const [sendLoading, setSendLoading] = useState(false)
 
     useEffect(() => {

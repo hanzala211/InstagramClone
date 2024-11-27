@@ -77,9 +77,9 @@ export function ArchivesModal({ selectStatus, setSelectCover, selectedIDs, selec
                                     }}
                                 />
                             </label>
-                        }) : <div className="text-[#8e8e8e] h-[63vh] mx-[20rem] w-full">
+                        }) : <div className="text-[#8e8e8e] h-[63vh] mx-[12rem] text-center w-full">
                             <p>No items found in this archive.</p>
-                            <p>Start adding some stories to see them here!</p>
+                            <p className="text-[#a2a2a2]">Start adding some stories to see them here!</p>
                         </div>}
                     </div>
                     : <div className="h-[64vh]"><Loader /> </div>}

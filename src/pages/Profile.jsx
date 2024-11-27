@@ -11,9 +11,12 @@ import { NoteCreator } from "../components/NoteCreator";
 import { NoteEditor } from "../components/NoteEditor";
 import { HighLightsModal } from "../components/HighLightsModal";
 import { formatNumber } from "../utils/helper";
+import { UserFollowModal } from "../components/UserFollowModal";
 
 export function Profile() {
     const { userData, setUserPosts, note, setNote, setMessage, setStories, stories, setCurrentStory, highlights, setHighlights, setHighLightStories, setCurrentHighLight, setUserSaves } = useUser();
+    const [isFollowerModalOpen, setIsFollowerModalOpen] = useState(false)
+    const [isFollowingModalOpen, setIsFollowingModalOpen] = useState(false)
     const [postsLoading, setPostsLoading] = useState(false);
     const [noteValue, setNoteValue] = useState("");
     const [isEditOpen, setIsEditOpen] = useState(false);
@@ -211,8 +214,8 @@ export function Profile() {
                     </div>
                     <div className="flex gap-10 items-center">
                         <p className="flex gap-1.5"><span className="font-semibold">{formatNumber(userData.data.user.postCount)}</span>posts</p>
-                        <p className="flex gap-1.5"><span className="font-semibold">{formatNumber(userData.data.user.followersCount)}</span>followers</p>
-                        <p className="flex gap-1.5"><span className="font-semibold">{formatNumber(userData.data.user.followingCount)}</span>following</p>
+                        <button onClick={() => setIsFollowerModalOpen(true)} className="flex gap-1.5"><span className="font-semibold">{formatNumber(userData.data.user.followersCount)}</span>followers</button>
+                        <button onClick={() => setIsFollowingModalOpen(true)} className="flex gap-1.5"><span className="font-semibold">{formatNumber(userData.data.user.followingCount)}</span>following</button>
                     </div>
                     <div>
                         <p className="font-semibold text-[14px]">{userData.data.user.fullName}</p>
@@ -253,6 +256,8 @@ export function Profile() {
         <ProfileSettings userData={userData} isEditOpen={isEditOpen} setIsEditOpen={setIsEditOpen} />
         <NoteCreator handleClose={handleCloseNote} isNoteOpen={isNoteOpen} noteValue={noteValue} setNoteValue={setNoteValue} setIsNoteOpen={setIsNoteOpen} note={note} setNote={setNote} noteFunction={createNote} shareLoading={shareLoading} />
         <HighLightsModal isCreatingHighLight={isCreatingHighLight} setIsCreatingHighLight={setIsCreatingHighLight} />
+        <UserFollowModal isFollowerModalOpen={isFollowerModalOpen} setIsFollowerModalOpen={setIsFollowerModalOpen} isFollowingModalOpen={false} />
+        <UserFollowModal isFollowingModalOpen={isFollowingModalOpen} setIsFollowingModalOpen={setIsFollowingModalOpen} isFollowerModalOpen={false} />
     </section>
 
 

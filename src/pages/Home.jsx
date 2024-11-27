@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Like, SaveSVG, UnLike, UnSave } from "../assets/Constants";
 import { useEffect, useState } from "react";
-import { usePost, useSearch, useUser } from "../context/UserContext";
+import { useSearch, useUser } from "../context/UserContext";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Loader } from "../components/Loader";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
@@ -10,6 +10,7 @@ import { Post } from "../components/Post";
 import { fetchUserDataOnClick } from "../utils/helper";
 import { CommentHome } from "../components/CommentHome";
 import { fetchHomePosts, formatDate } from "../utils/helper";
+import { usePost } from "../context/PostContext";
 
 export function Home() {
     const { userData, setUserData, setMainLoading, setMessage } = useUser()

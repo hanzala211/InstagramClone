@@ -1,27 +1,21 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5"
 import { CommentSVG, MoreCommentsSVG, MoreSVG } from "../assets/Constants";
 import { PostSettings } from "./PostSettings";
-import { usePost, useSearch, useUser } from "../context/UserContext";
+import { useSearch, useUser } from "../context/UserContext";
 import { Link } from "react-router-dom";
 import { Skeleton } from "./Skeleton";
 import { LikedComponent } from "./LikeComponent";
 import { SavedComponent } from "./SavedComponent";
 import { fetchUserDataOnClick, formatDate } from "../utils/helper";
+import { usePost } from "../context/PostContext";
 
 export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, comments, setComments }) {
-    const { selectedPost, setSelectedPost } = usePost()
+    const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, commentValue, setIsDisabled, setCommentValue, setIsPostSettingOpen, setIsCommented, isCommented, isAnimating, setIsAnimating, commentsLoading, setCommentsLoading, isSaved, isDisabled, isPostSettingOpen, isMyPost } = usePost()
     const { userData, setUserData, setMainLoading, setMessage } = useUser();
     const { setSelectedProfile } = useSearch()
-    const [commentValue, setCommentValue] = useState("");
-    const [isAnimating, setIsAnimating] = useState(false);
-    const [isPostSettingOpen, setIsPostSettingOpen] = useState(false);
-    const [isDisabled, setIsDisabled] = useState(false);
-    const [commentsLoading, setCommentsLoading] = useState(false);
-    const [isSaved, setIsSaved] = useState(false);
-    const [isMyPost, setIsMyPost] = useState(false);
-    const [isCommented, setIsCommented] = useState(false);
+
     const commentRef = useRef(null);
 
     useEffect(() => {

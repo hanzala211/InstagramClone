@@ -15,8 +15,10 @@ export function UserProvider({ children }) {
     const [highLightStories, setHighLightStories] = useState([])
     const [currentHighLight, setCurrentHighLight] = useState(0)
     const [userSaves, setUserSaves] = useState([]);
+    const [userFollowers, setUserFollowers] = useState([])
+    const [userFollowing, setUserFollowing] = useState([])
 
-    return <UserContext.Provider value={{ userData, setUserData, mainLoading, setMainLoading, userPosts, setUserPosts, message, setMessage, note, setNote, stories, setStories, archives, setArchives, loadingArchives, setLoadingArchives, currentStory, setCurrentStory, highlights, setHighlights, highLightStories, setHighLightStories, currentHighLight, setCurrentHighLight, userSaves, setUserSaves }}>{children}</UserContext.Provider>
+    return <UserContext.Provider value={{ userData, setUserData, mainLoading, setMainLoading, userPosts, setUserPosts, message, setMessage, note, setNote, stories, setStories, archives, setArchives, loadingArchives, setLoadingArchives, currentStory, setCurrentStory, highlights, setHighlights, highLightStories, setHighLightStories, currentHighLight, setCurrentHighLight, userSaves, setUserSaves, userFollowers, setUserFollowers, userFollowing, setUserFollowing }}>{children}</UserContext.Provider>
 }
 
 export function useUser() {
@@ -51,13 +53,3 @@ export function useSearch() {
     return context;
 }
 
-const PostContext = createContext();
-export function PostProvider({ children }) {
-    const [selectedPost, setSelectedPost] = useState(null);
-    return <PostContext.Provider value={{ selectedPost, setSelectedPost }}>{children}</PostContext.Provider>
-}
-
-export function usePost() {
-    const context = useContext(PostContext);
-    return context;
-}

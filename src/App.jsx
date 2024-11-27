@@ -3,7 +3,7 @@ import './App.css'
 import { Login } from './pages/Login'
 import { Layout } from './Layout'
 import { Home } from './pages/Home'
-import { PostProvider, SearchProvider, UserProvider } from './context/UserContext'
+import { SearchProvider, UserProvider } from './context/UserContext'
 import { Profile } from './pages/Profile'
 import { ProfileTabs } from './components/ProfileTabs'
 import { SignUp } from './pages/SignUp'
@@ -12,6 +12,7 @@ import { Archive } from './pages/Archive'
 import { ArchiveStories } from './components/ArchiveStories'
 import { SearchProfile } from './pages/SearchProfile'
 import { Explore } from './pages/Explore'
+import { PostProvider } from './context/PostContext'
 
 function App() {
   const localitem = JSON.parse(localStorage.getItem("token"))

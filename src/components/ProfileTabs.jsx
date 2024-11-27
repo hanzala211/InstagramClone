@@ -1,10 +1,11 @@
 import { SharePhotosIcon, TaggedIcon } from "../assets/Constants";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { usePost, useSearch, useUser } from "../context/UserContext";
+import { useSearch, useUser } from "../context/UserContext";
 import { useEffect, useState } from "react";
 import { Post } from "./Post";
 import { IoSaveOutline } from "react-icons/io5";
 import { PostModal } from "./PostModal";
+import { usePost } from "../context/PostContext";
 
 export function ProfileTabs({ isPosts, isTagged, isSaved, isSearchPosts }) {
     const { selectedPost, setSelectedPost } = usePost()
@@ -67,7 +68,7 @@ export function ProfileTabs({ isPosts, isTagged, isSaved, isSearchPosts }) {
             </div>
         }
 
-        <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={isPosts ? userData.data.user : isSearchPosts ? selectedProfile : isSaved ? userSaves[currentPost]?.postBy : ""} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} page={page} setPage={setPage} totalPages={totalPages} setTotalPages={setTotalPages} comments={comments} setComments={setComments} />
+        <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={isPosts || isTagged ? userData.data.user : isSearchPosts ? selectedProfile : isSaved ? userSaves[currentPost]?.postBy : ""} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} page={page} setPage={setPage} totalPages={totalPages} setTotalPages={setTotalPages} comments={comments} setComments={setComments} />
 
         {selectedPost !== null &&
             (
