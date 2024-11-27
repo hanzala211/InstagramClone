@@ -73,7 +73,7 @@ export function NoteEditor({ setIsNoteEditOpen }) {
             <button className="bg-[#0095F6] w-full rounded-lg text-[14px] py-1.5 transition duration-200 hover:bg-opacity-70" onClick={() => {
                 setIsNoteOpen(true)
             }}>Leave a new Note</button>
-            {!deleteLoading ? <button className="w-full text-[#0095f6] text-[14px] absolute -bottom-8 hover:text-white" onClick={() => deleteNote()}>Delete note</button> : <div className="absolute -top-36 left-1/2 -translate-x-1/2"><Loader widthHeight={true} /></div>}
+            {!deleteLoading ? <button className="w-full text-[#0095f6] text-[14px] absolute -bottom-7 hover:text-white" onClick={() => deleteNote()}>Delete note</button> : <div className="absolute -top-36 left-1/2 -translate-x-1/2"><Loader widthHeight={true} /></div>}
             <NoteCreator isNoteOpen={isNoteOpen} handleClose={handleCloseNote} noteValue={noteValue} noteFunction={updateNote} setNoteValue={setNoteValue} shareLoading={shareLoading} />
         </div>
     </div>

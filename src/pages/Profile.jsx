@@ -185,15 +185,16 @@ export function Profile() {
 
     return <section className="w-full max-w-[60%] mx-auto">
         <div className="w-full max-w-[61rem] pb-9 pt-20 border-b-[2px] border-[#262626]">
-            <div className="flex flex-col xl:flex-row w-full gap-20 ml-10 items-center relative">
-                <div className="absolute xl:-top-1 lg:left-[45%] xl:left-[7%] z-[1] cursor-pointer" onClick={() => {
+            <div className="flex flex-col xl:flex-row w-full gap-20 items-center relative">
+
+                <div className="cursor-pointer" onClick={() => {
                     if (note.length === 0) {
                         setIsNoteOpen(true);
                     } else {
                         setIsNoteEditOpen(true);
                     }
                 }}>
-                    {!isNoteEditOpen ? <NoteTooltip isProfile={true} note={note} noteLoading={noteLoading} /> : <div ref={noteEditorRef}><NoteEditor setIsNoteEditOpen={setIsNoteEditOpen} /></div>}
+                    {!isNoteEditOpen ? <div className="absolute xl:-top-1 lg:left-[45%] xl:left-[15%] z-[1]"><NoteTooltip isProfile={true} note={note} noteLoading={noteLoading} /></div> : <div ref={noteEditorRef} className="absolute xl:top-12 lg:left-[45%] xl:-left-[10%] z-[1]"><NoteEditor setIsNoteEditOpen={setIsNoteEditOpen} /></div>}
                 </div>
                 <Link to={stories.length > 0 ? `/stories/${userData.data.user.userName}/${stories[0]._id}/` : ""} className={`p-2 ${stories.length > 0 ? "relative rounded-full multicolor-border" : ""}`} onClick={() => setCurrentStory(0)}>
                     <img src={userData?.data?.user.profilePic} alt="User Profile" className="rounded-full w-32 lg:w-40" />

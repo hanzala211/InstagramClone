@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearch, useUser } from "../context/UserContext";
 import { Skeleton } from "./Skeleton";
-import { Link } from "react-router-dom";
 import { UserModal } from "./UserModal";
 
 export function SearchBox({ refere, isSearching }) {
