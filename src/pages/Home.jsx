@@ -313,7 +313,7 @@ export function Home() {
                                             <Link to={`/search/${item?.user.userName}/`} onClick={() => {
                                                 fetchUserDataOnClick(item?.user.userName, userData, null, setSelectedProfile, setMainLoading)
                                                 setMainLoading(true)
-                                            }} className="font-semibold text-[12px] text-white hover:opacity-70 transition duration-200">{item?.user.userName}</Link>
+                                            }} className="font-semibold text-[12px] text-white hover:opacity-70 transition duration-200 mr-2">{item?.user.userName}</Link>
                                             {item.caption !== null && item.caption}
                                         </p>
                                     </div>

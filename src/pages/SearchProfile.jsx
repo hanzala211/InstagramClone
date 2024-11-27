@@ -1,6 +1,6 @@
 import { MdVerified } from "react-icons/md";
 import NoteTooltip from "../components/Note";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSearch, useUser } from "../context/UserContext";
 import { Loader } from "../components/Loader";
@@ -16,6 +16,14 @@ export function SearchProfile() {
     const [isFollowed, setIsFollowed] = useState(false);
     const [searchUserNotes, setSearchUserNotes] = useState([])
     const [isDisabled, setIsDisabled] = useState(false)
+    const navigate = useNavigate();
+    const params = useParams();
+
+    useEffect(() => {
+        if (params.username === userData?.data.user.userName) {
+            navigate(`/${userData.data.user.userName}/`)
+        }
+    }, [params.username, userData?.data.user.userName, navigate])
 
     useEffect(() => {
         if (userData?.data.user.following) {

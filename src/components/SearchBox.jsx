@@ -45,7 +45,7 @@ export function SearchBox({ refere, isSearching }) {
                     });
                 });
                 await Promise.all(loadedImagesPromises).finally(() => setSearchLoading(false));
-                setSearchData((prev) => [...prev, ...result.data]);
+                setSearchData((prev) => [...prev, ...result.data.filter((item) => item._id !== userData?.data.user._id)]);
             }
         } catch (error) {
             if (error.name !== "AbortError") {
@@ -53,7 +53,6 @@ export function SearchBox({ refere, isSearching }) {
             }
         }
     }
-
 
     return <div ref={refere} className={`fixed pl-2 left-16 top-0 h-[100vh] transition-[width] overflow-auto scrollbar-hidden duration-300 ${!isSearching ? "w-0 pointer-events-none" : "border-r-[1px] border-[#262626] w-[80vw] sm:w-[19vw]"}`}>
         <div className={`px-4 pt-9 pb-6 flex gap-9 flex-col ${!isSearching ? "hidden" : "border-b-[1px] border-[#262626]"}`}>
