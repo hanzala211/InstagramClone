@@ -72,7 +72,7 @@ export function Explore() {
         setTotalPages(null)
     }
 
-    return <><section className={`w-full max-w-[65%] mt-10 mx-auto ${isPostsLoading || explorePagePosts.length === 0 ? "h-[85vh]" : ""} ${explorePagePosts.length < 6 ? "h-[95vh]" : ""}`}>
+    return <><section className={`w-full max-w-[65%] mt-10 mx-auto ${isPostsLoading || explorePagePosts.length === 0 ? "h-[85vh]" : ""} ${explorePagePosts.length < 5 ? "xl:h-[95vh]" : ""}`}>
         {explorePagePosts.length === 0 && !isPostsLoading ? (
             <p className="text-center text-lg text-gray-500">
                 No posts available. Check back later!
@@ -130,7 +130,7 @@ export function Explore() {
         {selectedPost !== null && explorePagePosts.length > 1 && <>
             {currentPost !== explorePagePosts.length - 1 && (
                 <button
-                    className={`fixed z-[100] right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none"
+                    className={`fixed z-[100] right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 invisible lg:visible  ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none "
                         }`}
                     onClick={handleIncrease}
                 >
@@ -140,7 +140,7 @@ export function Explore() {
 
             {currentPost !== 0 && (
                 <button
-                    className={`fixed z-[100] left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none"
+                    className={`fixed z-[100] left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 invisible lg:visible ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none "
                         }`}
                     onClick={handleDecrease}
                 >
