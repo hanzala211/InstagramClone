@@ -29,13 +29,16 @@ export function UserFollowModal({ isFollowerModalOpen, setIsFollowerModalOpen, i
     function handleClose() {
         if (isFollowerModalOpen) {
             setIsFollowerModalOpen(false);
+            setTimeout(() => {
+                setUserFollowers([])
+            }, 900)
         } else if (isFollowingModalOpen) {
+            setTimeout(() => {
+                setUserFollowing([]);
+            }, 900)
             setIsFollowingModalOpen(false)
         }
-        setTimeout(() => {
-            setUserFollowers([])
-            setUserFollowing([]);
-        }, 400)
+
     }
 
     async function fetchFollowers() {
@@ -94,9 +97,9 @@ export function UserFollowModal({ isFollowerModalOpen, setIsFollowerModalOpen, i
             <div className="overflow-auto scrollbar-hidden h-[20rem]">
                 {isLoading ? Array.from(({ length: 15 }), (_, i) => <div key={i} className="ml-3 mt-5"><Skeleton /></div>) : isFollowerModalOpen ? userFollowers.map((item, i) => (
                     <UserModal key={i} index={i} item={item} isSearchModal={false} setSelectedProfile={setSelectedProfile} />
-                )) : userFollowing.map((item, i) => (
+                )) : isFollowingModalOpen ? userFollowing.map((item, i) => (
                     <UserModal key={i} index={i} item={item} isSearchModal={false} setSelectedProfile={setSelectedProfile} />
-                ))}
+                )) : ""}
             </div>
         </div>
     </>
