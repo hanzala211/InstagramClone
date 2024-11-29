@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { IoCloseSharp } from "react-icons/io5";
 import { CreatePosts } from "../assets/Constants";
 import ReactCropper from "react-easy-crop";
 import { getCroppedImg } from "../utils/cropUtils";
@@ -7,6 +6,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { Loader } from "../components/Loader";
 import { useUser } from "../context/UserContext";
 import { EditPost } from "./EditPost";
+import { Overlay } from "./Overlay";
 
 export function CreatePost({
     isCreating,
@@ -125,17 +125,7 @@ export function CreatePost({
 
     return (
         <>
-            <IoCloseSharp
-                className={`fixed text-[35px] top-8 right-9 z-[100000] cursor-pointer opacity-0 ${isCreating ? "opacity-100" : "pointer-events-none"
-                    }`}
-                onClick={() => handleClose()}
-            />
-            <div
-                className={`overlay opacity-0 transition-all z-[50] duration-500 ${!isCreating ? "pointer-events-none" : "backdrop-blur-sm opacity-100"
-                    }`}
-                onClick={() => handleClose()}
-            ></div>
-
+            <Overlay handleClose={handleClose} isPostOpen={isCreating} />
             <div
                 className={`fixed opacity-0 top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isCreating ? "opacity-100" : "pointer-events-none"
                     } border-y-[1px] border-[#363636]`}

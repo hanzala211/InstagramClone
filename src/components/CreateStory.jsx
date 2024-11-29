@@ -1,8 +1,8 @@
-import { IoCloseSharp } from "react-icons/io5";
 import { CreatePosts } from "../assets/Constants";
 import { useRef, useState } from "react";
 import Pintura from "./Pintura";
 import { useUser } from "../context/UserContext";
+import { Overlay } from "./Overlay";
 
 export function CreateStory({ creatingStory, setIsCreatingStory }) {
     const { userData } = useUser();
@@ -56,15 +56,7 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
     }
 
     return <>
-        <IoCloseSharp
-            className={`fixed text-[35px] top-8 right-9 z-[100000] cursor-pointer opacity-0 ${creatingStory ? "opacity-100" : "pointer-events-none"}`}
-            onClick={() => handleClose()}
-        />
-        <div
-            className={`overlay opacity-0 z-[50] transition-all duration-500 ${!creatingStory ? "pointer-events-none" : "backdrop-blur-sm opacity-100"
-                }`}
-            onClick={handleClose}
-        ></div>
+        <Overlay handleClose={handleClose} isPostOpen={creatingStory} />
         <div
             className={`fixed opacity-0 top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${creatingStory ? "opacity-100" : "pointer-events-none"} border-y-[1px] border-[#363636] 
         lg:block xl:w-[40vw] h-[72vh] sm:w-[60vw] `}

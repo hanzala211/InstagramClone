@@ -129,7 +129,7 @@ export function SearchProfile() {
                 <div className="w-full max-w-[61rem] pb-9 pt-20 border-b-[2px] border-[#262626]">
                     <div className="flex flex-col xl:flex-row w-full gap-10 xl:gap-20 ml-10 items-center relative">
                         {searchUserNotes.length > 0 &&
-                            <div className="absolute xl:-top-1 left-[7%] z-[1] cursor-pointer">
+                            <div className="absolute xl:-top-1 top-16 left-[7%] z-[1] cursor-pointer">
                                 <NoteTooltip isProfile={true} note={searchUserNotes[0]} />
                             </div>
                         }

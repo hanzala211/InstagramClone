@@ -1,22 +1,32 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { IoCloseSharp } from "react-icons/io5"
-import { CommentSVG, MoreCommentsSVG, MoreSVG } from "../assets/Constants";
+import { MoreCommentsSVG, MoreSVG } from "../assets/Constants";
 import { PostSettings } from "./PostSettings";
 import { useSearch, useUser } from "../context/UserContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Skeleton } from "./Skeleton";
-import { LikedComponent } from "./LikeComponent";
-import { SavedComponent } from "./SavedComponent";
 import { fetchUserDataOnClick, formatDate } from "../utils/helper";
 import { usePost } from "../context/PostContext";
+import { UserHoverModal } from "./UserHoverModal";
+import { PostComment } from "./PostComment";
+import { PostOptions } from "./PostOptions";
+import { Overlay } from "./Overlay";
 
 export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, comments, setComments }) {
-    const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, commentValue, setIsDisabled, setCommentValue, setIsPostSettingOpen, setIsCommented, isCommented, isAnimating, setIsAnimating, commentsLoading, setCommentsLoading, isSaved, isDisabled, isPostSettingOpen, isMyPost } = usePost()
-    const { userData, setUserData, setMainLoading, setMessage } = useUser();
+    const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, commentValue, setIsDisabled, setCommentValue, setIsPostSettingOpen, setIsCommented, isCommented, isAnimating, setIsAnimating, commentsLoading, setCommentsLoading, isDisabled, isPostSettingOpen, isMyPost } = usePost()
+    const { userData, setMainLoading, setMessage } = useUser();
     const { setSelectedProfile } = useSearch()
-
+    const [isHovered, setIsHovered] = useState(false)
+    const [isCommentHovered, setIsCommentHovered] = useState(Array(comments?.length).fill(false))
     const commentRef = useRef(null);
+    const divRef = useRef(null);
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (comments?.length > 0) {
+            setIsCommentHovered(Array(comments?.length).fill(false))
+        }
+    }, [comments?.length])
 
     useEffect(() => {
         if (selectedPost?.postBy?._id !== undefined) {
@@ -87,6 +97,38 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         }, 400);
     }
 
+    function handleClick(item, postData) {
+        setMainLoading(true);
+        fetchUserDataOnClick(item !== null ? item?.user.userName : postData?.userName, userData, null, setSelectedProfile, setMainLoading);
+        setSelectedPost(null);
+    }
+
+    const handleMouseEnter = () => {
+        clearTimeout(divRef.current);
+        setIsHovered(true);
+    };
+
+    const handleMouseLeave = () => {
+        divRef.current = setTimeout(() => setIsHovered(false), 200);
+    };
+
+    const handleMouseEnterForComments = (i) => {
+        clearTimeout(divRef.current);
+        setIsCommentHovered((prev) => {
+            const updated = [...prev]
+            updated[i] = true;
+            return updated;
+        });
+    };
+
+    const handleMouseLeaveForComments = (i) => {
+        divRef.current = setTimeout(() => setIsCommentHovered((prev) => {
+            const updated = [...prev]
+            updated[i] = false;
+            return updated;
+        }), 200);
+    };
+
     async function postComment() {
         try {
             setIsDisabled(true);
@@ -112,62 +154,6 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
             setMessage("Failed")
         } finally {
             setIsDisabled(commentValue.length === 0);
-        }
-    }
-
-    async function savePost() {
-        try {
-            setIsSaved((prev) => !prev)
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/save/${selectedPost._id}`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            if (result.status !== "fail") {
-                setUserData((prev) => ({
-                    ...prev, data: {
-                        ...prev.data, user: {
-                            ...prev.data.user, savedPosts: prev.data.user.savedPosts.includes(result.savedPosts[0]) ? [...prev.data.user.savedPosts] : [...prev.data.user.savedPosts, ...result.savedPosts]
-                        }
-                    }
-                }))
-                setMessage("Post Saved Successfully")
-            }
-        } catch (error) {
-            console.error(error)
-            setMessage("Failed")
-            setIsSaved((prev) => !prev)
-        }
-    }
-
-    async function unSavePost() {
-        try {
-            setIsSaved((prev) => !prev)
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/unsave/${selectedPost._id}`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            if (result.status !== "fail") {
-                setUserData((prev) => ({
-                    ...prev, data: {
-                        ...prev.data, user: {
-                            ...prev.data.user, savedPosts: prev.data.user.savedPosts.includes(result.savedPosts[0]) ? prev.data.user.savedPosts.filter((item) => item !== result.savedPosts[0]) : [...prev.data.user.savedPosts, ...result.savedPosts]
-                        }
-                    }
-                }))
-                setMessage("Post Unsaved Successfully")
-            }
-        } catch (error) {
-            console.error(error)
-            setMessage("Failed")
-            setIsSaved((prev) => !prev)
         }
     }
 
@@ -203,17 +189,9 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
 
     return (
         <>
-            <IoCloseSharp
-                className={`fixed xl:text-[35px] text-[25px] xl:top-8 lg:top-5 top-2 xl:right-9 lg:right-5 right-2 z-[100000] cursor-pointer opacity-0 ${isPostOpen ? "opacity-100" : "pointer-events-none"}`}
-                onClick={handleClose}
-            />
+            <Overlay handleClose={handleClose} isPostOpen={isPostOpen} />
             <div
-                className={`overlay z-[100] opacity-0 transition-all duration-500 ${!isPostOpen ? "pointer-events-none" : "backdrop-blur-sm opacity-100"
-                    }`}
-                onClick={handleClose}
-            ></div>
-            <div
-                className={`fixed opacity-0 top-1/2 -translate-y-1/2 w-full xl:max-w-[75rem] lg:max-w-[58rem] max-w-[50rem] box-border xl:h-[48rem] lg:h-[35rem] h-[30rem] -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100" : "pointer-events-none"
+                className={`fixed opacity-0 top-1/2 -translate-y-1/2 w-full xl:max-w-[75rem] lg:max-w-[58rem] max-w-[50rem] box-border xl:h-[90vh] lg:h-[35rem] h-[30rem] -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100" : "pointer-events-none"
                     }`}
             >
                 <div className="h-full flex">
@@ -239,31 +217,37 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                         ) : ""}
                     </div>
                     <div className="w-[40%] h-full bg-[#000000] relative">
-                        <div className="flex justify-between items-center p-5 border-b-[1px] border-[#262626]">
+                        <div className="flex relative justify-between items-center p-5 border-b-[1px] border-[#262626]">
                             <Link
                                 to={userData?.data.user._id !== postData?._id ? `/search/${postData?.userName}/` : `/${userData?.data.user.userName}/`}
                                 onClick={() => {
-                                    fetchUserDataOnClick(postData?.userName, userData, null, setSelectedProfile, setMainLoading);
-                                    setMainLoading(true);
-                                    setSelectedPost(null);
+                                    handleClick(null, postData)
                                 }}
                                 className="text-[15px] flex flex-row gap-4 items-center font-semibold"
+                                onMouseEnter={handleMouseEnter}
+                                onMouseLeave={handleMouseLeave}
                             >
                                 <img src={postData?.profilePic} alt="Profile Picture" className="w-12 rounded-full" />
                                 <p className="hover:opacity-70 transition duration-200">{postData?.userName}</p>
                             </Link>
+                            {isHovered &&
+                                <div onClick={() => {
+                                    handleClick(null, postData)
+                                    navigate(userData?.data.user._id !== postData?._id ? `/search/${postData?.userName}/` : `/${userData?.data.user.userName}/`)
+                                }} className="absolute z-[50] top-20 left-10" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} ref={divRef}><UserHoverModal username={postData?.userName} isHovered={isHovered} /></div>
+                            }
                             <button onClick={() => setIsPostSettingOpen(true)}>
                                 <MoreSVG className="hover:opacity-70 cursor-pointer transition duration-300" />
                             </button>
                         </div>
-                        <div className="w-full flex flex-col xl:h-[67.5%] lg:h-[55%] h-[48%] gap-4 overflow-auto scrollbar-hidden">
+                        <div className="w-full flex flex-col xl:h-[63.5vh] lg:h-[56%] h-[48%] gap-4 overflow-auto scrollbar-hidden">
                             {selectedPost !== null && selectedPost.caption && (
                                 <div>
                                     <div className="w-full px-6 mt-4 text-[15px]">
                                         <div className="flex flex-row gap-4 items-start">
                                             <img src={postData?.profilePic} alt="Profile Picture" className="w-9 rounded-full" />
                                             <p>
-                                                <Link className="text-[14px] font-semibold mr-3 cursor-default">{postData?.userName}</Link>
+                                                <p className="text-[14px] font-semibold mr-3 cursor-default">{postData?.userName}</p>
                                                 {selectedPost.caption}
                                             </p>
                                         </div>
@@ -272,36 +256,32 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                             )}
                             <div className="flex flex-col gap-4 ml-5 pt-2">
                                 {commentsLoading ? (
-                                    <div className="flex flex-col gap-4">
-                                        {Array.from({ length: 20 }, (_, i) => <Skeleton key={i} np />)}
-                                    </div>
+                                    <div className="flex flex-col gap-4">{Array.from({ length: 20 }, (_, i) => <Skeleton key={i} />)}</div>
                                 ) : (
                                     comments?.map((item, i) => (
                                         <div key={i} className="flex gap-4 ml-1">
-                                            <img
-                                                src={item.user.profilePic}
-                                                alt={item.user.userName}
-                                                className="w-9 h-9 rounded-full"
-                                            />
-                                            <div className="flex flex-col gap-1">
+                                            <img src={item.user.profilePic} alt={item.user.userName} className="w-9 h-9 rounded-full" />
+                                            <div className="flex flex-col gap-1 relative">
                                                 <p className="text-[15px]">
                                                     <Link
-                                                        to={
-                                                            userData?.data.user._id !== item?.user._id
-                                                                ? `/search/${item?.user.userName}/`
-                                                                : `/${userData?.data.user.userName}/`
-                                                        }
-                                                        onClick={() => {
-                                                            setMainLoading(true);
-                                                            fetchUserDataOnClick(item?.user.userName, userData, null, setSelectedProfile, setMainLoading);
-                                                            setSelectedPost(null);
-                                                        }}
+                                                        to={userData?.data.user._id !== item?.user._id ? `/search/${item?.user.userName}/` : `/${userData?.data.user.userName}/`}
+                                                        onClick={() => handleClick(item)}
                                                         className="text-[13px] mr-2 font-semibold hover:opacity-50 transition duration-150"
+                                                        onMouseEnter={() => handleMouseEnterForComments(i)}
+                                                        onMouseLeave={() => handleMouseLeaveForComments(i)}
                                                     >
                                                         {item.user.userName}
                                                     </Link>
                                                     {item.comment}
                                                 </p>
+                                                {isCommentHovered[i] &&
+                                                    <div onClick={() => {
+                                                        handleClick(item)
+                                                        navigate(userData?.data.user._id !== item?.user._id
+                                                            ? `/search/${item?.user.userName}/`
+                                                            : `/${userData?.data.user.userName}/`)
+                                                    }} className="absolute z-[50] top-4 left-5" onMouseEnter={() => handleMouseEnterForComments(i)} onMouseLeave={() => handleMouseLeaveForComments(i)} ref={divRef}><UserHoverModal username={item?.user.userName} isHovered={isCommentHovered[i]} /></div>
+                                                }
                                                 <p className="text-[12px] text-[#A8A8A8]">{formatDate(item.createdAt)}</p>
                                             </div>
                                         </div>
@@ -316,16 +296,8 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                 </div>
                             </div>
                         </div>
-                        <div className="absolute bottom-0 z-[100] border-t-[1px] h-[10rem] border-[#262626] w-full">
-                            <div className="flex justify-between pt-5 px-5 ">
-                                <div className="flex flex-row gap-5">
-                                    <LikedComponent postData={postData} selectedPost={selectedPost} setSelectedPost={setSelectedPost} />
-                                    <button onClick={() => commentRef.current.focus()}>
-                                        <CommentSVG className="hover:stroke-gray-600 hover:opacity-80 transition-all duration-150 cursor-pointer" />
-                                    </button>
-                                </div>
-                                <SavedComponent isSaved={isSaved} savePost={savePost} unSavePost={unSavePost} />
-                            </div>
+                        <div className="absolute bottom-0 z-[200] border-t-[1px] h-[10rem] border-[#262626] w-full bg-[#000]">
+                            <PostOptions postData={postData} commentRef={commentRef} />
                             <div>
                                 {selectedPost !== null && (
                                     <div className="mt-2 px-5">
@@ -334,23 +306,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                     </div>
                                 )}
                             </div>
-                            <div className="mt-5 border-t-[1px] flex items-center border-[#262626] px-5 py-2">
-                                <input
-                                    ref={commentRef}
-                                    type="text"
-                                    value={commentValue}
-                                    onChange={(e) => setCommentValue(e.target.value)}
-                                    placeholder="Add a comment...."
-                                    className="w-[90%] bg-transparent outline-none placeholder:text-[14px]"
-                                />
-                                <button
-                                    className={`text-[#0095F6] ml-5 text-[12px] transition-all duration-150 ${isDisabled ? "opacity-50 " : "cursor-pointer hover:opacity-70"}`}
-                                    disabled={isDisabled}
-                                    onClick={() => postComment()}
-                                >
-                                    POST
-                                </button>
-                            </div>
+                            <PostComment commentRef={commentRef} commentValue={commentValue} setCommentValue={setCommentValue} isDisabled={isDisabled} postComment={postComment} />
                         </div>
                     </div>
                 </div>

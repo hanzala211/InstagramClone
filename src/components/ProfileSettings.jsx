@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5"
 import { useUser } from "../context/UserContext";
 import { Loader } from "./Loader";
+import { Overlay } from "./Overlay";
 
 export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
     const { setUserData } = useUser();
@@ -143,8 +144,7 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
     }
 
     return <>
-        <div className={`overlay opacity-0 transition-all z-[150] duration-500 ${!isEditOpen ? "pointer-events-none" : "backdrop-blur-sm opacity-100"}`} onClick={handleClose}></div>
-        <IoCloseSharp className={`absolute text-[40px] top-8 z-[10000] right-[2rem] cursor-pointer opacity-0 transition duration-200 ${isEditOpen ? "opacity-100" : ""}`} onClick={handleClose} />
+        <Overlay handleClose={handleClose} isPostOpen={isEditOpen} />
         <div className={`fixed inset-0 flex items-center left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 justify-center z-[150] w-full max-w-[45rem] h-[75vh] transition-opacity duration-500 ${isEditOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         >
             <div className="bg-[#262626] w-full h-full overflow-auto scrollbar-hidden  rounded-3xl px-10 py-10">

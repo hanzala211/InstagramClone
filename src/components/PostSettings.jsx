@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
 import { EditPost } from "./EditPost";
-import { IoCloseSharp } from "react-icons/io5";
 import { usePost } from "../context/PostContext";
+import { Overlay } from "./Overlay";
 
 export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPostOpen, isMyPost }) {
-    const { userData, setMessage, setUserData, userPosts, setUserPosts } = useUser();
+    const { userData, setMessage, setUserData, setUserPosts } = useUser();
     const { selectedPost, setSelectedPost } = usePost();
     const [isEditingOpen, setIsEditingOpen] = useState(false)
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -92,23 +92,10 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
         <div
             className={`overlay opacity-0 transition-all z-[100000] duration-500 ${!isPostSettingOpen ? "pointer-events-none" : "opacity-100"
                 }`}
-            onClick={() => handleClose()}
+            onClick={handleClose}
         ></div>
         <div
-            className={`bg-[#262626] 
-              xl:w-96 
-              w-72 
-              rounded-2xl 
-              fixed 
-              z-[1000000] 
-              opacity-0 
-              transition 
-              duration-300 
-              inset-0 
-              top-1/2 
-              -translate-y-1/2 
-              left-1/2 
-              -translate-x-1/2 
+            className={`bg-[#262626] xl:w-96 w-72 rounded-2xl fixed z-[1000000] opacity-0 transition duration-300 inset-0 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 
               ${!isPostSettingOpen ? "pointer-events-none" : "opacity-100"} 
               ${isMyPost ? "xl:h-[14.5rem] h-[12.2rem]" : "xl:h-[8.5rem] h-[7rem]"}`}
             style={{
@@ -118,21 +105,12 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
         >
             {isMyPost && (
                 <>
-                    <button
-                        className="text-red-600 w-full p-3 xl:text-[14px] text-[10px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]"
-                        onClick={() => deletePost()}
-                    >
-                        Delete
+                    <button className="text-red-600 w-full p-3 xl:text-[14px] text-[10px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]" onClick={() => deletePost()}>Delete
                     </button>
-                    <button
-                        className="w-full p-3 border-b-[1px] xl:text-[14px] text-[10px] active:opacity-70 font-semibold border-[#363636]"
-                        onClick={() => {
-                            setIsEditingOpen(true);
-                            setIsPostSettingOpen(false);
-                        }}
-                    >
-                        Edit
-                    </button>
+                    <button className="w-full p-3 border-b-[1px] xl:text-[14px] text-[10px] active:opacity-70 font-semibold border-[#363636]" onClick={() => {
+                        setIsEditingOpen(true);
+                        setIsPostSettingOpen(false);
+                    }}>Edit</button>
                 </>
             )}
             <button className="w-full p-3 border-b-[1px] xl:text-[14px] text-[10px] active:opacity-70 font-semibold border-[#363636]">
@@ -149,15 +127,7 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
             </button>
         </div>
 
-        <div
-            className={`overlay opacity-0 transition-all z-[110] backdrop-blur-sm duration-500 ${!isEditingOpen ? "pointer-events-none" : "opacity-100"
-                }`}
-            onClick={() => handleClose()}
-        />
-        <IoCloseSharp
-            className={`fixed text-[35px] top-8 right-9 cursor-pointer z-[100000] opacity-0 ${isEditingOpen || isShared ? "opacity-100" : "pointer-events-none"}`}
-            onClick={() => handleClose()}
-        />
+        <Overlay handleClose={handleClose} isPostOpen={isEditingOpen} />
         <div
             className={`fixed opacity-0 top-[51%] -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isEditingOpen ? "opacity-100" : "pointer-events-none"
                 } border-y-[1px] border-[#363636]`}
@@ -165,12 +135,12 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
             <div className={`bg-[#262626] w-[70vw] transition-all duration-300 flex flex-col opacity-0 ${isEditingOpen ? "opacity-100" : "pointer-events-none"}`}>
                 <EditPost croppedImage={selectedPost !== null ? selectedPost.imageUrls : []} handleIncrease={handleIncrease} handleDecrease={handleDecrease} currentIndex={currentIndex} isCaption={isEditingOpen} captionValue={captionValue} setCaptionValue={setCaptionValue} userData={userData} loading={false} />
             </div>
-            <button className="text-[#0095F6] absolute z-[200] -top-7 right-0 hover:text-white text-[15px]" onClick={() => updatePost()}>Update</button>
+            <button className="text-[#0095F6] absolute z-[200] -top-7 right-0 hover:text-white text-[15px]" onClick={updatePost}>Update</button>
         </div>
         <div
             className={`overlay opacity-0 transition-all z-[150] backdrop-blur-sm duration-500 ${!isShared ? "pointer-events-none" : "opacity-100"
                 }`}
-            onClick={() => handleClose()}
+            onClick={handleClose}
         ></div>
         <div className={`bg-[#262626] fixed top-[51%] z-[150] -translate-y-1/2 -translate-x-1/2 left-1/2 w-[40vw] h-[93vh] flex flex-col justify-center items-center opacity-0 transition duration-500 ${isShared ? "opacity-100" : "pointer-events-none"}`}>
             {shareLoading ? <img src="/images/sharedLoader.gif" alt="loading" className="w-32" /> : <img src="/images/sharedPost.gif" alt="loaded" className="w-32" />}
