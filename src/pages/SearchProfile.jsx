@@ -32,7 +32,9 @@ export function SearchProfile() {
     }, [selectedProfile._id, userData.data.user.following])
 
     useEffect(() => {
-        Promise.all(selectedProfile?.posts.map((item) => fetchPosts(item))).then(res => setSearchUserPosts(res)).finally(() => setPostsLoading(false))
+        Promise.all(selectedProfile?.posts.map((item) => fetchPosts(item))).then((res) => {
+            setSearchUserPosts(res.map((item) => item.post))
+        }).finally(() => setPostsLoading(false))
     }, [selectedProfile.posts, userData.data.token])
 
     useEffect(() => {
@@ -58,7 +60,7 @@ export function SearchProfile() {
                 redirect: "follow"
             })
             const result = await response.json();
-            return result.data;
+            return await result;
         } catch (error) {
             console.error(error)
         }

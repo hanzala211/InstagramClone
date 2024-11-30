@@ -54,17 +54,17 @@ export function SideBar() {
         fileInputRef.current.click();
     }
 
-    return <><aside className={`px-4 py-10 transition-[width] duration-300 ${isSearching ? "w-[4%] border-r-0" : "w-[17%] border-r-[2px] border-[#262626]"} fixed left-0 top-0 h-[100vh] `}>
+    return <><aside className={`px-4 py-10 transition-[width] duration-300 ${isSearching ? "w-[5%] border-r-0" : "w-[17%] border-r-[2px] border-[#262626]"} fixed left-0 top-0 h-[100vh] `}>
         {!isSearching && <Link to="/home"><img src="/images/instagramiconswhite.png" alt="Instagram Logo" className="w-[6.5rem] ml-2 mb-9" /></Link>}
         {isSearching && <NavLink to="/home"
             className={({ isActive }) =>
-                `group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-block py-2 px-2 rounded-md mb-9 ${isActive ? "font-bold" : ""}`
+                `group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-block py-2 px-2 rounded-md mb-4 ${isActive ? "font-bold" : ""}`
             }><InstagramSvg className="group-hover:scale-110 transition-transform duration-150" /></NavLink>}
         <div className="flex flex-col gap-3">
             <NavLink
                 to="/home"
                 className={({ isActive }) =>
-                    `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 py-3 rounded-md ${isActive ? "font-bold" : ""} ${isSearching ? "w-10 h-10" : ""}`
+                    `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 rounded-md ${isActive ? "font-bold" : ""} ${isSearching ? "w-10" : ""}`
                 }
             >{({ isActive }) => {
                 return <>{isActive && !isSearching ? <ActiveHome className={`group-hover:scale-110 transition-transform duration-150`} /> : <HomeIcon className={`group-hover:scale-110 transition-transform duration-150 stroke-[#F5F5F5]`} />}
@@ -73,7 +73,7 @@ export function SideBar() {
             </NavLink >
             <NavLink
                 className={
-                    `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 py-3 rounded-md $ ${isSearching ? "w-10 h-10 border-[1px] rounded-lg" : ""}`
+                    `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 rounded-md $ ${isSearching ? "w-10 border-[1px] rounded-lg" : ""}`
                 }
                 onClick={() => setIsSearching((prev) => !prev)}
                 ref={searchRef}
@@ -84,7 +84,7 @@ export function SideBar() {
             <NavLink
                 to="/explore"
                 className={({ isActive }) =>
-                    `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 py-3 rounded-md ${isActive ? "font-bold" : ""} ${isSearching ? "w-10 h-10" : ""}`
+                    `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 rounded-md ${isActive ? "font-bold" : ""} ${isSearching ? "w-10" : ""}`
                 }
             >
                 <ExploreIcon className="group-hover:scale-110 transition-transform duration-150" />
@@ -112,14 +112,14 @@ export function SideBar() {
             </NavLink> */}
             <NavLink
                 onClick={() => setIsCreating(true)}
-                className={`gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 py-3 rounded-md ${isSearching ? "w-10 h-10" : ""}`}
+                className={`gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 rounded-md ${isSearching ? "w-10" : ""}`}
             >
                 <CreateIcon className="group-hover:scale-110 transition-transform duration-150" />
                 <p className={`text-[15px] ${isSearching ? "hidden" : ""}`}>Create</p>
             </NavLink>
             <NavLink
                 onClick={() => setCreateStory(true)}
-                className={`gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 py-3 rounded-md ${isSearching ? "w-10 h-10" : ""}`}
+                className={`gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 rounded-md ${isSearching ? "w-10" : ""}`}
             >
                 <FaHistory className="group-hover:scale-110 transition-transform duration-150 text-[25px]" />
                 <p className={`text-[15px] ${isSearching ? "hidden" : ""}`}>Story</p>
@@ -127,7 +127,7 @@ export function SideBar() {
             <NavLink
                 to={`/${userData.data.user.userName}/`}
                 className={({ isActive }) =>
-                    `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 py-3 rounded-md ${isActive ? "font-bold" : ""} ${isSearching ? "w-10 h-10" : ""}`
+                    `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 rounded-md ${isActive ? "font-bold" : ""} ${isSearching ? "w-10" : ""}`
                 }
             >
                 <img src={userData.data.user.profilePic} id="image" alt="userIcon" className="rounded-full w-6 group-hover:scale-110" />
