@@ -196,7 +196,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
             >
 
                 <div className="h-full flex">
-                    <div className="xl:w-[70rem] w-[55rem] relative overflow-hidden">
+                    <div className="1280:w-[70rem] w-[55rem] relative overflow-hidden">
                         <div className={`w-full flex h-full ${isAnimating ? "transition-transform duration-300 ease-in-out" : ""} `} style={{ transform: `translateX(${-currentIndex * 100}%)` }}>
                             {selectedPost !== null ? selectedPost.imageUrls.map((item, i) => {
                                 return <img src={item} key={i} alt="Posts" className="object-fill h-full w-full" />
@@ -217,7 +217,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                             </>
                         ) : ""}
                     </div>
-                    <div className="xl:w-[45rem] w-[60rem] bg-[#000000] relative">
+                    <div className="1280:w-[45rem] w-[60rem] bg-[#000000] relative">
                         <div className="flex relative justify-between items-center p-5 border-b-[1px] border-[#262626]">
                             <Link
                                 to={userData?.data.user._id !== postData?._id ? `/search/${postData?.userName}/` : `/${userData?.data.user.userName}/`}
