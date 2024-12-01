@@ -27,7 +27,7 @@ export function Home() {
     return <><section className="w-full max-w-[40%] mx-auto">
         <div className={`flex flex-col gap-2 w-full ${isPostsLoading || homePosts.length === 0 ? "h-[90vh]" : ""} ${homePosts.length < 2 ? "h-[90vh]" : ""}`}>
             {!isPostsLoading ?
-                <InfiniteScroll dataLength={homePosts.length} loader={homePosts.length > 0 && <Loader height="h-[10vh]" />} next={() => {
+                <InfiniteScroll dataLength={homePosts.length} loader={homePosts.length > 0 && <Loader height="h-[10vh] overflow-scroll scrollbar-hidden" />} next={() => {
                     fetchHomePosts(userData, setHomePosts, setIsPostsLoading, setHasMore)
                 }} hasMore={hasMore} >
                     {
