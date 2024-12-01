@@ -67,7 +67,7 @@ export function UserHoverModal({ username, isHovered }) {
         }
     }
 
-    return <div className="bg-[#000] w-[19.5rem] rounded-lg shadow-sm shadow-gray-200 h-[16rem] ">
+    return <div className="bg-[#000] container w-[20rem] rounded-lg shadow-sm shadow-gray-200 h-[16rem] ">
         {isLoading ? <FullSkeleton /> :
             <>
                 <div className="flex gap-5 px-5 py-2">

@@ -191,14 +191,15 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         <>
             <Overlay handleClose={handleClose} isPostOpen={isPostOpen} />
             <div
-                className={`fixed opacity-0 top-1/2 -translate-y-1/2 w-full xl:max-w-[75rem] lg:max-w-[58rem] max-w-[50rem] box-border xl:h-[90vh] lg:h-[35rem] h-[30rem] -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100" : "pointer-events-none"
+                className={`fixed opacity-0 top-1/2 -translate-y-1/2 w-full md:max-w-[55rem] lg:max-w-[60rem] 1280:max-w-[70vw] 3xl:max-w-[90rem] h-[90vh] box-border -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100 pointer-events-auto" : "pointer-events-none"
                     }`}
             >
+
                 <div className="h-full flex">
-                    <div className="w-[60%] h-full relative overflow-hidden">
+                    <div className="xl:w-[70rem] w-[55rem] relative overflow-hidden">
                         <div className={`w-full flex h-full ${isAnimating ? "transition-transform duration-300 ease-in-out" : ""} `} style={{ transform: `translateX(${-currentIndex * 100}%)` }}>
                             {selectedPost !== null ? selectedPost.imageUrls.map((item, i) => {
-                                return <img src={item} key={i} alt="Posts" className="object-cover h-full w-full" />
+                                return <img src={item} key={i} alt="Posts" className="object-fill h-full w-full" />
                             }) : ""}
                         </div>
                         {selectedPost !== null && selectedPost.imageUrls.length > 1 ? (
@@ -216,7 +217,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                             </>
                         ) : ""}
                     </div>
-                    <div className="w-[40%] h-full bg-[#000000] relative">
+                    <div className="xl:w-[45rem] w-[60rem] bg-[#000000] relative">
                         <div className="flex relative justify-between items-center p-5 border-b-[1px] border-[#262626]">
                             <Link
                                 to={userData?.data.user._id !== postData?._id ? `/search/${postData?.userName}/` : `/${userData?.data.user.userName}/`}
@@ -280,7 +281,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                                         navigate(userData?.data.user._id !== item?.user._id
                                                             ? `/search/${item?.user.userName}/`
                                                             : `/${userData?.data.user.userName}/`)
-                                                    }} className="absolute z-[50] top-4 left-5" onMouseEnter={() => handleMouseEnterForComments(i)} onMouseLeave={() => handleMouseLeaveForComments(i)} ref={divRef}><UserHoverModal username={item?.user.userName} isHovered={isCommentHovered[i]} /></div>
+                                                    }} className="absolute z-[250] top-4 -left-10 1280:left-5" onMouseEnter={() => handleMouseEnterForComments(i)} onMouseLeave={() => handleMouseLeaveForComments(i)} ref={divRef}><UserHoverModal username={item?.user.userName} isHovered={isCommentHovered[i]} /></div>
                                                 }
                                                 <p className="text-[12px] text-[#A8A8A8]">{formatDate(item.createdAt)}</p>
                                             </div>

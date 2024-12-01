@@ -160,7 +160,7 @@ export function CreatePost({
                     </div>
                 ) : (
                     <div
-                        className={`bg-[#262626] w-full md:w-[90vw] xl:w-[73rem] xl:h-[50rem] md:h-[75vh] transition-all duration-300 flex flex-col`}
+                        className={`bg-[#262626] 1280:w-[70rem] w-[30rem] h-[80vh] lg:w-[60rem] lg:h-[85vh] 2xl:w-[86rem] 2xl:h-[90vh] 1280:h-[88vh] transition-all duration-300 flex flex-col overflow-auto scrollbar-hidden`}
                     >
                         <div className="relative w-full h-full">
                             {!loading && !isCaption ? (

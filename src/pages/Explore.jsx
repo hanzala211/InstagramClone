@@ -8,6 +8,7 @@ import { TbMessageCircleFilled } from "react-icons/tb";
 import { Post } from "../components/Post";
 import { formatNumber } from "../utils/helper";
 import { usePost } from "../context/PostContext";
+import { PostModal } from "../components/PostModal";
 
 export function Explore() {
     const { userData } = useUser();
@@ -86,7 +87,7 @@ export function Explore() {
         setTotalPages(null)
     }
 
-    return <><section className={`w-full max-w-[65%] mt-10 mx-auto ${isPostsLoading || explorePagePosts.length === 0 ? "h-[85vh]" : ""} ${explorePagePosts.length < 5 ? "xl:h-[95vh]" : ""}`}>
+    return <><section className={`w-full xl:max-w-[60%] max-w-[70%] mt-10 mx-auto ${isPostsLoading || explorePagePosts.length === 0 ? "h-[85vh]" : ""} ${explorePagePosts.length < 4 ? "xl:h-[95vh]" : ""}`}>
         {explorePagePosts.length === 0 && !isPostsLoading ? (
             <p className="text-center text-lg text-gray-500">
                 No posts available. Check back later!
@@ -102,39 +103,9 @@ export function Explore() {
                 }
                 hasMore={count < 8 && hasMore}
             >
-                <div className={`flex flex-wrap gap-2`}>
-                    {explorePagePosts.map((item, index) => (
-                        <div
-                            key={item.id || index}
-                            className="w-[20rem] h-[20rem] cursor-pointer group relative overflow-hidden"
-                            onClick={() => {
-                                setSelectedPost(item);
-                                setIsPostOpen(true);
-                                setCurrentPost(index);
-                            }}
-                            aria-label={`Open post ${item.caption}`}
-                        >
-                            {item.imageUrls.length > 1 && (
-                                <div className="absolute right-3 top-2">
-                                    <PiCopySimpleLight className="text-[25px]" />
-                                </div>
-                            )}
-                            <div
-                                className="absolute z-10 flex items-center justify-center gap-2 w-full h-full opacity-0 group-hover:opacity-100 bg-black/30"
-                            >
-                                <p className="text-[17px] font-semibold flex items-center gap-2 text-white">
-                                    <FaHeart /> {formatNumber(item.likeCount)}
-                                </p>
-                                <p className="text-[17px] font-semibold flex items-center gap-2 text-white">
-                                    <TbMessageCircleFilled /> {formatNumber(item.commentsCount)}
-                                </p>
-                            </div>
-                            <img
-                                src={item.imageUrls[0]}
-                                alt={item.caption || "Post image"}
-                                className="w-full h-full object-cover object-center"
-                            />
-                        </div>
+                <div className={`grid grid-flow-row grid-cols-3 gap-2`}>
+                    {explorePagePosts.map((item, index, arr) => (
+                        <PostModal key={index} arr={arr} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} item={item} i={index} />
                     ))}
                 </div>
             </InfiniteScroll>

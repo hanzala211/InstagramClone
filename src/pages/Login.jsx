@@ -74,9 +74,8 @@ export function Login() {
     return (
         <>
             {!mainLoading ?
-
-                <>
-                    <section className="flex justify-center items-center gap-5 w-full h-[90vh]">
+                <div className="h-[100vh] flex flex-col justify-between">
+                    <section className="flex justify-center mt-12 items-center gap-5 w-full">
                         <div className="w-[27rem] h-[37rem] bg-no-repeat relative" style={{ backgroundImage: "url('/images/home-phones.png')" }}>
                             <img src={imagesArr[currentIndex]} alt="ScreenShots" className={`absolute left-[65%] -translate-x-1/2 top-7 ${isAnimating ? "animating" : ""}`} />
                         </div>
@@ -116,7 +115,7 @@ export function Login() {
                             </div>
                         </div>
                     </section>
-                    <Footer /></>
+                    <Footer /></div>
                 : <LoadingPage />}
         </>
     );

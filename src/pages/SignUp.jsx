@@ -55,8 +55,8 @@ export function SignUp() {
         }
     }
 
-    return <>
-        <section className="flex justify-center items-center w-full h-[90vh]">
+    return <div className="flex flex-col h-[100vh] justify-between">
+        <section className="flex justify-center items-center w-full mt-12">
             <div className="flex flex-col gap-3 items-center">
                 <div className="flex items-center flex-col border-[2px] border-[#363636] w-[23.7rem] h-[35rem] gap-4">
                     {!loading ? <><div className="w-full">
@@ -103,5 +103,5 @@ export function SignUp() {
             </div>
         </section >
         <Footer />
-    </>
+    </div>
 }
