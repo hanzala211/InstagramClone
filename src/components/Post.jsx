@@ -11,6 +11,7 @@ import { UserHoverModal } from "./UserHoverModal";
 import { PostComment } from "./PostComment";
 import { PostOptions } from "./PostOptions";
 import { Overlay } from "./Overlay";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card";
 
 export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, comments, setComments }) {
     const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, commentValue, setIsDisabled, setCommentValue, setIsPostSettingOpen, setIsCommented, isCommented, isAnimating, setIsAnimating, commentsLoading, setCommentsLoading, isDisabled, isPostSettingOpen, isMyPost } = usePost()
@@ -19,7 +20,6 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
     const [isHovered, setIsHovered] = useState(false)
     const [isCommentHovered, setIsCommentHovered] = useState(Array(comments?.length).fill(false))
     const commentRef = useRef(null);
-    const divRef = useRef(null);
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -104,16 +104,14 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
     }
 
     const handleMouseEnter = () => {
-        clearTimeout(divRef.current);
         setIsHovered(true);
     };
 
     const handleMouseLeave = () => {
-        divRef.current = setTimeout(() => setIsHovered(false), 10);
+        setIsHovered(false);
     };
 
     const handleMouseEnterForComments = (i) => {
-        clearTimeout(divRef.current);
         setIsCommentHovered((prev) => {
             const updated = [...prev]
             updated[i] = true;
@@ -122,11 +120,11 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
     };
 
     const handleMouseLeaveForComments = (i) => {
-        divRef.current = setTimeout(() => setIsCommentHovered((prev) => {
+        setIsCommentHovered((prev) => {
             const updated = [...prev]
             updated[i] = false;
             return updated;
-        }), 200);
+        })
     };
 
     async function postComment() {
@@ -191,7 +189,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         <>
             <Overlay handleClose={handleClose} isPostOpen={isPostOpen} />
             <div
-                className={`fixed opacity-0 top-1/2 -translate-y-1/2 w-full 1280:max-w-[69rem] max-w-[  65rem] -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100 pointer-events-auto" : "pointer-events-none"
+                className={`fixed opacity-0 top-1/2 -translate-y-1/2 w-full 1280:max-w-[69rem] max-w-[65rem] -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100 pointer-events-auto" : "pointer-events-none"
                     }`}
             >
 
@@ -219,24 +217,28 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                     </div>
                     <div className="1280:w-[45rem] w-[60rem] bg-[#000000] relative">
                         <div className="flex relative justify-between items-center p-5 border-b-[1px] border-[#262626]">
-                            <Link
-                                to={userData?.data.user._id !== postData?._id ? `/search/${postData?.userName}/` : `/${userData?.data.user.userName}/`}
-                                onClick={() => {
-                                    handleClick(null, postData)
-                                }}
-                                className="text-[15px] flex flex-row gap-4 items-center font-semibold"
-                                onMouseEnter={handleMouseEnter}
-                                onMouseLeave={handleMouseLeave}
-                            >
-                                <img src={postData?.profilePic} alt="Profile Picture" className="w-12 rounded-full" />
-                                <p className="hover:opacity-70 transition duration-200">{postData?.userName}</p>
-                            </Link>
-                            {isHovered &&
-                                <div onClick={() => {
+                            <HoverCard>
+                                <HoverCardTrigger>
+                                    <Link
+                                        to={userData?.data.user._id !== postData?._id ? `/search/${postData?.userName}/` : `/${userData?.data.user.userName}/`}
+                                        onClick={() => handleClick(null, postData)}
+                                        className="text-[15px] flex flex-row gap-4 items-center font-semibold"
+                                        onMouseEnter={handleMouseEnter}
+                                        onMouseLeave={handleMouseLeave}
+                                    >
+                                        <img src={postData?.profilePic} alt="Profile Picture" className="w-12 rounded-full" />
+                                        <p className="hover:opacity-70 transition duration-200">{postData?.userName}</p>
+                                    </Link>
+                                </HoverCardTrigger>
+                                <div className="absolute z-[200]" onClick={() => {
                                     handleClick(null, postData)
                                     navigate(userData?.data.user._id !== postData?._id ? `/search/${postData?.userName}/` : `/${userData?.data.user.userName}/`)
-                                }} className="absolute z-[50] top-20 left-10" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} ref={divRef}><UserHoverModal username={postData?.userName} isHovered={isHovered} /></div>
-                            }
+                                }}>
+                                    <HoverCardContent>
+                                        <UserHoverModal username={postData?.userName} isHovered={isHovered} />
+                                    </HoverCardContent>
+                                </div>
+                            </HoverCard>
                             <button onClick={() => setIsPostSettingOpen(true)}>
                                 <MoreSVG className="hover:opacity-70 cursor-pointer transition duration-300" />
                             </button>
@@ -262,29 +264,35 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                     comments?.map((item, i) => (
                                         <div key={i} className="flex gap-4 ml-1">
                                             <img src={item.user.profilePic} alt={item.user.userName} className="w-9 h-9 rounded-full" />
-                                            <div className="flex flex-col gap-1 relative">
-                                                <p className="text-[15px]">
-                                                    <Link
-                                                        to={userData?.data.user._id !== item?.user._id ? `/search/${item?.user.userName}/` : `/${userData?.data.user.userName}/`}
-                                                        onClick={() => handleClick(item)}
-                                                        className="text-[13px] mr-2 font-semibold hover:opacity-50 transition duration-150"
-                                                        onMouseEnter={() => handleMouseEnterForComments(i)}
-                                                        onMouseLeave={() => handleMouseLeaveForComments(i)}
-                                                    >
-                                                        {item.user.userName}
-                                                    </Link>
-                                                    {item.comment}
-                                                </p>
-                                                {isCommentHovered[i] &&
-                                                    <div onClick={() => {
+                                            <HoverCard>
+                                                <div className="flex flex-col gap-1 relative">
+                                                    <p className="text-[15px]">
+                                                        <HoverCardTrigger>
+                                                            <Link
+                                                                to={userData?.data.user._id !== item?.user._id ? `/search/${item?.user.userName}/` : `/${userData?.data.user.userName}/`}
+                                                                onClick={() => handleClick(item)}
+                                                                className="text-[13px] mr-2 font-semibold hover:opacity-50 transition duration-150"
+                                                                onMouseEnter={() => handleMouseEnterForComments(i)}
+                                                                onMouseLeave={() => handleMouseLeaveForComments(i)}
+                                                            >
+                                                                {item.user.userName}
+                                                            </Link>
+                                                        </HoverCardTrigger>
+                                                        {item.comment}
+                                                    </p>
+                                                    <div className="absolute z-[200]" onClick={() => {
                                                         handleClick(item)
                                                         navigate(userData?.data.user._id !== item?.user._id
                                                             ? `/search/${item?.user.userName}/`
                                                             : `/${userData?.data.user.userName}/`)
-                                                    }} className="absolute z-[250] top-4 -left-10 1280:left-5" onMouseEnter={() => handleMouseEnterForComments(i)} onMouseLeave={() => handleMouseLeaveForComments(i)} ref={divRef}><UserHoverModal username={item?.user.userName} isHovered={isCommentHovered[i]} /></div>
-                                                }
-                                                <p className="text-[12px] text-[#A8A8A8]">{formatDate(item.createdAt)}</p>
-                                            </div>
+                                                    }}>
+                                                        <HoverCardContent>
+                                                            <UserHoverModal username={item?.user.userName} isHovered={isCommentHovered[i]} />
+                                                        </HoverCardContent>
+                                                    </div>
+                                                    <p className="text-[12px] text-[#A8A8A8]">{formatDate(item.createdAt)}</p>
+                                                </div>
+                                            </HoverCard>
                                         </div>
                                     ))
                                 )}
@@ -297,7 +305,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                 </div>
                             </div>
                         </div>
-                        <div className="absolute bottom-0 z-[200] border-t-[1px] h-[10rem] border-[#262626] w-full bg-[#000]">
+                        <div className="absolute bottom-0 z-[150] border-t-[1px] h-[10rem] border-[#262626] w-full bg-[#000]">
                             <PostOptions postData={postData} commentRef={commentRef} />
                             <div>
                                 {selectedPost !== null && (
@@ -310,7 +318,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                             <PostComment commentRef={commentRef} commentValue={commentValue} setCommentValue={setCommentValue} isDisabled={isDisabled} postComment={postComment} />
                         </div>
                     </div>
-                </div>
+                </div >
             </div >
             <PostSettings
                 isPostSettingOpen={isPostSettingOpen}

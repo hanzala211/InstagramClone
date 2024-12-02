@@ -7,6 +7,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 import { fetchUserDataOnClick, formatDate } from "../utils/helper"
 import { useEffect, useRef, useState } from "react"
 import { UserHoverModal } from "./UserHoverModal"
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card"
 
 export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost, setCurrentPostIndex, setIsPostOpen }) {
     const { userData, setMainLoading, setUserData, setMessage } = useUser()
@@ -19,7 +20,6 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
     const [likedPosts, setLikedPosts] = useState(Array(homePosts.length).fill(false));
     const [isHovered, setIsHovered] = useState(Array(homePosts.length).fill(false))
     const navigate = useNavigate()
-    const divRef = useRef(null)
 
     useEffect(() => {
         if (homePosts !== null) {
@@ -36,16 +36,13 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
             const updatedCurrentIndex = homePosts.map((post) => post?.imageUrls.length)
             setTotalIndex(updatedCurrentIndex)
         }
-    }, [homePosts])
-
-    useEffect(() => {
         if (homePosts) {
             setCurrentIndex(Array(homePosts.length).fill(0))
         }
         if (homePosts) {
             setIsHovered(Array(homePosts.length).fill(false))
         }
-    }, [homePosts.length])
+    }, [homePosts])
 
     function handleIncrease(index) {
         setIsAnimating(true);
@@ -72,7 +69,6 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
     }
 
     const handleMouseEnter = (index) => {
-        clearTimeout(divRef.current);
         setIsHovered((prev) => {
             const updated = [...prev]
             updated[index] = true;
@@ -81,11 +77,11 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
     };
 
     const handleMouseLeave = (index) => {
-        divRef.current = setTimeout(() => setIsHovered((prev) => {
+        setIsHovered((prev) => {
             const updated = [...prev]
             updated[index] = false;
             return updated;
-        }), 200);
+        })
     };
 
     async function savePost(id, index) {
@@ -269,20 +265,25 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
         <div className="flex flex-row items-center gap-2">
             <img src={item?.user.profilePic} className="rounded-full w-10" alt="" />
             <div className="flex flex-row gap-1 items-center relative">
-                <Link to={`/search/${item?.user.userName}/`} onClick={() => {
-                    fetchUserDataOnClick(item?.user.userName, userData, null, setSelectedProfile, setMainLoading)
-                    setMainLoading(true)
-                }} className="font-semibold text-[12px] hover:opacity-70 transition duration-200" onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={() => handleMouseLeave(index)}>{item?.user.userName} </Link>
-                {isHovered[index] &&
+                <HoverCard>
+                    <HoverCardTrigger>
+                        <Link to={`/search/${item?.user.userName}/`} onClick={() => {
+                            fetchUserDataOnClick(item?.user.userName, userData, null, setSelectedProfile, setMainLoading)
+                            setMainLoading(true)
+                        }} className="font-semibold text-[12px] hover:opacity-70 transition duration-200" onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={() => handleMouseLeave(index)}>{item?.user.userName}</Link>
+                    </HoverCardTrigger>
                     <div onClick={() => {
                         fetchUserDataOnClick(item?.user.userName, userData, null, setSelectedProfile, setMainLoading)
                         setMainLoading(true)
                         navigate(`/search/${item?.user.userName}/`)
-                    }}
-                        className="absolute z-[50] top-10" onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={() => handleMouseLeave(index)} ref={divRef}><UserHoverModal username={item?.user.userName} isHovered={isHovered[index]} /></div>
-                }
-                <p className="text-[#A8A8A8]">•</p>
-                <p className="text-[#a8a8a8] text-[13px] font-medium">{formatDate(item.createdAt)}</p>
+                    }} className="absolute z-[50]">
+                        <HoverCardContent>
+                            <UserHoverModal username={item?.user.userName} isHovered={isHovered[index]} />
+                        </HoverCardContent>
+                    </div>
+                    <p className="text-[#A8A8A8]">•</p>
+                    <p className="text-[#a8a8a8] text-[13px] font-medium">{formatDate(item.createdAt)}</p>
+                </HoverCard>
             </div>
         </div>
         <div className="w-full rounded-md bg-[#000000] border-[1px] border-[#2B2B2D] relative overflow-hidden">

@@ -16,7 +16,7 @@ export function SideBarItems({ item, isSearching }) {
                         src={item?.profileImg}
                         id="image"
                         alt="userIcon"
-                        className="rounded-full w-6 group-hover:scale-110"
+                        className="rounded-full w-[1.5rem] group-hover:scale-110"
                     />
                 ) : item?.homeactive ? isActive && !isSearching ? item?.activeIcon : item.icon : item.icon}
             </span>

@@ -10,15 +10,15 @@ export function FullSkeleton() {
         <div className="flex justify-evenly mt-4">
             <div className="w-full flex flex-col items-center gap-1">
                 <div className="h-4 bg-gray-400 rounded animate-pulse w-[27%]"></div>
-                <div className="h-4 bg-gray-400 rounded animate-pulse w-[32%]"></div>
+                <div className="h-4 bg-gray-400 rounded animate-pulse w-[40%]"></div>
             </div>
             <div className="w-full flex flex-col items-center gap-1">
                 <div className="h-4 bg-gray-400 rounded animate-pulse w-[27%]"></div>
-                <div className="h-4 bg-gray-400 rounded animate-pulse w-[32%]"></div>
+                <div className="h-4 bg-gray-400 rounded animate-pulse w-[40%]"></div>
             </div>
             <div className="w-full gap-1 flex flex-col items-center">
                 <div className="h-4 bg-gray-400 rounded animate-pulse w-[27%]"></div>
-                <div className="h-4 bg-gray-400 rounded animate-pulse w-[32%]"></div>
+                <div className="h-4 bg-gray-400 rounded animate-pulse w-[40%]"></div>
             </div>
         </div>
         <div className="flex gap-1 mt-[2.2rem]">
