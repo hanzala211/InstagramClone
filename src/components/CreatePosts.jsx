@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { CreatePosts } from "../assets/Constants";
 import ReactCropper from "react-easy-crop";
 import { getCroppedImg } from "../utils/cropUtils";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
@@ -7,6 +6,7 @@ import { Loader } from "../components/Loader";
 import { useUser } from "../context/UserContext";
 import { EditPost } from "./EditPost";
 import { Overlay } from "./Overlay";
+import { SelectImage } from "./SelectImage";
 
 export function CreatePost({
     isCreating,
@@ -26,7 +26,6 @@ export function CreatePost({
     const [loading, setLoading] = useState(false);
     const [isCaption, setIsCaption] = useState(false);
     const [captionValue, setCaptionValue] = useState("");
-    const [isDisabled, setIsDisabled] = useState(false);
     const [isShared, setIsShared] = useState(false);
     const [shareLoading, setShareLoading] = useState(false);
 
@@ -67,19 +66,10 @@ export function CreatePost({
         }
     };
 
-    function handleIncrease() {
-        setCurrentIndex((prev) => prev + 1);
-    }
-
-    function handleDecrease() {
-        setCurrentIndex((prev) => prev - 1);
-    }
-
     async function createPost() {
         const formData = new FormData();
         try {
             setShareLoading(true);
-            setIsDisabled(true);
             setIsShared(true);
             await Promise.all(
                 croppedImages.map(async (item, index) => {
@@ -117,7 +107,6 @@ export function CreatePost({
         } catch (error) {
             console.error(error);
         } finally {
-            setIsDisabled(false);
             setShareLoading(false);
             setCaptionValue("");
         }
@@ -126,38 +115,12 @@ export function CreatePost({
     return (
         <>
             <Overlay handleClose={handleClose} isPostOpen={isCreating} />
-            <div
-                className={`fixed opacity-0 top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isCreating ? "opacity-100" : "pointer-events-none"
-                    } border-y-[1px] border-[#363636]`}
-            >
+            <div className={`fixed opacity-0 top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isCreating ? "opacity-100" : "pointer-events-none"
+                } border-y-[1px] border-[#363636]`}>
                 <p className="text-[18px] absolute -top-9 left-1/2 -translate-x-1/2">
-                    {!isCaption
-                        ? "Create New Post"
-                        : !isShared
-                            ? "Share"
-                            : !shareLoading
-                                ? "Post shared"
-                                : "Post sharing"}
-                </p>
+                    {!isCaption ? "Create New Post" : !isShared ? "Share" : !shareLoading ? "Post shared" : "Post sharing"}</p>
                 {!selectedImage || selectedImage.length === 0 ? (
-                    <div className="bg-[#262626] flex items-center justify-center flex-col gap-2 w-full sm:w-[60vw] xl:w-[40vw] h-[72vh] px-5 py-5">
-                        <CreatePosts />
-                        <p className="text-[20px]">Drag photos and videos here</p>
-                        <button
-                            onClick={handleFile}
-                            className="bg-[#0095F6] hover:bg-opacity-70 transition-all duration-200 px-3 py-2 text-[14px] rounded-lg"
-                        >
-                            Select From Computer
-                        </button>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            ref={fileInputRef}
-                            onChange={handleFileChange}
-                            style={{ display: "none" }}
-                            multiple={true}
-                        />
-                    </div>
+                    <SelectImage handleFile={handleFile} fileInputRef={fileInputRef} handleFileChange={handleFileChange} />
                 ) : (
                     <div
                         className={`bg-[#262626] 1280:w-[70rem] w-[30rem] h-[80vh] lg:w-[60rem] lg:h-[85vh] 2xl:w-[86rem] 2xl:h-[90vh] 1280:h-[88vh] transition-all duration-300 flex flex-col overflow-auto scrollbar-hidden`}
@@ -189,8 +152,8 @@ export function CreatePost({
                                 <EditPost
                                     croppedImage={croppedImages}
                                     currentIndex={currentIndex}
-                                    handleDecrease={handleDecrease}
-                                    handleIncrease={handleIncrease}
+                                    handleDecrease={() => setCurrentIndex((prev) => prev - 1)}
+                                    handleIncrease={() => setCurrentIndex((prev) => prev + 1)}
                                     loading={loading}
                                     isCaption={isCaption}
                                     setCaptionValue={setCaptionValue}
@@ -227,8 +190,8 @@ export function CreatePost({
                             )}
                             {(!selectedImage || selectedImage.length > 1) && !isCaption && (
                                 <>
-                                    {currentIndex !== selectedImage.length - 1 && <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleIncrease}><FaArrowRight className="fill-black" /></button>}
-                                    {currentIndex !== 0 && <button className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleDecrease}><FaArrowLeft className="fill-black" /></button>}
+                                    {currentIndex !== selectedImage.length - 1 && <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={() => setCurrentIndex((prev) => prev + 1)}><FaArrowRight className="fill-black" /></button>}
+                                    {currentIndex !== 0 && <button className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={() => setCurrentIndex((prev) => prev - 1)}><FaArrowLeft className="fill-black" /></button>}
                                 </>
                             )}
                         </div>
@@ -237,7 +200,7 @@ export function CreatePost({
                         {!isShared && isCaption && <button className="absolute -top-7 right-0 text-[15px] text-[#0096f4] hover:text-white" onClick={createPost}>Share</button>}
                     </div>
                 )}
-            </div>
+            </div >
         </>
     );
 }

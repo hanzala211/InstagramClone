@@ -29,7 +29,7 @@ export function Login() {
             setTimeout(() => {
                 setCurrentIndex((prevIndex) => (prevIndex + 1) % imagesArr.length);
                 setIsAnimating(false);
-            }, 500);
+            }, 100);
         }, 3000);
 
         return () => clearInterval(interval);
@@ -77,7 +77,7 @@ export function Login() {
                 <div className="h-[100vh] flex flex-col justify-between">
                     <section className="flex justify-center mt-12 items-center gap-5 w-full">
                         <div className="w-[27rem] h-[37rem] bg-no-repeat relative" style={{ backgroundImage: "url('/images/home-phones.png')" }}>
-                            <img src={imagesArr[currentIndex]} alt="ScreenShots" className={`absolute left-[65%] -translate-x-1/2 top-7 ${isAnimating ? "animating" : ""}`} />
+                            <img src={imagesArr[currentIndex]} alt="ScreenShots" className={`absolute left-[65%] -translate-x-1/2 top-7 transition-all ${isAnimating ? "animating opacity-50" : "opacity-100"}`} />
                         </div>
                         <div className="flex flex-col gap-3 items-center">
                             <div className={`flex items-center flex-col border-[2px] border-[#363636] w-[23.7rem] gap-6 h-[27rem]`}>

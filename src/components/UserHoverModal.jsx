@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { useEffect, useState } from "react";
 import { FullSkeleton } from "./FullSkeleton";
-import { formatNumber } from "../utils/helper";
+import { fetchUserDataOnHover, formatNumber } from "../utils/helper";
 
 export function UserHoverModal({ username, isHovered }) {
     const { userData } = useUser()
@@ -14,58 +14,12 @@ export function UserHoverModal({ username, isHovered }) {
         const abortController = new AbortController();
         if (isHovered) {
             setIsLoading(true)
-            fetchUserDataOnHover(abortController.signal)
+            fetchUserDataOnHover(abortController.signal, username, userData, setHoverProfile, setPosts, setIsLoading)
         }
         return () => {
             abortController.abort();
         }
     }, [])
-
-    async function fetchUserDataOnHover(signal) {
-        try {
-            const response = await fetch(
-                `https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/search/${username}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `${userData?.data.token}`,
-                    },
-                    redirect: 'follow',
-                    signal
-                }
-            );
-            const result = await response.json();
-            setHoverProfile(result.data[0]);
-            if (result.data[0].posts) {
-                await Promise.all(
-                    result.data[0]?.posts.slice(0, 3).map((item) => fetchPostData(item))
-                )
-                    .then((res) => setPosts((prev) => [...prev, ...res.map((item) => item.post)]))
-                    .catch((err) => console.error(err))
-                    .finally(() => setIsLoading(false))
-            }
-        } catch (error) {
-            if (error.name !== 'AbortError') {
-                console.error('Error fetching user' + error)
-            }
-        }
-    }
-
-    async function fetchPostData(id) {
-        try {
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/${id}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${userData?.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            return result;
-        } catch (error) {
-            console.error(error)
-        }
-    }
 
     return <div className="bg-[#000] w-[20rem] rounded-lg shadow-sm shadow-gray-200 h-[16rem] ">
         {isLoading ? <FullSkeleton /> :

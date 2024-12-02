@@ -55,6 +55,18 @@ export function SideBar() {
         }
     ]
 
+    const moreArr = [
+        {
+            icon: <SaveIcon />,
+            title: "Saved",
+            to: `/${userData.data.user.userName}/saved/`
+        },
+        {
+            icon: <ReportIcon />,
+            title: "Report",
+        }
+    ]
+
     useEffect(() => {
         window.addEventListener("click", handleClick)
         return () => window.removeEventListener("click", handleClick)
@@ -111,20 +123,16 @@ export function SideBar() {
         {
             isOpen && <div className="fixed bg-[#262626] w-[13%] z-[50] modal bottom-20 left-8 rounded-[1rem]" ref={dropdownRef} >
                 <div className="border-b-[4px] border-[#353535] px-2 py-3">
-                    <Link
-                        to={`/${userData.data.user.userName}/saved/`}
-                        className="gap-4 items-center py-3 group w-full hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex p-2 rounded-md"
-                    >
-                        <SaveIcon />
-                        <p className="text-[15px]">Saved</p>
-                    </Link>
-                    <Link
-                        to="#"
-                        className="gap-4 items-center py-3 group w-full hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex p-2 rounded-md"
-                    >
-                        <ReportIcon />
-                        <p className="text-[15px]">Report</p>
-                    </Link>
+                    {moreArr.map((item, i) => (
+                        <Link
+                            key={i}
+                            to={item.to}
+                            className="gap-4 items-center py-3 group w-full hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex p-2 rounded-md"
+                        >
+                            {item.icon}
+                            <p className="text-[15px]">{item.title}</p>
+                        </Link>
+                    ))}
                 </div>
                 <div className="px-2 py-2.5">
                     <Link

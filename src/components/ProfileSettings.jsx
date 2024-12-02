@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { IoCloseSharp } from "react-icons/io5"
 import { useUser } from "../context/UserContext";
 import { Loader } from "./Loader";
 import { Overlay } from "./Overlay";
