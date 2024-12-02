@@ -191,7 +191,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         <>
             <Overlay handleClose={handleClose} isPostOpen={isPostOpen} />
             <div
-                className={`fixed opacity-0 top-1/2 -translate-y-1/2 w-full 1280:max-w-[69rem] max-w-[65rem] -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100 pointer-events-auto" : "pointer-events-none"
+                className={`fixed opacity-0 top-1/2 -translate-y-1/2 w-full 1280:max-w-[69rem] max-w-[  65rem] -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100 pointer-events-auto" : "pointer-events-none"
                     }`}
             >
 

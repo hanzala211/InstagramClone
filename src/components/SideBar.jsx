@@ -6,6 +6,7 @@ import { SearchBox } from "./SearchBox";
 import { CreatePost } from "./CreatePosts";
 import { FaHistory } from "react-icons/fa";
 import { CreateStory } from "./CreateStory";
+import { SideBarItems } from "./SideBarItems";
 
 export function SideBar() {
     const { isSearching, setIsSearching } = useSideBar();
@@ -21,6 +22,39 @@ export function SideBar() {
     const searchBoxRef = useRef(null);
     const dropdownRef = useRef(null);
 
+    const sideBarItems = [
+        {
+            text: 'Home',
+            icon: <HomeIcon />,
+            activeIcon: <ActiveHome />,
+            to: "/home",
+            homeactive: true,
+            onClick: undefined
+        }, {
+            text: "Search",
+            icon: <SearchIcon />,
+            onClick: () => setIsSearching((prev) => !prev),
+            ref: searchRef,
+        }, {
+            text: "Explore",
+            icon: <ExploreIcon />,
+            to: "/explore"
+        }, {
+            text: "Post",
+            icon: <CreateIcon />,
+            onClick: () => setIsCreating(true),
+        }, {
+            text: "Story",
+            icon: <FaHistory />,
+            onClick: () => setCreateStory(true),
+        }, {
+            text: "Profile",
+            isImg: true,
+            profileImg: userData.data.user.profilePic,
+            to: `/${userData.data.user.userName}/`
+        }
+    ]
+
     useEffect(() => {
         window.addEventListener("click", handleClick)
         return () => window.removeEventListener("click", handleClick)
@@ -34,7 +68,6 @@ export function SideBar() {
             setIsSearching(false)
             setSearchQuery("")
             setSearchData([]);
-
         }
     }
 
@@ -61,78 +94,9 @@ export function SideBar() {
                 `group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-block py-2 px-2 rounded-md mb-4 ${isActive ? "font-bold" : ""}`
             }><InstagramSvg className="group-hover:scale-110 transition-transform duration-150" /></NavLink>}
         <div className="flex flex-col gap-3">
-            <NavLink
-                to="/home"
-                className={({ isActive }) =>
-                    `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 rounded-md ${isActive ? "font-bold" : ""} ${isSearching ? "w-10" : ""}`
-                }
-            >{({ isActive }) => {
-                return <>{isActive && !isSearching ? <ActiveHome className={`group-hover:scale-110 transition-transform duration-150`} /> : <HomeIcon className={`group-hover:scale-110 transition-transform duration-150 stroke-[#F5F5F5]`} />}
-                    <p className={`text-[15px] ${isSearching ? "hidden" : ""}`}>Home</p></>
-            }}
-            </NavLink >
-            <NavLink
-                className={
-                    `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 rounded-md $ ${isSearching ? "w-10 border-[1px] rounded-lg" : ""}`
-                }
-                onClick={() => setIsSearching((prev) => !prev)}
-                ref={searchRef}
-            >
-                <SearchIcon className="group-hover:scale-110 transition-transform duration-150" />
-                <p className={`text-[15px] ${isSearching ? "hidden" : ""} `}>Search</p>
-            </NavLink>
-            <NavLink
-                to="/explore"
-                className={({ isActive }) =>
-                    `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 rounded-md ${isActive ? "font-bold" : ""} ${isSearching ? "w-10" : ""}`
-                }
-            >
-                <ExploreIcon className="group-hover:scale-110 transition-transform duration-150" />
-                <p className={`text-[15px] ${isSearching ? "hidden" : ""}`}>Explore</p>
-            </NavLink>
-            {/* <NavLink
-                end
-                to="/direct/inbox"
-                className={({ isActive }) =>
-                    `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 py-3 rounded-md ${isActive ? "font-bold" : ""} ${isSearching ? "w-10 h-10" : ""}`
-                }
-            >
-                <MessageIcon className="group-hover:scale-110 transition-transform duration-150" />
-                <p className={`text-[15px] ${isSearching ? "hidden" : ""}`}>Messages</p>
-            </NavLink>
-            <NavLink
-                end
-                to="/notification"
-                className={({ isActive }) =>
-                    `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 py-3 rounded-md ${isActive ? "font-bold" : ""} ${isSearching ? "w-10 h-10" : ""}`
-                }
-            >
-                <NotificationIcon className="group-hover:scale-110 transition-transform duration-150" />
-                <p className={`text-[15px] ${isSearching ? "hidden" : ""}`}>Notifications</p>
-            </NavLink> */}
-            <NavLink
-                onClick={() => setIsCreating(true)}
-                className={`gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 rounded-md ${isSearching ? "w-10" : ""}`}
-            >
-                <CreateIcon className="group-hover:scale-110 transition-transform duration-150" />
-                <p className={`text-[15px] ${isSearching ? "hidden" : ""}`}>Create</p>
-            </NavLink>
-            <NavLink
-                onClick={() => setCreateStory(true)}
-                className={`gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 rounded-md ${isSearching ? "w-10" : ""}`}
-            >
-                <FaHistory className="group-hover:scale-110 transition-transform duration-150 text-[25px]" />
-                <p className={`text-[15px] ${isSearching ? "hidden" : ""}`}>Story</p>
-            </NavLink>
-            <NavLink
-                to={`/${userData.data.user.userName}/`}
-                className={({ isActive }) =>
-                    `gap-4 group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex items-center p-2 rounded-md ${isActive ? "font-bold" : ""} ${isSearching ? "w-10" : ""}`
-                }
-            >
-                <img src={userData.data.user.profilePic} id="image" alt="userIcon" className="rounded-full w-6 group-hover:scale-110" />
-                <p className={`text-[15px] ${isSearching ? "hidden" : ""}`}>Profile</p>
-            </NavLink>
+            {sideBarItems?.map((item, i) => (
+                <SideBarItems item={item} key={i} isSearching={isSearching} />
+            ))}
         </div>
         <div
             ref={checkref}
