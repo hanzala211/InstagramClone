@@ -10,12 +10,12 @@ export function EditPost({ croppedImage, currentIndex, handleDecrease, handleInc
                     {currentIndex !== 0 && <button className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={handleDecrease}><FaArrowLeft className="fill-black" /></button>}
                 </> : ""}
         </div>
-        <div className="sm:w-[35%] w-[40%] px-4 py-5 border-l-[2px] border-[#363636]">
-            <div className="flex flex-row gap-4 items-center">
-                <img src={userData.data.user.profilePic} className="w-8 rounded-full" alt="Profile Pic" />
-                <p className="text-[14px] font-semibold">{userData.data.user.userName}</p>
+        <div className="sm:w-[35%] w-[40%] md:px-4 p-2 md:py-5 border-l-[2px] border-[#363636]">
+            <div className="flex flex-row md:gap-4 gap-2 items-center">
+                <img src={userData.data.user.profilePic} className="md:w-8 w-5 rounded-full" alt="Profile Pic" />
+                <p className="md:text-[14px] text-[12px] font-semibold">{userData.data.user.userName}</p>
             </div>
-            <textarea className="bg-transparent border-b-[1px] h-[10rem] text-white outline-none resize-none w-full mt-4" maxLength={100} value={captionValue} placeholder="Write a Caption" onChange={(e) => setCaptionValue(e.target.value)}></textarea>
+            <textarea className="bg-transparent border-b-[1px] md:h-[10rem] h-[7rem] text-white outline-none resize-none w-full mt-4 md:text-[16px] text-[12px] " maxLength={100} value={captionValue} placeholder="Write a Caption" onChange={(e) => setCaptionValue(e.target.value)}></textarea>
             <div className="flex justify-end">
                 <p className="text-[#737373] text-[13px] font-semibold">{captionValue?.length}/100</p>
             </div>
