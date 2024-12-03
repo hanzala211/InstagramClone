@@ -1,6 +1,6 @@
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 import { usePost } from "../context/PostContext"
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { LikePost } from "../assets/Constants";
 import { useUser } from "../context/UserContext";
 import { likePost } from "../utils/helper";
@@ -10,6 +10,7 @@ export function PostSlider({ currentIndex, setCurrentIndex }) {
     const { userData, setMessage } = useUser()
     const [showHeart, setShowHeart] = useState(false);
     const [heartIndex, setHeartIndex] = useState(null);
+    const lastTouchTime = useRef(0);
 
     const handleDoubleClick = (index) => {
         setHeartIndex(index);
@@ -48,6 +49,14 @@ export function PostSlider({ currentIndex, setCurrentIndex }) {
                                 src={item}
                                 alt="Post"
                                 onDoubleClick={() => handleDoubleClick(index)}
+                                onTouchStart={() => {
+                                    const currentTime = Date.now();
+                                    const timeDifference = currentTime - lastTouchTime.current;
+                                    if (timeDifference < 300 && timeDifference > 0) {
+                                        handleDoubleClick(index)
+                                    }
+                                    lastTouchTime.current = currentTime;
+                                }}
                                 className="object-fill h-full w-full"
                             />
                             {showHeart && heartIndex === index && (
