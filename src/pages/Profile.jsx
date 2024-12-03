@@ -215,9 +215,9 @@ export function Profile() {
                             </button>
                             <LogOutDiv isOpen={isOpen} dropdownRef={dropdownRef} isMobile={true} />
                         </Link>
-                        <div className="flex gap-3 items-center">
-                            <button className="bg-[#363636] px-4 py-1 sm:w-32 1280:w-auto rounded-[0.5rem] text-[14px] hover:bg-[rgb(38,38,38)] transition duration-150" onClick={() => setIsEditOpen(true)}>Edit Profile</button>
-                            <Link to="/archive/stories/" className="bg-[#363636] sm:w-32 1280:w-auto px-5 py-1 rounded-[0.5rem] text-[14px] flex justify-center hover:bg-[rgb(38,38,38)] transition duration-150 ">View Archive</Link>
+                        <div className="flex gap-3 flex-col 440:flex-row 440:items-center">
+                            <button className="bg-[#363636] px-4 py-1 w-28 440:w-32 1280:w-auto rounded-[0.5rem] text-[14px] hover:bg-[rgb(38,38,38)] transition duration-150" onClick={() => setIsEditOpen(true)}>Edit Profile</button>
+                            <Link to="/archive/stories/" className="bg-[#363636] w-32 440:w-32 1280:w-auto px-5 py-1 rounded-[0.5rem] text-[14px] flex justify-center hover:bg-[rgb(38,38,38)] transition duration-150 ">View Archive</Link>
                         </div>
                     </div>
                     <div className="md:flex hidden gap-10 items-center">
