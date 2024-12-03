@@ -201,7 +201,7 @@ export function Profile() {
                         setIsNoteEditOpen(true);
                     }
                 }}>
-                    {!isNoteEditOpen ? <div className="absolute md:top-2 lg:-top-1 top-2 left-[3rem] md:left-[6%] lg:left-[5rem] xl:left-[8rem] z-[1]"><NoteTooltip isProfile={true} note={note} noteLoading={noteLoading} /></div> : <div ref={noteEditorRef} className="absolute md:top-2 lg:top-20 top-2 left-[22rem] md:left-[20rem] lg:left-[0rem] xl:left-[8rem] z-[1]"><NoteEditor setIsNoteEditOpen={setIsNoteEditOpen} /></div>}
+                    {!isNoteEditOpen ? <div className="absolute md:top-2 lg:-top-1 top-7 left-[3.5rem] 440:top-2 440:left-[3rem] md:left-[6%] lg:left-[5rem] xl:left-[8rem] z-[1]"><NoteTooltip isProfile={true} note={note} noteLoading={noteLoading} /></div> : <div ref={noteEditorRef} className="absolute md:top-2 lg:top-20 top-2 left-[22rem] md:left-[20rem] lg:left-0 xl:left-[8rem] z-[1]"><NoteEditor setIsNoteEditOpen={setIsNoteEditOpen} /></div>}
                 </div>
                 <Link to={stories.length > 0 ? `/stories/${userData.data.user.userName}/${stories[0]._id}/` : ""} className={`p-2 ${stories.length > 0 ? "relative rounded-full multicolor-border" : ""}`} onClick={() => setCurrentStory(0)}>
                     <img src={userData?.data?.user.profilePic} alt="User Profile" className="rounded-full w-28 lg:w-40 min-w-[6rem]" />
