@@ -140,11 +140,21 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
     return (
         <>
             <Overlay handleClose={handleClose} isPostOpen={isPostOpen} />
-            <div className={`fixed opacity-0 top-1/2 -translate-y-1/2 w-full 1280:max-w-[80rem] lg:max-w-[65rem] h-[90vh] 1280:h-auto max-w-[50rem] -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100 pointer-events-auto" : "pointer-events-none"
+            <div className={`fixed opacity-0 top-[40%] sm:top-1/2 -translate-y-1/2 w-full 1280:max-w-[90rem] lg:max-w-[65rem] md:h-[32rem] 1280:h-auto md:max-w-[52rem] h-[25rem] max-w-[20rem] -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100 pointer-events-auto" : "pointer-events-none"
                 }`}>
-                <div className="h-full flex">
+                <div className="h-full flex flexBox">
+                    <div className="absolute md:hidden block -top-6 -left-3">
+                        <Link
+                            to={userData?.data.user._id !== postData?._id ? `/search/${postData?.userName}/` : `/${userData?.data.user.userName}/`}
+                            onClick={() => handleClick(null, postData)}
+                            className="text-[13px] flex flex-row gap-4 items-center font-semibold"
+                        >
+                            <img src={postData?.profilePic} alt="Profile Picture" className="w-10 rounded-full" />
+                            <p className="hover:opacity-70 transition duration-200">{postData?.userName}</p>
+                        </Link>
+                    </div>
                     <PostSlider currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
-                    <div className="1280:w-[45rem] w-[60rem] bg-[#000000] relative">
+                    <div className="1280:w-[45rem] lg:w-[60rem] md:w-[65rem] w-[22rem] bg-[#000000] absolute -bottom-32 md:relative md:bottom-0">
                         <div className="flex relative justify-between items-center p-5 border-b-[1px] border-[#262626]">
                             <HoverCard>
                                 <HoverCardTrigger>
@@ -172,7 +182,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                 <MoreSVG className="hover:opacity-70 cursor-pointer transition duration-300" />
                             </button>
                         </div>
-                        <div className="w-full flex flex-col 1280:h-[60.5vh] lg:h-[56%] h-[48%] gap-4 overflow-auto scrollbar-hidden">
+                        <div className="w-full md:flex hidden flex-col 1280:h-[60.5vh] lg:h-[56%] h-[48%] gap-4 overflow-auto scrollbar-hidden">
                             {selectedPost !== null && selectedPost.caption && (
                                 <div>
                                     <div className="w-full px-6 mt-4 text-[15px]">

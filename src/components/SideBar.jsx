@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import { ActiveHome, CreateIcon, ExploreIcon, HomeIcon, InstagramSvg, MoreIcon, ReportIcon, SaveIcon, SearchIcon } from "../assets/Constants";
+import { ActiveExplore, ActiveHome, CreateIcon, ExploreIcon, HomeIcon, InstagramSvg, MoreIcon, ReportIcon, SaveIcon, SearchIcon } from "../assets/Constants";
 import { useEffect, useRef, useState } from "react";
 import { useSearch, useSideBar, useUser } from "../context/UserContext";
 import { SearchBox } from "./SearchBox";
@@ -7,15 +7,14 @@ import { CreatePost } from "./CreatePosts";
 import { FaHistory } from "react-icons/fa";
 import { CreateStory } from "./CreateStory";
 import { SideBarItems } from "./SideBarItems";
+import { LogOutDiv } from "./LogOutDiv";
 
 export function SideBar() {
-    const { isSearching, setIsSearching } = useSideBar();
+    const { isSearching, setIsSearching, isCreating, setIsCreating, createStory, setCreateStory } = useSideBar();
     const { setSearchQuery, setSearchData } = useSearch()
-    const { userData, setUserData, setMainLoading } = useUser();
+    const { userData } = useUser();
     const [isOpen, setIsOpen] = useState(false);
-    const [isCreating, setIsCreating] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
-    const [createStory, setCreateStory] = useState(false);
     const checkref = useRef(null);
     const searchRef = useRef(null);
     const fileInputRef = useRef(null);
@@ -38,6 +37,8 @@ export function SideBar() {
         }, {
             text: "Explore",
             icon: <ExploreIcon />,
+            activeIcon: <ActiveExplore />,
+            homeactive: true,
             to: "/explore"
         }, {
             text: "Post",
@@ -52,18 +53,6 @@ export function SideBar() {
             isImg: true,
             profileImg: userData.data.user.profilePic,
             to: `/${userData.data.user.userName}/`
-        }
-    ]
-
-    const moreArr = [
-        {
-            icon: <SaveIcon />,
-            title: "Saved",
-            to: `/${userData.data.user.userName}/saved/`
-        },
-        {
-            icon: <ReportIcon />,
-            title: "Report",
         }
     ]
 
@@ -99,12 +88,12 @@ export function SideBar() {
         fileInputRef.current.click();
     }
 
-    return <><aside className={`px-4 py-10 transition-[width] duration-300 ${isSearching ? "w-[5%] border-r-0" : "w-[17%] border-r-[2px] border-[#262626]"} fixed left-0 top-0 h-[100vh] `}>
-        {!isSearching && <Link to="/home"><img src="/images/instagramiconswhite.png" alt="Instagram Logo" className="w-[6.5rem] ml-2 mb-9" /></Link>}
-        {isSearching && <NavLink to="/home"
+    return <><aside className={`px-4 py-10 hidden md:block transition-[width] bg-[#000] duration-300 ${isSearching ? "w-[5%] border-r-0" : "w-[17%] border-r-[2px] border-[#262626]"} fixed z-[100] left-0 top-0 h-[100vh] w-[5rem] lg:w-[17%]`}>
+        <Link to="/home"><img src="/images/instagramiconswhite.png" alt="Instagram Logo" className={`w-[6.5rem] ml-2 mb-9 ${isSearching ? "hidden" : "hidden lg:block"}`} /></Link>
+        <NavLink to="/home"
             className={({ isActive }) =>
-                `group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-block py-2 px-2 rounded-md mb-4 ${isActive ? "font-bold" : ""}`
-            }><InstagramSvg className="group-hover:scale-110 transition-transform duration-150" /></NavLink>}
+                `group hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-block py-2 px-2 rounded-md mb-4 ${isActive ? "font-bold" : ""} ${isSearching ? "" : "block lg:hidden"}`
+            }><InstagramSvg className="group-hover:scale-110 transition-transform duration-150" /></NavLink>
         <div className="flex flex-col gap-3">
             {sideBarItems?.map((item, i) => (
                 <SideBarItems item={item} key={i} isSearching={isSearching} />
@@ -112,46 +101,15 @@ export function SideBar() {
         </div>
         <div
             ref={checkref}
-            className={`gap-4 absolute bottom-5 group hover:bg-[rgba(255,255,255,.1)] transition cursor-pointer duration-300 inline-flex items-center p-2 rounded-md ${isOpen ? "font-bold" : ""} ${isSearching ? "w-10" : "w-[90%]"}`}
+            className={`gap-4 absolute bottom-5 group hover:bg-[rgba(255,255,255,.1)] transition cursor-pointer duration-300 inline-flex items-center p-2 rounded-md ${isOpen ? "font-bold" : ""} ${isSearching ? "w-10" : "lg:w-[90%] w-[50%]"}`}
             onClick={() => setIsOpen((prev) => !prev)}
         >
             <MoreIcon className="group-hover:scale-110 transition-transform duration-150" />
-            <p className={`text-[15px] ${isSearching ? "hidden" : ""}`}>More</p>
+            <p className={`text-[15px] ${isSearching ? "hidden" : "hidden lg:block"}`}>More</p>
         </div>
         <SearchBox refere={searchBoxRef} isSearching={isSearching} />
     </aside >
-        {
-            isOpen && <div className="fixed bg-[#262626] w-[13%] z-[50] modal bottom-20 left-8 rounded-[1rem]" ref={dropdownRef} >
-                <div className="border-b-[4px] border-[#353535] px-2 py-3">
-                    {moreArr.map((item, i) => (
-                        <Link
-                            key={i}
-                            to={item.to}
-                            className="gap-4 items-center py-3 group w-full hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex p-2 rounded-md"
-                        >
-                            {item.icon}
-                            <p className="text-[15px]">{item.title}</p>
-                        </Link>
-                    ))}
-                </div>
-                <div className="px-2 py-2.5">
-                    <Link
-                        to="/login"
-                        className="gap-4 items-center group w-full py-3 hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex p-4 rounded-md"
-                        onClick={() => {
-                            setMainLoading(true)
-                            setUserData([])
-                            localStorage.removeItem("token")
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 500)
-                        }}
-                    >
-                        <p className="text-[14px]">Log out</p>
-                    </Link>
-                </div>
-            </div>
-        }
+        <LogOutDiv isOpen={isOpen} dropdownRef={dropdownRef} />
         <CreatePost isCreating={isCreating} fileInputRef={fileInputRef} selectedImage={selectedImage} setIsCreating={setIsCreating} setSelectedImage={setSelectedImage} handleFileChange={handleFileChange} handleFile={handleFile} />
         <CreateStory creatingStory={createStory} setIsCreatingStory={setCreateStory} />
     </>

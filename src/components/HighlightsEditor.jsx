@@ -157,7 +157,7 @@ export function HighlightsEditor({ highLightsModal, setHighLightsModal }) {
                 <p>New highlight</p>
                 <IoCloseSharp
                     className={`absolute text-[25px] font-extralight top-2 right-2 z-[100000] cursor-pointer opacity-0 transition-all duration-500 ${isEditing ? "opacity-100" : "pointer-events-none"}`}
-                    onClick={() => handleClose()}
+                    onClick={handleClose}
                 />
             </div>
             <div className="w-full flex justify-center py-5 px-5 border-b-[1px] border-[#363636]">

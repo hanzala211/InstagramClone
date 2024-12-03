@@ -59,7 +59,7 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
         <Overlay handleClose={handleClose} isPostOpen={creatingStory} />
         <div
             className={`fixed opacity-0 top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${creatingStory ? "opacity-100" : "pointer-events-none"} border-y-[1px] border-[#363636] 
-        lg:block xl:w-[40vw] h-[72vh] sm:w-[60vw] `}
+        lg:block xl:w-[40vw] h-[72vh] sm:w-[30rem] w-[25rem] `}
         >
             <p className="text-[18px] absolute -top-9 left-1/2 -translate-x-1/2 sm:text-[16px] md:text-[18px]">
                 {!isUploading ? "Create New Story" : !uploaded ? "Story Sharing" : "Story Shared"}

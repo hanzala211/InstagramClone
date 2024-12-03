@@ -4,7 +4,7 @@ import { Link, NavLink, Outlet, useNavigate, useParams } from "react-router-dom"
 import { useEffect, useState } from "react";
 import { useSearch, useUser } from "../context/UserContext";
 import { Loader } from "../components/Loader";
-import { PostsIcon } from "../assets/Constants";
+import { MobilePostIcon, PostsIcon } from "../assets/Constants";
 import { HighLights } from "../components/Highlights";
 import { LoadingPage } from "./LoadingPage";
 import { formatNumber } from "../utils/helper";
@@ -127,11 +127,11 @@ export function SearchProfile() {
 
     return <>
         {!mainLoading ?
-            <section className="w-full max-w-[60%] mx-auto">
-                <div className="w-full max-w-[61rem] pb-9 pt-20 border-b-[2px] border-[#262626]">
-                    <div className="flex flex-col xl:flex-row w-full gap-10 xl:gap-20 ml-10 items-center relative">
+            <section className="w-full lg:max-w-[60%] mx-auto">
+                <div className="w-full max-w-[61rem] pb-9 lg:pt-20 pt-5 md:border-b-[2px] md:border-[#262626]">
+                    <div className="flex w-full xl:gap-20 lg:gap-5 gap-3 ml-3 items-center relative">
                         {searchUserNotes.length > 0 &&
-                            <div className="absolute xl:-top-1 top-16 left-[7%] z-[1] cursor-pointer">
+                            <div className="absolute md:top-5 lg:-top-1 top-2 left-[8%] md:left-[6%] xl:left-[15%] lg:left-[10%] cursor-pointer">
                                 <NoteTooltip isProfile={true} note={searchUserNotes[0]} />
                             </div>
                         }
@@ -141,18 +141,20 @@ export function SearchProfile() {
                             <img src={selectedProfile.profilePic} alt="User Profile" className="rounded-full w-32 xl:w-40" />
                         </Link>
                         <div className="flex flex-col gap-6 mt-6 xl:mt-0">
-                            <div className="flex gap-6 items-center">
+                            <div className="flex md:flex-row flex-col gap-6 md:items-center">
                                 <Link className="text-[20px] flex items-center gap-1">
                                     {selectedProfile.userName}
                                     {selectedProfile?.followers.length > 10 && <MdVerified className="fill-[#0095F6]" />}
                                 </Link>
-                                {isFollowed ?
-                                    <button disabled={isDisabled} className={`bg-[#363636] px-7 py-1 rounded-lg ${isDisabled ? "opacity-50" : ""}`} onClick={() => unfollowUser()}>Unfollow</button>
-                                    :
-                                    <button disabled={isDisabled} className={`bg-[#0095F6] px-7 py-1 rounded-lg ${isDisabled ? "opacity-50" : ""}`} onClick={() => followUser()}>Follow</button>
-                                }
+                                <div>
+                                    {isFollowed ?
+                                        <button disabled={isDisabled} className={`bg-[#363636] px-7 py-1 rounded-lg sm:w-32 1280:w-auto ${isDisabled ? "opacity-50" : ""}`} onClick={() => unfollowUser()}>Unfollow</button>
+                                        :
+                                        <button disabled={isDisabled} className={`bg-[#0095F6] px-7 py-1 rounded-lg ${isDisabled ? "opacity-50" : ""}`} onClick={() => followUser()}>Follow</button>
+                                    }
+                                </div>
                             </div>
-                            <div className="flex gap-10 items-center">
+                            <div className="md:flex hidden gap-10 items-center">
                                 <p className="flex gap-1.5"><span className="font-semibold">{formatNumber(selectedProfile.postCount)}</span>posts</p>
                                 <p className="flex gap-1.5"><span className="font-semibold">{formatNumber(selectedProfile.followersCount)}</span>followers</p>
                                 <p className="flex gap-1.5"><span className="font-semibold">{formatNumber(selectedProfile.followingCount)}</span>following</p>
@@ -175,13 +177,24 @@ export function SearchProfile() {
                         )}
                     </div>
                 </div>
-                <div className="absolute xl:left-[57%] left-[60%] -translate-x-1/2 flex gap-10">
+                <div className="flex justify-evenly py-2 border-y-[1px] border-[#262626] md:hidden">
+                    <p className="flex mr-10 flex-col items-center gap-0.5 w-[33%]"><span className="font-semibold">{formatNumber(userData.data.user.postCount)}</span><span className="text-[13px] text-[#a8a8a8]">posts</span></p>
+                    <button className="flex mr-10 flex-col items-center gap-0.5 w-[33%]"><span className="font-semibold">{formatNumber(userData.data.user.followersCount)}</span><span className="text-[13px] text-[#a8a8a8]">followers</span></button>
+                    <button className="flex flex-col items-center gap-0.5 w-[33%]"><span className="font-semibold">{formatNumber(userData.data.user.followingCount)}</span><span className="text-[13px] text-[#a8a8a8]">following</span></button>
+                </div>
+                <div className="absolute left-[57%] -translate-x-1/2 md:flex hidden gap-10">
                     <NavLink end to={`/search/${selectedProfile.userName}/`}
                         className={({ isActive }) => `flex items-center tracking-wider py-3 gap-1 text-[12px] ${isActive ? "font-semibold border-t-[2px]" : "text-[#A8A8A8]"}`}>
                         <PostsIcon /> POSTS
                     </NavLink>
                 </div>
-                <div className="mt-[4rem]">
+                <div className="flex md:hidden justify-center border-b-[1px] border-[#262626] gap-10">
+                    <NavLink end to={`/search/${selectedProfile.userName}/`}
+                        className={({ isActive }) => `flex w-[35%] items-center justify-center tracking-wider py-3 gap-1 ${isActive ? "font-semibold border-t-[2px]" : "text-[#A8A8A8]"}`}>
+                        <MobilePostIcon />
+                    </NavLink>
+                </div>
+                <div className="md:mt-[4rem] mt-6">
                     {!postsLoading ? <Outlet /> : <Loader height="h-[34vh]" />}
                 </div>
             </section>

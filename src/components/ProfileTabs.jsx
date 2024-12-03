@@ -55,7 +55,7 @@ export function ProfileTabs({ isPosts, isTagged, isSaved, isSearchPosts }) {
                 <h1 className="text-[25px] font-extrabold">{isPosts ? "Share photos" : isTagged ? "Photos of you" : isSaved ? "Saved Posts" : isSearchPosts ? "No posts yet" : ""}</h1>
                 <p className="text-[13px]">{isPosts ? "When you share photos, they will appear on your profile." : isTagged ? "When people tag you in photos, they'll appear here." : isSaved ? "When you save posts, they will appear on your profile" : ""}</p>
             </div> :
-            <div className="xl:max-w-[100%] h-auto grid lg:grid-cols-3 grid-cols-2 gap-[10px]">
+            <div className="xl:max-w-[100%] mb-16 md:mb-0 h-auto grid lg:grid-cols-3 grid-cols-2 gap-[10px]">
                 {isPosts ? reversedPosts.map((item, i, arr) =>
                     <PostModal key={i} i={i} arr={arr} item={item} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} />) :
                     isTagged ? reversedPosts.map((item, i, arr) =>

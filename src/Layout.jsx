@@ -5,6 +5,7 @@ import { LoadingPage } from "./pages/LoadingPage";
 import { Footer } from "./components/Footer";
 import { useEffect } from "react";
 import { fetchUserDataOnClick } from "./utils/helper";
+import { MobileBar } from "./components/MobileBar";
 
 export function Layout({ token }) {
     const { mainLoading, setMainLoading, setUserData, message, setMessage } = useUser();
@@ -56,9 +57,10 @@ export function Layout({ token }) {
 
     return <>
         {!mainLoading ? <section className="flex flex-row w-full items-center">
-            <div className="w-[17%] left-0 top-0 h-[100vh]"></div>
+            <div className="w-[17%] left-0 top-0 md:block hidden h-[100vh]"></div>
             <SideBarProvider>
                 <SideBar />
+                <MobileBar />
             </SideBarProvider>
             <div className="flex flex-col gap-10 w-full">
                 <Outlet />

@@ -30,7 +30,10 @@ const SideBarContext = createContext();
 
 export function SideBarProvider({ children }) {
     const [isSearching, setIsSearching] = useState(false);
-    return <SideBarContext.Provider value={{ isSearching, setIsSearching }}>{children}</SideBarContext.Provider>
+    const [isCreating, setIsCreating] = useState(false);
+    const [createStory, setCreateStory] = useState(false);
+
+    return <SideBarContext.Provider value={{ isSearching, setIsSearching, isCreating, setIsCreating, createStory, setCreateStory }}>{children}</SideBarContext.Provider>
 }
 
 export function useSideBar() {

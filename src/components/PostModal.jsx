@@ -10,8 +10,8 @@ export function PostModal({ arr, i, setSelectedPost, setIsPostOpen, setCurrentPo
         setIsPostOpen(true)
         setCurrentPost(i);
     }}>
-        <div className="absolute right-3 top-2">
-            {item?.imageUrls.length > 1 ? <PiCopySimpleLight className="text-[25px]" /> : ""}
+        <div className="absolute md:right-3 md:top-2 right-1 top-1">
+            {item?.imageUrls.length > 1 ? <PiCopySimpleLight className="text-[18px] md:text-[25px]" /> : ""}
         </div>
         <div className="absolute z-10 flex items-center justify-center gap-2 w-full h-full opacity-0 group-hover:opacity-100" style={{ backgroundColor: "rgba(0, 0, 0, 0.3)" }}>
             <p className="text-[17px] font-semibold flex items-center gap-2"><FaHeart /> {formatNumber(item?.likeCount)}</p>

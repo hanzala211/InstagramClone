@@ -92,3 +92,10 @@ body::-webkit-scrollbar {
 	object-fit: cover;
 	opacity: 1;
 }
+@media (max-width: 768px){
+	.flexBox{
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+}

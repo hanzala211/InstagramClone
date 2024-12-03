@@ -123,7 +123,7 @@ export function CreatePost({
                     <SelectImage handleFile={handleFile} fileInputRef={fileInputRef} handleFileChange={handleFileChange} />
                 ) : (
                     <div
-                        className={`bg-[#262626] 1280:w-[70rem] w-[30rem] h-[80vh] lg:w-[60rem] lg:h-[85vh] 2xl:w-[86rem] 2xl:h-[90vh] 1280:h-[88vh] transition-all duration-300 flex flex-col overflow-auto scrollbar-hidden`}
+                        className={`bg-[#262626] 1280:w-[70rem] w-[25rem] h-[70vh] sm:w-[40rem] sm:h-[50vh] md:w-[50rem] lg:w-[60rem] lg:h-[85vh] 2xl:w-[86rem] 2xl:h-[90vh] 1280:h-[88vh] transition-all duration-300 flex flex-col overflow-auto scrollbar-hidden`}
                     >
                         <div className="relative w-full h-full">
                             {!loading && !isCaption ? (
@@ -162,7 +162,7 @@ export function CreatePost({
                                 />
                             ) : isShared ? (
                                 <div
-                                    className={`bg-[#262626] w-full h-[72vh] flex flex-col justify-center items-center`}
+                                    className={`bg-[#262626] w-full h-[50vh] lg:h-[72vh] flex flex-col justify-center items-center`}
                                 >
                                     {shareLoading ? (
                                         <img

@@ -24,10 +24,10 @@ export function Home() {
         fetchHomePosts(userData, setHomePosts, setIsPostsLoading, setHasMore)
     }, [])
 
-    return <><section className="w-full max-w-[40%] mx-auto">
+    return <><section className="w-full lg:max-w-[40%] max-w-[95%] mb-20 md:mb-2 mx-auto">
         <div className={`flex flex-col gap-2 w-full ${isPostsLoading || homePosts.length === 0 ? "h-[90vh]" : ""} ${homePosts.length < 2 ? "h-[90vh]" : ""}`}>
             {!isPostsLoading ?
-                <InfiniteScroll dataLength={homePosts.length} loader={homePosts.length > 0 && <Loader height="h-[10vh] overflow-scroll scrollbar-hidden" />} next={() => {
+                <InfiniteScroll dataLength={homePosts.length} loader={homePosts.length > 0 && <Loader height="md:h-[10vh] h-[15vh] overflow-scroll scrollbar-hidden" />} next={() => {
                     fetchHomePosts(userData, setHomePosts, setIsPostsLoading, setHasMore)
                 }} hasMore={hasMore} >
                     {

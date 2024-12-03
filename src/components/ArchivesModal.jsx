@@ -46,7 +46,7 @@ export function ArchivesModal({ selectStatus, setSelectCover, selectedIDs, selec
     }
 
     return <>
-        <div className={`w-full max-w-[30vw] overflow-hidden bg-[#262626] rounded-xl h-[75vh] fixed inset-0 z-[100] top-1/2 ${left} -translate-x-1/2 -translate-y-1/2 opacity-0 transition duration-500 ${selectStatus && !selectCover ? "opacity-100" : "pointer-events-none"}`}>
+        <div className={`w-full md:max-w-[30rem] max-w-[25rem] overflow-hidden bg-[#262626] rounded-xl h-[75vh] fixed inset-0 z-[100] top-1/2 ${left} -translate-x-1/2 -translate-y-1/2 opacity-0 transition duration-500 ${selectStatus && !selectCover ? "opacity-100" : "pointer-events-none"}`}>
             <div className="text-center w-full py-3 border-b-[1px] border-[#363636]">
                 <button className="absolute text-[30px] top-2.5 left-0" onClick={() => setSelectStatus(false)}>
                     <MdKeyboardArrowLeft />
@@ -59,7 +59,7 @@ export function ArchivesModal({ selectStatus, setSelectCover, selectedIDs, selec
             </div>
             <div className="overflow-auto h-[65vh]">
                 {!loadingArchives ?
-                    <div className="grid grid-cols-3 gap-[3px]">
+                    <div className={`${archives.length === 0 ? "flex items-center" : ""} md:grid md:grid-cols-3 md:gap-[3px]`}>
                         {archives !== undefined && archives.length > 0 ? archives.map((item, i) => {
                             return <label key={i} className={`relative hover:opacity-50 ${selectedIDs.some((pack) => pack._id === item._id) ? "opacity-50" : ""}`} >
                                 <img src={item.imageUrl} alt="Story Image" className="w-96" />
@@ -77,7 +77,7 @@ export function ArchivesModal({ selectStatus, setSelectCover, selectedIDs, selec
                                     }}
                                 />
                             </label>
-                        }) : <div className="text-[#8e8e8e] h-[63vh] mx-[12rem] text-center w-full">
+                        }) : <div className="text-[#8e8e8e] h-[63vh] text-center w-[25rem] md:w-[30rem] mx-auto">
                             <p>No items found in this archive.</p>
                             <p className="text-[#a2a2a2]">Start adding some stories to see them here!</p>
                         </div>}

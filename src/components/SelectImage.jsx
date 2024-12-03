@@ -1,7 +1,7 @@
 import { CreatePosts } from "../assets/Constants";
 
 export function SelectImage({ handleFile, fileInputRef, handleFileChange }) {
-    return <div className="bg-[#262626] flex items-center justify-center flex-col gap-2 w-full sm:w-[60vw] xl:w-[40vw] h-[72vh] px-5 py-5">
+    return <div className="bg-[#262626] flex items-center justify-center flex-col gap-2 w-[25rem] md:w-[40rem] 1280:w-[40vw] h-[72vh] px-5 py-5">
         <CreatePosts />
         <p className="text-[20px]">Drag photos and videos here</p>
         <button

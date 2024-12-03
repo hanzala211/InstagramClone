@@ -28,9 +28,9 @@ export function Archive() {
         fetchArchive()
     }, [])
     return <>
-        <section className="w-full max-w-[75%] grid grid-rows-[22vh,auto] gap-10 mx-auto">
+        <section className="w-full lg:max-w-[75%] grid grid-rows-[22vh,auto] gap-10 mx-auto">
             <div className="relative mt-7 border-b-[1px] border-[#262626]">
-                <Link onClick={() => navigate(-1)} className="flex gap-2 w-[6rem] items-center">
+                <Link onClick={() => navigate(-1)} className="flex gap-2 ml-3 md:ml-0 w-[6rem] items-center">
                     <LeftArrow />
                     <h2 className="text-[20px]">Archive</h2>
                 </Link>

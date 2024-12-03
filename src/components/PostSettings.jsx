@@ -95,7 +95,7 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
             onClick={handleClose}
         ></div>
         <div
-            className={`bg-[#262626] xl:w-96 w-72 rounded-2xl fixed z-[1000000] opacity-0 transition duration-300 inset-0 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 
+            className={`bg-[#262626] xl:w-96 w-72 rounded-2xl fixed z-[10000] opacity-0 transition duration-300 inset-0 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 
               ${!isPostSettingOpen ? "pointer-events-none" : "opacity-100"} 
               ${isMyPost ? "xl:h-[14.5rem] h-[12.2rem]" : "xl:h-[8.5rem] h-[7rem]"}`}
             style={{

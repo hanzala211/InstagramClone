@@ -292,8 +292,8 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
                     return <img src={item} key={i} alt="Posts" className="w-full object-cover" />
                 }) : ""}
             </div>
-            {item?.imageUrls.length > 1 ? <> {item !== null && currentIndex[index] !== totalIndex[index] - 1 && <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={() => handleIncrease(index)}><FaArrowRight className="fill-black" /></button>}
-                {currentIndex[index] !== 0 && <button className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={() => handleDecrease(index)}><FaArrowLeft className="fill-black" /></button>}
+            {item?.imageUrls.length > 1 ? <> {item !== null && currentIndex[index] !== totalIndex[index] - 1 && <button className="absolute md:right-4 right-1 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={() => handleIncrease(index)}><FaArrowRight className="fill-black" /></button>}
+                {currentIndex[index] !== 0 && <button className="absolute md:left-4 left-1 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={() => handleDecrease(index)}><FaArrowLeft className="fill-black" /></button>}
             </> : ""}
         </div>
         <div className="flex flex-col gap-2 w-full">

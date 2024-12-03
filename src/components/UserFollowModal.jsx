@@ -3,6 +3,7 @@ import { useSearch, useUser } from "../context/UserContext";
 import { useEffect, useState } from "react";
 import { UserModal } from "./UserModal";
 import { Skeleton } from "./Skeleton";
+import { Overlay } from "./Overlay";
 
 export function UserFollowModal({ isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen }) {
     const { userData, userFollowers, setUserFollowers, userFollowing, setUserFollowing } = useUser();
@@ -81,15 +82,7 @@ export function UserFollowModal({ isFollowerModalOpen, setIsFollowerModalOpen, i
 
 
     return <>
-        <IoCloseSharp
-            className={`fixed text-[35px] top-8 right-9 z-[100000] cursor-pointer opacity-0 ${isFollowerModalOpen || isFollowingModalOpen ? "opacity-100" : "pointer-events-none"}`}
-            onClick={handleClose}
-        />
-        <div
-            className={`overlay opacity-0 transition-all z-[50] duration-500 ${isFollowerModalOpen || isFollowingModalOpen ? "backdrop-blur-sm opacity-100" : "pointer-events-none"
-                }`}
-            onClick={handleClose}
-        ></div>
+        <Overlay handleClose={handleClose} isPostOpen={isFollowerModalOpen || isFollowingModalOpen} />
         <div className={`fixed opacity-0 top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isFollowerModalOpen || isFollowingModalOpen ? "opacity-100" : "pointer-events-none"} w-full max-w-[20rem] rounded-xl border-y-[1px] bg-[#363636] border-[#363636]`}>
             <div className="border-b-[1px] border-[#252525] h-[2rem]">
                 <h1 className="absolute left-1/2 top-1 text-[14px] -translate-x-1/2">User {isFollowerModalOpen ? "Followers" : "Following"} </h1>
