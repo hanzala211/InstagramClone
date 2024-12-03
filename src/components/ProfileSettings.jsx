@@ -144,9 +144,9 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
 
     return <>
         <Overlay handleClose={handleClose} isPostOpen={isEditOpen} />
-        <div className={`fixed flex items-center left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 justify-center z-[150] w-full md:max-w-[45rem] md:h-[75vh] max-w-[25rem] h-[76vh] transition-opacity duration-500 ${isEditOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        <div className={`fixed flex items-center left-1/2 -translate-x-1/2 top-[48%] md:top-1/2 -translate-y-1/2 justify-center z-[150] w-full md:max-w-[45rem] md:h-[75vh] 440:max-w-[25rem] max-w-[23rem] h-[75vh] transition-opacity duration-500 ${isEditOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         >
-            <div className="bg-[#262626] w-full h-full overflow-auto scrollbar-hidden md:rounded-3xl rounded-xl px-5 md:px-10 md:py-10 py-3">
+            <div className="bg-[#262626] w-full h-full overflow-auto scrollbar-hidden md:rounded-3xl rounded-xl px-5 md:px-10 md:py-10 py-6">
                 <h2 className="text-[25px] font-semibold">Edit Profile</h2>
                 <div className="flex flex-row items-center justify-between bg-[#424242] rounded-2xl my-5 px-2 md:px-4 py-2 w-full">
                     <div className="flex gap-4 items-center">

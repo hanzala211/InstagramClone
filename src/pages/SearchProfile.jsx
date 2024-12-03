@@ -138,7 +138,7 @@ export function SearchProfile() {
                         <Link to={searchUserStatus.length > 0 ? `/search/stories/${selectedProfile.userName}/${searchUserStatus[0]._id}/` : ""}
                             className={`p-2 ${searchUserStatus.length > 0 ? "relative rounded-full multicolor-border" : ""}`}
                             onClick={() => setCurrentStory(0)}>
-                            <img src={selectedProfile.profilePic} alt="User Profile" className="rounded-full w-32 xl:w-40" />
+                            <img src={selectedProfile.profilePic} alt="User Profile" className="rounded-full w-20 sm:w-28 lg:w-40 md:min-w-[6rem] min-w-[3rem]" />
                         </Link>
                         <div className="flex flex-col gap-6 mt-6 xl:mt-0">
                             <div className="flex md:flex-row flex-col gap-6 md:items-center">
@@ -165,7 +165,7 @@ export function SearchProfile() {
                             </div>
                         </div>
                     </div>
-                    <div className="flex gap-10 ml-5 mt-16 h-[7.3rem] overflow-x-auto scrollbar-hidden">
+                    <div className={`flex gap-10 ml-5 md:mt-16 mt-5 ${searchUserHighLights.length === 0 ? "" : "md:h-36 h-24"} overflow-x-auto scrollbar-hidden`}>
                         {searchUserHighLights.length > 0 && searchUserHighLights.map((item, i, arr) =>
                             <Link to={`/search/stories/highlight/${arr[i]._id}/`} key={i} onClick={() => {
                                 setHighLightStories(searchUserHighLights[i].stories)

@@ -201,10 +201,10 @@ export function Profile() {
                         setIsNoteEditOpen(true);
                     }
                 }}>
-                    {!isNoteEditOpen ? <div className="absolute md:top-2 lg:-top-1 top-7 left-[3.5rem] 440:top-2 440:left-[3rem] md:left-[6%] lg:left-[5rem] xl:left-[8rem] z-[1]"><NoteTooltip isProfile={true} note={note} noteLoading={noteLoading} /></div> : <div ref={noteEditorRef} className="absolute md:top-2 lg:top-20 top-2 left-[22rem] md:left-[20rem] lg:left-0 xl:left-[8rem] z-[1]"><NoteEditor setIsNoteEditOpen={setIsNoteEditOpen} /></div>}
+                    {!isNoteEditOpen ? <div className="absolute md:top-2 lg:-top-1 top-6 left-[3rem] 440:top-2 440:left-[3rem] md:left-[6%] lg:left-[5rem] xl:left-[8rem] z-[1]"><NoteTooltip isProfile={true} note={note} noteLoading={noteLoading} /></div> : <div ref={noteEditorRef} className="absolute md:top-2 lg:top-20 top-2 left-[22rem] md:left-[20rem] lg:left-0 xl:left-[8rem] z-[1]"><NoteEditor setIsNoteEditOpen={setIsNoteEditOpen} /></div>}
                 </div>
                 <Link to={stories.length > 0 ? `/stories/${userData.data.user.userName}/${stories[0]._id}/` : ""} className={`p-2 ${stories.length > 0 ? "relative rounded-full multicolor-border" : ""}`} onClick={() => setCurrentStory(0)}>
-                    <img src={userData?.data?.user.profilePic} alt="User Profile" className="rounded-full w-28 lg:w-40 min-w-[6rem]" />
+                    <img src={userData?.data?.user.profilePic} alt="User Profile" className="rounded-full w-20 sm:w-28 lg:w-40 md:min-w-[6rem] min-w-[3rem]" />
                 </Link>
                 <div className="flex flex-col gap-6 mt-6 xl:mt-0">
                     <div className="flex gap-6 md:flex-row flex-col md:items-center">
@@ -215,8 +215,8 @@ export function Profile() {
                             </button>
                             <LogOutDiv isOpen={isOpen} dropdownRef={dropdownRef} isMobile={true} />
                         </Link>
-                        <div className="flex gap-3 flex-col 440:flex-row 440:items-center">
-                            <button className="bg-[#363636] px-4 py-1 w-28 440:w-32 1280:w-auto rounded-[0.5rem] text-[14px] hover:bg-[rgb(38,38,38)] transition duration-150" onClick={() => setIsEditOpen(true)}>Edit Profile</button>
+                        <div className="flex gap-3 flex-row 440:items-center">
+                            <button className="bg-[#363636] md:px-4 py-1 w-24 440:w-32 1280:w-auto rounded-[0.5rem] text-[14px] hover:bg-[rgb(38,38,38)] transition duration-150" onClick={() => setIsEditOpen(true)}>Edit Profile</button>
                             <Link to="/archive/stories/" className="bg-[#363636] w-32 440:w-32 1280:w-auto px-5 py-1 rounded-[0.5rem] text-[14px] flex justify-center hover:bg-[rgb(38,38,38)] transition duration-150 ">View Archive</Link>
                         </div>
                     </div>
@@ -231,7 +231,7 @@ export function Profile() {
                     </div>
                 </div>
             </div>
-            <div className="flex gap-10 ml-5 mt-16 h-36 overflow-x-auto scrollbar-hidden">
+            <div className="flex gap-10 ml-5 md:mt-16 mt-5 md:h-36 h-24 overflow-x-auto scrollbar-hidden">
                 {highlights.length > 0 && highlights.map((item, i, arr) => (
                     <Link to={`/stories/highlight/${arr[i]._id}/`} key={i} onClick={() => {
                         setHighLightStories(highlights[i].stories);
