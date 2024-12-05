@@ -118,7 +118,7 @@ export function Explore() {
     }
 
     return <><section className={`w-full lg:max-w-[80%] xl:max-w-[60%] max-w-[95%] mt-10 mx-auto ${isPostsLoading || explorePagePosts.length === 0 ? "h-[85vh]" : ""} ${explorePagePosts.length < 4 ? "xl:h-[95vh]" : ""}`}>
-        <div ref={containerRef} className="bg-[#121212] w-full flex gap-3 items-center p-3 h-[3.5rem] fixed top-0 z-[50] left-0">
+        <div ref={containerRef} className="bg-[#121212] w-full md:hidden flex gap-3 items-center p-3 h-[3.5rem] fixed top-0 z-[50] left-0">
             <input ref={inputRef} type="text" name="search" id="search" placeholder="Search" className={`bg-[#000] border-[1px] border-[#6F6F6F] rounded-md py-1 px-3 outline-none ${isSearching ? "w-[22rem]" : "w-96"}`} onFocus={() => setIsSearching(true)} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             {isSearching && <button className="text-[14px]" onClick={() => setIsSearching(false)}>Cancel</button>}
         </div>
