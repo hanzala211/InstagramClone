@@ -172,14 +172,14 @@ export function Profile() {
                     <div className="flex gap-4 sm:gap-6 md:flex-row flex-col md:items-center">
                         <Link className="text-[20px] relative flex items-center gap-1">{userData?.data?.user.userName}
                             {userData !== undefined && userData?.data.user.followers.length > 10 && <MdVerified className="fill-[#0095F6]" />}
-                            <button ref={checkref} onClick={() => setIsOpen((prev) => !prev)}>
+                            <button className="block md:hidden" ref={checkref} onClick={() => setIsOpen((prev) => !prev)}>
                                 <SettingIcon />
                             </button>
                             <LogOutDiv isOpen={isOpen} dropdownRef={dropdownRef} isMobile={true} />
                         </Link>
                         <div className="flex gap-3 flex-row 440:items-center">
                             <button className="bg-[#363636] md:px-4 py-1 w-24 440:w-32 1280:w-auto rounded-[0.5rem] text-[14px] hover:bg-[rgb(38,38,38)] transition duration-150" onClick={() => setIsEditOpen(true)}>Edit Profile</button>
-                            <Link to="/archive/stories/" className="bg-[#363636] w-32 440:w-32 1280:w-auto px-5 py-1 rounded-[0.5rem] text-[14px] flex justify-center hover:bg-[rgb(38,38,38)] transition duration-150 ">View Archive</Link>
+                            <Link to="/archive/stories/" className="bg-[#363636] w-32 440:w-32 1280:w-auto px-5 py-1 rounded-[0.5rem] text-[14px] flex justify-center hover:bg-[rgb(38,38,38)] transition duration-150">View Archive</Link>
                         </div>
                     </div>
                     <div className="md:flex hidden gap-10 items-center">
