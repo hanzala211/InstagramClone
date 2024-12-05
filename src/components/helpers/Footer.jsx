@@ -10,5 +10,4 @@ export function Footer() {
         </div>
         <p className="text-[12px] sm:text-[14px] text-[#A8A8A8] mt-2">© 2024 Instagram from Meta</p>
     </footer>
-
 }
