@@ -32,8 +32,8 @@ export function NoteEditor() {
     }
 
     return <div className="absolute w-[20rem] h-[20rem] px-4 flex items-center flex-col justify-evenly bg-[#262626] rounded-xl -left-80 top-[5.2rem] z-[100] lg:left-0 lg:top-0 lg:w-[18rem] lg:h-[18rem]">
-        <div className="absolute top-[8%] left-[43%] cursor-pointer lg:top-[5%] lg:left-[50%] lg:transform lg:-translate-x-1/2">
-            <NoteTooltip isProfile={true} note={note} className="text-[18px]" />
+        <div className="absolute top-[3rem] left-[50%] cursor-pointer lg:top-[12%] -translate-x-1/2">
+            <NoteTooltip isProfile={true} note={note} className="md:text-[18px]" />
         </div>
         <img src={userData?.data?.user.profilePic} alt="User Profile" className="rounded-full w-40" />
         <div className="w-full flex flex-col gap-2 relative">

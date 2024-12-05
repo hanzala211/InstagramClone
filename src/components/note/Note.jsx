@@ -2,11 +2,10 @@ import { Loader } from "../helpers/Loader";
 
 const NoteTooltip = ({ isProfile, noteValue, setNoteValue, note, className, noteLoading }) => {
     return (
-        <div className="relative inline-block">
+        <div className="relative">
             <div
-                className={`absolute -top-8 left-1/2 transform -translate-x-1/2 bg-[rgb(54,54,54)] text-white text-sm rounded-2xl px-4 py-3 flex items-center space-x-1 shadow-lg  ${isProfile ? "" : "max-w-48 w-48 pt-5"
+                className={`absolute -top-8 left-1/2 transform -translate-x-1/2 bg-[rgb(54,54,54)] text-white text-sm md:rounded-2xl rounded-xl md:px-4 md:py-3 p-2 flex items-center space-x-1 shadow-lg  ${isProfile ? "" : "max-w-48 w-full pt-5"
                     }`}
-                style={{ minWidth: isProfile ? "4rem" : "10rem" }}
             >
                 {!noteLoading ? (
                     isProfile ? (
