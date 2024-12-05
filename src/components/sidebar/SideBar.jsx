@@ -101,7 +101,7 @@ export function SideBar() {
         </div>
         <div
             ref={checkref}
-            className={`gap-4 absolute bottom-5 group hover:bg-[rgba(255,255,255,.1)] transition cursor-pointer duration-300 inline-flex items-center p-2 rounded-md ${isOpen ? "font-bold" : ""} ${isSearching ? "w-10" : "lg:w-[90%] w-[50%]"}`}
+            className={`gap-4 absolute bottom-5 group hover:bg-[rgba(255,255,255,.1)] transition cursor-pointer duration-300 inline-flex items-center p-2 rounded-md ${isOpen ? "font-bold" : ""} ${isSearching ? "w-10" : "lg:w-[80%] w-[50%]"}`}
             onClick={() => setIsOpen((prev) => !prev)}
         >
             <MoreIcon className="group-hover:scale-110 transition-transform duration-150" />

@@ -18,7 +18,7 @@ export function LogOutDiv({ isOpen, dropdownRef, isMobile }) {
     ]
     return <>
         {
-            isOpen && <div className={`absolute bg-[#262626] w-full md:max-w-[12%] max-w-[70%] z-[300] modal rounded-[1rem] ${isMobile ? "top-8 left-16 440:left-24" : "bottom-20 left-8"}`} ref={dropdownRef} >
+            isOpen && <div className={`absolute bg-[#262626] w-full md:max-w-[12rem] max-w-[70%] z-[300] modal rounded-[1rem] ${isMobile ? "top-8 left-16 440:left-24" : "bottom-20 left-16"}`} ref={dropdownRef} >
                 <div className="border-b-[4px] border-[#353535] px-2 py-3">
                     {moreArr.map((item, i) => (
                         <Link
