@@ -17,8 +17,11 @@ export function UserProvider({ children }) {
     const [userSaves, setUserSaves] = useState([]);
     const [userFollowers, setUserFollowers] = useState([])
     const [userFollowing, setUserFollowing] = useState([])
+    const [isNoteEditOpen, setIsNoteEditOpen] = useState(false);
+    const [isFollowerModalOpen, setIsFollowerModalOpen] = useState(false)
+    const [isFollowingModalOpen, setIsFollowingModalOpen] = useState(false)
 
-    return <UserContext.Provider value={{ userData, setUserData, mainLoading, setMainLoading, userPosts, setUserPosts, message, setMessage, note, setNote, stories, setStories, archives, setArchives, loadingArchives, setLoadingArchives, currentStory, setCurrentStory, highlights, setHighlights, highLightStories, setHighLightStories, currentHighLight, setCurrentHighLight, userSaves, setUserSaves, userFollowers, setUserFollowers, userFollowing, setUserFollowing }}>{children}</UserContext.Provider>
+    return <UserContext.Provider value={{ userData, setUserData, mainLoading, setMainLoading, userPosts, setUserPosts, message, setMessage, note, setNote, stories, setStories, archives, setArchives, loadingArchives, setLoadingArchives, currentStory, setCurrentStory, highlights, setHighlights, highLightStories, setHighLightStories, currentHighLight, setCurrentHighLight, userSaves, setUserSaves, userFollowers, setUserFollowers, userFollowing, setUserFollowing, isNoteEditOpen, setIsNoteEditOpen, isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen }}>{children}</UserContext.Provider>
 }
 
 export function useUser() {

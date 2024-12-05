@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react"
 import { useSearch, useUser } from "../context/UserContext";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Loader } from "../components/Loader";
+import { Loader } from "../components/helpers/Loader";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { Post } from "../components/Post";
+import { Post } from "../components/post/Post";
 import { usePost } from "../context/PostContext";
-import { PostModal } from "../components/PostModal";
+import { PostModal } from "../components/post/PostModal";
 import { fetchSearch } from "../utils/helper";
-import { UserModal } from "../components/UserModal";
+import { UserModal } from "../components/usermodals/UserModal";
 
 export function Explore() {
     const { userData } = useUser();

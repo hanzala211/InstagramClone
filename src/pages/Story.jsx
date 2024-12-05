@@ -5,7 +5,7 @@ import { MdVerified } from "react-icons/md";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { MoreSVG } from "../assets/Constants";
 import { useState } from "react";
-import { HighlightsEditor } from "../components/HighlightsEditor";
+import { HighlightsEditor } from "../components/story/HighlightsEditor";
 import { formatDate } from "../utils/helper";
 
 export function Story({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSearchHighLight }) {

@@ -1,13 +1,13 @@
 import { MdVerified } from "react-icons/md";
-import NoteTooltip from "../components/Note";
+import NoteTooltip from "../components/note/Note";
 import { Link, NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSearch, useUser } from "../context/UserContext";
-import { Loader } from "../components/Loader";
+import { Loader } from "../components/helpers/Loader";
 import { MobilePostIcon, PostsIcon } from "../assets/Constants";
-import { HighLights } from "../components/Highlights";
+import { HighLights } from "../components/story/Highlights";
 import { LoadingPage } from "./LoadingPage";
-import { formatNumber } from "../utils/helper";
+import { UserFollowDetails } from "../components/usermodals/UserFollowDetails";
 
 export function SearchProfile() {
     const { setSearchUserPosts, selectedProfile, searchUserStatus, setSearchUserStatus, searchUserHighLights, setSearchUserHighLights, setSelectedProfile } = useSearch();
@@ -128,10 +128,10 @@ export function SearchProfile() {
     return <>
         {!mainLoading ?
             <section className="w-full lg:max-w-[60%] mx-auto">
-                <div className="w-full max-w-[61rem] pb-9 lg:pt-20 pt-5 md:border-b-[2px] md:border-[#262626]">
-                    <div className="flex w-full xl:gap-20 lg:gap-5 gap-3 ml-3 items-center relative">
+                <div className="w-full max-w-[61rem] pb-9 lg:pt-20 pt-8 md:border-b-[2px] md:border-[#262626]">
+                    <div className="flex w-full xl:gap-20 lg:gap-5 gap-3 ml-3 items-start sm:items-center relative">
                         {searchUserNotes.length > 0 &&
-                            <div className="absolute md:top-5 lg:-top-1 top-2 left-[8%] md:left-[6%] xl:left-[15%] lg:left-[10%] cursor-pointer">
+                            <div className="absolute md:top-2 lg:-top-1 -top-2 left-[3rem] sm:top-1 sm:left-[3.5rem] md:left-[6%] lg:left-[5rem] xl:left-[4.5rem] xl:-top-2 z-[1]">
                                 <NoteTooltip isProfile={true} note={searchUserNotes[0]} />
                             </div>
                         }
@@ -140,8 +140,8 @@ export function SearchProfile() {
                             onClick={() => setCurrentStory(0)}>
                             <img src={selectedProfile.profilePic} alt="User Profile" className="rounded-full w-20 sm:w-28 lg:w-40 md:min-w-[6rem] min-w-[3rem]" />
                         </Link>
-                        <div className="flex flex-col gap-6 mt-6 xl:mt-0">
-                            <div className="flex md:flex-row flex-col gap-6 md:items-center">
+                        <div className="flex flex-col gap-2 sm:gap-5 mt-2 xl:mt-0">
+                            <div className="flex md:flex-row flex-col gap-3 sm:gap-6 md:items-center">
                                 <Link className="text-[20px] flex items-center gap-1">
                                     {selectedProfile.userName}
                                     {selectedProfile?.followers.length > 10 && <MdVerified className="fill-[#0095F6]" />}
@@ -155,17 +155,15 @@ export function SearchProfile() {
                                 </div>
                             </div>
                             <div className="md:flex hidden gap-10 items-center">
-                                <p className="flex gap-1.5"><span className="font-semibold">{formatNumber(selectedProfile.postCount)}</span>posts</p>
-                                <p className="flex gap-1.5"><span className="font-semibold">{formatNumber(selectedProfile.followersCount)}</span>followers</p>
-                                <p className="flex gap-1.5"><span className="font-semibold">{formatNumber(selectedProfile.followingCount)}</span>following</p>
+                                <UserFollowDetails selectedProfile={true} />
                             </div>
-                            <div>
+                            <div className="relative -left-[5.5rem] top-3 sm:left-0 sm:top-0">
                                 <p className="font-semibold text-[14px]">{selectedProfile.fullName}</p>
                                 <p className="font-semibold text-[14px] text-[#a8a8a8] w-[200px] break-words">{selectedProfile.bio}</p>
                             </div>
                         </div>
                     </div>
-                    <div className={`flex gap-10 ml-5 md:mt-16 mt-5 ${searchUserHighLights.length === 0 ? "" : "md:h-36 h-24"} overflow-x-auto scrollbar-hidden`}>
+                    <div className={`flex gap-10 ml-5 md:mt-16 mt-7 ${searchUserHighLights.length === 0 ? "" : "md:h-36 h-24"} overflow-x-auto scrollbar-hidden`}>
                         {searchUserHighLights.length > 0 && searchUserHighLights.map((item, i, arr) =>
                             <Link to={`/search/stories/highlight/${arr[i]._id}/`} key={i} onClick={() => {
                                 setHighLightStories(searchUserHighLights[i].stories)
@@ -178,9 +176,7 @@ export function SearchProfile() {
                     </div>
                 </div>
                 <div className="flex justify-evenly py-2 border-y-[1px] border-[#262626] md:hidden">
-                    <p className="flex mr-10 flex-col items-center gap-0.5 w-[33%]"><span className="font-semibold">{formatNumber(userData.data.user.postCount)}</span><span className="text-[13px] text-[#a8a8a8]">posts</span></p>
-                    <button className="flex mr-10 flex-col items-center gap-0.5 w-[33%]"><span className="font-semibold">{formatNumber(userData.data.user.followersCount)}</span><span className="text-[13px] text-[#a8a8a8]">followers</span></button>
-                    <button className="flex flex-col items-center gap-0.5 w-[33%]"><span className="font-semibold">{formatNumber(userData.data.user.followingCount)}</span><span className="text-[13px] text-[#a8a8a8]">following</span></button>
+                    <UserFollowDetails isSearchProfile={true} />
                 </div>
                 <div className="absolute left-[57%] -translate-x-1/2 md:flex hidden gap-10">
                     <NavLink end to={`/search/${selectedProfile.userName}/`}

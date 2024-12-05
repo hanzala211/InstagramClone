@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
-import { Footer } from "../components/Footer";
-import { Loader } from "../components/Loader";
+import { Footer } from "../components/helpers/Footer";
+import { Loader } from "../components/helpers/Loader";
 
 export function SignUp() {
     const { setUserData, userData, setMainLoading } = useUser();

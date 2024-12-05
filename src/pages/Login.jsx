@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from "react"
 import { FaFacebook } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { imagesArr } from "../assets/Constants";
-import { Footer } from "../components/Footer";
+import { Footer } from "../components/helpers/Footer";
 import { useUser } from "../context/UserContext";
-import { Loader } from "../components/Loader";
+import { Loader } from "../components/helpers/Loader";
 import { LoadingPage } from "./LoadingPage";
 
 export function Login() {

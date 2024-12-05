@@ -1,11 +1,11 @@
 import { Outlet, useParams } from "react-router-dom";
-import { SideBar } from "./components/SideBar";
+import { SideBar } from "./components/sidebar/SideBar";
 import { SideBarProvider, useSearch, useUser } from "./context/UserContext";
 import { LoadingPage } from "./pages/LoadingPage";
-import { Footer } from "./components/Footer";
+import { Footer } from "./components/helpers/Footer";
 import { useEffect } from "react";
 import { fetchUserDataOnClick } from "./utils/helper";
-import { MobileBar } from "./components/MobileBar";
+import { MobileBar } from "./components/sidebar/MobileBar";
 
 export function Layout({ token }) {
     const { mainLoading, setMainLoading, setUserData, message, setMessage } = useUser();

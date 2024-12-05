@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Loader } from "../components/Loader";
+import { Loader } from "../components/helpers/Loader";
 import { RiUserFollowFill } from "react-icons/ri";
-import { Post } from "../components/Post";
+import { Post } from "../components/post/Post";
 import { fetchHomePosts } from "../utils/helper";
-import { HomePost } from "../components/HomePost";
+import { HomePost } from "../components/post/HomePost";
 
 export function Home() {
     const { userData } = useUser()

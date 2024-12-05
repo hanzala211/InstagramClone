@@ -5,14 +5,14 @@ import { Layout } from './Layout'
 import { Home } from './pages/Home'
 import { SearchProvider, UserProvider } from './context/UserContext'
 import { Profile } from './pages/Profile'
-import { ProfileTabs } from './components/ProfileTabs'
+import { ProfileTabs } from './components/profile/ProfileTabs'
 import { SignUp } from './pages/SignUp'
 import { Story } from './pages/Story'
 import { Archive } from './pages/Archive'
-import { ArchiveStories } from './components/ArchiveStories'
 import { SearchProfile } from './pages/SearchProfile'
 import { Explore } from './pages/Explore'
 import { PostProvider } from './context/PostContext'
+import { ArchiveStories } from './components/archives/ArchiveStories'
 
 function App() {
   const localitem = JSON.parse(localStorage.getItem("token"))
