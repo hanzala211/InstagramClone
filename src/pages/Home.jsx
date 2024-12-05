@@ -38,7 +38,7 @@ export function Home() {
                 </InfiniteScroll>
                 : <Loader />}
             {
-                homePosts.length > 0 && !isPostsLoading &&
+                homePosts.length === 0 && !isPostsLoading &&
                 <div className="absolute top-20 left-[50%] -translate-x-1/2 text-center flex flex-col items-center gap-1">
                     <RiUserFollowFill className="text-[40px]" />
                     <h2 className="text-[40px] font-semibold">Follow Someone</h2>
