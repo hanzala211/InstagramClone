@@ -3,8 +3,7 @@ import { MoreCommentsSVG, MoreSVG } from "../../assets/Constants";
 import { PostSettings } from "./PostSettings";
 import { useSearch, useUser } from "../../context/UserContext";
 import { Link, useNavigate } from "react-router-dom";
-import { Skeleton } from "../helpers/Skeleton";
-import { fetchUserDataOnClick, formatDate } from "../../utils/helper";
+import { fetchComments, fetchUserDataOnClick, formatDate } from "../../utils/helper";
 import { usePost } from "../../context/PostContext";
 import { UserHoverModal } from "../usermodals/UserHoverModal";
 import { PostComment } from "../comments/PostComment";
@@ -12,7 +11,7 @@ import { PostOptions } from "./PostOptions";
 import { Overlay } from "../helpers/Overlay";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card";
 import { PostSlider } from "./PostSlider";
-import { CommentItem } from "../comments/CommentItem";
+import { CommentsStructure } from "../comments/CommentsStructure";
 
 export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, comments, setComments }) {
     const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, commentValue, setIsDisabled, setCommentValue, setIsPostSettingOpen, setIsCommented, isCommented, commentsLoading, setCommentsLoading, isDisabled, isPostSettingOpen, isMyPost } = usePost()
@@ -52,7 +51,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         const signal = controller.signal;
 
         if (selectedPost !== null) {
-            fetchComments(signal);
+            fetchComments(signal, setComments, setCommentsLoading, setTotalPages, userData, selectedPost, page);
         }
         return () => {
             controller.abort();
@@ -107,41 +106,10 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         }
     }
 
-    async function fetchComments(signal) {
-        try {
-            setCommentsLoading(true);
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/comments/${selectedPost._id}?page=${page}&limit=10`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${userData.data.token}`,
-                },
-                redirect: "follow",
-                signal
-            })
-            const result = await response.json()
-            setTotalPages(result.data.totalPages);
-            setComments((prev) => {
-                const newComments = result.data.comments.filter((newComment) => {
-                    return !prev.some((existingComment) => existingComment._id === newComment._id);
-                });
-                return [...newComments, ...prev];
-            });
-        } catch (error) {
-            if (error.name !== "AbortError") {
-                console.error("Fetch failed:", error);
-            }
-        } finally {
-            if (!signal.aborted) {
-                setCommentsLoading(false);
-            }
-        }
-    }
-
     return (
         <>
             <Overlay handleClose={handleClose} isPostOpen={isPostOpen} />
-            <div className={`fixed opacity-0 top-[40%] sm:top-1/2 -translate-y-1/2 w-full 1280:max-w-[90rem] lg:max-w-[65rem] md:h-[32rem] 1280:h-auto md:max-w-[52rem] h-[25rem] max-w-[20rem] -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100 pointer-events-auto" : "pointer-events-none"
-                }`}>
+            <div className={`fixed opacity-0 top-[40%] sm:top-1/2 -translate-y-1/2 w-full 1280:max-w-[90rem] lg:max-w-[65rem] md:h-[32rem] 1280:h-auto md:max-w-[52rem] h-[25rem] max-w-[20rem] -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100 pointer-events-auto" : "pointer-events-none"}`}>
                 <div className="h-full flex flexBox">
                     <div className="absolute md:hidden block -top-6 -left-3">
                         <Link
@@ -197,13 +165,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                 </div>
                             )}
                             <div className="flex flex-col gap-4 ml-5 pt-2">
-                                {commentsLoading ? (
-                                    <div className="flex flex-col gap-4">{Array.from({ length: 20 }, (_, i) => <Skeleton key={i} />)}</div>
-                                ) : (
-                                    comments?.map((item, i) => (
-                                        <CommentItem key={i} item={item} comments={comments} handleClick={handleClick} i={i} />
-                                    ))
-                                )}
+                                <CommentsStructure handleClick={handleClick} />
                                 <div className="w-full flex justify-center items-center mb-2">
                                     {page !== totalPages && !commentsLoading && comments !== null && comments?.length !== 0 ? (
                                         <button className="hover:opacity-55 transition-all duration-150" onClick={() => setPage((prev) => prev + 1)}>
@@ -227,7 +189,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                         </div>
                     </div>
                 </div >
-            </div >
+            </div>
             <PostSettings
                 isPostSettingOpen={isPostSettingOpen}
                 isMyPost={isMyPost}

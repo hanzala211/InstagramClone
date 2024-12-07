@@ -4,22 +4,34 @@ import { CommentHome } from "../comments/CommentHome"
 import { usePost } from "../../context/PostContext"
 import { Like, SaveSVG, UnLike, UnSave } from "../../assets/Constants"
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
-import { fetchUserDataOnClick, formatDate } from "../../utils/helper"
+import { fetchComments, fetchUserDataOnClick, formatDate } from "../../utils/helper"
 import { useEffect, useState } from "react"
 import { UserHoverModal } from "../usermodals/UserHoverModal"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card"
+import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer"
+import { CommentDrawer } from "../comments/CommentDrawer"
 
-export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost, setCurrentPostIndex, setIsPostOpen }) {
+
+export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost, setCurrentPostIndex, setIsPostOpen, isPost, arr }) {
     const { userData, setMainLoading, setUserData, setMessage } = useUser()
     const { setSelectedProfile } = useSearch()
-    const { setSelectedPost } = usePost()
-    const [isAnimating, setIsAnimating] = useState(false);
-    const [currentIndex, setCurrentIndex] = useState(Array(homePosts.length).fill(0));
+    const { setSelectedPost, selectedPost, setComments, setCommentsLoading, setTotalPages, page, isCommented } = usePost()
+    const [isAnimating, setIsAnimating] = useState(false)
+    const [currentIndex, setCurrentIndex] = useState(Array(homePosts.length).fill(0))
     const [totalIndex, setTotalIndex] = useState(Array(homePosts.length).fill(0))
-    const [savedPosts, setSavedPosts] = useState(Array(homePosts.length).fill(false));
-    const [likedPosts, setLikedPosts] = useState(Array(homePosts.length).fill(false));
+    const [savedPosts, setSavedPosts] = useState(Array(homePosts.length).fill(false))
+    const [likedPosts, setLikedPosts] = useState(Array(homePosts.length).fill(false))
     const [isHovered, setIsHovered] = useState(Array(homePosts.length).fill(false))
+    const [innerWidth, setInnerWidth] = useState(0)
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const handleResize = () => {
+            setInnerWidth(window.innerWidth);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         if (homePosts !== null) {
@@ -43,6 +55,15 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
             setIsHovered(Array(homePosts.length).fill(false))
         }
     }, [homePosts])
+
+    useEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+        fetchComments(signal, setComments, setCommentsLoading, setTotalPages, userData, selectedPost, page);
+        return () => {
+            controller.abort();
+        };
+    }, [page, selectedPost?._id, userData.data.token, isCommented])
 
     function handleIncrease(index) {
         setIsAnimating(true);
@@ -261,24 +282,24 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
         }
     }
 
-    return <div className="flex flex-col gap-2 mt-7 border-b-[2px] border-[#262626] pb-4">
-        <div className="flex flex-row items-center gap-2">
-            <img src={item?.user.profilePic} className="rounded-full w-10" alt="" />
+    return <div className={`flex flex-col gap-2 mt-7 ${isPost ? "" : "border-b-[2px] border-[#262626]"} pb-4`}>
+        <div className={`flex flex-row items-center gap-2`}>
+            <img src={item?.user?.profilePic || item?.postBy?.profilePic || userData?.data?.user?.profilePic} className="rounded-full w-10" alt="" />
             <div className="flex flex-row gap-1 items-center relative">
                 <HoverCard>
                     <HoverCardTrigger>
-                        <Link to={`/search/${item?.user.userName}/`} onClick={() => {
-                            fetchUserDataOnClick(item?.user.userName, userData, null, setSelectedProfile, setMainLoading)
+                        <Link to={`/search/${item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName}/`} onClick={() => {
+                            fetchUserDataOnClick(item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName, userData, null, setSelectedProfile, setMainLoading)
                             setMainLoading(true)
-                        }} className="font-semibold text-[12px] hover:opacity-70 transition duration-200" onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={() => handleMouseLeave(index)}>{item?.user.userName}</Link>
+                        }} className="font-semibold text-[12px] hover:opacity-70 transition duration-200" onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={() => handleMouseLeave(index)}>{item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName}</Link>
                     </HoverCardTrigger>
                     <div onClick={() => {
-                        fetchUserDataOnClick(item?.user.userName, userData, null, setSelectedProfile, setMainLoading)
+                        fetchUserDataOnClick(item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName, userData, null, setSelectedProfile, setMainLoading)
                         setMainLoading(true)
-                        navigate(`/search/${item?.user.userName}/`)
+                        navigate(`/search/${item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName}/`)
                     }} className="absolute z-[50]">
                         <HoverCardContent>
-                            <UserHoverModal username={item?.user.userName} isHovered={isHovered[index]} />
+                            <UserHoverModal username={item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName} isHovered={isHovered[index]} />
                         </HoverCardContent>
                     </div>
                     <p className="text-[#A8A8A8]">•</p>
@@ -286,10 +307,10 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
                 </HoverCard>
             </div>
         </div>
-        <div className="w-full rounded-md bg-[#000000] border-[1px] border-[#2B2B2D] relative overflow-hidden">
-            <div className={`w-full h-full flex items-start ${isAnimating ? "transition-transform duration-300 ease-in-out" : ""} `} style={{ transform: `translateX(${-currentIndex[index] * 100}%)` }}>
+        <div className={`w-full bg-[#000000] border-[1px] border-[#2B2B2D] relative overflow-hidden ${isPost ? "" : "rounded-md"}`}>
+            <div className={`w-full ${isPost ? "h-[29rem]" : "h-full"} flex items-start ${isAnimating ? "transition-transform duration-300 ease-in-out" : ""} `} style={{ transform: `translateX(${-currentIndex[index] * 100}%)` }}>
                 {item !== null ? item.imageUrls.map((item, i) => {
-                    return <img src={item} key={i} alt="Posts" className="w-full object-cover" />
+                    return <img src={item} key={i} alt="Posts" className="w-full h-full object-cover" />
                 }) : ""}
             </div>
             {item?.imageUrls.length > 1 ? <> {item !== null && currentIndex[index] !== totalIndex[index] - 1 && <button className="absolute md:right-4 right-1 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={() => handleIncrease(index)}><FaArrowRight className="fill-black" /></button>}
@@ -300,9 +321,17 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
             <div className="flex flex-row justify-between">
                 <div className="flex flex-row gap-3">
                     {!likedPosts[index] ?
-                        <button onClick={() => likePost(item._id, index)}><Like className={`hover:opacity-80 transition-all duration-150 cursor-pointer`} /></button>
-                        : <button onClick={() => unLikePost(item._id, index)}><UnLike className={`hover:opacity-80 fill-red-700 transition-all duration-150 cursor-pointer`} /></button>}
-                    <CommentHome setCurrentIndex={setCurrentPostIndex} item={item} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} setSelectedPost={setSelectedPost} i={index} />
+                        <button onClick={() => likePost(item._id, index)}><Like className={`hover:opacity-80 transition-all duration-150 cursor-pointer mb-1`} /></button>
+                        : <button onClick={() => unLikePost(item._id, index)}><UnLike className={`hover:opacity-80 fill-red-700 mb-1 transition-all duration-150 cursor-pointer`} /></button>}
+                    {innerWidth >= 768 && <CommentHome setCurrentIndex={setCurrentPostIndex} item={item} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} setSelectedPost={setSelectedPost} i={index} />}
+                    {innerWidth < 768 && <Drawer onClose={() => {
+                        setComments([])
+                    }}>
+                        <DrawerContent className="bg-[#000] border-t-[1px] border-[#a8a8a8]">
+                            <CommentDrawer />
+                        </DrawerContent>
+                        <DrawerTrigger><span onClick={() => setSelectedPost(item)}><CommentHome setCurrentIndex={setCurrentPostIndex} item={item} setCurrentPost={setCurrentPost} arr={arr} i={index} /></span></DrawerTrigger>
+                    </Drawer>}
                 </div>
                 {!savedPosts[index] ?
                     <button onClick={() => savePost(item._id, index)}>
@@ -313,13 +342,14 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
             <p className="text-[14px] font-medium">{item.likeCount} likes</p>
             <div className="w-full text-[15px]">
                 <p className="text-[13px] text-[#a8a8a1]">
-                    <Link to={`/search/${item?.user.userName}/`} onClick={() => {
-                        fetchUserDataOnClick(item?.user.userName, userData, null, setSelectedProfile, setMainLoading)
+                    <Link to={`/search/${item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName}/`} onClick={() => {
+                        fetchUserDataOnClick(item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName, userData, null, setSelectedProfile, setMainLoading)
                         setMainLoading(true)
-                        navigate(`/search/${item?.user.userName}/`)
-                    }} className="font-semibold text-[12px] text-white hover:opacity-70 transition duration-200 mr-2">{item?.user.userName}</Link>
+                        navigate(`/search/${item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName}/`)
+                    }} className="font-semibold text-[12px] text-white hover:opacity-70 transition duration-200 mr-2">{item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName}</Link>
                     {item.caption !== null && item.caption}
                 </p>
+                <button className="text-[#a8a8a8] text-[14px]">View all {item.commentsCount} comments</button>
             </div>
         </div>
     </div>

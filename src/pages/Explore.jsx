@@ -12,16 +12,13 @@ import { UserModal } from "../components/usermodals/UserModal";
 export function Explore() {
     const { userData } = useUser();
     const { searchQuery, setSearchQuery, searchData, setSearchData, setSelectedProfile } = useSearch();
-    const { setSelectedPost, selectedPost } = usePost()
+    const { setSelectedPost, selectedPost, comments, setComments, page, setPage, totalPages, setTotalPages } = usePost()
     const [explorePagePosts, setExplorePagePosts] = useState([]);
     const [isPostsLoading, setIsPostsLoading] = useState(false);
     const [currentPost, setCurrentPost] = useState(0);
     const [isPostOpen, setIsPostOpen] = useState(false);
     const [count, setCount] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
-    const [comments, setComments] = useState([]);
     const [hasMore, setHasMore] = useState(true)
     const [isSearching, setIsSearching] = useState(false)
     const [searchLoading, setSearchLoading] = useState(false);

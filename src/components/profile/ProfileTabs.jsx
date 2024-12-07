@@ -8,15 +8,12 @@ import { PostModal } from "../post/PostModal";
 import { usePost } from "../../context/PostContext";
 
 export function ProfileTabs({ isPosts, isTagged, isSaved, isSearchPosts }) {
-    const { selectedPost, setSelectedPost } = usePost()
+    const { selectedPost, setSelectedPost, comments, setComments, page, setPage, totalPages, setTotalPages } = usePost()
     const { searchUserPosts, selectedProfile } = useSearch()
     const { userPosts, userData, userSaves } = useUser();
     const [isPostOpen, setIsPostOpen] = useState(false);
     const [currentPost, setCurrentPost] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [page, setPage] = useState(1);
-    const [comments, setComments] = useState([])
-    const [totalPages, setTotalPages] = useState(null);
     const reversedPosts = userPosts?.slice().reverse() || [];
     const reversedUserPosts = searchUserPosts?.slice().reverse() || [];
     const reversedSavedPosts = userSaves?.slice().reverse() || [];

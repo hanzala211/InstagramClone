@@ -13,6 +13,7 @@ import { SearchProfile } from './pages/SearchProfile'
 import { Explore } from './pages/Explore'
 import { PostProvider } from './context/PostContext'
 import { ArchiveStories } from './components/archives/ArchiveStories'
+import { MobilePostPage } from './pages/MobilePostPage'
 
 function App() {
   const localitem = JSON.parse(localStorage.getItem("token"))
@@ -31,6 +32,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path='/signup' element={<SignUp />} />
               <Route path='/' element={<Layout token={localitem} />}>
+                <Route path=':username/p/:id/' element={<MobilePostPage />} />
                 <Route path='explore/' element={<Explore />} />
                 <Route path='/search/:username/' element={<SearchProfile />}>
                   <Route index element={<ProfileTabs isSearchPosts={true} isPosts={false} isTagged={false} isSaved={false} />} />

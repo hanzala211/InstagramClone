@@ -257,3 +257,47 @@ export async function fetchSearch(
 		}
 	}
 }
+
+export async function fetchComments(
+	signal,
+	setComments,
+	setCommentsLoading,
+	setTotalPages,
+	userData,
+	selectedPost,
+	page
+) {
+	try {
+		setComments([]);
+		setCommentsLoading(true);
+		const response = await fetch(
+			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/comments/${selectedPost._id}?page=${page}&limit=10`,
+			{
+				method: 'GET',
+				headers: {
+					Authorization: `${userData.data.token}`,
+				},
+				redirect: 'follow',
+				signal,
+			}
+		);
+		const result = await response.json();
+		setTotalPages(result.data.totalPages);
+		setComments((prev) => {
+			const newComments = result.data.comments.filter((newComment) => {
+				return !prev.some(
+					(existingComment) => existingComment._id === newComment._id
+				);
+			});
+			return [...newComments, ...prev];
+		});
+	} catch (error) {
+		if (error.name !== 'AbortError') {
+			console.error('Fetch failed:', error);
+		}
+	} finally {
+		if (!signal.aborted) {
+			setCommentsLoading(false);
+		}
+	}
+}

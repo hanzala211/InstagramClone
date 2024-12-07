@@ -13,8 +13,12 @@ export function PostProvider({ children }) {
     const [isCommented, setIsCommented] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
     const [isLiked, setIsLiked] = useState(false)
+    const [homePosts, setHomePosts] = useState([])
+    const [comments, setComments] = useState([])
+    const [page, setPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(0);
 
-    return <PostContext.Provider value={{ commentValue, setCommentValue, isAnimating, setIsAnimating, isPostSettingOpen, setIsPostSettingOpen, isDisabled, setIsDisabled, commentsLoading, setCommentsLoading, isSaved, setIsSaved, isMyPost, setIsMyPost, isCommented, setIsCommented, selectedPost, setSelectedPost, isLiked, setIsLiked }}>{children}</PostContext.Provider>
+    return <PostContext.Provider value={{ commentValue, setCommentValue, isAnimating, setIsAnimating, isPostSettingOpen, setIsPostSettingOpen, isDisabled, setIsDisabled, commentsLoading, setCommentsLoading, isSaved, setIsSaved, isMyPost, setIsMyPost, isCommented, setIsCommented, selectedPost, setSelectedPost, isLiked, setIsLiked, homePosts, setHomePosts, comments, setComments, page, setPage, totalPages, setTotalPages }}>{children}</PostContext.Provider>
 }
 export function usePost() {
     const context = useContext(PostContext)

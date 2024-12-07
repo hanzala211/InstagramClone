@@ -6,17 +6,15 @@ import { RiUserFollowFill } from "react-icons/ri";
 import { Post } from "../components/post/Post";
 import { fetchHomePosts } from "../utils/helper";
 import { HomePost } from "../components/post/HomePost";
+import { usePost } from "../context/PostContext";
 
 export function Home() {
     const { userData } = useUser()
-    const [homePosts, setHomePosts] = useState([])
+    const { homePosts, setHomePosts, comments, setComments, page, setPage, totalPages, setTotalPages } = usePost()
     const [currentPostIndex, setCurrentPostIndex] = useState(0)
     const [isPostsLoading, setIsPostsLoading] = useState(false)
     const [isPostOpen, setIsPostOpen] = useState(false)
     const [currentPost, setCurrentPost] = useState(null)
-    const [page, setPage] = useState(1)
-    const [totalPages, setTotalPages] = useState(0);
-    const [comments, setComments] = useState([])
     const [hasMore, setHasMore] = useState(true)
 
     useEffect(() => {
@@ -31,8 +29,8 @@ export function Home() {
                     fetchHomePosts(userData, setHomePosts, setIsPostsLoading, setHasMore)
                 }} hasMore={hasMore} >
                     {
-                        homePosts.length > 0 ? homePosts.map((item, index) => (
-                            <HomePost key={index} index={index} item={item} homePosts={homePosts} setHomePosts={setHomePosts} setCurrentPost={setCurrentPost} setCurrentPostIndex={setCurrentPostIndex} setIsPostOpen={setIsPostOpen} />
+                        homePosts.length > 0 ? homePosts.map((item, index, arr) => (
+                            <HomePost arr={arr} key={index} index={index} item={item} homePosts={homePosts} setHomePosts={setHomePosts} setCurrentPost={setCurrentPost} setCurrentPostIndex={setCurrentPostIndex} setIsPostOpen={setIsPostOpen} />
                         )) : ''}
 
                 </InfiniteScroll>
