@@ -14,8 +14,8 @@ import { PostSlider } from "./PostSlider";
 import { CommentsStructure } from "../comments/CommentsStructure";
 
 export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, comments, setComments }) {
-    const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, commentValue, setIsDisabled, setCommentValue, setIsPostSettingOpen, setIsCommented, isCommented, commentsLoading, setCommentsLoading, isDisabled, isPostSettingOpen, isMyPost } = usePost()
-    const { userData, setMainLoading, setMessage } = useUser();
+    const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, setCommentValue, setIsPostSettingOpen, isCommented, commentsLoading, setCommentsLoading, isPostSettingOpen, isMyPost } = usePost()
+    const { userData, setMainLoading } = useUser();
     const { setSelectedProfile } = useSearch()
     const [isHovered, setIsHovered] = useState(false)
     const commentRef = useRef(null);
@@ -37,14 +37,6 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         body.style.overflowY = isPostOpen ? "hidden" : "auto";
         return () => body.style.overflowY = "auto"
     }, [isPostOpen])
-
-    useEffect(() => {
-        if (commentValue.length > 0) {
-            setIsDisabled(false)
-        } else {
-            setIsDisabled(true);
-        }
-    }, [commentValue])
 
     useEffect(() => {
         const controller = new AbortController();
@@ -76,34 +68,6 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         setMainLoading(true);
         fetchUserDataOnClick(item !== null ? item?.user.userName : postData?.userName, userData, null, setSelectedProfile, setMainLoading);
         setSelectedPost(null);
-    }
-
-    async function postComment() {
-        try {
-            setIsDisabled(true);
-            const respone = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/comment/${selectedPost._id}`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `${userData.data.token}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "comment": commentValue
-                }),
-                redirect: "follow"
-            })
-            const result = await respone.json();
-            if (result.status !== "fail") {
-                setMessage("Commented Successfully")
-                setCommentValue("")
-                setIsCommented((prev) => !prev)
-            }
-        } catch (error) {
-            console.error(error)
-            setMessage("Failed")
-        } finally {
-            setIsDisabled(commentValue.length === 0);
-        }
     }
 
     return (
@@ -185,7 +149,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                                     </div>
                                 )}
                             </div>
-                            <PostComment commentRef={commentRef} commentValue={commentValue} setCommentValue={setCommentValue} isDisabled={isDisabled} postComment={postComment} />
+                            <PostComment commentRef={commentRef} />
                         </div>
                     </div>
                 </div >

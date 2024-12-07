@@ -22,7 +22,7 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
     const [savedPosts, setSavedPosts] = useState(Array(homePosts.length).fill(false))
     const [likedPosts, setLikedPosts] = useState(Array(homePosts.length).fill(false))
     const [isHovered, setIsHovered] = useState(Array(homePosts.length).fill(false))
-    const [innerWidth, setInnerWidth] = useState(0)
+    const [innerWidth, setInnerWidth] = useState(window.innerWidth)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -323,15 +323,16 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
                     {!likedPosts[index] ?
                         <button onClick={() => likePost(item._id, index)}><Like className={`hover:opacity-80 transition-all duration-150 cursor-pointer mb-1`} /></button>
                         : <button onClick={() => unLikePost(item._id, index)}><UnLike className={`hover:opacity-80 fill-red-700 mb-1 transition-all duration-150 cursor-pointer`} /></button>}
-                    {innerWidth >= 768 && <CommentHome setCurrentIndex={setCurrentPostIndex} item={item} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} setSelectedPost={setSelectedPost} i={index} />}
-                    {innerWidth < 768 && <Drawer onClose={() => {
-                        setComments([])
-                    }}>
-                        <DrawerContent className="bg-[#000] border-t-[1px] border-[#a8a8a8]">
-                            <CommentDrawer />
-                        </DrawerContent>
-                        <DrawerTrigger><span onClick={() => setSelectedPost(item)}><CommentHome setCurrentIndex={setCurrentPostIndex} item={item} setCurrentPost={setCurrentPost} arr={arr} i={index} /></span></DrawerTrigger>
-                    </Drawer>}
+                    {innerWidth >= 768 && <span onClick={() => setSelectedPost(item)}><CommentHome setCurrentIndex={setCurrentPostIndex} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} i={index} /></span>}
+                    {innerWidth < 768 &&
+                        <Drawer onClose={() => {
+                            setComments([])
+                        }}>
+                            <DrawerContent className="bg-[#000] border-t-[1px] border-[#a8a8a8]">
+                                <CommentDrawer />
+                            </DrawerContent>
+                            <DrawerTrigger><span onClick={() => setSelectedPost(item)}><CommentHome setCurrentIndex={setCurrentPostIndex} item={item} setCurrentPost={setCurrentPost} arr={arr} i={index} /></span></DrawerTrigger>
+                        </Drawer>}
                 </div>
                 {!savedPosts[index] ?
                     <button onClick={() => savePost(item._id, index)}>

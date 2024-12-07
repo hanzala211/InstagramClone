@@ -1,11 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { HomePost } from "../components/post/HomePost";
 import { PostPageHeader } from "../components/sidebar/PostPageHeader";
 import { usePost } from "../context/PostContext";
+import { PostComment } from "../components/comments/PostComment";
 
 
 export function MobilePostPage() {
     const { selectedPost, homePosts, setHomePosts } = usePost()
+    const commentRef = useRef(null)
     useEffect(() => {
         setHomePosts([selectedPost])
     }, [])
@@ -16,5 +18,6 @@ export function MobilePostPage() {
                 <HomePost key={index} item={item} index={index} homePosts={homePosts} setHomePosts={setHomePosts} isPost={true} />
             ))}
         </div>
+        <PostComment className="absolute w-full bottom-14" commentRef={commentRef} />
     </section>
 }
