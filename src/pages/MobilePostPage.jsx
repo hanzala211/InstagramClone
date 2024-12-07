@@ -18,6 +18,6 @@ export function MobilePostPage() {
                 <HomePost key={index} item={item} index={index} homePosts={homePosts} setHomePosts={setHomePosts} isPost={true} />
             ))}
         </div>
-        <PostComment className="absolute w-full bottom-14" commentRef={commentRef} />
+        <PostComment className="fixed w-full bottom-[3.4rem]" commentRef={commentRef} />
     </section>
 }
