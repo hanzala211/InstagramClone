@@ -95,7 +95,7 @@ export function NoteCreator({ isEditing, isNoteOpen, setIsNoteOpen }) {
             </div>
             <div className="flex justify-center items-center h-[85%]">
                 <div className="relative">
-                    <div className="absolute -top-4 left-[60%]">
+                    <div className="absolute -top-4 left-[2rem]">
                         <NoteTooltip isProfile={false} noteValue={noteValue} setNoteValue={setNoteValue} />
                     </div>
                     <img src={userData?.data?.user.profilePic} alt="User Profile" className="rounded-full w-40" />
