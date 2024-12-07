@@ -5,11 +5,12 @@ import { usePost } from "../../context/PostContext"
 import { Like, SaveSVG, UnLike, UnSave } from "../../assets/Constants"
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 import { fetchComments, fetchUserDataOnClick, formatDate } from "../../utils/helper"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { UserHoverModal } from "../usermodals/UserHoverModal"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card"
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer"
 import { CommentDrawer } from "../comments/CommentDrawer"
+import { LikeAnimation } from "./LikeAnimation"
 
 
 export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost, setCurrentPostIndex, setIsPostOpen, isPost, arr }) {
@@ -23,6 +24,9 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
     const [likedPosts, setLikedPosts] = useState(Array(homePosts.length).fill(false))
     const [isHovered, setIsHovered] = useState(Array(homePosts.length).fill(false))
     const [innerWidth, setInnerWidth] = useState(window.innerWidth)
+    const [showHeart, setShowHeart] = useState(false);
+    const [heartIndex, setHeartIndex] = useState(null);
+    const lastTouchTime = useRef(0);
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -64,6 +68,15 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
             controller.abort();
         };
     }, [page, selectedPost?._id, userData.data.token, isCommented])
+
+    const handleDoubleClick = (id, indexForClick) => {
+        setHeartIndex(indexForClick);
+        setShowHeart(true);
+        setTimeout(() => setShowHeart(false), 800);
+        if (!likedPosts[indexForClick]) {
+            likePost(id, indexForClick)
+        }
+    };
 
     function handleIncrease(index) {
         setIsAnimating(true);
@@ -310,7 +323,20 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
         <div className={`w-full bg-[#000000] border-[1px] border-[#2B2B2D] relative overflow-hidden ${isPost ? "" : "rounded-md"}`}>
             <div className={`w-full ${isPost ? "h-[29rem]" : "h-full"} flex items-start ${isAnimating ? "transition-transform duration-300 ease-in-out" : ""} `} style={{ transform: `translateX(${-currentIndex[index] * 100}%)` }}>
                 {item !== null ? item.imageUrls.map((item, i) => {
-                    return <img src={item} key={i} alt="Posts" className="w-full h-full object-cover" />
+                    return <div className="relative flex-shrink-0 w-full h-full"
+                        key={i}>
+                        <img onDoubleClick={() => handleDoubleClick(arr[index]._id, i)}
+                            onTouchStart={() => {
+                                const currentTime = Date.now();
+                                const timeDifference = currentTime - lastTouchTime.current;
+                                if (timeDifference < 300 && timeDifference > 0) {
+                                    handleDoubleClick(arr[index]._id, i)
+                                }
+                                lastTouchTime.current = currentTime;
+                            }} src={item} alt="Posts" className="w-full h-full object-cover" />
+                        <LikeAnimation showHeart={showHeart} heartIndex={heartIndex} index={index} />
+
+                    </div>
                 }) : ""}
             </div>
             {item?.imageUrls.length > 1 ? <> {item !== null && currentIndex[index] !== totalIndex[index] - 1 && <button className="absolute md:right-4 right-1 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={() => handleIncrease(index)}><FaArrowRight className="fill-black" /></button>}

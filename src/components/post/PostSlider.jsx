@@ -1,9 +1,9 @@
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 import { usePost } from "../../context/PostContext"
 import { useRef, useState } from "react";
-import { LikePost } from "../../assets/Constants";
 import { useUser } from "../../context/UserContext";
 import { likePost } from "../../utils/helper";
+import { LikeAnimation } from "./LikeAnimation";
 
 export function PostSlider({ currentIndex, setCurrentIndex }) {
     const { isAnimating, selectedPost, setSelectedPost, isLiked, setIsLiked, setIsAnimating } = usePost()
@@ -59,13 +59,7 @@ export function PostSlider({ currentIndex, setCurrentIndex }) {
                                 }}
                                 className="object-fill h-full w-full"
                             />
-                            {showHeart && heartIndex === index && (
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="text-red-500 text-6xl animate-popAndMoveUp">
-                                        <LikePost />
-                                    </div>
-                                </div>
-                            )}
+                            <LikeAnimation showHeart={showHeart} heartIndex={heartIndex} index={index} />
                         </div>
                     );
                 })
