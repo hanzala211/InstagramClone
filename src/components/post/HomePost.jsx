@@ -11,6 +11,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@radix-ui/react-h
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer"
 import { CommentDrawer } from "../comments/CommentDrawer"
 import { LikeAnimation } from "./LikeAnimation"
+import { PostComment } from "../comments/PostComment"
 
 
 export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost, setCurrentPostIndex, setIsPostOpen, isPost, arr }) {
@@ -27,6 +28,7 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
     const [showHeart, setShowHeart] = useState(false);
     const [heartIndex, setHeartIndex] = useState(null);
     const lastTouchTime = useRef(0);
+    const commentRef = useRef(null)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -377,6 +379,9 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
                     {item.caption !== null && item.caption}
                 </p>
                 <button className="text-[#a8a8a8] text-[14px]">View all {item.commentsCount} comments</button>
+                <div className="md:hidden">
+                    <PostComment commentRef={commentRef} />
+                </div>
             </div>
         </div>
     </div>
