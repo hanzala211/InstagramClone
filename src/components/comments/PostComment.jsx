@@ -2,10 +2,9 @@ import { useEffect } from "react";
 import { usePost } from "../../context/PostContext";
 import { useUser } from "../../context/UserContext";
 
-export function PostComment({ commentRef, className }) {
-    const { setIsDisabled, isDisabled, commentValue, setCommentValue, setIsCommented, selectedPost } = usePost()
+export function PostComment({ commentRef, className, item }) {
+    const { setIsDisabled, isDisabled, commentValue, setCommentValue, setIsCommented, selectedPost, setSelectedPost } = usePost()
     const { userData, setMessage } = useUser()
-
 
     async function postComment() {
         try {
@@ -51,6 +50,11 @@ export function PostComment({ commentRef, className }) {
             onChange={(e) => setCommentValue(e.target.value)}
             placeholder="Add a comment...."
             className="w-[90%] bg-transparent outline-none placeholder:text-[14px]"
+            onFocus={() => {
+                if (selectedPost === null) {
+                    setSelectedPost(item)
+                }
+            }}
         />
         <button
             className={`text-[#0095F6] ml-5 text-[12px] transition-all duration-150 ${isDisabled ? "opacity-50 " : "cursor-pointer hover:opacity-70"}`}

@@ -379,9 +379,10 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
                     {item.caption !== null && item.caption}
                 </p>
                 <button className="text-[#a8a8a8] text-[14px]">View all {item.commentsCount} comments</button>
-                <div className="md:hidden">
-                    <PostComment commentRef={commentRef} />
-                </div>
+                {!isPost &&
+                    <div className="md:hidden">
+                        <PostComment commentRef={commentRef} item={item} />
+                    </div>}
             </div>
         </div>
     </div>
