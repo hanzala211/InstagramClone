@@ -248,7 +248,7 @@ export async function fetchSearch(
 						item._id !== userData?.data.user._id &&
 						!prev.some((existingItem) => existingItem._id === item._id)
 				);
-				return [...prev, ...newItems, ...result.data];
+				return [...prev, ...newItems];
 			});
 		}
 	} catch (error) {
