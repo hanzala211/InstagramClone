@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { Footer } from "../components/helpers/Footer";
 import { Loader } from "../components/helpers/Loader";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
 export function SignUp() {
     const { setUserData, userData, setMainLoading } = useUser();
@@ -41,6 +43,10 @@ export function SignUp() {
                 setSignupPassword("")
                 setFullName("")
                 setUserName("")
+                addDoc(collection(db, "users", `${result.data.user._id}`), {
+                    userName: `${userName}`,
+                    id: `${result.data.user._id}`
+                })
                 setSuccessMessage(result.status)
                 navigate("/home");
                 localStorage.setItem("token", JSON.stringify(result.data.token))

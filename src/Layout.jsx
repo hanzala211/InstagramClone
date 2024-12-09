@@ -1,4 +1,4 @@
-import { Outlet, useParams } from "react-router-dom";
+import { Outlet, useLocation, useParams } from "react-router-dom";
 import { SideBar } from "./components/sidebar/SideBar";
 import { SideBarProvider, useSearch, useUser } from "./context/UserContext";
 import { LoadingPage } from "./pages/LoadingPage";
@@ -11,6 +11,7 @@ export function Layout({ token }) {
     const { mainLoading, setMainLoading, setUserData, message, setMessage } = useUser();
     const { setSelectedProfile } = useSearch();
     const params = useParams()
+    const location = useLocation()
 
     useEffect(() => {
         if (token !== null) {
@@ -57,7 +58,7 @@ export function Layout({ token }) {
 
     return <>
         {!mainLoading ? <section className="flex flex-row w-full items-center">
-            <div className="w-[17%] left-0 top-0 md:block hidden h-[100vh]"></div>
+            <div className={`left-0 top-0 md:block hidden h-[100vh] ${location.pathname.slice(0, 7) ? "w-[5rem]" : "w-[17%]"}`}></div>
             <SideBarProvider>
                 <SideBar />
                 <MobileBar />

@@ -248,7 +248,7 @@ export async function fetchSearch(
 						item._id !== userData?.data.user._id &&
 						!prev.some((existingItem) => existingItem._id === item._id)
 				);
-				return [...prev, ...newItems];
+				return [...prev, ...newItems, ...result.data];
 			});
 		}
 	} catch (error) {
@@ -299,5 +299,28 @@ export async function fetchComments(
 		if (!signal.aborted) {
 			setCommentsLoading(false);
 		}
+	}
+}
+export async function fetchNote(setNoteLoading, userData, setNote) {
+	try {
+		setNoteLoading(true);
+		const response = await fetch(
+			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/note`,
+			{
+				method: 'GET',
+				headers: {
+					Authorization: `${userData.data.token}`,
+				},
+				redirect: 'follow',
+			}
+		);
+		const result = await response.json();
+		if (result.message !== 'Note not found or expired.') {
+			setNote(result.note);
+		}
+	} catch (error) {
+		console.error(error);
+	} finally {
+		setNoteLoading(false);
 	}
 }

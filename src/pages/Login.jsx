@@ -6,6 +6,8 @@ import { Footer } from "../components/helpers/Footer";
 import { useUser } from "../context/UserContext";
 import { Loader } from "../components/helpers/Loader";
 import { LoadingPage } from "./LoadingPage";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
 export function Login() {
     const { setMainLoading, setUserData, userData, mainLoading } = useUser();
@@ -54,10 +56,14 @@ export function Login() {
 
             const result = await response.json();
             setUserData(result);
-            if (result.status === "success") {
+            if (result && result.status === "success" && result.data) {
                 setMainLoading(true);
                 setUserValue("")
                 setPassword("")
+                setDoc(doc(db, "users", `${result.data.user._id}`), {
+                    userName: `${result.data.user.userName}`,
+                    id: `${result.data.user._id}`
+                })
                 navigate("/home");
                 localStorage.setItem("token", JSON.stringify(result.data.token))
             } else {

@@ -15,6 +15,7 @@ import { LogOutDiv } from "../components/profile/LogOutDiv";
 import { MobileProfileBar } from "../components/profile/MobileProfileBar";
 import { UserFollowDetails } from "../components/usermodals/UserFollowDetails";
 import { LaptopProfileBar } from "../components/profile/LaptopProfileBar";
+import { fetchNote } from "../utils/helper";
 
 export function Profile() {
     const { userData, setUserPosts, note, setNote, setStories, stories, setCurrentStory, highlights, setHighlights, setHighLightStories, setCurrentHighLight, setUserSaves, isNoteEditOpen, setIsNoteEditOpen, isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen } = useUser();
@@ -31,7 +32,7 @@ export function Profile() {
     useEffect(() => {
         fetchPosts();
         fetchSaves();
-        fetchNote();
+        fetchNote(setNoteLoading, userData, setNote);
         getStatus();
         if (highlights.length === 0) {
             getHighLights()
@@ -94,27 +95,6 @@ export function Profile() {
         }
     }
 
-    async function fetchNote() {
-        try {
-            setNoteLoading(true);
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/note`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            if (result.message !== "Note not found or expired.") {
-                setNote(result.note)
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setNoteLoading(false);
-        }
-    }
-
     async function fetchSaves() {
         try {
             const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/saved-posts`, {
@@ -153,7 +133,7 @@ export function Profile() {
     }
 
 
-    return <section className="w-full lg:max-w-[60%] mx-auto">
+    return <section className="w-full lg:max-w-[50%] md:max-w-[87%] mx-auto">
         <div className="w-full max-w-[61rem] pb-9 lg:pt-20 pt-8 md:border-b-[2px] md:border-[#262626]">
             <div className="flex w-full xl:gap-20 lg:gap-5 gap-2 sm:items-center relative">
                 <div className="cursor-pointer" onClick={() => {

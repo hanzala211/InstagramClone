@@ -8,6 +8,7 @@ import { MobilePostIcon, PostsIcon } from "../assets/Constants";
 import { HighLights } from "../components/story/Highlights";
 import { LoadingPage } from "./LoadingPage";
 import { UserFollowDetails } from "../components/usermodals/UserFollowDetails";
+import { NoteDiv } from "../components/note/NoteDiv";
 
 export function SearchProfile() {
     const { setSearchUserPosts, selectedProfile, searchUserStatus, setSearchUserStatus, searchUserHighLights, setSearchUserHighLights, setSelectedProfile } = useSearch();
@@ -131,9 +132,7 @@ export function SearchProfile() {
                 <div className="w-full max-w-[61rem] pb-9 lg:pt-20 pt-8 md:border-b-[2px] md:border-[#262626]">
                     <div className="flex w-full xl:gap-20 lg:gap-5 gap-3 ml-3 items-start sm:items-center relative">
                         {searchUserNotes.length > 0 &&
-                            <div className="absolute top-3 left-[3rem] sm:top-5 sm:left-[3.5rem] md:left-[3.5rem] lg:left-[4.5rem] md:top-3 z-[1]">
-                                <NoteTooltip isProfile={true} note={searchUserNotes[0]} />
-                            </div>
+                            <NoteDiv notes={searchUserNotes[0]} />
                         }
                         <Link to={searchUserStatus.length > 0 ? `/search/stories/${selectedProfile.userName}/${searchUserStatus[0]._id}/` : ""}
                             className={`p-2 ${searchUserStatus.length > 0 ? "relative rounded-full multicolor-border h-[5.9rem] sm:h-32 md:h-auto" : ""}`}

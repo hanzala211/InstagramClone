@@ -12,7 +12,7 @@ export function MobilePostPage() {
         setHomePosts([selectedPost])
     }, [])
     return <section className="w-full">
-        <PostPageHeader />
+        <PostPageHeader isArrowNeeded={true} />
         <div className="w-full max-w-[22.8rem] mx-auto mt-12">
             {homePosts.map((item, index) => (
                 <HomePost key={index} item={item} index={index} homePosts={homePosts} setHomePosts={setHomePosts} isPost={true} />
