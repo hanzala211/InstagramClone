@@ -67,7 +67,7 @@ export function UserChat() {
         </div>
         <div
             ref={messagesContainerRef}
-            className="overflow-y-auto h-auto max-h-[calc(100vh-230px)] scrollbar-hidden py-3 px-3 flex flex-col gap-5">
+            className="overflow-y-auto h-full max-h-[calc(100vh-230px)] md:max-h-[calc(100vh-130px)] scrollbar-hidden py-3 px-3 flex flex-col gap-5">
             {messages.length > 0 ? messages.map((message, index) => (
                 <div key={index} className={`flex ${message.senderId === userData.data.user._id ? "justify-end" : "justify-start"
                     }`}>
