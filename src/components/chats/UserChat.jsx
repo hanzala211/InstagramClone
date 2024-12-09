@@ -58,14 +58,16 @@ export function UserChat() {
         }).catch((err) => console.error(err))
     };
 
-    return <div className="md:w-[80%] mt-10 w-[90%] bg-[#000] overflow-hidden ml-0 md:ml-5 1280:ml-0">
+    return <div className="md:w-[80%] mt-10 md:mt-0 w-[90%] bg-[#000] overflow-hidden ml-0 md:ml-5 1280:ml-0">
         <div className="py-2 px-4 border-b-[2px] border-[#262626]">
             <Link className="flex w-[12rem] items-center gap-3">
                 <img src={selectedChat.profilePic} className="w-12 rounded-full" alt="Profile Image" />
                 <h2 className="font-semibold text-[15px]">{selectedChat.fullName}</h2>
             </Link>
         </div>
-        <div ref={messagesContainerRef} className="overflow-y-auto h-[calc(100%-170px)] md:h-[calc(100%-130px)] scrollbar-hidden py-3 px-3 flex flex-col gap-5">
+        <div
+            ref={messagesContainerRef}
+            className="overflow-y-auto h-auto max-h-[calc(100vh-230px)] scrollbar-hidden py-3 px-3 flex flex-col gap-5">
             {messages.length > 0 ? messages.map((message, index) => (
                 <div key={index} className={`flex ${message.senderId === userData.data.user._id ? "justify-end" : "justify-start"
                     }`}>
