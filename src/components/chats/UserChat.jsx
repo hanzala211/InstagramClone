@@ -5,10 +5,12 @@ import { useEffect, useRef, useState } from "react";
 import { useChat } from "../../context/ChatContext";
 import { addDoc, collection, doc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
-import { useUser } from "../../context/UserContext";
+import { useSearch, useUser } from "../../context/UserContext";
+import { fetchUserDataOnClick } from "../../utils/helper";
 
 export function UserChat() {
-    const { userData } = useUser()
+    const { userData, setMainLoading } = useUser()
+    const { setSelectedProfile } = useSearch()
     const { selectedChat, messages, setMessages } = useChat()
     const [isPickingEmoji, setIsPickingEmoji] = useState(false)
     const [messageValue, setMessageValue] = useState("")
@@ -19,12 +21,14 @@ export function UserChat() {
 
     useEffect(() => {
         window.addEventListener("click", handleClick)
-        window.addEventListener("keydown", handleKeyDown)
+        if (messageValue.length > 0) {
+            window.addEventListener("keydown", handleKeyDown)
+        }
         return () => {
             window.removeEventListener("keydown", handleKeyDown)
             window.removeEventListener("click", handleClick)
         }
-    }, [])
+    }, [messageValue])
 
     useEffect(() => {
         if (messagesContainerRef.current) {
@@ -43,7 +47,7 @@ export function UserChat() {
     }
 
     function handleKeyDown(e) {
-        if (e.key === "Enter" && messageValue.length > 0) {
+        if (e.key === "Enter") {
             handleSendMessage()
         }
     }
@@ -70,7 +74,10 @@ export function UserChat() {
 
     return <div className="md:w-[80%] mt-10 md:mt-0 w-[90%] bg-[#000] overflow-hidden ml-0 md:ml-5 1280:ml-0">
         <div className="py-2 px-4 border-b-[2px] border-[#262626]">
-            <Link className="flex w-[12rem] items-center gap-3">
+            <Link to={`/search/${selectedChat.userName}/`} onClick={() => {
+                fetchUserDataOnClick(selectedChat.userName, userData, null, setSelectedProfile, setMainLoading)
+                setMainLoading(true)
+            }} className="flex w-[12rem] items-center gap-3">
                 <img src={selectedChat.profilePic} className="w-12 rounded-full" alt="Profile Image" />
                 <h2 className="font-semibold text-[15px]">{selectedChat.fullName}</h2>
             </Link>
