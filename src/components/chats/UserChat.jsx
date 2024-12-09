@@ -9,7 +9,7 @@ import { useUser } from "../../context/UserContext";
 
 export function UserChat() {
     const { userData } = useUser()
-    const { selectedChat, messages, setMessages, threads } = useChat()
+    const { selectedChat, messages, setMessages } = useChat()
     const [isPickingEmoji, setIsPickingEmoji] = useState(false)
     const [messageValue, setMessageValue] = useState("")
     const [innerWidth, setInnerWidth] = useState(0)
@@ -19,7 +19,11 @@ export function UserChat() {
 
     useEffect(() => {
         window.addEventListener("click", handleClick)
-        return () => window.removeEventListener("click", handleClick)
+        window.addEventListener("keydown", handleKeyDown)
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown)
+            window.removeEventListener("click", handleClick)
+        }
     }, [])
 
     useEffect(() => {
@@ -38,7 +42,13 @@ export function UserChat() {
         }
     }
 
-    const handleSendMessage = () => {
+    function handleKeyDown(e) {
+        if (e.key === "Enter" && messageValue.length > 0) {
+            handleSendMessage()
+        }
+    }
+
+    function handleSendMessage() {
         setMessages([...messages, { text: messageValue, sender: userData.data.user._id }]);
         setDoc(doc(db, "messagesThread", [userData.data.user._id, selectedChat._id].sort().join("_")), {
             participants: [userData.data.user._id, selectedChat._id],
