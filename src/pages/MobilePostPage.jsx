@@ -11,13 +11,13 @@ export function MobilePostPage() {
     useEffect(() => {
         setHomePosts([selectedPost])
     }, [])
-    return <section className="w-full">
+    return <section className="w-full min-h-screen">
         <PostPageHeader isArrowNeeded={true} />
-        <div className="w-full max-w-[22.8rem] mx-auto mt-12">
+        <div className="w-full 440:max-w-[24rem] max-w-[22rem] mx-auto mt-12">
             {homePosts.map((item, index) => (
                 <HomePost key={index} item={item} index={index} homePosts={homePosts} setHomePosts={setHomePosts} isPost={true} />
             ))}
         </div>
-        <PostComment className="fixed w-full bottom-[3.4rem]" commentRef={commentRef} />
+        <PostComment className="fixed w-full bottom-[3.5rem]" commentRef={commentRef} />
     </section>
 }

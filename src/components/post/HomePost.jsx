@@ -323,7 +323,7 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
             </div>
         </div>
         <div className={`w-full bg-[#000000] border-[1px] border-[#2B2B2D] relative overflow-hidden ${isPost ? "" : "rounded-md"}`}>
-            <div className={`w-full ${isPost ? "h-[29rem]" : "h-full"} flex items-start ${isAnimating ? "transition-transform duration-300 ease-in-out" : ""} `} style={{ transform: `translateX(${-currentIndex[index] * 100}%)` }}>
+            <div className={`w-full ${isPost ? "440:h-[30rem] max-h-[20rem]" : "h-full"} flex items-start ${isAnimating ? "transition-transform duration-300 ease-in-out" : ""} `} style={{ transform: `translateX(${-currentIndex[index] * 100}%)` }}>
                 {item !== null ? item.imageUrls.map((item, i) => {
                     return <div className="relative flex-shrink-0 w-full h-full"
                         key={i}>
