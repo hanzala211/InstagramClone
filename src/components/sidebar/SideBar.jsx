@@ -47,7 +47,8 @@ export function SideBar() {
             icon: <ChatIcon />,
             activeIcon: <ActiveChatIcon />,
             homeactive: true,
-            to: "/direct/inbox/"
+            to: "/direct/inbox/",
+            isNotification: true,
         },
         {
             text: "Post",

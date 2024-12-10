@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { EmojiIcon } from "../../assets/Constants";
 import { useEffect, useRef, useState } from "react";
 import { useChat } from "../../context/ChatContext";
-import { addDoc, collection, doc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { useSearch, useUser } from "../../context/UserContext";
 import { fetchUserDataOnClick } from "../../utils/helper";
@@ -17,7 +17,8 @@ export function UserChat() {
     const [innerWidth, setInnerWidth] = useState(0)
     const emojiIconRef = useRef(null)
     const emojiPickerRef = useRef(null)
-    const messagesContainerRef = useRef();
+    const scrollRef = useRef(null);
+
 
     useEffect(() => {
         window.addEventListener("click", handleClick)
@@ -31,14 +32,12 @@ export function UserChat() {
     }, [messageValue])
 
     useEffect(() => {
-        if (messagesContainerRef.current) {
-            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
-        }
-    }, []);
-
-    useEffect(() => {
         setInnerWidth(window.innerWidth)
     }, [window.innerWidth])
+
+    useEffect(() => {
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }, [messages.length]);
 
     function handleClick(e) {
         if (emojiIconRef.current && emojiPickerRef.current && !emojiIconRef.current.contains(e.target) && !emojiPickerRef.current.contains(e.target)) {
@@ -54,10 +53,12 @@ export function UserChat() {
 
     function handleSendMessage() {
         setMessages([...messages, { text: messageValue, sender: userData.data.user._id }]);
+        setMessageValue("");
         setDoc(doc(db, "messagesThread", [userData.data.user._id, selectedChat._id].sort().join("_")), {
             participants: [userData.data.user._id, selectedChat._id],
             lastMessage: null,
-            timeStamp: serverTimestamp()
+            timeStamp: serverTimestamp(),
+            lastMessageSender: userData.data.user._id
         }).then(() => {
             addDoc(collection(db, "messagesThread", [userData.data.user._id, selectedChat._id].sort().join("_"), "messages"), {
                 senderId: userData.data.user._id,
@@ -68,7 +69,24 @@ export function UserChat() {
                 lastMessage: messageValue,
                 timeStamp: serverTimestamp()
             }).catch((err) => console.error(err))
-            setMessageValue("");
+            const q = query(
+                collection(db, "notifications"),
+                where("messageSender", "==", userData.data.user._id),
+                where("userId", "==", selectedChat._id)
+            );
+            getDocs(q).then((item) => {
+                if (item.empty) {
+                    addDoc(collection(db, "notifications"), {
+                        read: false,
+                        messageSender: userData?.data?.user?._id,
+                        userId: selectedChat._id,
+                        timeStamp: serverTimestamp(),
+                    })
+                } else {
+                    const docRef = item.docs[0].ref;
+                    updateDoc(docRef, { read: false })
+                }
+            });
         }).catch((err) => console.error(err))
     };
 
@@ -82,14 +100,14 @@ export function UserChat() {
                 <h2 className="font-semibold text-[15px]">{selectedChat.fullName}</h2>
             </Link>
         </div>
-        <div
-            ref={messagesContainerRef}
+        <div ref={scrollRef}
             className="overflow-y-auto h-full max-h-[calc(100vh-230px)] md:max-h-[calc(100vh-130px)] scrollbar-hidden py-3 px-3 flex flex-col gap-5">
             {messages.length > 0 ? messages.map((message, index) => (
-                <div key={index} className={`flex ${message.senderId === userData.data.user._id ? "justify-end" : "justify-start"
+                <div key={index} className={`flex items-end gap-2 ${message.senderId === userData.data.user._id ? "justify-end" : "justify-start"
                     }`}>
+                    {message.senderId !== userData.data.user._id && <img src={selectedChat?.profilePic} alt={`Chat User ${message.userName}`} className="w-6 rounded-full " />}
                     <div
-                        className={`p-3 rounded-3xl text-sm max-w-xs ${message.senderId === userData.data.user._id
+                        className={`p-2.5 rounded-xl text-sm max-w-xs ${message.senderId === userData.data.user._id
                             ? "bg-[#0096f4] text-white"
                             : "bg-[#262626]"
                             }`}

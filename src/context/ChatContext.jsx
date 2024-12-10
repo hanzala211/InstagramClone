@@ -13,12 +13,16 @@ export function ChatProvider({ children }) {
     const [searchChatValue, setSearchChatValue] = useState("")
     const [messages, setMessages] = useState([])
     const [threads, setThreads] = useState([])
+    const [notifications, setNotifications] = useState([])
 
     useEffect(() => {
         if (selectedChat && userData) {
             const querySearch = query(collection(db, "messagesThread", [userData.data.user._id, selectedChat._id].sort().join("_"), "messages"), orderBy("timeStamp"))
             const unsubscribe = onSnapshot(querySearch, (querySnapShote) => {
-                setMessages(querySnapShote.docs.map((item) => item.data()))
+                setMessages(querySnapShote.docs.map((item) => ({
+                    ...item.data(),
+                    id: item.id
+                })))
             })
             return () => unsubscribe()
         }
@@ -48,7 +52,8 @@ export function ChatProvider({ children }) {
                         const result = await response.json()
                         const returnObj = {
                             ...result.data.user,
-                            lastMessage: foundArr[index].lastMessage
+                            lastMessage: foundArr[index].lastMessage,
+                            lastMessageSender: foundArr[index].lastMessageSender,
                         }
                         return returnObj;
                     } catch (error) {
@@ -64,7 +69,19 @@ export function ChatProvider({ children }) {
         return () => unsubscribe();
     }, [userData?.data?.user?._id])
 
-    return <ChatContext.Provider value={{ isChatSearch, setIsChatSearch, selectedChat, setSelectedChat, searchChatValue, setSearchChatValue, searchData, setSearchData, messages, setMessages, threads, setThreads }}>{children}</ChatContext.Provider>
+    useEffect(() => {
+        if (!userData?.data?.user?._id) return;
+        const querySearch = query(collection(db, "notifications"), where("userId", "==", userData.data.user._id), where("read", "==", false))
+        const unsubscribe = onSnapshot(querySearch, (querySnapshot) => {
+            setNotifications(querySnapshot.docs.map((item) => ({
+                ...item.data(),
+                id: item.id,
+            })))
+        })
+        return () => unsubscribe()
+    }, [userData?.data?.user?._id])
+
+    return <ChatContext.Provider value={{ isChatSearch, setIsChatSearch, selectedChat, setSelectedChat, searchChatValue, setSearchChatValue, searchData, setSearchData, messages, setMessages, threads, setThreads, notifications, setNotifications }}>{children}</ChatContext.Provider>
 }
 
 export function useChat() {
