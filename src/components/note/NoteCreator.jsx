@@ -3,6 +3,7 @@ import { useUser } from "../../context/UserContext";
 import NoteTooltip from "./Note";
 import { Loader } from "../helpers/Loader";
 import { useState } from "react";
+import { createNote, updateNote } from "../../services/note";
 
 export function NoteCreator({ isEditing, isNoteOpen, setIsNoteOpen }) {
     const { userData, setMessage, setNote, setIsNoteEditOpen } = useUser();
@@ -13,59 +14,6 @@ export function NoteCreator({ isEditing, isNoteOpen, setIsNoteOpen }) {
     function handleClose() {
         setIsNoteOpen(false)
         setNoteValue("");
-    }
-
-    async function createNote() {
-        try {
-            setShareLoading(true);
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/note`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `${userData.data.token}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "content": noteValue
-                }),
-                redirect: "follow"
-            })
-            const result = await response.json();
-            setMessage(result.message);
-            setNote(result.note)
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setNoteValue("");
-            setShareLoading(false);
-            setIsNoteOpen(false);
-        }
-    }
-
-
-    async function updateNote() {
-        try {
-            setShareLoading(true);
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/note`, {
-                method: "PUT",
-                headers: {
-                    "Authorization": `${userData.data.token}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "content": noteValue
-                }),
-                redirect: "follow"
-            })
-            const result = await response.json();
-            setMessage(result.message);
-            setNote(result.note)
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setShareLoading(false);
-            setIsNoteOpen(false)
-            setIsNoteEditOpen(false);
-        }
     }
 
     return <>
@@ -87,9 +35,9 @@ export function NoteCreator({ isEditing, isNoteOpen, setIsNoteOpen }) {
                 {!shareLoading ?
                     <button className={`text-[#0095F6] ${isDisabled ? "opacity-50" : "hover:text-white transition duration-150"}`} disabled={isDisabled} onClick={() => {
                         if (isEditing) {
-                            updateNote()
+                            updateNote(setShareLoading, userData, noteValue, setMessage, setNote, setIsNoteEditOpen, setIsNoteOpen)
                         } else {
-                            createNote()
+                            createNote(setShareLoading, userData, noteValue, setMessage, setNote, setNoteValue, setIsNoteOpen)
                         }
                     }}>Share</button> : <div><Loader height="h-[0vh]" widthHeight={true} /></div>}
             </div>

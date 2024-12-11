@@ -3,10 +3,9 @@ import { Link } from "react-router-dom";
 import { EmojiIcon } from "../../assets/Constants";
 import { useEffect, useRef, useState } from "react";
 import { useChat } from "../../context/ChatContext";
-import { addDoc, collection, doc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
 import { useSearch, useUser } from "../../context/UserContext";
 import { fetchUserDataOnClick } from "../../utils/helper";
+import { handleSendMessage } from "../../services/chat";
 
 export function UserChat() {
     const { userData, setMainLoading } = useUser()
@@ -51,45 +50,6 @@ export function UserChat() {
         }
     }
 
-    function handleSendMessage() {
-        setMessages([...messages, { text: messageValue, sender: userData.data.user._id }]);
-        setMessageValue("");
-        setDoc(doc(db, "messagesThread", [userData.data.user._id, selectedChat._id].sort().join("_")), {
-            participants: [userData.data.user._id, selectedChat._id],
-            lastMessage: null,
-            timeStamp: serverTimestamp(),
-            lastMessageSender: userData.data.user._id
-        }).then(() => {
-            addDoc(collection(db, "messagesThread", [userData.data.user._id, selectedChat._id].sort().join("_"), "messages"), {
-                senderId: userData.data.user._id,
-                content: messageValue,
-                timeStamp: serverTimestamp()
-            }).catch((error) => console.error(error))
-            updateDoc(doc(db, "messagesThread", [userData.data.user._id, selectedChat._id].sort().join("_")), {
-                lastMessage: messageValue,
-                timeStamp: serverTimestamp()
-            }).catch((err) => console.error(err))
-            const q = query(
-                collection(db, "notifications"),
-                where("messageSender", "==", userData.data.user._id),
-                where("userId", "==", selectedChat._id)
-            );
-            getDocs(q).then((item) => {
-                if (item.empty) {
-                    addDoc(collection(db, "notifications"), {
-                        read: false,
-                        messageSender: userData?.data?.user?._id,
-                        userId: selectedChat._id,
-                        timeStamp: serverTimestamp(),
-                    })
-                } else {
-                    const docRef = item.docs[0].ref;
-                    updateDoc(docRef, { read: false })
-                }
-            });
-        }).catch((err) => console.error(err))
-    };
-
     return <div className="md:w-[80%] mt-10 md:mt-0 w-[90%] bg-[#000] overflow-hidden ml-0 md:ml-5 1280:ml-0">
         <div className="py-2 px-4 border-b-[2px] border-[#262626]">
             <Link to={`/search/${selectedChat.userName}/`} onClick={() => {
@@ -125,7 +85,7 @@ export function UserChat() {
                 </div>
             }
             <input type="text" value={messageValue} className="w-[100%] rounded-3xl bg-transparent outline-none border-[1px] border-[#a2a2a2] px-12 py-2" placeholder="Message..." onChange={(e) => setMessageValue(e.target.value)} />
-            <button className={`text-[#0096f4] ${messageValue.length === 0 ? "opacity-70" : " hover:text-white"} text-[14px] absolute right-10 top-[1.1rem] transition duration-100`} disabled={messageValue.length === 0} onClick={handleSendMessage}>Send</button>
+            <button className={`text-[#0096f4] ${messageValue.length === 0 ? "opacity-70" : " hover:text-white"} text-[14px] absolute right-10 top-[1.1rem] transition duration-100`} disabled={messageValue.length === 0} onClick={() => handleSendMessage(setMessages, messages, messageValue, userData, setMessageValue, selectedChat)}>Send</button>
         </div>
     </div>
 }

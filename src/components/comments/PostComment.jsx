@@ -1,38 +1,11 @@
 import { useEffect } from "react";
 import { usePost } from "../../context/PostContext";
 import { useUser } from "../../context/UserContext";
+import { postComment } from "../../services/post";
 
 export function PostComment({ commentRef, className, item }) {
     const { setIsDisabled, isDisabled, commentValue, setCommentValue, setIsCommented, selectedPost, setSelectedPost } = usePost()
     const { userData, setMessage } = useUser()
-
-    async function postComment() {
-        try {
-            setIsDisabled(true);
-            const respone = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/comment/${selectedPost._id}`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `${userData.data.token}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "comment": commentValue
-                }),
-                redirect: "follow"
-            })
-            const result = await respone.json();
-            if (result.status !== "fail") {
-                setMessage("Commented Successfully")
-                setCommentValue("")
-                setIsCommented((prev) => !prev)
-            }
-        } catch (error) {
-            console.error(error)
-            setMessage("Failed")
-        } finally {
-            setIsDisabled(commentValue.length === 0);
-        }
-    }
 
     useEffect(() => {
         if (commentValue.length > 0) {
@@ -59,7 +32,7 @@ export function PostComment({ commentRef, className, item }) {
         <button
             className={`text-[#0095F6] ml-5 text-[12px] transition-all duration-150 ${isDisabled ? "opacity-50 " : "cursor-pointer hover:opacity-70"}`}
             disabled={isDisabled}
-            onClick={postComment}
+            onClick={() => postComment(setIsDisabled, userData, commentValue, selectedPost, setMessage, setCommentValue, setIsCommented)}
         >
             POST
         </button>

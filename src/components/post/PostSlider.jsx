@@ -41,10 +41,7 @@ export function PostSlider({ currentIndex, setCurrentIndex }) {
             {selectedPost !== null
                 ? selectedPost.imageUrls.map((item, index) => {
                     return (
-                        <div
-                            key={index}
-                            className="relative flex-shrink-0 w-full h-full"
-                        >
+                        <div key={index} className="relative flex-shrink-0 w-full h-full">
                             <img
                                 src={item}
                                 alt="Post"

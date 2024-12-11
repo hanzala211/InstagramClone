@@ -3,6 +3,7 @@ import { MdKeyboardArrowLeft } from "react-icons/md"
 import { Loader } from "../helpers/Loader";
 import { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
+import { fetchArchive } from "../../services/archive";
 
 export function ArchivesModal({ selectStatus, setSelectCover, selectedIDs, selectCover, setSelectStatus, isCreatingHighLight, handleClose, setSelectedIDs, left }) {
     const { userData } = useUser()
@@ -10,27 +11,7 @@ export function ArchivesModal({ selectStatus, setSelectCover, selectedIDs, selec
     const [archives, setArchives] = useState([]);
 
     useEffect(() => {
-        async function fetchArchive() {
-            try {
-                setLoadingArchives(true);
-                const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/archives`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `${userData.data.token}`
-                    },
-                    redirect: "follow"
-                })
-                const result = await response.json();
-                if (result.message !== "No archives found.") {
-                    setArchives(result.archives);
-                }
-            } catch (error) {
-                console.error(error)
-            } finally {
-                setLoadingArchives(false)
-            }
-        }
-        fetchArchive()
+        fetchArchive(setLoadingArchives, userData, setArchives)
     }, [])
 
     function formatDate(num) {

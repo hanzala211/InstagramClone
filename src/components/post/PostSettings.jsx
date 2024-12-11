@@ -3,6 +3,7 @@ import { useUser } from "../../context/UserContext";
 import { EditPost } from "../post/EditPost";
 import { usePost } from "../../context/PostContext";
 import { Overlay } from "../helpers/Overlay";
+import { deletePost, updatePost } from "../../services/post";
 
 export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPostOpen, isMyPost }) {
     const { userData, setMessage, setUserData, setUserPosts } = useUser();
@@ -32,62 +33,6 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
         setCurrentIndex((prev) => prev - 1)
     }
 
-    async function deletePost() {
-        try {
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/${selectedPost._id}`, {
-                method: "DELETE",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            setMessage(result.data)
-            setUserData((prev) => ({
-                ...prev, data: {
-                    ...prev.data, user: {
-                        ...prev.data.user, posts: prev.data.user.posts.filter((item) => item !== selectedPost?._id), postCount: prev.data.user.postCount - 1
-                    }
-                }
-            }))
-            setUserPosts((prev) => (prev.filter((item) => item._id !== selectedPost._id)))
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setSelectedPost(null)
-            setIsPostSettingOpen(false)
-            setIsPostOpen(false)
-        }
-    }
-
-    async function updatePost() {
-        try {
-            setShareLoading(true);
-            setIsShared(true);
-            setIsEditingOpen(false);
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/${selectedPost._id}`, {
-                method: "PUT",
-                headers: {
-                    "Authorization": `${userData.data.token}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "caption": captionValue,
-                    "isPublic": true
-                }),
-                redirect: "follow"
-            })
-            const result = await response.json();
-            if (result.status !== "fail") {
-                setMessage("Post Updated")
-            }
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setShareLoading(false);
-        }
-    }
-
     return <>
         <div
             className={`overlay opacity-0 transition-all z-[200] duration-500 ${!isPostSettingOpen ? "pointer-events-none" : "opacity-100"
@@ -105,7 +50,7 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
         >
             {isMyPost && (
                 <>
-                    <button className="text-red-600 w-full p-3 xl:text-[14px] text-[10px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]" onClick={() => deletePost()}>Delete
+                    <button className="text-red-600 w-full p-3 xl:text-[14px] text-[10px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]" onClick={() => deletePost(userData, setMessage, setUserData, setUserPosts, selectedPost, setSelectedPost, setIsPostSettingOpen, setIsPostOpen)}>Delete
                     </button>
                     <button className="w-full p-3 border-b-[1px] xl:text-[14px] text-[10px] active:opacity-70 font-semibold border-[#363636]" onClick={() => {
                         setIsEditingOpen(true);
@@ -135,7 +80,7 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
             <div className={`bg-[#262626] xl:w-[70vw] w-[85vw] h-[92vh] transition-all duration-300 flex flex-col opacity-0 ${isEditingOpen ? "opacity-100" : "pointer-events-none"}`}>
                 <EditPost croppedImage={selectedPost !== null ? selectedPost.imageUrls : []} handleIncrease={handleIncrease} handleDecrease={handleDecrease} currentIndex={currentIndex} isCaption={isEditingOpen} captionValue={captionValue} setCaptionValue={setCaptionValue} userData={userData} loading={false} />
             </div>
-            <button className="text-[#0095F6] absolute z-[200] -top-7 right-0 hover:text-white text-[15px]" onClick={updatePost}>Update</button>
+            <button className="text-[#0095F6] absolute z-[200] -top-7 right-0 hover:text-white text-[15px]" onClick={() => updatePost(setShareLoading, setIsShared, setIsEditingOpen, userData, captionValue, selectedPost, setMessage)}>Update</button>
         </div>
         <div
             className={`overlay opacity-0 transition-all z-[150] backdrop-blur-sm duration-500 ${!isShared ? "pointer-events-none" : "opacity-100"
