@@ -1,9 +1,9 @@
-import { IoCloseSharp } from "react-icons/io5";
 import { useSearch, useUser } from "../../context/UserContext";
 import { useEffect, useState } from "react";
 import { UserModal } from "./UserModal";
 import { Skeleton } from "../helpers/Skeleton";
 import { Overlay } from "../helpers/Overlay";
+import { fetchFollowers, fetchFollowing } from "../../services/followerModal";
 
 export function UserFollowModal({ isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen }) {
     const { userData, userFollowers, setUserFollowers, userFollowing, setUserFollowing } = useUser();
@@ -20,10 +20,10 @@ export function UserFollowModal({ isFollowerModalOpen, setIsFollowerModalOpen, i
 
     useEffect(() => {
         if (isFollowerModalOpen === true) {
-            fetchFollowers();
+            fetchFollowers(setIsLoading, userData, setUserFollowers);
         }
         else if (isFollowingModalOpen) {
-            fetchFollowing();
+            fetchFollowing(setIsLoading, userData, setUserFollowing);
         }
     }, [isFollowerModalOpen, isFollowingModalOpen])
 
@@ -41,45 +41,6 @@ export function UserFollowModal({ isFollowerModalOpen, setIsFollowerModalOpen, i
         }
 
     }
-
-    async function fetchFollowers() {
-        try {
-            setIsLoading(true)
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/followers`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            setUserFollowers(result.data)
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setIsLoading(false)
-        }
-    }
-
-    async function fetchFollowing() {
-        try {
-            setIsLoading(true)
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/following`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            setUserFollowing(result.data)
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setIsLoading(false)
-        }
-    }
-
 
     return <>
         <Overlay handleClose={handleClose} isPostOpen={isFollowerModalOpen || isFollowingModalOpen} />
