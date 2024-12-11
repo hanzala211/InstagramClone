@@ -24,7 +24,7 @@ export function SearchBox({ refere, isSearching }) {
         return () => abortController.abort();
     }, [searchQuery])
 
-    return <div ref={refere} className={`fixed ${location.pathname.slice(0, 7) === "/direct" ? "bg-[#000] left-20" : "bg-[#000] xl:bg-transparent lg:left-32"} md:left-20 xl:left-20 top-0 h-[100vh] transition-[width] overflow-auto scrollbar-hidden duration-500 ease-in-out ${!isSearching ? "w-0 pointer-events-none" : "border-r-[1px] border-[#262626] sm:w-[30vw] lg:w-[23rem]"}`}>
+    return <div ref={refere} className={`fixed ${location.pathname.slice(0, 7) === "/direct" ? "bg-[#000] left-20" : "bg-[#000] xl:bg-transparent lg:left-32"} md:left-20 xl:left-20 top-0 h-[100vh] transition-[width] overflow-auto scrollbar-hidden duration-300 ease-in-out ${!isSearching ? "w-0 pointer-events-none" : "border-r-[1px] border-[#262626] sm:w-[30vw] lg:w-[23rem]"}`}>
         <div className={`px-4 pt-9 pb-6 flex gap-9 flex-col ${!isSearching ? "hidden" : "border-b-[1px] border-[#262626]"}`}>
             <h2 className="font-semibold text-[25px]">Search</h2>
             <input type="text" placeholder="Search" className="bg-[#363636] px-3 py-2.5 w-full rounded-lg outline-none" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />

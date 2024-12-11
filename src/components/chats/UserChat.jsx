@@ -70,11 +70,7 @@ export function UserChat() {
                             }`}>
                             {message.senderId !== userData.data.user._id && <img src={selectedChat?.profilePic} alt={`Chat User ${message?.userName}`} className="w-6 rounded-full " />}
                             <div
-                                className={`p-2.5 rounded-xl text-sm max-w-xs ${message.senderId === userData.data.user._id
-                                    ? "bg-[#0096f4] text-white"
-                                    : "bg-[#262626]"
-                                    }`}
-                            >
+                                className={`p-2.5 rounded-xl text-sm max-w-xs ${message.senderId === userData.data.user._id ? "bg-[#0096f4] text-white" : "bg-[#262626]"}`}>
                                 {message.content}
                             </div>
                         </div>
