@@ -8,6 +8,7 @@ export function PostPageHeader({ isArrowNeeded, isHomePage, isInbox }) {
     const { setSelectedPost, setComments } = usePost()
     const { notifications } = useChat()
     const navigate = useNavigate()
+
     return <div className="fixed top-0 z-[1000] bg-[#000] flex md:hidden py-5 items-center border-b-[2px] border-[#363636] w-full h-[2rem]">
         {isArrowNeeded && <FaChevronLeft onClick={() => {
             navigate(-1)

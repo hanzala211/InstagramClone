@@ -1,11 +1,9 @@
 import { CreatePosts } from "../../assets/Constants";
 import { useRef, useState } from "react";
 import Pintura from "../helpers/Pintura";
-import { useUser } from "../../context/UserContext";
 import { Overlay } from "../helpers/Overlay";
 
 export function CreateStory({ creatingStory, setIsCreatingStory }) {
-    const { userData } = useUser();
     const [selectedImage, setSelectedImage] = useState(null)
     const [result, setResult] = useState(null);
     const [isUploading, setIsUploading] = useState(false);
@@ -32,27 +30,6 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
 
     function handleFile() {
         fileInputRef.current.click();
-    }
-
-    async function uploadStory() {
-        const formdata = new FormData();
-        const blobImage = await fetch(result).then((req) => req.blob())
-        formdata.append("image", blobImage, "storyImage.jpg")
-        try {
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/story`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                body: formdata,
-                redirect: "follow"
-            })
-            const resultAwait = await response.json();
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setUploaded(true);
-        }
     }
 
     return <>
@@ -90,8 +67,8 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
                         setSelectedImage={setSelectedImage}
                         setResult={setResult}
                         result={result}
-                        uploadStory={uploadStory}
                         setIsUploading={setIsUploading}
+                        setUploaded={setUploaded}
                     />
                 ) : (
                     <>

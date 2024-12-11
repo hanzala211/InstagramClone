@@ -2,6 +2,8 @@ import { PinturaEditor } from "@pqina/react-pintura";
 import "@pqina/pintura/pintura.css";
 import { getEditorDefaults } from "@pqina/pintura";
 import { useEffect } from "react";
+import { uploadStory } from "../../services/stroy";
+import { useUser } from "../../context/UserContext";
 
 const editorDefaults = getEditorDefaults({
     stickers: [],
@@ -10,11 +12,12 @@ const editorDefaults = getEditorDefaults({
     enableWatermark: false,
 });
 
-export default function Pintura({ selectedImage, result, setResult, uploadStory, setIsUploading }) {
+export default function Pintura({ selectedImage, result, setResult, setIsUploading, setUploaded }) {
+    const { userData } = useUser()
     useEffect(() => {
         if (result) {
             setIsUploading(true);
-            uploadStory();
+            uploadStory(result, userData, setUploaded);
         }
     }, [result, setIsUploading, uploadStory]);
     return (

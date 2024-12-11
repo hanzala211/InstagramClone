@@ -52,7 +52,7 @@ export function SearchProfile() {
 
     return <>
         {!mainLoading ?
-            <section className="w-full lg:max-w-[50%] md:max-w-[87%] mx-auto">
+            <section className="w-full lg:max-w-[45%] md:max-w-[87%] mx-auto">
                 <div className="w-full max-w-[61rem] pb-9 lg:pt-20 pt-8 md:border-b-[2px] md:border-[#262626]">
                     <div className="flex w-full xl:gap-20 lg:gap-5 gap-2 sm:items-center relative">
                         {searchUserNotes.length > 0 &&
