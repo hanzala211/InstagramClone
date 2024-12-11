@@ -105,8 +105,7 @@ export function SideBar() {
     return <><aside
         className={`px-4 py-10 hidden md:block transition-[width] bg-[#000] border-r-[2px] border-[#262626] duration-500 ease-in-out 
       ${isSearching || location.pathname.slice(0, 7) === "/direct" ? "w-[5rem]" : "w-[5rem] lg:w-[15rem] xl:w-[18rem]"} 
-      fixed z-[100] left-0 top-0 h-[100vh]`}
-    >
+      fixed z-[100] left-0 top-0 h-[100vh]`}>
         <Link to="/home"><img src="/images/instagramiconswhite.png" alt="Instagram Logo" className={`w-[6.5rem] ml-2 mb-9 ${isSearching || location.pathname.slice(0, 7) === "/direct" ? "hidden" : "hidden lg:block"}`} /></Link>
         <NavLink to="/home"
             className={({ isActive }) =>
@@ -126,8 +125,10 @@ export function SideBar() {
             <p className={`text-[15px] ${isSearching || location.pathname.slice(0, 7) === "/direct" ? "hidden" : "hidden lg:block"}`}>More</p>
         </div>
         <SearchBox refere={searchBoxRef} isSearching={isSearching} />
+        <div>
+            <LogOutDiv isOpen={isOpen} dropdownRef={dropdownRef} />
+        </div>
     </aside >
-        <LogOutDiv isOpen={isOpen} dropdownRef={dropdownRef} />
         <CreatePost isCreating={isCreating} fileInputRef={fileInputRef} selectedImage={selectedImage} setIsCreating={setIsCreating} setSelectedImage={setSelectedImage} handleFileChange={handleFileChange} handleFile={handleFile} />
         <CreateStory creatingStory={createStory} setIsCreatingStory={setCreateStory} />
     </>
