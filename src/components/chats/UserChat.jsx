@@ -8,7 +8,7 @@ import { fetchUserDataOnClick } from "../../utils/helper";
 import { handleSendMessage } from "../../services/chat";
 import { Loader } from "../helpers/Loader";
 import { BsThreeDots } from "react-icons/bs";
-import { deleteDoc, doc } from "firebase/firestore";
+import { collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 
 export function UserChat() {
@@ -98,7 +98,10 @@ export function UserChat() {
                                 return updated;
                             })}>
                                 {isClicked[index] && <div className="absolute md:-left-36 -left-[6.5rem] flex hover:opacity-80 transition duration-200 items-center justify-center rounded-lg bg-[#262626] -top-6 md:w-32 md:h-12 w-24 h-10">
-                                    <button onClick={() => deleteDoc(doc(db, "messagesThread", [userData.data.user._id, selectedChat._id].sort().join("_"), "messages", message.id))} className="text-red-500">Delete</button>
+                                    <button onClick={() => {
+                                        deleteDoc(doc(db, "messagesThread", [userData.data.user._id, selectedChat._id].sort().join("_"), "messages", message.id))
+                                        // updateDoc(collection())
+                                    }} className="text-red-500">Delete</button>
                                 </div>
                                 }
                                 <BsThreeDots />

@@ -58,12 +58,10 @@ export function ChatProvider({ children }) {
     useEffect(() => {
         if (!userData?.data?.user?._id) return;
         setThreadsLoading(true)
-
         const querySearch = query(
             collection(db, "messagesThread"),
             where("participants", "array-contains", userData.data.user._id)
         );
-
         const unsubscribe = onSnapshot(querySearch, (querySnapshot) => {
             const foundArr = querySnapshot.docs.map((item) => item.data())
             const foundIds = foundArr.map((item) => item.participants.find((id) => userData.data.user._id !== id))
@@ -93,6 +91,8 @@ export function ChatProvider({ children }) {
                 }).finally(() => setTimeout(() => {
                     setThreadsLoading(false)
                 }, 500))
+            } else {
+                setThreadsLoading(false)
             }
         });
 
