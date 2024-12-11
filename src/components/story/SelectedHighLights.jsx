@@ -1,8 +1,11 @@
 import { IoCloseSharp } from "react-icons/io5"
 import { MdKeyboardArrowLeft } from "react-icons/md"
 import { Loader } from "../helpers/Loader"
+import { createHighLight } from "../../services/stroy"
+import { useUser } from "../../context/UserContext"
 
-export function SelectedHighLights({ selectCover, setSelectCover, setSelectedIDs, isCreatingHighLight, handleClose, selectedIDs, formatDate, formatMonth, currentID, createHighLight, sendLoading, setCurrentID }) {
+export function SelectedHighLights({ selectCover, setSelectCover, setSelectedIDs, isCreatingHighLight, handleClose, selectedIDs, formatDate, formatMonth, currentID, sendLoading, setCurrentID, setSendLoading, highlightName }) {
+    const { userData } = useUser()
     return <>
         <div className={`w-full max-w-[30vw] overflow-hidden bg-[#262626] rounded-xl h-[75vh] fixed inset-0 z-[100] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition duration-500 ${selectCover ? "opacity-100" : "pointer-events-none"}`}>
             <div className="text-center w-full py-3 border-b-[1px] border-[#363636]">
@@ -39,7 +42,7 @@ export function SelectedHighLights({ selectCover, setSelectCover, setSelectedIDs
             </div>
             <div className="w-full border-t-[1px] border-[#363636]">
                 {!sendLoading ?
-                    <button onClick={() => createHighLight()} className={`w-full py-3 text-[15px] transition-all duration-150 font-semibold  text-[#0095F6]`} >Done</button>
+                    <button onClick={() => createHighLight(setSendLoading, userData, highlightName, selectedIDs, currentID, handleClose)} className={`w-full py-3 text-[15px] transition-all duration-150 font-semibold  text-[#0095F6]`} >Done</button>
                     : <Loader height="15vh mt-1.5" widthHeight={false} />}
             </div>
         </div></>

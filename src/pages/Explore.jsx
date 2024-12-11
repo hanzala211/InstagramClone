@@ -6,8 +6,8 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { Post } from "../components/post/Post";
 import { usePost } from "../context/PostContext";
 import { PostModal } from "../components/post/PostModal";
-import { fetchSearch } from "../utils/helper";
 import { UserModal } from "../components/usermodals/UserModal";
+import { fetchSearch } from "../services/search";
 
 export function Explore() {
     const { userData } = useUser();

@@ -3,8 +3,8 @@ import { useChat } from "../../context/ChatContext"
 import { UserThreads } from "./UserThreads"
 import { useEffect, useState } from "react"
 import { useUser } from "../../context/UserContext"
-import { fetchSearch } from "../../utils/helper"
 import { Skeleton } from "../helpers/Skeleton"
+import { fetchSearch } from "../../services/search"
 
 export function NewChat() {
     const { setIsChatSearch, isChatSearch, searchChatValue, setSearchChatValue, searchData, setSearchData } = useChat()
