@@ -5,11 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import { useChat } from "../../context/ChatContext";
 import { useSearch, useUser } from "../../context/UserContext";
 import { fetchUserDataOnClick } from "../../utils/helper";
-import { handleSendMessage } from "../../services/chat";
+import { deleteMessageAndUpdateThread, handleSendMessage } from "../../services/chat";
 import { Loader } from "../helpers/Loader";
 import { BsThreeDots } from "react-icons/bs";
-import { collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
 
 export function UserChat() {
     const { userData, setMainLoading } = useUser()
@@ -57,7 +55,12 @@ export function UserChat() {
 
     function handleKeyDown(e) {
         if (e.key === "Enter") {
-            handleSendMessage()
+            handleSendMessage(setMessages,
+                messages,
+                messageValue,
+                userData,
+                setMessageValue,
+                selectedChat)
         }
     }
 
@@ -97,11 +100,10 @@ export function UserChat() {
                                 updated[index] = !updated[index];
                                 return updated;
                             })}>
-                                {isClicked[index] && <div className="absolute md:-left-36 -left-[6.5rem] flex hover:opacity-80 transition duration-200 items-center justify-center rounded-lg bg-[#262626] -top-6 md:w-32 md:h-12 w-24 h-10">
-                                    <button onClick={() => {
-                                        deleteDoc(doc(db, "messagesThread", [userData.data.user._id, selectedChat._id].sort().join("_"), "messages", message.id))
-                                        // updateDoc(collection())
-                                    }} className="text-red-500">Delete</button>
+                                {isClicked[index] && <div onClick={() => {
+                                    deleteMessageAndUpdateThread(userData.data.user._id, selectedChat._id, message.id);
+                                }} className="absolute md:-left-36 -left-[6.5rem] flex hover:opacity-80 transition duration-200 items-center justify-center rounded-lg bg-[#262626] -top-6 md:w-32 md:h-12 w-24 h-10 text-red-500">
+                                    Delete
                                 </div>
                                 }
                                 <BsThreeDots />

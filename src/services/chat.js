@@ -1,9 +1,13 @@
 import {
 	addDoc,
 	collection,
+	deleteDoc,
 	doc,
 	getDocs,
+	limit,
+	orderBy,
 	query,
+	runTransaction,
 	serverTimestamp,
 	setDoc,
 	updateDoc,
@@ -82,4 +86,43 @@ export function handleSendMessage(
 			});
 		})
 		.catch((err) => console.error(err));
+}
+
+export async function deleteMessageAndUpdateThread(
+	userId,
+	selectedChatId,
+	messageId
+) {
+	const threadId = [userId, selectedChatId].sort().join('_');
+	const threadDocRef = doc(db, 'messagesThread', threadId);
+	const messagesCollectionRef = collection(
+		db,
+		'messagesThread',
+		threadId,
+		'messages'
+	);
+	const messageDocRef = doc(messagesCollectionRef, messageId);
+	try {
+		deleteDoc(messageDocRef);
+		const latestMessageQuery = query(
+			messagesCollectionRef,
+			orderBy('timeStamp', 'desc'),
+			limit(1)
+		);
+		const latestMessageSnapshot = await getDocs(latestMessageQuery);
+		if (!latestMessageSnapshot.empty) {
+			const latestMessage = latestMessageSnapshot.docs[0].data();
+			updateDoc(threadDocRef, {
+				lastMessage: latestMessage.content || '',
+				lastMessageSender: latestMessage.senderId,
+			});
+		} else {
+			updateDoc(threadDocRef, {
+				lastMessage: '',
+				lastMessageSender: null,
+			});
+		}
+	} catch (error) {
+		console.error('Error deleting message and updating thread:', error);
+	}
 }
