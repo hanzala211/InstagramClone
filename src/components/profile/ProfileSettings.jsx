@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import { Loader } from "../helpers/Loader";
 import { Overlay } from "../helpers/Overlay";
+import { changeData } from "../../services/profile";
 
 export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
     const { setUserData } = useUser();
@@ -63,85 +64,6 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
         fileInputRef.current.value = null;
     }
 
-    async function changeData() {
-        const raw = JSON.stringify({
-            "userName": changeUserName,
-            "fullName": userData.data.user.fullName,
-            "websiteUrl": userData.data.user.websiteUrl,
-            "gender": "Male",
-            "bio": changeBio,
-            "isPublic": !isPublic
-        });
-        try {
-            setErrorMessage("")
-            setSuccessMessage("")
-            setIsDisabled(true);
-            const response = await fetch("https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/profile-settings", {
-                method: "PUT",
-                headers: {
-                    "Authorization": `${userData.data.token}`,
-                    "Content-Type": "application/json"
-                },
-                body: raw,
-                redirect: "follow"
-            })
-            const result = await response.json();
-            if (result.message === "Profile updated successfully") {
-                setSuccessMessage(result.message);
-                setUserData((prev) => {
-                    return {
-                        ...prev, data: {
-                            ...prev.data,
-                            user: {
-                                ...result.data,
-                            }
-                        }
-                    }
-                })
-            }
-            else {
-                setErrorMessage(result.message)
-            }
-            if (selectedImage !== null) {
-                const formData = new FormData();
-                const blobImage = await fetch(selectedImage).then((req) => req.blob());
-                formData.append("image", blobImage, "profileImage")
-                const response = await fetch("https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/profile-settings/profile-pic", {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `${userData.data.token}`,
-                    },
-                    body: formData,
-                    redirect: "follow"
-                })
-                const result = await response.json();
-                if (result.message === "Profile picture updated successfully") {
-                    setUserData((prev) => {
-                        return {
-                            ...prev, data: {
-                                ...prev.data, user: {
-                                    ...prev.data.user, profilePic: result.profilePic
-                                }
-                            }
-                        }
-                    })
-
-                } else {
-                    setErrorMessage(result.data);
-                }
-            }
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setIsDisabled(false)
-            setIsEditOpen(false)
-            setTimeout(() => {
-                setSuccessMessage("")
-                setErrorMessage("")
-            }, 900)
-        }
-    }
-
     return <>
         <Overlay handleClose={handleClose} isPostOpen={isEditOpen} />
         <div className={`fixed flex items-center left-1/2 -translate-x-1/2 top-[48%] md:top-1/2 -translate-y-1/2 justify-center z-[150] w-full md:max-w-[45rem] md:h-[75vh] 440:max-w-[25rem] max-w-[23rem] h-[75vh] transition-opacity duration-500 ${isEditOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
@@ -193,7 +115,7 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
                 </div>
                 <div className="mt-5">
                     <button
-                        onClick={changeData}
+                        onClick={() => changeData(changeUserName, userData, setErrorMessage, setSuccessMessage, setIsDisabled, changeBio, isPublic, setUserData, selectedImage, setIsEditOpen)}
                         className={`w-full relative py-3 rounded-xl bg-[#0095F6] text-white ${!isChanged ? "opacity-50 cursor-not-allowed" : "opacity-100"} ${isDisabled ? "opacity-60 cursor-not-allowed" : ""}`}
                         disabled={!isChanged || isDisabled}
                     >

@@ -16,6 +16,7 @@ import { MobileProfileBar } from "../components/profile/MobileProfileBar";
 import { UserFollowDetails } from "../components/usermodals/UserFollowDetails";
 import { LaptopProfileBar } from "../components/profile/LaptopProfileBar";
 import { fetchNote } from "../utils/helper";
+import { fetchPosts, fetchSaves, getHighLights, getStatus } from "../services/profile";
 
 export function Profile() {
     const { userData, setUserPosts, note, setNote, setStories, stories, setCurrentStory, highlights, setHighlights, setHighLightStories, setCurrentHighLight, setUserSaves, isNoteEditOpen, setIsNoteEditOpen, isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen } = useUser();
@@ -30,12 +31,12 @@ export function Profile() {
     const checkref = useRef(null);
 
     useEffect(() => {
-        fetchPosts();
-        fetchSaves();
+        fetchPosts(setPostsLoading, userData, setUserPosts);
+        fetchSaves(userData, setUserSaves);
         fetchNote(setNoteLoading, userData, setNote);
-        getStatus();
+        getStatus(userData, setStories);
         if (highlights.length === 0) {
-            getHighLights()
+            getHighLights(setHighLightStories, userData, setHighlights)
         }
     }, [])
 
@@ -60,78 +61,6 @@ export function Profile() {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [setIsNoteEditOpen]);
-
-    async function getHighLights() {
-        try {
-            setHighLightStories([]);
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/highlights`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            setHighlights(result.highlights)
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
-    async function getStatus() {
-        try {
-
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/story`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            setStories(result.stories)
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
-    async function fetchSaves() {
-        try {
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/saved-posts`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            setUserSaves(result.data)
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
-    async function fetchPosts() {
-        try {
-            setPostsLoading(true);
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/my-posts`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            });
-            const result = await response.json();
-            setUserPosts(result.data)
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setTimeout(() => {
-                setPostsLoading(false);
-            }, 500);
-        }
-    }
-
 
     return <section className="w-full lg:max-w-[50%] md:max-w-[87%] mx-auto">
         <div className="w-full max-w-[61rem] pb-9 lg:pt-20 pt-8 md:border-b-[2px] md:border-[#262626]">

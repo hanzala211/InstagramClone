@@ -124,7 +124,7 @@ export function UserChat() {
                     <EmojiPicker width={innerWidth > 768 ? 350 : 300} height={innerWidth > 768 ? 350 : 300} onEmojiClick={(emoji) => setMessageValue((prev) => prev + emoji.emoji)} theme="dark" />
                 </div>
             }
-            <input type="text" value={messageValue} className="w-[100%] rounded-3xl bg-transparent outline-none border-[1px] px-12 py-2" placeholder="Message..." onChange={(e) => setMessageValue(e.target.value)} />
+            <input type="text" value={messageValue} className="w-[100%] rounded-3xl bg-transparent outline-none border-[1px] border-[#a2a2a2] px-12 py-2" placeholder="Message..." onChange={(e) => setMessageValue(e.target.value)} />
             <button className={`text-[#0096f4] ${messageValue.length === 0 ? "opacity-70" : " hover:text-white"} text-[14px] absolute right-10 top-[1.1rem] transition duration-100`} disabled={messageValue.length === 0} onClick={handleSendMessage}>Send</button>
         </div>
     </div>

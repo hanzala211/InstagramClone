@@ -1,5 +1,4 @@
 import { MdVerified } from "react-icons/md";
-import NoteTooltip from "../components/note/Note";
 import { Link, NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSearch, useUser } from "../context/UserContext";
@@ -9,6 +8,7 @@ import { HighLights } from "../components/story/Highlights";
 import { LoadingPage } from "./LoadingPage";
 import { UserFollowDetails } from "../components/usermodals/UserFollowDetails";
 import { NoteDiv } from "../components/note/NoteDiv";
+import { followUser, unfollowUser, fetchPosts } from "../services/searchProfile";
 
 export function SearchProfile() {
     const { setSearchUserPosts, selectedProfile, searchUserStatus, setSearchUserStatus, searchUserHighLights, setSearchUserHighLights, setSelectedProfile } = useSearch();
@@ -33,7 +33,7 @@ export function SearchProfile() {
     }, [selectedProfile._id, userData.data.user.following])
 
     useEffect(() => {
-        Promise.all(selectedProfile?.posts.map((item) => fetchPosts(item))).then((res) => {
+        Promise.all(selectedProfile?.posts.map((item) => fetchPosts(item, setPostsLoading, userData))).then((res) => {
             setSearchUserPosts(res.map((item) => item.post))
         }).finally(() => setPostsLoading(false))
     }, [selectedProfile.posts, userData.data.token])
@@ -50,87 +50,11 @@ export function SearchProfile() {
         }
     }, [selectedProfile])
 
-    async function fetchPosts(postID) {
-        try {
-            setPostsLoading(true);
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/${postID}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            return await result;
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
-    async function followUser() {
-        try {
-            setUserData((prev) => ({
-                ...prev, data: {
-                    ...prev.data, user: {
-                        ...prev.data.user, following: [...prev.data.user.following, selectedProfile?._id], followingCount: prev.data.user.followingCount + 1
-                    }
-                }
-            }))
-            setIsDisabled(true)
-            setSelectedProfile((prev) => ({
-                ...prev, followersCount: prev.followersCount + 1
-            }))
-            setIsDisabled(true);
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/follow/${selectedProfile._id}`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setIsDisabled(false)
-            setMessage("User Followed Successfully")
-        }
-    }
-
-    async function unfollowUser() {
-        try {
-            setUserData((prev) => ({
-                ...prev, data: {
-                    ...prev.data, user: {
-                        ...prev.data.user, following: [prev.data.user.following.filter((item) => item !== selectedProfile._id)], followingCount: prev.data.user.followingCount - 1
-                    }
-                }
-            }))
-            setIsDisabled(true)
-            setSelectedProfile((prev) => ({
-                ...prev, followersCount: prev.followersCount - 1
-            }))
-            const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/unfollow/${selectedProfile._id}`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `${userData.data.token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setIsDisabled(false)
-            setMessage("User Unfollowed Successfully")
-        }
-    }
-
     return <>
         {!mainLoading ?
-            <section className="w-full lg:max-w-[60%] mx-auto">
+            <section className="w-full lg:max-w-[50%] md:max-w-[87%] mx-auto">
                 <div className="w-full max-w-[61rem] pb-9 lg:pt-20 pt-8 md:border-b-[2px] md:border-[#262626]">
-                    <div className="flex w-full xl:gap-20 lg:gap-5 gap-3 ml-3 items-start sm:items-center relative">
+                    <div className="flex w-full xl:gap-20 lg:gap-5 gap-2 sm:items-center relative">
                         {searchUserNotes.length > 0 &&
                             <NoteDiv notes={searchUserNotes[0]} />
                         }
@@ -147,9 +71,9 @@ export function SearchProfile() {
                                 </Link>
                                 <div>
                                     {isFollowed ?
-                                        <button disabled={isDisabled} className={`bg-[#363636] px-7 py-1 rounded-lg sm:w-32 1280:w-auto ${isDisabled ? "opacity-50" : ""}`} onClick={() => unfollowUser()}>Unfollow</button>
+                                        <button disabled={isDisabled} className={`bg-[#363636] px-7 py-1 rounded-lg sm:w-32 1280:w-auto ${isDisabled ? "opacity-50" : ""}`} onClick={() => unfollowUser(setUserData, selectedProfile, setIsDisabled, setSelectedProfile, userData, setMessage)}>Unfollow</button>
                                         :
-                                        <button disabled={isDisabled} className={`bg-[#0095F6] px-7 py-1 rounded-lg ${isDisabled ? "opacity-50" : ""}`} onClick={() => followUser()}>Follow</button>
+                                        <button disabled={isDisabled} className={`bg-[#0095F6] px-7 py-1 rounded-lg ${isDisabled ? "opacity-50" : ""}`} onClick={() => followUser(setUserData, selectedProfile, setIsDisabled, setSelectedProfile, setMessage, userData)}>Follow</button>
                                     }
                                 </div>
                             </div>
@@ -162,7 +86,7 @@ export function SearchProfile() {
                             </div>
                         </div>
                     </div>
-                    <div className={`flex gap-10 ml-5 md:mt-16 mt-7 ${searchUserHighLights.length === 0 ? "" : "md:h-36 h-24"} overflow-x-auto scrollbar-hidden`}>
+                    <div className={`flex gap-10 ml-5 md:mt-16 mt-7 ${searchUserHighLights.length === 0 ? "h-24" : "md:h-36 h-24"} overflow-x-auto scrollbar-hidden`}>
                         {searchUserHighLights.length > 0 && searchUserHighLights.map((item, i, arr) =>
                             <Link to={`/search/stories/highlight/${arr[i]._id}/`} key={i} onClick={() => {
                                 setHighLightStories(searchUserHighLights[i].stories)
@@ -177,7 +101,7 @@ export function SearchProfile() {
                 <div className="flex justify-evenly py-2 border-y-[1px] border-[#262626] md:hidden">
                     <UserFollowDetails isSearchProfile={true} />
                 </div>
-                <div className="absolute left-[57%] -translate-x-1/2 md:flex hidden gap-10">
+                <div className="absolute left-[52%] -translate-x-1/2 md:flex hidden gap-10">
                     <NavLink end to={`/search/${selectedProfile.userName}/`}
                         className={({ isActive }) => `flex items-center tracking-wider py-3 gap-1 text-[12px] ${isActive ? "font-semibold border-t-[2px]" : "text-[#A8A8A8]"}`}>
                         <PostsIcon /> POSTS
