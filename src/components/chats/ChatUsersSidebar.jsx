@@ -13,7 +13,6 @@ export function ChatUsersSidebar() {
     const { setIsChatSearch, threads, threadsLoading } = useChat()
     const [noteLoading, setNoteLoading] = useState(false)
 
-
     useEffect(() => {
         fetchNote(setNoteLoading, userData, setNote);
     }, [])

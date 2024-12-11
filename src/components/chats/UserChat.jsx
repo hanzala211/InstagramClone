@@ -7,6 +7,9 @@ import { useSearch, useUser } from "../../context/UserContext";
 import { fetchUserDataOnClick } from "../../utils/helper";
 import { handleSendMessage } from "../../services/chat";
 import { Loader } from "../helpers/Loader";
+import { BsThreeDots } from "react-icons/bs";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
 
 export function UserChat() {
     const { userData, setMainLoading } = useUser()
@@ -15,6 +18,8 @@ export function UserChat() {
     const [isPickingEmoji, setIsPickingEmoji] = useState(false)
     const [messageValue, setMessageValue] = useState("")
     const [innerWidth, setInnerWidth] = useState(0)
+    const [messagesDelete, setMessagesDelete] = useState(null)
+    const [isClicked, setIsClicked] = useState(null)
     const emojiIconRef = useRef(null)
     const emojiPickerRef = useRef(null)
     const scrollRef = useRef(null);
@@ -37,6 +42,10 @@ export function UserChat() {
     useEffect(() => {
         if (scrollRef.current !== null) {
             scrollRef.current.scrollTop = scrollRef.current?.scrollHeight;
+        }
+        if (messages !== null) {
+            setMessagesDelete(Array.from(messages.length).fill(false))
+            setIsClicked(Array.from(messages.length).fill(false))
         }
     }, [messages.length]);
 
@@ -66,11 +75,36 @@ export function UserChat() {
                 <div ref={scrollRef}
                     className="overflow-y-auto h-full max-h-[calc(100vh-230px)] md:max-h-[calc(100vh-130px)] scrollbar-hidden py-3 px-3 flex flex-col gap-5">
                     {messages.length > 0 ? messages.map((message, index) => (
-                        <div key={index} className={`flex items-end gap-2 ${message?.senderId === userData.data.user._id ? "justify-end" : "justify-start"
+                        <div key={index} onMouseEnter={() => {
+                            setMessagesDelete(Array.from(messages.length).fill(false))
+                            setMessagesDelete((prev) => {
+                                const updated = [...prev];
+                                updated[index] = true;
+                                return updated;
+                            })
+                        }} onMouseLeave={() => {
+                            if (!isClicked[index]) {
+                                setMessagesDelete((prev) => {
+                                    const updated = [...prev];
+                                    updated[index] = false;
+                                    return updated;
+                                })
+                            }
+                        }} className={`flex items-end gap-3 ${message?.senderId === userData.data.user._id ? "justify-end" : "justify-start"
                             }`}>
+                            {messagesDelete[index] && message.senderId === userData?.data.user._id && <button className="-translate-y-[70%] relative" onClick={() => setIsClicked((prev) => {
+                                const updated = [...prev];
+                                updated[index] = !updated[index];
+                                return updated;
+                            })}>
+                                {isClicked[index] && <div className="absolute md:-left-36 -left-[6.5rem] flex hover:opacity-80 transition duration-200 items-center justify-center rounded-lg bg-[#262626] -top-6 md:w-32 md:h-12 w-24 h-10">
+                                    <button onClick={() => deleteDoc(doc(db, "messagesThread", [userData.data.user._id, selectedChat._id].sort().join("_"), "messages", message.id))} className="text-red-500">Delete</button>
+                                </div>
+                                }
+                                <BsThreeDots />
+                            </button>}
                             {message.senderId !== userData.data.user._id && <img src={selectedChat?.profilePic} alt={`Chat User ${message?.userName}`} className="w-6 rounded-full " />}
-                            <div
-                                className={`p-2.5 rounded-xl text-sm max-w-xs ${message.senderId === userData.data.user._id ? "bg-[#0096f4] text-white" : "bg-[#262626]"}`}>
+                            <div className={`p-2.5 rounded-xl text-sm max-w-xs ${message.senderId === userData.data.user._id ? "bg-[#0096f4] text-white" : "bg-[#262626]"}`}>
                                 {message.content}
                             </div>
                         </div>
