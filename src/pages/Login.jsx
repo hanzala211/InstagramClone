@@ -66,11 +66,6 @@ export function Login() {
                 })
                 navigate("/home");
                 localStorage.setItem("token", JSON.stringify(result.data.token))
-            } else {
-                setUserData({
-                    status: "fail",
-                    data: "Server Is Down.Please try after sometime",
-                })
             }
         } catch (error) {
             setUserData({
