@@ -51,10 +51,17 @@ export function SignUp() {
                 navigate("/home");
                 localStorage.setItem("token", JSON.stringify(result.data.token))
             } else {
-                console.error("Login failed");
+                setUserData({
+                    status: "fail",
+                    data: "Server Is Down.Please try after sometime",
+                })
             }
         } catch (error) {
-            console.error(error);
+            setUserData({
+                status: "fail",
+                data: "Server Is Down.Please try after sometime",
+                error: error
+            })
         } finally {
             setLoading(false);
             setMainLoading(false)
