@@ -4,12 +4,12 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-	apiKey: 'AIzaSyBBfS5rezYOuIMYnCPr4kA8BsCfwA4chUg',
+	apiKey: import.meta.env.VITE_FIREBASE_REACT_API_KEY,
 	authDomain: 'instachat-98ace.firebaseapp.com',
 	projectId: 'instachat-98ace',
 	storageBucket: 'instachat-98ace.firebasestorage.app',
 	messagingSenderId: '772013663673',
-	appId: '1:772013663673:web:c1f100b5b26ca169ef8268',
+	appId: import.meta.env.VITE_APP_ID,
 	measurementId: 'G-PK5KEZ71NF',
 };
 
