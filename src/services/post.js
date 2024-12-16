@@ -259,3 +259,45 @@ export async function postComment(
 		setIsDisabled(commentValue.length === 0);
 	}
 }
+
+export async function fetchExplorePosts(
+	setCount,
+	setExplorePagePosts,
+	userData,
+	setHasMore,
+	setIsPostsLoading
+) {
+	try {
+		setCount((prev) => prev + 1);
+		const response = await fetch(
+			`${import.meta.env.VITE_APP_URL}api/v1/explore?limit=6`,
+			{
+				method: 'GET',
+				headers: {
+					Authorization: `${userData.data.token}`,
+				},
+				redirect: 'follow',
+			}
+		);
+		const result = await response.json();
+		if (result.status !== 'fail') {
+			setExplorePagePosts((prev) => {
+				const newItems = result.data.filter(
+					(item) => !prev.some((prevItem) => prevItem._id === item._id)
+				);
+				if (newItems.length === 0) {
+					setHasMore(false);
+					return [...prev];
+				} else {
+					return [...prev, ...newItems];
+				}
+			});
+		} else {
+			setHasMore(false);
+		}
+	} catch (error) {
+		console.error(error);
+	} finally {
+		setIsPostsLoading(false);
+	}
+}

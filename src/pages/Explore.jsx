@@ -8,6 +8,7 @@ import { usePost } from "../context/PostContext";
 import { PostModal } from "../components/post/PostModal";
 import { UserModal } from "../components/usermodals/UserModal";
 import { fetchSearch } from "../services/search";
+import { fetchExplorePosts } from "../services/post";
 
 export function Explore() {
     const { userData } = useUser();
@@ -27,7 +28,11 @@ export function Explore() {
 
     useEffect(() => {
         setIsPostsLoading(true)
-        fetchPosts();
+        fetchExplorePosts(setCount,
+            setExplorePagePosts,
+            userData,
+            setHasMore,
+            setIsPostsLoading);
     }, [])
 
     useEffect(() => {
@@ -62,42 +67,6 @@ export function Explore() {
         }
     };
 
-    async function fetchPosts() {
-        try {
-            setCount((prev) => prev + 1)
-            const response = await fetch(
-                `https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/explore?limit=6`,
-                {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `${userData.data.token}`,
-                    },
-                    redirect: 'follow',
-                }
-            );
-            const result = await response.json();
-            if (result.status !== 'fail') {
-                setExplorePagePosts((prev) => {
-                    const newItems = result.data.filter(
-                        (item) => !prev.some((prevItem) => prevItem._id === item._id)
-                    );
-                    if (newItems.length === 0) {
-                        setHasMore(false);
-                        return [...prev];
-                    } else {
-                        return [...prev, ...newItems];
-                    }
-                });
-            } else {
-                setHasMore(false);
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setIsPostsLoading(false);
-        }
-    }
-
     function handleIncrease() {
         setCurrentPost((prev) => prev + 1)
         setCurrentIndex(0)
@@ -131,7 +100,7 @@ export function Explore() {
         ) : isPostsLoading ? <Loader /> : (
             <InfiniteScroll
                 dataLength={explorePagePosts.length}
-                next={fetchPosts}
+                next={() => fetchExplorePosts(setCount, setExplorePagePosts, userData, setHasMore, setIsPostsLoading)}
                 loader={
                     <div className="flex justify-center py-4">
                         <Loader height="h-[5vh]" />
