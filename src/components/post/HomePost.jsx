@@ -21,7 +21,7 @@ import { SearchChat } from "../chats/SearchChat"
 export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost, setCurrentPostIndex, setIsPostOpen, isPost, arr }) {
     const { userData, setMainLoading, setUserData, setMessage, innerWidth } = useUser()
     const { setSelectedProfile } = useSearch()
-    const { setSelectedPost, selectedPost, setComments, setCommentsLoading, setTotalPages, page, isCommented, isShareOpenHome, setIsShareOpenHome } = usePost()
+    const { setSelectedPost, selectedPost, setComments, setCommentsLoading, setTotalPages, page, isCommented, setIsShareOpenHome } = usePost()
     const [isAnimating, setIsAnimating] = useState(false)
     const [currentIndex, setCurrentIndex] = useState(Array(homePosts.length).fill(0))
     const [totalIndex, setTotalIndex] = useState(Array(homePosts.length).fill(0))
@@ -147,7 +147,7 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
                                 const currentTime = Date.now();
                                 const timeDifference = currentTime - lastTouchTime.current;
                                 if (timeDifference < 300 && timeDifference > 0) {
-                                    handleDoubleClick(arr[index]._id, i)
+                                    handleDoubleClick(homePosts[index]._id, i)
                                 }
                                 lastTouchTime.current = currentTime;
                             }} src={item} alt="Posts" className="w-full h-full object-cover" />
