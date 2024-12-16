@@ -118,17 +118,17 @@ export function SideBar() {
         </div>
         <div
             ref={checkref}
-            className={`gap-4 absolute bottom-5 group hover:bg-[rgba(255,255,255,.1)] transition cursor-pointer duration-300 inline-flex items-center p-2 rounded-md ${isOpen ? "font-bold" : ""} ${isSearching || location.pathname.slice(0, 7) === "/direct" ? "w-10" : "lg:w-[15rem] w-[50%]"}`}
+            className={`gap-4 absolute bottom-5 group hover:bg-[rgba(255,255,255,.1)] transition cursor-pointer duration-300 inline-flex items-center p-2 rounded-md ${isOpen ? "font-bold" : ""} ${isSearching || location.pathname.slice(0, 7) === "/direct" ? "w-10" : "xl:w-[15rem] w-[50%] md:w-[12rem]"}`}
             onClick={() => setIsOpen((prev) => !prev)}
         >
             <MoreIcon className="group-hover:scale-110 transition-transform duration-150" />
             <p className={`text-[15px] ${isSearching || location.pathname.slice(0, 7) === "/direct" ? "hidden" : "hidden lg:block"}`}>More</p>
         </div>
         <SearchBox refere={searchBoxRef} isSearching={isSearching} />
-    </aside >
         <div>
             <LogOutDiv isOpen={isOpen} dropdownRef={dropdownRef} />
         </div>
+    </aside >
         <CreatePost isCreating={isCreating} fileInputRef={fileInputRef} selectedImage={selectedImage} setIsCreating={setIsCreating} setSelectedImage={setSelectedImage} handleFileChange={handleFileChange} handleFile={handleFile} />
         <CreateStory creatingStory={createStory} setIsCreatingStory={setCreateStory} />
     </>
