@@ -29,7 +29,7 @@ export function Layout({ token }) {
         try {
             setMainLoading(true)
             setUserData([])
-            const response = await fetch("https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/auth/me", {
+            const response = await fetch(`${import.meta.env.VITE_APP_URL}api/v1/auth/me`, {
                 method: "GET",
                 headers: {
                     "Authorization": `${token}`
@@ -55,6 +55,7 @@ export function Layout({ token }) {
             }
         }
     }
+    console.log(`${import.meta.env.VITE_APP_URL}`)
 
     return <>
         {!mainLoading ? <section className="flex flex-row w-full items-center">
