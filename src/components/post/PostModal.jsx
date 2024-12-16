@@ -2,22 +2,25 @@ import { FaHeart } from "react-icons/fa";
 import { PiCopySimpleLight } from "react-icons/pi";
 import { TbMessageCircleFilled } from "react-icons/tb";
 import { formatNumber } from "../../utils/helper";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
 
 export function PostModal({ arr, i, setSelectedPost, setIsPostOpen, setCurrentPost, item }) {
     const { userData } = useUser()
-    const [innerHeight, setInnerHeight] = useState(0);
+    const [innerHeight, setInnerHeight] = useState(0)
+    const navigate = useNavigate()
 
     useEffect(() => {
         setInnerHeight(window.innerWidth)
     }, [window.innerWidth])
 
-    return <Link to={innerHeight < 768 ? `/${item?.user ? item.user.userName : item.postBy.userName ? item.postBy.userName : userData?.data?.user?.userName}/p/${item._id}/` : ""} className="w-full max-w-[25rem] h-full max-h-[25rem] cursor-pointer group relative overflow-hidden" onClick={() => {
+    return <div className="w-full max-w-[25rem] h-full max-h-[25rem] cursor-pointer group relative overflow-hidden" onClick={() => {
         if (innerHeight > 768) {
             setIsPostOpen(true)
             setCurrentPost(i);
+        } else {
+            navigate(`/${item?.user ? item.user.userName : item.postBy.userName ? item.postBy.userName : userData?.data?.user?.userName}/p/${item._id}/`)
         }
         setSelectedPost({
             ...arr[i],
@@ -41,5 +44,5 @@ export function PostModal({ arr, i, setSelectedPost, setIsPostOpen, setCurrentPo
             alt={item?.caption}
             className="w-full h-full object-cover object-center"
         />
-    </Link>
+    </div>
 }
