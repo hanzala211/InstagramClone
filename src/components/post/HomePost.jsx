@@ -126,6 +126,7 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
         })
     };
 
+
     return <div className={`flex flex-col gap-2 mt-7 ${isPost ? "" : "border-b-[2px] border-[#262626]"} pb-4`}>
         <div className={`flex flex-row items-center gap-2`}>
             <img src={item?.user?.profilePic || item?.postBy?.profilePic || userData?.data?.user?.profilePic} className="rounded-full w-10" alt="" />
@@ -210,9 +211,15 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
                     }} className="font-semibold text-[12px] text-white hover:opacity-70 transition duration-200 mr-2">{item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName}</Link>
                     {item.caption !== null && item.caption}
                 </p>
-                <button className="text-[#a8a8a8] text-[14px]">View all {item.commentsCount} comments</button>
+                {innerWidth < 768 &&
+                    <Drawer onClose={() => setComments([])}>
+                        <DrawerContent className="bg-[#000] border-t-[1px] border-[#a8a8a8]">
+                            <CommentDrawer />
+                        </DrawerContent>
+                        <DrawerTrigger>{item.commentsCount > 1 && <button onClick={() => setSelectedPost(item)} className="text-[#a8a8a8] text-[14px]">View all {item.commentsCount} comments</button>}</DrawerTrigger>
+                    </Drawer>}
                 {!isPost &&
-                    <div className="md:hidden">
+                    <div className={`md:hidden ${item.commentsCount > 1 ? "" : "-mt-3"}`}>
                         <PostComment commentRef={commentRef} item={item} />
                     </div>}
             </div>
