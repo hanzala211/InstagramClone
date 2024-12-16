@@ -29,6 +29,7 @@ export function NewChat() {
         setSearchChatValue("")
         setSearchData([])
     }
+
     return <>
         <div
             className={`overlay z-[100] opacity-0 transition-all duration-500 ${!isChatSearch ? "pointer-events-none" : "backdrop-blur-sm opacity-100"

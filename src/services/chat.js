@@ -125,3 +125,25 @@ export async function deleteMessageAndUpdateThread(
 		console.error('Error deleting message and updating thread:', error);
 	}
 }
+
+export async function fetchSelectedChat(userData, setSelectedChat, location) {
+	try {
+		const response = await fetch(
+			`${import.meta.env.VITE_APP_URL}api/v1/auth/${location.pathname.slice(
+				16,
+				-1
+			)}`,
+			{
+				method: 'GET',
+				headers: {
+					Authorization: `${userData.data.token}`,
+				},
+				redirect: 'follow',
+			}
+		);
+		const result = await response.json();
+		setSelectedChat(result.data.user);
+	} catch (error) {
+		console.error(error);
+	}
+}

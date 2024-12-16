@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useUser } from "./UserContext";
 import { db } from "../firebaseConfig";
 import { useLocation } from "react-router-dom";
+import { fetchSelectedChat } from "../services/chat";
 
 const ChatContext = createContext()
 
@@ -21,22 +22,7 @@ export function ChatProvider({ children }) {
 
     useEffect(() => {
         if (location.pathname.slice(16, -1) !== "" && selectedChat === null) {
-            async function fetchSelectedChat() {
-                try {
-                    const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/auth/${location.pathname.slice(16, -1)}`, {
-                        method: "GET",
-                        headers: {
-                            "Authorization": `${userData.data.token}`
-                        },
-                        redirect: "follow"
-                    })
-                    const result = await response.json()
-                    setSelectedChat(result.data.user)
-                } catch (error) {
-                    console.error(error)
-                }
-            }
-            fetchSelectedChat()
+            fetchSelectedChat(userData, setSelectedChat, location)
         }
     }, [location.pathname, selectedChat, userData])
 
