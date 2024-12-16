@@ -58,7 +58,7 @@ export function Login() {
                             <img src={imagesArr[currentIndex]} alt="ScreenShots" className={`absolute left-[65%] -translate-x-1/2 top-7 transition-all ${isAnimating ? "animating opacity-50" : "opacity-100"}`} />
                         </div>
                         <div className="flex flex-col gap-3 items-center">
-                            <div className={`flex items-center flex-col border-[2px] border-[#363636] w-[23.7rem] gap-6 h-[27rem]`}>
+                            <div className={`flex items-center flex-col border-[2px] border-[#363636] w-[22rem] sm:w-[23.7rem] gap-6 sm:h-[27rem] h-[25rem]`}>
                                 {!loading ? <><div className="w-full">
                                     <Link><img src="/images/instagramiconswhite.png" alt="" className="w-1/2 mx-auto mt-10" /></Link>
                                 </div>
@@ -77,7 +77,7 @@ export function Login() {
                                     {userData?.status === "fail" && <p className="text-red-500">{userData.data}</p>}
                                 </> : <div className="mt-2"><Loader /></div>}
                             </div>
-                            <div className="flex items-center justify-center border-[2px] border-[#363636] py-6 w-[23.7rem] gap-1">
+                            <div className="flex items-center justify-center border-[2px] border-[#363636] py-6 sm:w-[23.7rem] w-[22rem] gap-1">
                                 <p>Don't have an account?</p>
                                 <Link to="/signup" className="text-[#3897F1]">Sign up</Link>
                             </div>

@@ -40,9 +40,9 @@ export function SignUp() {
     ]
 
     return <div className="flex flex-col h-[100vh] justify-between">
-        <section className="flex justify-center items-center w-full mt-12">
+        <section className="flex justify-center items-center w-full sm:mt-12 mt-2">
             <div className="flex flex-col gap-3 items-center">
-                <div className="flex items-center flex-col border-[2px] border-[#363636] w-[23.7rem] h-[35rem] gap-4">
+                <div className="flex items-center flex-col border-[2px] border-[#363636] sm:w-[23.7rem] w-[22rem] h-[35rem] gap-4">
                     {!loading ? <><div className="w-full">
                         <Link><img src="/images/instagramiconswhite.png" alt="" className="w-1/2 mx-auto mt-10" /></Link>
                     </div>
@@ -62,7 +62,7 @@ export function SignUp() {
                     {succesMessage === "success" && <p className="text-green-600 uppercase">{succesMessage}</p>}
                 </div>
                 {userData?.status === "fail" && <p className="text-red-500">{userData.data}</p>}
-                <div className="flex items-center justify-center border-[2px] border-[#363636] py-6 w-[23.7rem] gap-1">
+                <div className="flex items-center justify-center border-[2px] border-[#363636] py-6 sm:w-[23.7rem] w-[22rem] gap-1">
                     <p>Have an account?</p>
                     <Link to="/login" onClick={() => setUserData([])} className="text-[#3897F1]">Log in</Link>
                 </div>
