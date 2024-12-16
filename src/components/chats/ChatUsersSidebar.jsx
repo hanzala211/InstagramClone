@@ -6,16 +6,21 @@ import { useChat } from "../../context/ChatContext"
 import { UserThreads } from "./UserThreads"
 import { Skeleton } from "../helpers/Skeleton";
 import { fetchNote } from "../../services/note"
+import { useNavigate } from "react-router-dom"
 
 
 export function ChatUsersSidebar() {
     const { userData, note, setNote } = useUser()
-    const { setIsChatSearch, threads, threadsLoading } = useChat()
+    const { setIsChatSearch, threads, threadsLoading, selectedChat } = useChat()
     const [noteLoading, setNoteLoading] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
+        if (selectedChat !== null) {
+            navigate(`/direct/inbox/t/${selectedChat?._id}`)
+        }
         fetchNote(setNoteLoading, userData, setNote);
-    }, [])
+    }, [selectedChat?._id])
 
     return <div className="bg-[#000] mt-7 md:mt-0 overflow-auto scrollbar-hidden border-r-[2px] border-[#262626] md:w-[23.5rem] h-[95vh] md:h-[100vh] relative top-0 flex flex-col items-center md:block gap-12 left-0 py-12">
         <div className="flex justify-between px-5">

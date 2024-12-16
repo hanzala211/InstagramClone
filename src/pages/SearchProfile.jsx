@@ -9,9 +9,11 @@ import { LoadingPage } from "./LoadingPage";
 import { UserFollowDetails } from "../components/usermodals/UserFollowDetails";
 import { NoteDiv } from "../components/note/NoteDiv";
 import { followUser, unfollowUser, fetchPosts } from "../services/searchProfile";
+import { useChat } from "../context/ChatContext";
 
 export function SearchProfile() {
     const { setSearchUserPosts, selectedProfile, searchUserStatus, setSearchUserStatus, searchUserHighLights, setSearchUserHighLights, setSelectedProfile } = useSearch();
+    const { setSelectedChat } = useChat()
     const { userData, setUserData, setHighLightStories, setCurrentHighLight, setCurrentStory, mainLoading, setMessage } = useUser()
     const [postsLoading, setPostsLoading] = useState(false);
     const [isFollowed, setIsFollowed] = useState(false);
@@ -69,12 +71,16 @@ export function SearchProfile() {
                                     {selectedProfile.userName}
                                     {selectedProfile?.followers.length > 10 && <MdVerified className="fill-[#0095F6]" />}
                                 </Link>
-                                <div>
+                                <div className="flex gap-3">
                                     {isFollowed ?
                                         <button disabled={isDisabled} className={`bg-[#363636] px-7 py-1 rounded-lg sm:w-32 1280:w-auto ${isDisabled ? "opacity-50" : ""}`} onClick={() => unfollowUser(setUserData, selectedProfile, setIsDisabled, setSelectedProfile, userData, setMessage)}>Unfollow</button>
                                         :
                                         <button disabled={isDisabled} className={`bg-[#0095F6] px-7 py-1 rounded-lg ${isDisabled ? "opacity-50" : ""}`} onClick={() => followUser(setUserData, selectedProfile, setIsDisabled, setSelectedProfile, setMessage, userData)}>Follow</button>
                                     }
+                                    <button onClick={() => {
+                                        setSelectedChat(selectedProfile)
+                                        navigate("/direct/inbox/")
+                                    }} className={`bg-[#0095F6] px-7 py-1 rounded-lg`}>Message</button>
                                 </div>
                             </div>
                             <div className="md:flex hidden gap-10 items-center">
@@ -101,7 +107,7 @@ export function SearchProfile() {
                 <div className="flex justify-evenly py-2 border-y-[1px] border-[#262626] md:hidden">
                     <UserFollowDetails isSearchProfile={true} />
                 </div>
-                <div className="absolute left-[55%] -translate-x-1/2 md:flex hidden gap-10">
+                <div className="absolute left-[58%] xl:left-[56%] -translate-x-1/2 md:flex hidden gap-10">
                     <NavLink end to={`/search/${selectedProfile.userName}/`}
                         className={({ isActive }) => `flex items-center tracking-wider py-3 gap-1 text-[12px] ${isActive ? "font-semibold border-t-[2px]" : "text-[#A8A8A8]"}`}>
                         <PostsIcon /> POSTS

@@ -7,12 +7,20 @@ import { useEffect } from "react";
 import { MobileBar } from "./components/sidebar/MobileBar";
 import { fetchMe } from "./services/userAuth";
 import { fetchUserDataOnClick } from "./services/searchProfile";
+import { useChat } from "./context/ChatContext";
 
 export function Layout({ token }) {
     const { mainLoading, setMainLoading, setUserData, message, setMessage } = useUser();
+    const { setSelectedChat } = useChat()
     const { setSelectedProfile } = useSearch();
     const params = useParams()
     const location = useLocation()
+
+    useEffect(() => {
+        if (location.pathname.slice(0, 14) !== "/direct/inbox/") {
+            setSelectedChat(null)
+        }
+    }, [location.pathname])
 
     useEffect(() => {
         if (token !== null) {
