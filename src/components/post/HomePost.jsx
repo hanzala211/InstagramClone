@@ -142,12 +142,12 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
                 {item !== null ? item.imageUrls.map((item, i) => {
                     return <div className="relative flex-shrink-0 w-full h-full"
                         key={i}>
-                        <img onDoubleClick={() => handleDoubleClick(arr[index]._id, i)}
+                        <img onDoubleClick={() => handleDoubleClick(homePosts[index]._id, index)}
                             onTouchStart={() => {
                                 const currentTime = Date.now();
                                 const timeDifference = currentTime - lastTouchTime.current;
                                 if (timeDifference < 300 && timeDifference > 0) {
-                                    handleDoubleClick(homePosts[index]._id, i)
+                                    handleDoubleClick(homePosts[index]._id, index)
                                 }
                                 lastTouchTime.current = currentTime;
                             }} src={item} alt="Posts" className="w-full h-full object-cover" />
