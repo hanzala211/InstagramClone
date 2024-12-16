@@ -36,7 +36,7 @@ export function Login() {
         return () => clearInterval(interval);
     }, [imagesArr.length]);
 
-
+    console.log(`${import.meta.env.VITE_APP_URL}`)
 
     return (
         <>

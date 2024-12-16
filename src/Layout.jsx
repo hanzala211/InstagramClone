@@ -6,6 +6,7 @@ import { Footer } from "./components/helpers/Footer";
 import { useEffect } from "react";
 import { fetchUserDataOnClick } from "./utils/helper";
 import { MobileBar } from "./components/sidebar/MobileBar";
+import { fetchMe } from "./services/userAuth";
 
 export function Layout({ token }) {
     const { mainLoading, setMainLoading, setUserData, message, setMessage } = useUser();
@@ -15,7 +16,7 @@ export function Layout({ token }) {
 
     useEffect(() => {
         if (token !== null) {
-            fetchUser();
+            fetchMe(setMainLoading, setUserData, token, params, fetchUserDataOnClick, setSelectedProfile);
         }
     }, [token])
 
@@ -24,38 +25,6 @@ export function Layout({ token }) {
             setMessage("")
         }, 1500);
     }, [message])
-
-    async function fetchUser() {
-        try {
-            setMainLoading(true)
-            setUserData([])
-            const response = await fetch(`${import.meta.env.VITE_APP_URL}api/v1/auth/me`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `${token}`
-                },
-                redirect: "follow"
-            })
-            const result = await response.json();
-            setUserData({
-                status: result.status,
-                data: {
-                    token: token,
-                    user: {
-                        ...result.data,
-                    }
-                }
-            })
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setMainLoading(false);
-            if (params) {
-                fetchUserDataOnClick(params.username, null, token, setSelectedProfile, setMainLoading)
-            }
-        }
-    }
-    console.log(`${import.meta.env.VITE_APP_URL}`)
 
     return <>
         {!mainLoading ? <section className="flex flex-row w-full items-center">

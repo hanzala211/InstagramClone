@@ -118,3 +118,49 @@ export async function fetchData(
 		setMainLoading(false);
 	}
 }
+export async function fetchMe(
+	setMainLoading,
+	setUserData,
+	token,
+	params,
+	fetchUserDataOnClick,
+	setSelectedProfile
+) {
+	try {
+		setMainLoading(true);
+		setUserData([]);
+		const response = await fetch(
+			`${import.meta.env.VITE_APP_URL}api/v1/auth/me`,
+			{
+				method: 'GET',
+				headers: {
+					Authorization: `${token}`,
+				},
+				redirect: 'follow',
+			}
+		);
+		const result = await response.json();
+		setUserData({
+			status: result.status,
+			data: {
+				token: token,
+				user: {
+					...result.data,
+				},
+			},
+		});
+	} catch (error) {
+		console.error(error);
+	} finally {
+		setMainLoading(false);
+		if (params) {
+			fetchUserDataOnClick(
+				params.username,
+				null,
+				token,
+				setSelectedProfile,
+				setMainLoading
+			);
+		}
+	}
+}
