@@ -70,7 +70,7 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
                     <SelectImage handleFile={handleFile} fileInputRef={fileInputRef} handleFileChange={handleFileChange} />
                 ) : (
                     <div
-                        className={`bg-[#262626] 1280:w-[70rem] 440:w-[25rem] w-[21rem] h-[70vh] sm:w-[40rem] sm:h-[50vh] md:w-[50rem] lg:w-[60rem] lg:h-[85vh] 2xl:w-[86rem] 2xl:h-[90vh] 1280:h-[88vh] transition-all duration-300 flex flex-col overflow-auto scrollbar-hidden`}
+                        className={`bg-[#262626] ${isShared ? "md:w-[40rem] md:h-[40rem] w-[23rem] h-[32rem] 440:w-[25rem] 440:h-[35rem]" : "1280:w-[70rem] 440:w-[25rem] w-[21rem] h-[70vh] sm:w-[40rem] sm:h-[50vh] md:w-[50rem] lg:w-[60rem] lg:h-[85vh] 2xl:w-[86rem] 2xl:h-[90vh] 1280:h-[88vh]"}  transition-all duration-300 flex flex-col overflow-auto scrollbar-hidden`}
                     >
                         <div className="relative w-full h-full">
                             {!loading && !isCaption ? (
@@ -107,7 +107,7 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
                                 />
                             ) : isShared ? (
                                 <div
-                                    className={`bg-[#262626] w-full h-[65vh] lg:h-[72vh] flex flex-col justify-center items-center`}
+                                    className={`bg-[#262626] w-full h-[60vh] flex flex-col justify-center items-center`}
                                 >
                                     {shareLoading ? (
                                         <img src="/images/sharedLoader.gif" alt="loading" className="w-32" />) : (<img src="/images/sharedPost.gif" alt="loaded" className="w-32" />)}
