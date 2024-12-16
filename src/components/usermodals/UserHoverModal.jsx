@@ -21,10 +21,10 @@ export function UserHoverModal({ username, isHovered }) {
         }
     }, [])
 
-    return <div className="bg-[#000] w-[20rem] rounded-lg shadow-sm shadow-gray-200 h-[16rem] hidden md:block">
+    return <div className="bg-[#000] w-[20rem] rounded-lg shadow-sm shadow-gray-200  hidden md:block">
         {isLoading ? <FullSkeleton /> :
             <>
-                <div className="flex gap-5 px-3 py-2">
+                <div className="flex gap-5 px-4 py-3">
                     <img src={hoverProfile?.profilePic} alt="Test User" className="rounded-full w-11 h-11" />
                     <div className="flex gap-1 flex-col">
                         <Link className="text-[14px]">{hoverProfile?.userName}</Link>
