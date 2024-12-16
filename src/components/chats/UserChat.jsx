@@ -16,8 +16,8 @@ export function UserChat() {
     const [isPickingEmoji, setIsPickingEmoji] = useState(false)
     const [messageValue, setMessageValue] = useState("")
     const [innerWidth, setInnerWidth] = useState(0)
-    const [messagesDelete, setMessagesDelete] = useState(null)
-    const [isClicked, setIsClicked] = useState(null)
+    const [messagesDelete, setMessagesDelete] = useState([])
+    const [isClicked, setIsClicked] = useState([])
     const emojiIconRef = useRef(null)
     const emojiPickerRef = useRef(null)
     const scrollRef = useRef(null);
@@ -41,11 +41,12 @@ export function UserChat() {
         if (scrollRef.current !== null) {
             scrollRef.current.scrollTop = scrollRef.current?.scrollHeight;
         }
-        if (messages !== null) {
-            setMessagesDelete(Array.from(messages.length).fill(false))
-            setIsClicked(Array.from(messages.length).fill(false))
+        if (Array.isArray(messages)) {
+            const newArray = Array.from(messages.length).fill(false);
+            setMessagesDelete(newArray);
+            setIsClicked(newArray);
         }
-    }, [messages.length]);
+    }, [messages]);
 
     function handleClick(e) {
         if (emojiIconRef.current && emojiPickerRef.current && !emojiIconRef.current.contains(e.target) && !emojiPickerRef.current.contains(e.target)) {
@@ -55,12 +56,7 @@ export function UserChat() {
 
     function handleKeyDown(e) {
         if (e.key === "Enter") {
-            handleSendMessage(setMessages,
-                messages,
-                messageValue,
-                userData,
-                setMessageValue,
-                selectedChat)
+            handleSendMessage(setMessages, messages, messageValue, userData, setMessageValue, selectedChat)
         }
     }
 
@@ -94,22 +90,22 @@ export function UserChat() {
                         }
                     }} className={`flex items-end gap-3 ${message?.senderId === userData.data.user._id ? "justify-end" : "justify-start"
                         }`}>
-                        {messagesDelete[index] && message.senderId === userData?.data.user._id && <button className="-translate-y-[70%] relative" onClick={() => setIsClicked((prev) => {
+                        {messagesDelete[index] && message?.senderId === userData?.data.user._id && <button className="-translate-y-[70%] relative" onClick={() => setIsClicked((prev) => {
                             const updated = [...prev];
                             updated[index] = !updated[index];
                             return updated;
                         })}>
                             {isClicked[index] && <div onClick={() => {
-                                deleteMessageAndUpdateThread(userData.data.user._id, selectedChat._id, message.id);
+                                deleteMessageAndUpdateThread(userData.data.user._id, selectedChat._id, message?.id);
                             }} className="absolute md:-left-36 -left-[6.5rem] flex hover:opacity-80 transition duration-200 items-center justify-center rounded-lg bg-[#262626] -top-6 md:w-32 md:h-12 w-24 h-10 text-red-500">
                                 Delete
                             </div>
                             }
                             <BsThreeDots />
                         </button>}
-                        {message.senderId !== userData.data.user._id && <img src={selectedChat?.profilePic} alt={`Chat User ${message?.userName}`} className="w-6 rounded-full " />}
-                        <div className={`p-2.5 rounded-xl text-sm max-w-xs ${message.senderId === userData.data.user._id ? "bg-[#0096f4] text-white" : "bg-[#262626]"}`}>
-                            {message.content}
+                        {message?.senderId !== userData.data.user._id && <img src={selectedChat?.profilePic} alt={`Chat User ${message?.userName}`} className="w-6 rounded-full " />}
+                        <div className={`p-2.5 rounded-xl text-sm max-w-xs ${message?.senderId === userData.data.user._id ? "bg-[#0096f4] text-white" : "bg-[#262626]"}`}>
+                            {message?.content}
                         </div>
                     </div>
                 )) : ""}
