@@ -34,7 +34,7 @@ export function ChatUsersSidebar() {
         </div>
         <h1 className="mt-8 mb-3 text-[17px] px-5 font-semibold md:block hidden">Messages</h1>
         <div className="flex flex-col gap-3">
-            {!threadsLoading ? threads.map((item, index) => <UserThreads key={index} item={item} />) : Array.from({ length: 5 }, (_, i) => <div key={i} className="mt-2 md:ml-5"><Skeleton isThread={true} width={true} /></div>)}
+            {!threadsLoading ? threads.map((item, index) => <UserThreads key={index} item={item} isChat={true} />) : Array.from({ length: 5 }, (_, i) => <div key={i} className="mt-2 md:ml-5"><Skeleton isThread={true} width={true} /></div>)}
         </div>
     </div>
 }

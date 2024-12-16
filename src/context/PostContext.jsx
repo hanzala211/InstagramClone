@@ -17,8 +17,11 @@ export function PostProvider({ children }) {
     const [comments, setComments] = useState([])
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(0);
+    const [isShareOpen, setIsShareOpen] = useState(false)
+    const [isShareOpenHome, setIsShareOpenHome] = useState([])
+    const [isShareSearch, setIsShareSearch] = useState("")
 
-    return <PostContext.Provider value={{ commentValue, setCommentValue, isAnimating, setIsAnimating, isPostSettingOpen, setIsPostSettingOpen, isDisabled, setIsDisabled, commentsLoading, setCommentsLoading, isSaved, setIsSaved, isMyPost, setIsMyPost, isCommented, setIsCommented, selectedPost, setSelectedPost, isLiked, setIsLiked, homePosts, setHomePosts, comments, setComments, page, setPage, totalPages, setTotalPages }}>{children}</PostContext.Provider>
+    return <PostContext.Provider value={{ commentValue, setCommentValue, isAnimating, setIsAnimating, isPostSettingOpen, setIsPostSettingOpen, isDisabled, setIsDisabled, commentsLoading, setCommentsLoading, isSaved, setIsSaved, isMyPost, setIsMyPost, isCommented, setIsCommented, selectedPost, setSelectedPost, isLiked, setIsLiked, homePosts, setHomePosts, comments, setComments, page, setPage, totalPages, setTotalPages, isShareOpen, setIsShareOpen, isShareSearch, setIsShareSearch, isShareOpenHome, setIsShareOpenHome }}>{children}</PostContext.Provider>
 }
 export function usePost() {
     const context = useContext(PostContext)

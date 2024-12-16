@@ -39,7 +39,7 @@ function App() {
                 <Route path='/' element={<Layout token={localitem} />}>
                   <Route path='direct/inbox/' element={<Chat />}>
                     <Route index element={<ChatDiv />} />
-                    <Route path='t/:id/' element={<UserChat />} />
+                    <Route path='t/:id' element={<UserChat />} />
                   </Route>
                   <Route path=':username/p/:id/' element={<MobilePostPage />} />
                   <Route path='explore/' element={<Explore />} />

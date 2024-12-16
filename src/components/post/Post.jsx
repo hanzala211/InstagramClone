@@ -14,6 +14,7 @@ import { PostSlider } from "./PostSlider";
 import { CommentsStructure } from "../comments/CommentsStructure";
 import { fetchComments } from "../../services/post";
 import { fetchUserDataOnClick } from "../../services/searchProfile";
+import { SearchChat } from "../chats/SearchChat";
 
 export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, comments, setComments }) {
     const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, setCommentValue, setIsPostSettingOpen, isCommented, commentsLoading, setCommentsLoading, isPostSettingOpen, isMyPost } = usePost()
@@ -75,7 +76,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
     return (
         <>
             <Overlay handleClose={handleClose} isPostOpen={isPostOpen} />
-            <div className={`fixed opacity-0 top-[40%] sm:top-1/2 -translate-y-1/2 w-full 1280:max-w-[90rem] lg:max-w-[65rem] md:h-[32rem] 1280:h-auto md:max-w-[52rem] h-[25rem] max-w-[20rem] -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100 pointer-events-auto" : "pointer-events-none"}`}>
+            <div className={`fixed opacity-0 top-[40%] sm:top-1/2 -translate-y-1/2 w-full 1280:max-w-[90rem] lg:max-w-[68rem] lg:h-[38rem] md:h-[30rem] 1280:h-auto md:max-w-[52rem] h-[25rem] max-w-[20rem] -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isPostOpen ? "opacity-100 pointer-events-auto" : "pointer-events-none"}`}>
                 <div className="h-full flex flexBox">
                     <div className="absolute md:hidden block -top-6 -left-3">
                         <Link
@@ -162,6 +163,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                 setIsPostSettingOpen={setIsPostSettingOpen}
                 setIsPostOpen={setIsPostOpen}
             />
+            <SearchChat header="Share" isChat={false} />
         </>
     );
 

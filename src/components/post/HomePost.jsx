@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useSearch, useUser } from "../../context/UserContext"
 import { CommentHome } from "../comments/CommentHome"
 import { usePost } from "../../context/PostContext"
-import { Like, SaveSVG, UnLike, UnSave } from "../../assets/Constants"
+import { Like, SaveSVG, ShareIcon, UnLike, UnSave } from "../../assets/Constants"
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 import { formatDate } from "../../utils/helper"
 import { useEffect, useRef, useState } from "react"
@@ -15,19 +15,19 @@ import { PostComment } from "../comments/PostComment"
 import { savePost, unSavePost, likePost, unLikePost } from "../../services/homePage"
 import { fetchComments } from "../../services/post"
 import { fetchUserDataOnClick } from "../../services/searchProfile"
+import { SearchChat } from "../chats/SearchChat"
 
 
 export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost, setCurrentPostIndex, setIsPostOpen, isPost, arr }) {
-    const { userData, setMainLoading, setUserData, setMessage } = useUser()
+    const { userData, setMainLoading, setUserData, setMessage, innerWidth } = useUser()
     const { setSelectedProfile } = useSearch()
-    const { setSelectedPost, selectedPost, setComments, setCommentsLoading, setTotalPages, page, isCommented } = usePost()
+    const { setSelectedPost, selectedPost, setComments, setCommentsLoading, setTotalPages, page, isCommented, isShareOpenHome, setIsShareOpenHome } = usePost()
     const [isAnimating, setIsAnimating] = useState(false)
     const [currentIndex, setCurrentIndex] = useState(Array(homePosts.length).fill(0))
     const [totalIndex, setTotalIndex] = useState(Array(homePosts.length).fill(0))
     const [savedPosts, setSavedPosts] = useState(Array(homePosts.length).fill(false))
     const [likedPosts, setLikedPosts] = useState(Array(homePosts.length).fill(false))
     const [isHovered, setIsHovered] = useState(Array(homePosts.length).fill(false))
-    const [innerWidth, setInnerWidth] = useState(window.innerWidth)
     const [showHeart, setShowHeart] = useState(false);
     const [heartIndex, setHeartIndex] = useState(null);
     const lastTouchTime = useRef(0);
@@ -35,34 +35,20 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
     const navigate = useNavigate()
 
     useEffect(() => {
-        const handleResize = () => {
-            setInnerWidth(window.innerWidth);
-        };
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    useEffect(() => {
         if (homePosts !== null) {
             const updatedLikedPosts = homePosts.map((post) => post.likes.includes(userData?.data.user._id))
             setLikedPosts(updatedLikedPosts)
-        }
-        if (homePosts !== null) {
+            const updatedCurrentIndex = homePosts.map((post) => post?.imageUrls.length)
+            setTotalIndex(updatedCurrentIndex)
+            setCurrentIndex(Array(homePosts.length).fill(0))
+            setIsHovered(Array(homePosts.length).fill(false))
             const updatedSavedPosts = homePosts.map((post) =>
                 userData.data.user.savedPosts.includes(post._id)
             );
             setSavedPosts(updatedSavedPosts);
+            setIsShareOpenHome(Array(homePosts.length).fill(false))
         }
-        if (homePosts !== null) {
-            const updatedCurrentIndex = homePosts.map((post) => post?.imageUrls.length)
-            setTotalIndex(updatedCurrentIndex)
-        }
-        if (homePosts) {
-            setCurrentIndex(Array(homePosts.length).fill(0))
-        }
-        if (homePosts) {
-            setIsHovered(Array(homePosts.length).fill(false))
-        }
+
     }, [homePosts])
 
     useEffect(() => {
@@ -126,8 +112,7 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
         })
     };
 
-
-    return <div className={`flex flex-col gap-2 mt-7 ${isPost ? "" : "border-b-[2px] border-[#262626]"} pb-4`}>
+    return <><div className={`flex flex-col gap-2 mt-7 ${isPost ? "" : "border-b-[2px] border-[#262626]"} pb-4`}>
         <div className={`flex flex-row items-center gap-2`}>
             <img src={item?.user?.profilePic || item?.postBy?.profilePic || userData?.data?.user?.profilePic} className="rounded-full w-10" alt="" />
             <div className="flex flex-row gap-1 items-center relative">
@@ -194,6 +179,14 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
                             </DrawerContent>
                             <DrawerTrigger><span onClick={() => setSelectedPost(item)}><CommentHome setCurrentIndex={setCurrentPostIndex} item={item} setCurrentPost={setCurrentPost} arr={arr} i={index} /></span></DrawerTrigger>
                         </Drawer>}
+                    <button onClick={() => {
+                        setSelectedPost(item)
+                        setIsShareOpenHome((prev) => {
+                            const updated = [...prev]
+                            updated[index] = true;
+                            return updated;
+                        })
+                    }} className="hover:opacity-70 transition duration-300 mb-0.5"><ShareIcon /></button>
                 </div>
                 {!savedPosts[index] ?
                     <button onClick={() => savePost(item._id, index, setSavedPosts, setUserData, userData, setMessage)}>
@@ -225,4 +218,6 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
             </div>
         </div>
     </div>
+        <SearchChat index={index} header="Share" isChat={false} />
+    </>
 }

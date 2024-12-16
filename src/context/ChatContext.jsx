@@ -21,7 +21,7 @@ export function ChatProvider({ children }) {
     const location = useLocation()
 
     useEffect(() => {
-        if (location.pathname.slice(16, -1) !== "" && selectedChat === null) {
+        if (location.pathname.slice(16, -1) !== "" && selectedChat === null && location.pathname.slice(0, 7) === '/direct') {
             fetchSelectedChat(userData, setSelectedChat, location)
         }
     }, [location.pathname, selectedChat, userData])
