@@ -62,7 +62,7 @@ export function Profile() {
         };
     }, [setIsNoteEditOpen]);
 
-    return <section className="w-full lg:max-w-[70%] md:max-w-[87%] mx-auto">
+    return <section className="w-full lg:max-w-[57%] md:max-w-[87%] mx-auto">
         <div className="w-full max-w-[61rem] pb-9 lg:pt-20 pt-8 md:border-b-[2px] md:border-[#262626]">
             <div className="flex w-full xl:gap-20 lg:gap-5 gap-2 sm:items-center relative">
                 <div className="cursor-pointer" onClick={() => {

@@ -52,7 +52,7 @@ export function SearchProfile() {
 
     return <>
         {!mainLoading ?
-            <section className="w-full lg:max-w-[45%] md:max-w-[87%] mx-auto">
+            <section className="w-full lg:max-w-[57%] md:max-w-[87%] mx-auto">
                 <div className="w-full max-w-[61rem] pb-9 lg:pt-20 pt-8 md:border-b-[2px] md:border-[#262626]">
                     <div className="flex w-full xl:gap-20 lg:gap-5 gap-2 sm:items-center relative">
                         {searchUserNotes.length > 0 &&
@@ -101,7 +101,7 @@ export function SearchProfile() {
                 <div className="flex justify-evenly py-2 border-y-[1px] border-[#262626] md:hidden">
                     <UserFollowDetails isSearchProfile={true} />
                 </div>
-                <div className="absolute left-[52%] -translate-x-1/2 md:flex hidden gap-10">
+                <div className="absolute left-[56%] -translate-x-1/2 md:flex hidden gap-10">
                     <NavLink end to={`/search/${selectedProfile.userName}/`}
                         className={({ isActive }) => `flex items-center tracking-wider py-3 gap-1 text-[12px] ${isActive ? "font-semibold border-t-[2px]" : "text-[#A8A8A8]"}`}>
                         <PostsIcon /> POSTS
