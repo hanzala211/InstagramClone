@@ -29,7 +29,7 @@ export function Layout({ token }) {
 
     return <>
         {!mainLoading ? <section className="flex flex-row w-full items-center">
-            <div className={`left-0 top-0 md:block hidden h-[100vh] ${location.pathname.slice(0, 7) === "/direct" ? "w-[5rem]" : "lg:w-[15rem] xl:left-[5rem] w-[10rem]"}`}></div>
+            <div className={`left-0 top-0 md:block hidden h-[100vh] ${location.pathname.slice(0, 7) === "/direct" ? "w-[5.5rem]" : "lg:w-[15rem] xl:left-[5rem] w-[10rem]"}`}></div>
             <SideBarProvider>
                 <SideBar />
                 <MobileBar />
