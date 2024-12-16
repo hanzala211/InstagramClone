@@ -6,8 +6,7 @@ import { Footer } from "../components/helpers/Footer";
 import { useUser } from "../context/UserContext";
 import { Loader } from "../components/helpers/Loader";
 import { LoadingPage } from "./LoadingPage";
-import { collection, doc, setDoc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import { fetchUser } from "../services/userAuth";
 
 export function Login() {
     const { setMainLoading, setUserData, userData, mainLoading } = useUser();
@@ -37,47 +36,7 @@ export function Login() {
         return () => clearInterval(interval);
     }, [imagesArr.length]);
 
-    async function fetchUser() {
-        const userId = {
-            "identifier": userValue,
-            "password": password
-        };
-        const raw = JSON.stringify(userId);
-        try {
-            setLoading(true);
-            const response = await fetch('https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/auth/login', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: raw,
-                redirect: "follow"
-            });
 
-            const result = await response.json();
-            setUserData(result);
-            if (result && result.status === "success" && result.data) {
-                setMainLoading(true);
-                setUserValue("")
-                setPassword("")
-                setDoc(doc(db, "users", `${result.data.user._id}`), {
-                    userName: `${result.data.user.userName}`,
-                    id: `${result.data.user._id}`
-                })
-                navigate("/home");
-                localStorage.setItem("token", JSON.stringify(result.data.token))
-            }
-        } catch (error) {
-            setUserData({
-                status: "fail",
-                data: "Server Is Down.Please try after sometime",
-                error: error
-            })
-        } finally {
-            setMainLoading(false)
-            setLoading(false);
-        }
-    }
 
     return (
         <>
@@ -102,7 +61,14 @@ export function Login() {
                                             <input type="password" className="bg-[#121212] pl-2 h-[2.5rem] usernameInput outline-none pr-2 w-[17.5rem] border-[1px] text-[11px] border-[#A8A8A8] rounded-md" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                                         </div>
                                         <Link to={userData?.status === "success" ? "/home" : "#"} className="text-center bg-[#0069AD] text-[14px] py-2 rounded-lg mt-3 opacity-90" onClick={() => {
-                                            fetchUser();
+                                            fetchUser(userValue,
+                                                password,
+                                                setLoading,
+                                                setUserData,
+                                                setUserValue,
+                                                setPassword,
+                                                setMainLoading,
+                                                navigate);
                                         }}>Log in</Link>
                                     </div>
                                     <div className="relative">
