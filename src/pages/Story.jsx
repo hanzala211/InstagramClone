@@ -74,7 +74,7 @@ export function Story({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSe
                                 {isOwnProfile || isArchive || isHighLight ? userData.data.user.followingCount > 10 && <MdVerified className="fill-white" /> : isSearchUser || isSearchHighLight ? selectedProfile.followingCount > 10 && <MdVerified className="fill-white" /> : ""}
                             </Link>
                             <p className="text-[#A2A2A2] text-[10px] md:text-[11px] font-semibold">
-                                {isOwnProfile ? formatDate(stories[currentStory].createdAt) : isArchive ? formatDate(archives[currentStory].createdAt) : isHighLight ? formatDate(highLightStories[currentStory].createdAt) : isSearchUser ? formatDate(searchUserStatus[currentStory].createdAt) : isSearchHighLight ? searchUserHighLights[currentStory].createdAt : ""} ago
+                                {isOwnProfile ? formatDate(stories[currentStory].createdAt) : isArchive ? formatDate(archives[currentStory]?.createdAt) : isHighLight ? formatDate(highLightStories[currentStory]?.createdAt) : isSearchUser ? formatDate(searchUserStatus[currentStory]?.createdAt) : isSearchHighLight ? searchUserHighLights[currentStory]?.createdAt : ""} ago
                             </p>
                         </div>
                     </div>

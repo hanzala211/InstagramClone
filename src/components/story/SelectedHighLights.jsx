@@ -6,8 +6,9 @@ import { useUser } from "../../context/UserContext"
 import { useNavigate } from "react-router-dom"
 
 export function SelectedHighLights({ selectCover, setSelectCover, setSelectedIDs, isCreatingHighLight, handleClose, selectedIDs, formatDate, formatMonth, currentID, sendLoading, setCurrentID, setSendLoading, highlightName, editingHighlight }) {
-    const { currentHighLight, highlights, highLightStories, userData } = useUser()
+    const { currentHighLight, highlights, highLightStories, userData, setMessage } = useUser()
     const navigate = useNavigate();
+
     return <>
         <div className={`w-full max-w-[30rem] overflow-hidden bg-[#262626] rounded-xl h-[75vh] fixed inset-0 z-[100] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition duration-500 ${selectCover ? "opacity-100" : "pointer-events-none"}`}>
             <div className="text-center w-full py-3 border-b-[1px] border-[#363636]">
@@ -46,19 +47,9 @@ export function SelectedHighLights({ selectCover, setSelectCover, setSelectedIDs
                 {!sendLoading ?
                     <button onClick={() => {
                         if (!editingHighlight) {
-                            createHighLight(setSendLoading, userData, highlightName, selectedIDs, currentID, handleClose)
+                            createHighLight(setSendLoading, userData, highlightName, selectedIDs, currentID, handleClose, setMessage)
                         } else {
-                            console.log("Test Edit")
-                            editHighLight(setSendLoading,
-                                highlights,
-                                currentHighLight,
-                                userData,
-                                highLightStories,
-                                highlightName,
-                                selectedIDs,
-                                currentID,
-                                handleClose,
-                                navigate)
+                            editHighLight(setSendLoading, highlights, currentHighLight, userData, highLightStories, highlightName, selectedIDs, currentID, handleClose, navigate, setMessage)
                         }
                     }} className={`w-full py-3 text-[15px] transition-all duration-150 font-semibold  text-[#0095F6]`} >Done</button>
                     : <Loader height="15vh mt-1.5" widthHeight={false} />}

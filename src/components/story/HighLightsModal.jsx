@@ -60,17 +60,15 @@ export function HighLightsModal({ setIsCreatingHighLight, isCreatingHighLight })
                         placeholder="Highlight name"
                         className="bg-[#121212] w-full p-2 rounded-sm outline-none placeholder:text-[#737373] placeholder:text-[14px]"
                         value={highlightName}
-                        onChange={(e) => setHighlightName(e.target.value)}
+                        onChange={(e) => {
+                            setHighlightName(e.target.value)
+                        }}
                     />
                 </div>
                 <div className="w-full px-5">
-                    <button
-                        className={`w-full py-3 text-[15px] transition-all duration-150 font-semibold ${highlightName.length > 0 ? "text-[#0095F6]" : "text-[#A8A8A8]"}`}
+                    <button className={`w-full py-3 text-[15px] transition-all duration-150 font-semibold ${highlightName.length > 0 ? "text-[#0095F6]" : "text-[#A8A8A8]"}`}
                         disabled={highlightName.length === 0}
-                        onClick={() => setSelectStatus(true)}
-                    >
-                        Next
-                    </button>
+                        onClick={() => setSelectStatus(true)}>Next</button>
                 </div>
             </div>
         </div>

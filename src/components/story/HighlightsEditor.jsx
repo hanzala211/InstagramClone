@@ -71,6 +71,6 @@ export function HighlightsEditor({ highLightsModal, setHighLightsModal }) {
             </div>
         </div>
         <ArchivesModal selectStatus={selectStatus} setSelectStatus={setSelectStatus} selectedIDs={selectedIDs} setSelectedIDs={setSelectedIDs} selectCover={selectCover} setSelectCover={setSelectCover} isCreatingHighLight={isEditing} handleClose={handleClose} left="left-[52%]" highlights={highlights} currentHighLight={currentHighLight} />
-        <SelectedHighLights selectCover={selectCover} setSelectCover={setSelectCover} setSelectedIDs={setSelectedIDs} isCreatingHighLight={isEditing} handleClose={handleClose} selectedIDs={selectedIDs} formatMonth={formatMonth} formatDate={formatDate} currentID={currentID} setCurrentID={setCurrentID} sendLoading={sendLoading} setSendLoading={setSendLoading} editingHighlight={true} />
+        <SelectedHighLights selectCover={selectCover} setSelectCover={setSelectCover} setSelectedIDs={setSelectedIDs} isCreatingHighLight={isEditing} handleClose={handleClose} selectedIDs={selectedIDs} formatMonth={formatMonth} formatDate={formatDate} currentID={currentID} setCurrentID={setCurrentID} sendLoading={sendLoading} setSendLoading={setSendLoading} editingHighlight={true} highlightName={highlightName} />
     </>
 }

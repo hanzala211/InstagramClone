@@ -28,7 +28,8 @@ export async function createHighLight(
 	highlightName,
 	selectedIDs,
 	currentID,
-	handleClose
+	handleClose,
+	setMessage
 ) {
 	try {
 		setSendLoading(true);
@@ -68,32 +69,7 @@ export async function createHighLight(
 				return addStory.json();
 			}
 			Promise.all(selectedIDs.map((item) => sendStories(item._id)));
-			async function postProfile() {
-				const formData = new FormData();
-				const blobImage = await fetch(selectedIDs[currentID].imageUrl).then(
-					(req) => req.blob()
-				);
-				formData.append('image', blobImage, 'profileImage');
-				try {
-					const response = await fetch(
-						`${import.meta.env.VITE_APP_URL}api/v1/highlights/${
-							result.highlight._id
-						}/profile-pic`,
-						{
-							method: 'POST',
-							headers: {
-								Authorization: `${userData.data.token}`,
-							},
-							body: formData,
-							redirect: 'follow',
-						}
-					);
-					const postResult = await response.json();
-				} catch (error) {
-					console.error(error);
-				}
-			}
-			postProfile();
+			postProfile(selectedIDs, currentID, result, userData, setMessage);
 		}
 	} catch (error) {
 		console.error(error);
@@ -125,12 +101,12 @@ export async function deleteHighlight(
 			}
 		);
 		const result = await response.json();
+		navigate(-1);
 	} catch (error) {
 		console.error(error);
 	} finally {
 		setHighLightsModal(false);
 		setCurrentHighLight(0);
-		navigate(-1);
 	}
 }
 
@@ -144,7 +120,8 @@ export async function editHighLight(
 	selectedIDs,
 	currentID,
 	handleClose,
-	navigate
+	navigate,
+	setMessage
 ) {
 	async function removeHighLights(storyID) {
 		try {
@@ -172,6 +149,7 @@ export async function editHighLight(
 	}
 
 	Promise.all(highLightStories.map((item) => removeHighLights(item._id)));
+
 	try {
 		const response = await fetch(
 			`${import.meta.env.VITE_APP_URL}api/v1/highlights/${
@@ -210,37 +188,46 @@ export async function editHighLight(
 			return addStory.json();
 		}
 		Promise.all(selectedIDs.map((item) => sendStories(item._id)));
-		async function postProfile() {
-			const formData = new FormData();
-			const blobImage = await fetch(selectedIDs[currentID].imageUrl).then(
-				(req) => req.blob()
-			);
-			formData.append('image', blobImage, 'profileImage');
-			try {
-				const response = await fetch(
-					`${import.meta.env.VITE_APP_URL}api/v1/highlights/${
-						result.highlight._id
-					}/profile-pic`,
-					{
-						method: 'POST',
-						headers: {
-							Authorization: `${userData.data.token}`,
-						},
-						body: formData,
-						redirect: 'follow',
-					}
-				);
-				const postResult = await response.json();
-			} catch (error) {
-				console.error(error);
-			}
-		}
-		postProfile();
+		postProfile(selectedIDs, currentID, result, userData, setMessage);
 	} catch (error) {
 		console.error(error);
 	} finally {
 		setSendLoading(false);
 		navigate(-1);
 		handleClose();
+	}
+}
+
+async function postProfile(
+	selectedIDs,
+	currentID,
+	result,
+	userData,
+	setMessage
+) {
+	const formData = new FormData();
+	const blobImage = await fetch(selectedIDs[currentID].imageUrl).then((req) =>
+		req.blob()
+	);
+	formData.append('image', blobImage, 'profileImage');
+	try {
+		const response = await fetch(
+			`${import.meta.env.VITE_APP_URL}api/v1/highlights/${
+				result.highlight._id
+			}/profile-pic`,
+			{
+				method: 'POST',
+				headers: {
+					Authorization: `${userData.data.token}`,
+				},
+				body: formData,
+				redirect: 'follow',
+			}
+		);
+		const postResult = await response.json();
+	} catch (error) {
+		console.error(error);
+	} finally {
+		setMessage('Highligh Added Successfully');
 	}
 }
