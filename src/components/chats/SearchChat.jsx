@@ -8,7 +8,7 @@ import { fetchSearch } from "../../services/search"
 import { usePost } from "../../context/PostContext"
 
 export function SearchChat({ header, isChat, index }) {
-    const { setIsChatSearch, isChatSearch, searchChatValue, setSearchChatValue, searchData, setSearchData } = useChat()
+    const { setIsChatSearch, threads, isChatSearch, searchChatValue, setSearchChatValue, searchData, setSearchData } = useChat()
     const { isShareOpen, setIsShareOpen, isShareSearch, setIsShareSearch, isShareOpenHome, setIsShareOpenHome } = usePost()
     const { userData } = useUser()
     const [searchLoading, setSearchLoading] = useState(false)
@@ -61,11 +61,13 @@ export function SearchChat({ header, isChat, index }) {
             </div>
             <div className="h-full overflow-y-auto scrollbar-hidden">
                 {searchLoading ? Array.from(({ length: 30 }), (_, i) => <div key={i} className="ml-3 mt-5"><Skeleton /></div>) : ""}
-                {searchData.map((item, index) => (
+                {searchData.length > 0 ? searchData.map((item, index) => (
                     <div key={index} className="hover:bg-[#a8a8a8] hover:bg-opacity-30 transition-all duration-300">
                         <UserThreads index={index} isNewChat={true} item={item} isChat={isChat} />
                     </div>
-                ))}
+                )) : isChat ? "" : threads.map((item, index) => (<div key={index} className="hover:bg-[#a8a8a8] hover:bg-opacity-30 transition-all duration-300">
+                    <UserThreads index={index} isNewChat={true} item={item} isChat={isChat} />
+                </div>))}
             </div>
         </div>
     </>
