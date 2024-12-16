@@ -62,7 +62,7 @@ export function Profile() {
         };
     }, [setIsNoteEditOpen]);
 
-    return <section className="w-full lg:max-w-[50%] md:max-w-[87%] mx-auto">
+    return <section className="w-full lg:max-w-[70%] md:max-w-[87%] mx-auto">
         <div className="w-full max-w-[61rem] pb-9 lg:pt-20 pt-8 md:border-b-[2px] md:border-[#262626]">
             <div className="flex w-full xl:gap-20 lg:gap-5 gap-2 sm:items-center relative">
                 <div className="cursor-pointer" onClick={() => {
@@ -75,7 +75,7 @@ export function Profile() {
                     {!isNoteEditOpen ? <div className="absolute md:top-4 lg:top-2.5 xl:top-1.5 top-3 left-[3rem] sm:top-6 sm:left-[4rem] md:left-[4rem] lg:left-[5.5rem] xl:left-[9rem] z-[1]"><NoteTooltip isProfile={true} note={note} noteLoading={noteLoading} /></div> : <div ref={noteEditorRef} className="absolute md:top-2 lg:top-20 top-2 left-[22rem] md:left-[20rem] lg:left-0 xl:left-[8rem] z-[1]"><NoteEditor /></div>}
                 </div>
                 <Link to={stories.length > 0 ? `/stories/${userData.data.user.userName}/${stories[0]._id}/` : ""} className={`p-2 ${stories.length > 0 ? "relative rounded-full multicolor-border h-[5.9rem] sm:h-32 md:h-auto" : ""}`} onClick={() => setCurrentStory(0)}>
-                    <img src={userData?.data?.user.profilePic} alt="User Profile" className="rounded-full w-20 sm:w-28 lg:w-40 lg:min-w-[10rem] min-w-[3rem]" />
+                    <img src={userData?.data?.user.profilePic} alt="User Profile" className="rounded-full w-20 sm:w-28 lg:w-40 lg:min-w-[7rem] min-w-[3rem]" />
                 </Link>
                 <div className="flex flex-col gap-4 sm:gap-6 mt-2 xl:mt-0 relative ">
                     <div className="flex gap-4 sm:gap-6 md:flex-row flex-col md:items-center">
