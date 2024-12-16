@@ -14,7 +14,7 @@ export async function savePost(
 		});
 
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/save/${id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/save/${id}`,
 			{
 				method: 'POST',
 				headers: {
@@ -59,7 +59,7 @@ export async function unSavePost(
 			return updated;
 		});
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/unsave/${id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/unsave/${id}`,
 			{
 				method: 'POST',
 				headers: {
@@ -117,7 +117,7 @@ export async function likePost(
 		});
 
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/like/${id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/post/like/${id}`,
 			{
 				method: 'POST',
 				headers: {
@@ -180,7 +180,7 @@ export async function unLikePost(
 		});
 
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/dislike/${id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/post/dislike/${id}`,
 			{
 				method: 'POST',
 				headers: {

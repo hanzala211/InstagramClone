@@ -2,7 +2,7 @@ export async function fetchArchive(setLoadingArchives, userData, setArchives) {
 	try {
 		setLoadingArchives(true);
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/archives`,
+			`${import.meta.env.VITE_APP_URL}api/v1/archives`,
 			{
 				method: 'GET',
 				headers: {

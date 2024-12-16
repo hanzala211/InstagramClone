@@ -4,7 +4,7 @@ export async function uploadStory(result, userData, setUploaded) {
 	formdata.append('image', blobImage, 'storyImage.jpg');
 	try {
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/story`,
+			`${import.meta.env.VITE_APP_URL}api/v1/story`,
 			{
 				method: 'POST',
 				headers: {
@@ -33,7 +33,7 @@ export async function createHighLight(
 	try {
 		setSendLoading(true);
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/highlights`,
+			`${import.meta.env.VITE_APP_URL}api/v1/highlights`,
 			{
 				method: 'POST',
 				headers: {
@@ -50,7 +50,9 @@ export async function createHighLight(
 		if (result.message === 'Highlight created successfully.') {
 			async function sendStories(storyID) {
 				const addStory = await fetch(
-					`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/highlights/${result.highlight._id}/add`,
+					`${import.meta.env.VITE_APP_URL}api/v1/highlights/${
+						result.highlight._id
+					}/add`,
 					{
 						method: 'POST',
 						headers: {
@@ -74,7 +76,9 @@ export async function createHighLight(
 				formData.append('image', blobImage, 'profileImage');
 				try {
 					const response = await fetch(
-						`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/highlights/${result.highlight._id}/profile-pic`,
+						`${import.meta.env.VITE_APP_URL}api/v1/highlights/${
+							result.highlight._id
+						}/profile-pic`,
 						{
 							method: 'POST',
 							headers: {

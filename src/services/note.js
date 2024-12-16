@@ -9,20 +9,17 @@ export async function createNote(
 ) {
 	try {
 		setShareLoading(true);
-		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/note`,
-			{
-				method: 'POST',
-				headers: {
-					Authorization: `${userData.data.token}`,
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					content: noteValue,
-				}),
-				redirect: 'follow',
-			}
-		);
+		const response = await fetch(`${import.meta.env.VITE_APP_URL}api/v1/note`, {
+			method: 'POST',
+			headers: {
+				Authorization: `${userData.data.token}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				content: noteValue,
+			}),
+			redirect: 'follow',
+		});
 		const result = await response.json();
 		setMessage(result.message);
 		setNote(result.note);
@@ -46,20 +43,17 @@ export async function updateNote(
 ) {
 	try {
 		setShareLoading(true);
-		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/note`,
-			{
-				method: 'PUT',
-				headers: {
-					Authorization: `${userData.data.token}`,
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					content: noteValue,
-				}),
-				redirect: 'follow',
-			}
-		);
+		const response = await fetch(`${import.meta.env.VITE_APP_URL}api/v1/note`, {
+			method: 'PUT',
+			headers: {
+				Authorization: `${userData.data.token}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				content: noteValue,
+			}),
+			redirect: 'follow',
+		});
 		const result = await response.json();
 		setMessage(result.message);
 		setNote(result.note);
@@ -81,17 +75,14 @@ export async function deleteNote(
 ) {
 	try {
 		setDeleteLoading(true);
-		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/note`,
-			{
-				method: 'DELETE',
-				headers: {
-					Authorization: `${userData.data.token}`,
-				},
-				body: '',
-				redirect: 'follow',
-			}
-		);
+		const response = await fetch(`${import.meta.env.VITE_APP_URL}api/v1/note`, {
+			method: 'DELETE',
+			headers: {
+				Authorization: `${userData.data.token}`,
+			},
+			body: '',
+			redirect: 'follow',
+		});
 		const result = await response.json();
 		setMessage(result.message);
 	} catch (error) {

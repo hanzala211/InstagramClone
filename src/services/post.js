@@ -17,17 +17,14 @@ export async function createPost(
 				formData.append('images', blob, `image${index}.jpg`);
 			})
 		);
-		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post`,
-			{
-				method: 'POST',
-				headers: {
-					Authorization: `${userData.data.token}`,
-				},
-				body: formData,
-				redirect: 'follow',
-			}
-		);
+		const response = await fetch(`${import.meta.env.VITE_APP_URL}api/v1/post`, {
+			method: 'POST',
+			headers: {
+				Authorization: `${userData.data.token}`,
+			},
+			body: formData,
+			redirect: 'follow',
+		});
 		const result = await response.json();
 		if (captionValue.length > 0) {
 			await fetch(
@@ -61,7 +58,7 @@ export async function savePost(
 	try {
 		setIsSaved((prev) => !prev);
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/save/${selectedPost._id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/save/${selectedPost._id}`,
 			{
 				method: 'POST',
 				headers: {
@@ -103,7 +100,7 @@ export async function unSavePost(
 	try {
 		setIsSaved((prev) => !prev);
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/unsave/${selectedPost._id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/unsave/${selectedPost._id}`,
 			{
 				method: 'POST',
 				headers: {
@@ -149,7 +146,7 @@ export async function deletePost(
 ) {
 	try {
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/${selectedPost._id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/post/${selectedPost._id}`,
 			{
 				method: 'DELETE',
 				headers: {
@@ -199,7 +196,7 @@ export async function updatePost(
 		setIsShared(true);
 		setIsEditingOpen(false);
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/${selectedPost._id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/post/${selectedPost._id}`,
 			{
 				method: 'PUT',
 				headers: {
@@ -236,7 +233,7 @@ export async function postComment(
 	try {
 		setIsDisabled(true);
 		const respone = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/comment/${selectedPost._id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/post/comment/${selectedPost._id}`,
 			{
 				method: 'POST',
 				headers: {

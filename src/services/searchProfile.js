@@ -2,7 +2,7 @@ export async function fetchPosts(postID, setPostsLoading, userData) {
 	try {
 		setPostsLoading(true);
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/${postID}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/post/${postID}`,
 			{
 				method: 'GET',
 				headers: {
@@ -45,7 +45,9 @@ export async function followUser(
 		}));
 		setIsDisabled(true);
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/follow/${selectedProfile._id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/user/follow/${
+				selectedProfile._id
+			}`,
 			{
 				method: 'POST',
 				headers: {
@@ -93,7 +95,9 @@ export async function unfollowUser(
 			followersCount: prev.followersCount - 1,
 		}));
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/unfollow/${selectedProfile._id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/user/unfollow/${
+				selectedProfile._id
+			}`,
 			{
 				method: 'POST',
 				headers: {

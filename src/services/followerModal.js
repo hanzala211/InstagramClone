@@ -2,7 +2,7 @@ export async function fetchFollowers(setIsLoading, userData, setUserFollowers) {
 	try {
 		setIsLoading(true);
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/followers`,
+			`${import.meta.env.VITE_APP_URL}api/v1/user/followers`,
 			{
 				method: 'GET',
 				headers: {
@@ -24,7 +24,7 @@ export async function fetchFollowing(setIsLoading, userData, setUserFollowing) {
 	try {
 		setIsLoading(true);
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/following`,
+			`${import.meta.env.VITE_APP_URL}api/v1/user/following`,
 			{
 				method: 'GET',
 				headers: {

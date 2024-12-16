@@ -19,7 +19,7 @@ export async function fetchUser(
 	try {
 		setLoading(true);
 		const response = await fetch(
-			'https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/auth/login',
+			`${import.meta.env.VITE_APP_URL}api/v1/auth/login`,
 			{
 				method: 'POST',
 				headers: {
@@ -68,7 +68,7 @@ export async function fetchData(
 	setSignupPassword,
 	setFullName,
 	setUserName,
-    navigate
+	navigate
 ) {
 	const data = JSON.stringify({
 		fullName: fullName,
@@ -82,7 +82,7 @@ export async function fetchData(
 		setUserData({});
 		setSuccessMessage('');
 		const response = await fetch(
-			'https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/auth/signup',
+			`${import.meta.env.VITE_APP_URL}api/v1/auth/signup`,
 			{
 				method: 'POST',
 				headers: {

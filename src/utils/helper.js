@@ -8,7 +8,7 @@ export async function fetchUserDataOnClick(
 	setMainLoading(true);
 	try {
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/search/${username}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/user/search/${username}`,
 			{
 				method: 'GET',
 				headers: {
@@ -36,7 +36,7 @@ export async function fetchHomePosts(
 ) {
 	try {
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/home?limit=5`,
+			`${import.meta.env.VITE_APP_URL}api/v1/home?limit=5`,
 			{
 				method: 'GET',
 				headers: {
@@ -118,7 +118,7 @@ export async function fetchUserDataOnHover(
 ) {
 	try {
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/search/${username}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/user/search/${username}`,
 			{
 				method: 'GET',
 				headers: {
@@ -152,7 +152,7 @@ export async function fetchUserDataOnHover(
 async function fetchPostData(id, userData) {
 	try {
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/${id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/post/${id}`,
 			{
 				method: 'GET',
 				headers: {
@@ -189,7 +189,7 @@ export async function likePost(
 			};
 		});
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/like/${selectedPost._id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/post/like/${selectedPost._id}`,
 			{
 				method: 'POST',
 				headers: {
@@ -222,7 +222,9 @@ export async function fetchComments(
 		setComments([]);
 		setCommentsLoading(true);
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/comments/${selectedPost._id}?page=${page}&limit=10`,
+			`${import.meta.env.VITE_APP_URL}api/v1/post/comments/${
+				selectedPost._id
+			}?page=${page}&limit=10`,
 			{
 				method: 'GET',
 				headers: {
@@ -255,16 +257,13 @@ export async function fetchComments(
 export async function fetchNote(setNoteLoading, userData, setNote) {
 	try {
 		setNoteLoading(true);
-		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/note`,
-			{
-				method: 'GET',
-				headers: {
-					Authorization: `${userData.data.token}`,
-				},
-				redirect: 'follow',
-			}
-		);
+		const response = await fetch(`${import.meta.env.VITE_APP_URL}api/v1/note`, {
+			method: 'GET',
+			headers: {
+				Authorization: `${userData.data.token}`,
+			},
+			redirect: 'follow',
+		});
 		const result = await response.json();
 		if (result.message !== 'Note not found or expired.') {
 			setNote(result.note);

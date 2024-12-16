@@ -8,7 +8,7 @@ export async function fetchSearch(
 	try {
 		setSearchData([]);
 		const response = await fetch(
-			`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/user/search/${searchQuery}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/user/search/${searchQuery}`,
 			{
 				method: 'GET',
 				headers: {

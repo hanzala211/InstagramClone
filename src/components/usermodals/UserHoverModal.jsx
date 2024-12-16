@@ -36,7 +36,7 @@ export function UserHoverModal({ username, isHovered }) {
                     <p className="font-bold flex flex-col items-center ml-10 text-[15px]">{formatNumber(hoverProfile?.followersCount)} <span className="font-normal">followers</span></p>
                     <p className="font-bold flex flex-col items-center text-[15px] ml-8">{formatNumber(hoverProfile?.followingCount)} <span className="font-normal">following</span></p>
                 </div>
-                <div className={`flex mt-9 gap-1 ${posts.length > 2 ? "justify-evenly" : ""}`}>
+                <div className={`flex mt-9 gap-1 ${posts.length > 2 ? "justify-evenly" : posts.length === 0 ? "justify-center" : ""}`}>
                     {posts.length > 0 ? posts?.map((item, i) => (
                         <img key={i} src={item?.imageUrls[0]} alt={item?.caption} className="w-[32%] object-cover rounded" />
                     )) : <div className="flex flex-col gap-2 items-center">
