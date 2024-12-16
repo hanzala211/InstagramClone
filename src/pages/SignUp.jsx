@@ -20,22 +20,26 @@ export function SignUp() {
         {
             onChange: (e) => setEmailAddress(e.target.value),
             text: "Email Address",
-            value: emailAddress
+            value: emailAddress,
+            type: "email"
         },
         {
             onChange: (e) => setSignupPassword(e.target.value),
             text: "Password",
-            value: signupPassword
+            value: signupPassword,
+            type: "password"
         },
         {
             onChange: (e) => setFullName(e.target.value),
             text: "Full Name",
-            value: fullName
+            value: fullName,
+            type: "text"
         },
         {
             onChange: (e) => setUserName(e.target.value),
             text: "Username",
-            value: userName
+            value: userName,
+            type: "text"
         }
     ]
 
@@ -52,7 +56,7 @@ export function SignUp() {
                         </div>
                         <div className="flex flex-col gap-2 border-t-[1px] border-[#262626] pt-6">
                             {signupForm.map((item, index) => (
-                                <InputLabel key={index} onChange={item.onChange} value={item.value} text={item.text} />
+                                <InputLabel key={index} onChange={item.onChange} value={item.value} text={item.text} type={item.type} />
                             ))}
                             <Link to={(emailAddress.length > 0 && signupPassword.length > 0 && fullName.length > 0 && userName.length > 0) ? "#" : "#"} className="text-center bg-[#0069AD] text-[14px] py-2 rounded-lg mt-3 opacity-90" onClick={() => {
                                 fetchData(fullName, userName, emailAddress, signupPassword, setMainLoading, setLoading, setUserData, setSuccessMessage, setEmailAddress, setSignupPassword, setFullName, setUserName, navigate);

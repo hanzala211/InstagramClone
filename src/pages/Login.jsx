@@ -40,12 +40,14 @@ export function Login() {
         {
             onChange: (e) => setUserValue(e.target.value),
             text: "Phone number, username or email address",
-            value: userValue
+            value: userValue,
+            type: "text"
         },
         {
             onChange: (e) => setPassword(e.target.value),
             text: "Password",
-            value: password
+            value: password,
+            type: "password"
         }
     ]
 
@@ -53,18 +55,18 @@ export function Login() {
         <>
             {!mainLoading ?
                 <div className="h-[100vh] flex flex-col justify-between">
-                    <section className="flex justify-center mt-12 items-center gap-5 w-full">
+                    <section className="flex justify-center mt-12 items-center lg:gap-5 gap-1 w-full">
                         <div className="w-[27rem] hidden md:block h-[37rem] bg-no-repeat relative" style={{ backgroundImage: "url('/images/home-phones.png')" }}>
-                            <img src={imagesArr[currentIndex]} alt="ScreenShots" className={`absolute left-[65%] -translate-x-1/2 top-7 transition-all ${isAnimating ? "animating opacity-50" : "opacity-100"}`} />
+                            <img src={imagesArr[currentIndex]} alt="ScreenShots" className={`absolute left-[68%] md:left-[65%] -translate-x-1/2 top-7 transition-all ${isAnimating ? "animating opacity-50" : "opacity-100"}`} />
                         </div>
                         <div className="flex flex-col gap-3 items-center">
-                            <div className={`flex items-center flex-col border-[2px] border-[#363636] w-[22rem] sm:w-[23.7rem] gap-6 sm:h-[27rem] h-[25rem]`}>
+                            <div className={`flex items-center flex-col border-[2px] border-[#363636] w-[22rem] lg:w-[23.7rem] gap-6 lg:h-[27rem] h-[25rem]`}>
                                 {!loading ? <><div className="w-full">
                                     <Link><img src="/images/instagramiconswhite.png" alt="" className="w-1/2 mx-auto mt-10" /></Link>
                                 </div>
                                     <div className="flex flex-col gap-2 border-b-[1px] border-[#262626] pb-6">
                                         {loginForm.map((item, index) => (
-                                            <InputLabel key={index} onChange={item.onChange} value={item.value} text={item.text} />
+                                            <InputLabel key={index} onChange={item.onChange} value={item.value} text={item.text} type={item.type} />
                                         ))}
                                         <Link to={userData?.status === "success" ? "/home" : "#"} className="text-center bg-[#0069AD] text-[14px] py-2 rounded-lg mt-3 opacity-90" onClick={() => {
                                             fetchUser(userValue, password, setLoading, setUserData, setUserValue, setPassword, setMainLoading, navigate);
@@ -77,7 +79,7 @@ export function Login() {
                                     {userData?.status === "fail" && <p className="text-red-500">{userData.data}</p>}
                                 </> : <div className="mt-2"><Loader /></div>}
                             </div>
-                            <div className="flex items-center justify-center border-[2px] border-[#363636] py-6 sm:w-[23.7rem] w-[22rem] gap-1">
+                            <div className="flex items-center justify-center border-[2px] border-[#363636] py-6 lg:w-[23.7rem] w-[22rem] gap-1">
                                 <p>Don't have an account?</p>
                                 <Link to="/signup" className="text-[#3897F1]">Sign up</Link>
                             </div>
