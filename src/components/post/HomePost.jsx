@@ -133,7 +133,7 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
                         </HoverCardContent>
                     </div>
                     <p className="text-[#A8A8A8]">•</p>
-                    <p className="text-[#a8a8a8] text-[13px] font-medium">{formatDate(item.createdAt)}</p>
+                    <p className="text-[#a8a8a8] text-[13px] font-medium">{formatDate(item?.createdAt)}</p>
                 </HoverCard>
             </div>
         </div>

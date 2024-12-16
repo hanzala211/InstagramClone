@@ -2,7 +2,7 @@ import { FaHeart } from "react-icons/fa";
 import { PiCopySimpleLight } from "react-icons/pi";
 import { TbMessageCircleFilled } from "react-icons/tb";
 import { formatNumber } from "../../utils/helper";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
 
@@ -25,12 +25,11 @@ export function PostModal({ arr, i, setSelectedPost, setIsPostOpen, setCurrentPo
         setSelectedPost({
             ...arr[i],
             user: {
-                userName: item.postBy.userName ? item.postBy.userName : item.user ? item.user.userName : userData.data.user.userName,
-                profilePic: item.postBy.profilePic ? item.postBy.profilePic : item.user ? item.user.profilePic : userData.data.user.profilePic,
-                _id: item.postBy._id ? item.postBy._id : item.user ? item.user._id : userData.data.user._id
+                userName: item.postBy?.userName || item.user?.userName || userData.data.user.userName,
+                profilePic: item.postBy?.profilePic || item.user?.profilePic || userData.data.user.profilePic,
+                _id: item.postBy?._id || item.user?._id || userData.data.user._id,
             }
-        }
-        );
+        });
     }}>
         <div className="absolute md:right-3 md:top-2 right-1 top-1">
             {item?.imageUrls.length > 1 ? <PiCopySimpleLight className="text-[18px] md:text-[25px]" /> : ""}
