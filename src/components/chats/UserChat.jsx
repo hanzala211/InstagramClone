@@ -21,6 +21,8 @@ export function UserChat() {
     const emojiIconRef = useRef(null)
     const emojiPickerRef = useRef(null)
     const scrollRef = useRef(null);
+    const deleteDivRef = useRef(null)
+    const iconRef = useRef(null)
 
     useEffect(() => {
         window.addEventListener("click", handleClick)
@@ -51,6 +53,10 @@ export function UserChat() {
     function handleClick(e) {
         if (emojiIconRef.current && emojiPickerRef.current && !emojiIconRef.current.contains(e.target) && !emojiPickerRef.current.contains(e.target)) {
             setIsPickingEmoji(false)
+        }
+        if (iconRef.current && !iconRef.current.contains(e.target) && deleteDivRef.current && !deleteDivRef.current.contains(e.target)) {
+            setIsClicked(Array.from(messages.length).fill(false))
+            setMessagesDelete(Array.from(messages.length).fill(false))
         }
     }
 
@@ -95,13 +101,13 @@ export function UserChat() {
                             updated[index] = !updated[index];
                             return updated;
                         })}>
-                            {isClicked[index] && <div onClick={() => {
+                            {isClicked[index] && <div ref={deleteDivRef} onClick={() => {
                                 deleteMessageAndUpdateThread(userData.data.user._id, selectedChat._id, message?.id);
-                            }} className="absolute md:-left-36 -left-[6.5rem] flex hover:opacity-80 transition duration-200 items-center justify-center rounded-lg bg-[#262626] -top-6 md:w-32 md:h-12 w-24 h-10 text-red-500">
-                                Delete
-                            </div>
+                            }} className="absolute md:-left-36 -left-[6.5rem] flex hover:opacity-80 transition duration-200 items-center justify-center rounded-lg bg-[#262626] -top-6 md:w-32 md:h-12 w-24 h-10 text-red-500">Delete</div>
                             }
-                            <BsThreeDots />
+                            <div ref={iconRef}>
+                                <BsThreeDots />
+                            </div>
                         </button>}
                         {message?.senderId !== userData.data.user._id && <img src={selectedChat?.profilePic} alt={`Chat User ${message?.userName}`} className="w-6 rounded-full " />}
                         <div className={`p-2.5 rounded-xl text-sm max-w-xs ${message?.senderId === userData.data.user._id ? "bg-[#0096f4] text-white" : "bg-[#262626]"}`}>
