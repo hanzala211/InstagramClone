@@ -147,3 +147,27 @@ export async function fetchSelectedChat(userData, setSelectedChat, location) {
 		console.error(error);
 	}
 }
+
+export async function fetchUserById(id, index, userData, foundArr) {
+	try {
+		const response = await fetch(
+			`${import.meta.env.VITE_APP_URL}api/v1/auth/${id}`,
+			{
+				method: 'GET',
+				headers: {
+					Authorization: `${userData.data.token}`,
+				},
+				redirect: 'follow',
+			}
+		);
+		const result = await response.json();
+		const returnObj = {
+			...result.data.user,
+			lastMessage: foundArr[index].lastMessage,
+			lastMessageSender: foundArr[index].lastMessageSender,
+		};
+		return returnObj;
+	} catch (error) {
+		console.error(error);
+	}
+}

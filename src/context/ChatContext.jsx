@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useUser } from "./UserContext";
 import { db } from "../firebaseConfig";
 import { useLocation } from "react-router-dom";
-import { fetchSelectedChat } from "../services/chat";
+import { fetchSelectedChat, fetchUserById } from "../services/chat";
 
 const ChatContext = createContext()
 
@@ -52,27 +52,7 @@ export function ChatProvider({ children }) {
             const foundArr = querySnapshot.docs.map((item) => item.data())
             const foundIds = foundArr.map((item) => item.participants.find((id) => userData.data.user._id !== id))
             if (foundIds.length > 0) {
-                async function fetchUserById(id, index) {
-                    try {
-                        const response = await fetch(`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/auth/${id}`, {
-                            method: "GET",
-                            headers: {
-                                "Authorization": `${userData.data.token}`
-                            },
-                            redirect: "follow"
-                        })
-                        const result = await response.json()
-                        const returnObj = {
-                            ...result.data.user,
-                            lastMessage: foundArr[index].lastMessage,
-                            lastMessageSender: foundArr[index].lastMessageSender,
-                        }
-                        return returnObj;
-                    } catch (error) {
-                        console.error(error)
-                    }
-                }
-                Promise.all(foundIds.map((item, index) => fetchUserById(item, index))).then((res) => {
+                Promise.all(foundIds.map((item, index) => fetchUserById(item, index, userData, foundArr))).then((res) => {
                     setThreads(res)
                 }).finally(() => setTimeout(() => {
                     setThreadsLoading(false)
