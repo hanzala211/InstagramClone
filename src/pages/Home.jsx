@@ -23,16 +23,14 @@ export function Home() {
         fetchHomePosts(userData, setHomePosts, setIsPostsLoading, setHasMore)
     }, [])
 
-    const fetchMore = () => {
-        fetchHomePosts(userData, setHomePosts, setIsPostsLoading, setHasMore)
-    }
-
     return <>
         <PostPageHeader isArrowNeeded={false} isHomePage={true} />
         <section className="w-full lg:max-w-[40%] sm:max-w-[85%] max-w-[95%] mb-20 md:mb-2 mt-7 md:mt-0 mx-auto">
             <div className={`flex flex-col gap-2 w-full ${isPostsLoading || homePosts.length === 0 ? "h-[90vh]" : ""} ${homePosts.length < 2 ? "h-[90vh]" : ""}`}>
                 {!isPostsLoading ?
-                    <InfiniteScroll dataLength={homePosts.length} loader={homePosts.length > 0 && <Loader height="md:h-[10vh] h-[15vh] overflow-scroll scrollbar-hidden" />} next={fetchMore} hasMore={hasMore} >
+                    <InfiniteScroll dataLength={homePosts.length} loader={homePosts.length > 0 && <Loader height="md:h-[10vh] h-[15vh] overflow-scroll scrollbar-hidden" />} next={() => {
+                        fetchHomePosts(userData, setHomePosts, setIsPostsLoading, setHasMore)
+                    }} hasMore={hasMore} >
                         {
                             homePosts.length > 0 ? homePosts.map((item, index, arr) => (
                                 <HomePost arr={arr} key={index} index={index} item={item} homePosts={homePosts} setHomePosts={setHomePosts} setCurrentPost={setCurrentPost} setCurrentPostIndex={setCurrentPostIndex} setIsPostOpen={setIsPostOpen} />

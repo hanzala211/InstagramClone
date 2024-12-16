@@ -338,7 +338,7 @@ export async function fetchComments(
 			return [...newComments, ...prev];
 		});
 	} catch (error) {
-		if (error.name !== 'AbortError') {
+		if (error.name !== 'AbortError' && error.name !== 'TypeError') {
 			console.error('Fetch failed:', error);
 		}
 	} finally {
