@@ -4,6 +4,7 @@ import { useUser } from "../context/UserContext";
 import { Footer } from "../components/helpers/Footer";
 import { Loader } from "../components/helpers/Loader";
 import { fetchData } from "../services/userAuth";
+import { InputLabel } from "../components/helpers/InputLabel";
 
 export function SignUp() {
     const { setUserData, userData, setMainLoading } = useUser();
@@ -14,6 +15,29 @@ export function SignUp() {
     const [loading, setLoading] = useState(false)
     const [succesMessage, setSuccessMessage] = useState("");
     const navigate = useNavigate()
+
+    const signupForm = [
+        {
+            onChange: (e) => setEmailAddress(e.target.value),
+            text: "Email Address",
+            value: emailAddress
+        },
+        {
+            onChange: (e) => setSignupPassword(e.target.value),
+            text: "Password",
+            value: signupPassword
+        },
+        {
+            onChange: (e) => setFullName(e.target.value),
+            text: "Full Name",
+            value: fullName
+        },
+        {
+            onChange: (e) => setUserName(e.target.value),
+            text: "Username",
+            value: userName
+        }
+    ]
 
     return <div className="flex flex-col h-[100vh] justify-between">
         <section className="flex justify-center items-center w-full mt-12">
@@ -27,22 +51,9 @@ export function SignUp() {
                             <h2 className="absolute z-[20] left-1/2 -translate-x-1/2 -top-[0.5rem] bg-[#000] p-3 text-[13px] rounded-full text-[#A8A8A8]">OR</h2>
                         </div>
                         <div className="flex flex-col gap-2 border-t-[1px] border-[#262626] pt-6">
-                            <div className="relative">
-                                <label htmlFor="email" className={`text-[#A8A8A8] text-[12px] top-1/2 transition-all duration-100 -translate-y-1/2 left-2.5 absolute pointer-events-none ${emailAddress.length > 0 ? "text-[8px] -translate-y-[17px]" : ""}`}>Email Address</label>
-                                <input type="text" className="bg-[#121212] pl-2 h-[2.5rem] outline-none pr-2 w-[17.5rem] border-[1px] text-[11px] border-[#A8A8A8] rounded-md" id="email" value={emailAddress} onChange={(e) => setEmailAddress(e.target.value)} />
-                            </div>
-                            <div className="relative">
-                                <label htmlFor="password" className={`text-[#A8A8A8] text-[12px] top-1/2 transition-all duration-150 -translate-y-1/2 left-2.5 absolute pointer-events-none ${signupPassword.length > 0 ? "text-[8px] -translate-y-[17px]" : ""}`}>Password</label>
-                                <input type="password" className="bg-[#121212] pl-2 h-[2.5rem] usernameInput outline-none pr-2 w-[17.5rem] border-[1px] text-[11px] border-[#A8A8A8] rounded-md" id="password" value={signupPassword} onChange={(e) => setSignupPassword(e.target.value)} />
-                            </div>
-                            <div className="relative">
-                                <label htmlFor="fullname" className={`text-[#A8A8A8] text-[12px] top-1/2 transition-all duration-150 -translate-y-1/2 left-2.5 absolute pointer-events-none ${fullName.length > 0 ? "text-[8px] -translate-y-[17px]" : ""}`}>Full Name</label>
-                                <input type="text" className="bg-[#121212] pl-2 h-[2.5rem] usernameInput outline-none pr-2 w-[17.5rem] border-[1px] text-[11px] border-[#A8A8A8] rounded-md" id="fullname" value={fullName} onChange={(e) => setFullName(e.target.value)} />
-                            </div>
-                            <div className="relative">
-                                <label htmlFor="username" className={`text-[#A8A8A8] text-[12px] top-1/2 transition-all duration-150 -translate-y-1/2 left-2.5 absolute pointer-events-none ${userName.length > 0 ? "text-[8px] -translate-y-[17px]" : ""}`}>Username</label>
-                                <input type="text" className="bg-[#121212] pl-2 h-[2.5rem] usernameInput outline-none pr-2 w-[17.5rem] border-[1px] text-[11px] border-[#A8A8A8] rounded-md" id="username" value={userName} onChange={(e) => setUserName(e.target.value)} />
-                            </div>
+                            {signupForm.map((item, index) => (
+                                <InputLabel key={index} onChange={item.onChange} value={item.value} text={item.text} />
+                            ))}
                             <Link to={(emailAddress.length > 0 && signupPassword.length > 0 && fullName.length > 0 && userName.length > 0) ? "#" : "#"} className="text-center bg-[#0069AD] text-[14px] py-2 rounded-lg mt-3 opacity-90" onClick={() => {
                                 fetchData(fullName, userName, emailAddress, signupPassword, setMainLoading, setLoading, setUserData, setSuccessMessage, setEmailAddress, setSignupPassword, setFullName, setUserName, navigate);
                             }}>Sign up</Link>

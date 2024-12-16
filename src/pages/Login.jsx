@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { FaFacebook } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { imagesArr } from "../assets/Constants";
@@ -7,6 +7,7 @@ import { useUser } from "../context/UserContext";
 import { Loader } from "../components/helpers/Loader";
 import { LoadingPage } from "./LoadingPage";
 import { fetchUser } from "../services/userAuth";
+import { InputLabel } from "../components/helpers/InputLabel";
 
 export function Login() {
     const { setMainLoading, setUserData, userData, mainLoading } = useUser();
@@ -15,7 +16,6 @@ export function Login() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
     const [loading, setLoading] = useState(false)
-    const inputRef = useRef(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -36,6 +36,19 @@ export function Login() {
         return () => clearInterval(interval);
     }, [imagesArr.length]);
 
+    const loginForm = [
+        {
+            onChange: (e) => setUserValue(e.target.value),
+            text: "Phone number, username or email address",
+            value: userValue
+        },
+        {
+            onChange: (e) => setPassword(e.target.value),
+            text: "Password",
+            value: password
+        }
+    ]
+
     return (
         <>
             {!mainLoading ?
@@ -50,23 +63,11 @@ export function Login() {
                                     <Link><img src="/images/instagramiconswhite.png" alt="" className="w-1/2 mx-auto mt-10" /></Link>
                                 </div>
                                     <div className="flex flex-col gap-2 border-b-[1px] border-[#262626] pb-6">
-                                        <div className="relative">
-                                            <label htmlFor="username" className={`text-[#A8A8A8] text-[12px] top-1/2 transition-all duration-100 -translate-y-1/2 left-2.5 absolute pointer-events-none ${userValue.length > 0 ? "text-[8px] -translate-y-[17px]" : ""}`}>Phone number, username or email address</label>
-                                            <input type="text" className="bg-[#121212] pl-2 h-[2.5rem] outline-none pr-2 w-[17.5rem] border-[1px] text-[11px] border-[#A8A8A8] rounded-md" id="username" value={userValue} ref={inputRef} onChange={(e) => setUserValue(e.target.value)} />
-                                        </div>
-                                        <div className="relative">
-                                            <label htmlFor="password" className={`text-[#A8A8A8] text-[12px] top-1/2 transition-all duration-150 -translate-y-1/2 left-2.5 absolute pointer-events-none ${password.length > 0 ? "text-[8px] -translate-y-[17px]" : ""}`}>Password</label>
-                                            <input type="password" className="bg-[#121212] pl-2 h-[2.5rem] usernameInput outline-none pr-2 w-[17.5rem] border-[1px] text-[11px] border-[#A8A8A8] rounded-md" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                                        </div>
+                                        {loginForm.map((item, index) => (
+                                            <InputLabel key={index} onChange={item.onChange} value={item.value} text={item.text} />
+                                        ))}
                                         <Link to={userData?.status === "success" ? "/home" : "#"} className="text-center bg-[#0069AD] text-[14px] py-2 rounded-lg mt-3 opacity-90" onClick={() => {
-                                            fetchUser(userValue,
-                                                password,
-                                                setLoading,
-                                                setUserData,
-                                                setUserValue,
-                                                setPassword,
-                                                setMainLoading,
-                                                navigate);
+                                            fetchUser(userValue, password, setLoading, setUserData, setUserValue, setPassword, setMainLoading, navigate);
                                         }}>Log in</Link>
                                     </div>
                                     <div className="relative">
