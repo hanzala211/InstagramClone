@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import { useEffect, useState } from "react";
 import { FullSkeleton } from "../helpers/FullSkeleton";
-import { fetchUserDataOnHover, formatNumber } from "../../utils/helper";
+import { formatNumber } from "../../utils/helper";
+import { fetchUserDataOnHover } from "../../services/searchProfile";
 
 export function UserHoverModal({ username, isHovered }) {
     const { userData } = useUser()

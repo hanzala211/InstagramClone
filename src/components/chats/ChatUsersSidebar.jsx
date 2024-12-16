@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
 import { ChatSearchIcon } from "../../assets/Constants"
 import { useUser } from "../../context/UserContext"
-import { fetchNote } from "../../utils/helper"
 import { NoteDiv } from "../note/NoteDiv"
 import { useChat } from "../../context/ChatContext"
 import { UserThreads } from "./UserThreads"
 import { Skeleton } from "../helpers/Skeleton";
+import { fetchNote } from "../../services/note"
 
 
 export function ChatUsersSidebar() {

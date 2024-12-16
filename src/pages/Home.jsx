@@ -4,7 +4,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Loader } from "../components/helpers/Loader";
 import { RiUserFollowFill } from "react-icons/ri";
 import { Post } from "../components/post/Post";
-import { fetchHomePosts } from "../utils/helper";
+import { fetchHomePosts } from "../services/homePage";
 import { HomePost } from "../components/post/HomePost";
 import { usePost } from "../context/PostContext";
 import { PostPageHeader } from "../components/sidebar/PostPageHeader";

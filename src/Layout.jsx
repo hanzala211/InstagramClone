@@ -4,9 +4,9 @@ import { SideBarProvider, useSearch, useUser } from "./context/UserContext";
 import { LoadingPage } from "./pages/LoadingPage";
 import { Footer } from "./components/helpers/Footer";
 import { useEffect } from "react";
-import { fetchUserDataOnClick } from "./utils/helper";
 import { MobileBar } from "./components/sidebar/MobileBar";
 import { fetchMe } from "./services/userAuth";
+import { fetchUserDataOnClick } from "./services/searchProfile";
 
 export function Layout({ token }) {
     const { mainLoading, setMainLoading, setUserData, message, setMessage } = useUser();

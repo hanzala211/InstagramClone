@@ -15,8 +15,8 @@ import { LogOutDiv } from "../components/profile/LogOutDiv";
 import { MobileProfileBar } from "../components/profile/MobileProfileBar";
 import { UserFollowDetails } from "../components/usermodals/UserFollowDetails";
 import { LaptopProfileBar } from "../components/profile/LaptopProfileBar";
-import { fetchNote } from "../utils/helper";
 import { fetchPosts, fetchSaves, getHighLights, getStatus } from "../services/profile";
+import { fetchNote } from "../services/note";
 
 export function Profile() {
     const { userData, setUserPosts, note, setNote, setStories, stories, setCurrentStory, highlights, setHighlights, setHighLightStories, setCurrentHighLight, setUserSaves, isNoteEditOpen, setIsNoteEditOpen, isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen } = useUser();

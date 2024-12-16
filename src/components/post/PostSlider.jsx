@@ -2,8 +2,8 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 import { usePost } from "../../context/PostContext"
 import { useRef, useState } from "react";
 import { useUser } from "../../context/UserContext";
-import { likePost } from "../../utils/helper";
 import { LikeAnimation } from "./LikeAnimation";
+import { likePost } from "../../services/post";
 
 export function PostSlider({ currentIndex, setCurrentIndex }) {
     const { isAnimating, selectedPost, setSelectedPost, isLiked, setIsLiked, setIsAnimating } = usePost()

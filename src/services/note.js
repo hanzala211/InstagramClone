@@ -93,3 +93,24 @@ export async function deleteNote(
 		setDeleteLoading(false);
 	}
 }
+
+export async function fetchNote(setNoteLoading, userData, setNote) {
+	try {
+		setNoteLoading(true);
+		const response = await fetch(`${import.meta.env.VITE_APP_URL}api/v1/note`, {
+			method: 'GET',
+			headers: {
+				Authorization: `${userData.data.token}`,
+			},
+			redirect: 'follow',
+		});
+		const result = await response.json();
+		if (result.message !== 'Note not found or expired.') {
+			setNote(result.note);
+		}
+	} catch (error) {
+		console.error(error);
+	} finally {
+		setNoteLoading(false);
+	}
+}

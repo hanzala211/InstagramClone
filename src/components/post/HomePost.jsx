@@ -4,7 +4,7 @@ import { CommentHome } from "../comments/CommentHome"
 import { usePost } from "../../context/PostContext"
 import { Like, SaveSVG, UnLike, UnSave } from "../../assets/Constants"
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
-import { fetchComments, fetchUserDataOnClick, formatDate } from "../../utils/helper"
+import { formatDate } from "../../utils/helper"
 import { useEffect, useRef, useState } from "react"
 import { UserHoverModal } from "../usermodals/UserHoverModal"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card"
@@ -13,6 +13,8 @@ import { CommentDrawer } from "../comments/CommentDrawer"
 import { LikeAnimation } from "./LikeAnimation"
 import { PostComment } from "../comments/PostComment"
 import { savePost, unSavePost, likePost, unLikePost } from "../../services/homePage"
+import { fetchComments } from "../../services/post"
+import { fetchUserDataOnClick } from "../../services/searchProfile"
 
 
 export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost, setCurrentPostIndex, setIsPostOpen, isPost, arr }) {

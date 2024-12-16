@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
-import { fetchUserDataOnClick } from "../../utils/helper"
 import { useUser } from "../../context/UserContext"
+import { fetchUserDataOnClick } from "../../services/searchProfile"
 
 export function UserModal({ setSelectedProfile, item, isSearchModal }) {
     const { userData, setMainLoading } = useUser()

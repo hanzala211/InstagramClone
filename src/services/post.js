@@ -301,3 +301,131 @@ export async function fetchExplorePosts(
 		setIsPostsLoading(false);
 	}
 }
+
+export async function fetchComments(
+	signal,
+	setComments,
+	setCommentsLoading,
+	setTotalPages,
+	userData,
+	selectedPost,
+	page
+) {
+	try {
+		setComments([]);
+		setCommentsLoading(true);
+		const response = await fetch(
+			`${import.meta.env.VITE_APP_URL}api/v1/post/comments/${
+				selectedPost._id
+			}?page=${page}&limit=10`,
+			{
+				method: 'GET',
+				headers: {
+					Authorization: `${userData.data.token}`,
+				},
+				redirect: 'follow',
+				signal,
+			}
+		);
+		const result = await response.json();
+		setTotalPages(result.data.totalPages);
+		setComments((prev) => {
+			const newComments = result.data.comments.filter((newComment) => {
+				return !prev.some(
+					(existingComment) => existingComment._id === newComment._id
+				);
+			});
+			return [...newComments, ...prev];
+		});
+	} catch (error) {
+		if (error.name !== 'AbortError') {
+			console.error('Fetch failed:', error);
+		}
+	} finally {
+		if (!signal.aborted) {
+			setCommentsLoading(false);
+		}
+	}
+}
+
+export async function likePost(
+	setSelectedPost,
+	userData,
+	selectedPost,
+	setIsLiked,
+	setMessage
+) {
+	try {
+		setSelectedPost((prev) => {
+			const hasLiked = prev.likes.some(
+				(item) => item === userData.data.user._id
+			);
+			return {
+				...prev,
+				likeCount: hasLiked ? prev.likeCount - 1 : prev.likeCount + 1,
+				likes: hasLiked
+					? prev.likes.filter((item) => item !== userData.data.user._id)
+					: [...prev.likes, userData.data.user._id],
+			};
+		});
+		const response = await fetch(
+			`${import.meta.env.VITE_APP_URL}api/v1/post/like/${selectedPost._id}`,
+			{
+				method: 'POST',
+				headers: {
+					Authorization: `${userData.data.token}`,
+				},
+				redirect: 'follow',
+			}
+		);
+		const result = await response.json();
+		if (result.message !== 'Post liked successfully.') {
+			setIsLiked((prev) => !prev);
+		} else {
+			setMessage(result.message);
+		}
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+export async function unLikePost(
+	setSelectedPost,
+	userData,
+	selectedPost,
+	setIsLiked,
+	setMessage
+) {
+	try {
+		setSelectedPost((prev) => {
+			const hasLiked = prev.likes.some(
+				(item) => item === userData.data.user._id
+			);
+			return {
+				...prev,
+				likeCount: hasLiked ? prev.likeCount - 1 : prev.likeCount + 1,
+				likes: hasLiked
+					? prev.likes.filter((item) => item !== userData.data.user._id) // Remove like
+					: [...prev.likes, userData.data.user._id], // Add like
+			};
+		});
+		const response = await fetch(
+			`${import.meta.env.VITE_APP_URL}api/v1/post/dislike/${selectedPost._id}`,
+			{
+				method: 'POST',
+				headers: {
+					Authorization: `${userData.data.token}`,
+				},
+				redirect: 'follow',
+			}
+		);
+		const result = await response.json();
+		if (result.message !== 'Post disliked successfully.') {
+			setIsLiked((prev) => !prev);
+		} else {
+			setMessage(result.message);
+		}
+	} catch (error) {
+		console.error(error);
+	}
+}

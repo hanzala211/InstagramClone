@@ -9,15 +9,7 @@ import { SelectImage } from "./SelectImage";
 import { Overlay } from "../helpers/Overlay";
 import { createPost } from "../../services/post";
 
-export function CreatePost({
-    isCreating,
-    fileInputRef,
-    selectedImage,
-    setSelectedImage,
-    setIsCreating,
-    handleFileChange,
-    handleFile,
-}) {
+export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelectedImage, setIsCreating, handleFileChange, handleFile }) {
     const { userData } = useUser();
     const [crop, setCrop] = useState([]);
     const [zoom, setZoom] = useState([]);
@@ -104,9 +96,7 @@ export function CreatePost({
                                     onCropComplete={onCropComplete}
                                 />
                             ) : isCaption && !isShared ? (
-                                <EditPost
-                                    croppedImage={croppedImages}
-                                    currentIndex={currentIndex}
+                                <EditPost croppedImage={croppedImages} currentIndex={currentIndex}
                                     handleDecrease={() => setCurrentIndex((prev) => prev - 1)}
                                     handleIncrease={() => setCurrentIndex((prev) => prev + 1)}
                                     loading={loading}
@@ -120,25 +110,8 @@ export function CreatePost({
                                     className={`bg-[#262626] w-full h-[65vh] lg:h-[72vh] flex flex-col justify-center items-center`}
                                 >
                                     {shareLoading ? (
-                                        <img
-                                            src="/images/sharedLoader.gif"
-                                            alt="loading"
-                                            className="w-32"
-                                        />
-                                    ) : (
-                                        <img
-                                            src="/images/sharedPost.gif"
-                                            alt="loaded"
-                                            className="w-32"
-                                        />
-                                    )}
-                                    {shareLoading ? (
-                                        ""
-                                    ) : (
-                                        <p className="text-[20px] font-semibold mt-5">
-                                            Your post has been shared.
-                                        </p>
-                                    )}
+                                        <img src="/images/sharedLoader.gif" alt="loading" className="w-32" />) : (<img src="/images/sharedPost.gif" alt="loaded" className="w-32" />)}
+                                    {shareLoading ? "" : (<p className="text-[20px] font-semibold mt-5">Your post has been shared.</p>)}
                                 </div>
                             ) : (
                                 <Loader />

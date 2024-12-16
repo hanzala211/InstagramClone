@@ -3,7 +3,7 @@ import { MoreCommentsSVG, MoreSVG } from "../../assets/Constants";
 import { PostSettings } from "./PostSettings";
 import { useSearch, useUser } from "../../context/UserContext";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchComments, fetchUserDataOnClick, formatDate } from "../../utils/helper";
+import { formatDate } from "../../utils/helper";
 import { usePost } from "../../context/PostContext";
 import { UserHoverModal } from "../usermodals/UserHoverModal";
 import { PostComment } from "../comments/PostComment";
@@ -12,6 +12,8 @@ import { Overlay } from "../helpers/Overlay";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card";
 import { PostSlider } from "./PostSlider";
 import { CommentsStructure } from "../comments/CommentsStructure";
+import { fetchComments } from "../../services/post";
+import { fetchUserDataOnClick } from "../../services/searchProfile";
 
 export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, comments, setComments }) {
     const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, setCommentValue, setIsPostSettingOpen, isCommented, commentsLoading, setCommentsLoading, isPostSettingOpen, isMyPost } = usePost()

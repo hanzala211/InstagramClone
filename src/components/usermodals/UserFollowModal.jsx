@@ -39,7 +39,6 @@ export function UserFollowModal({ isFollowerModalOpen, setIsFollowerModalOpen, i
             }, 900)
             setIsFollowingModalOpen(false)
         }
-
     }
 
     return <>

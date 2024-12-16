@@ -214,3 +214,43 @@ export async function unLikePost(
 		console.error(error);
 	}
 }
+
+export async function fetchHomePosts(
+	userData,
+	setHomePosts,
+	setIsPostsLoading,
+	setHasMore
+) {
+	try {
+		const response = await fetch(
+			`${import.meta.env.VITE_APP_URL}api/v1/home?limit=5`,
+			{
+				method: 'GET',
+				headers: {
+					Authorization: `${userData.data.token}`,
+				},
+				redirect: 'follow',
+			}
+		);
+		const result = await response.json();
+		if (result.status !== 'fail') {
+			setHomePosts((prev) => {
+				const newItems = result.data.filter(
+					(item) => !prev.some((prevItem) => prevItem._id === item._id)
+				);
+				if (newItems.length === 0) {
+					setHasMore(false);
+					return [...prev];
+				} else {
+					return [...prev, ...newItems];
+				}
+			});
+		} else {
+			setHasMore(false);
+		}
+	} catch (error) {
+		console.error(error);
+	} finally {
+		setIsPostsLoading(false);
+	}
+}

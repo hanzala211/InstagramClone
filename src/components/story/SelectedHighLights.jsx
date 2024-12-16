@@ -1,13 +1,15 @@
 import { IoCloseSharp } from "react-icons/io5"
 import { MdKeyboardArrowLeft } from "react-icons/md"
 import { Loader } from "../helpers/Loader"
-import { createHighLight } from "../../services/stroy"
+import { createHighLight, editHighLight } from "../../services/story"
 import { useUser } from "../../context/UserContext"
+import { useNavigate } from "react-router-dom"
 
-export function SelectedHighLights({ selectCover, setSelectCover, setSelectedIDs, isCreatingHighLight, handleClose, selectedIDs, formatDate, formatMonth, currentID, sendLoading, setCurrentID, setSendLoading, highlightName }) {
-    const { userData } = useUser()
+export function SelectedHighLights({ selectCover, setSelectCover, setSelectedIDs, isCreatingHighLight, handleClose, selectedIDs, formatDate, formatMonth, currentID, sendLoading, setCurrentID, setSendLoading, highlightName, editingHighlight }) {
+    const { currentHighLight, highlights, highLightStories, userData } = useUser()
+    const navigate = useNavigate();
     return <>
-        <div className={`w-full max-w-[30vw] overflow-hidden bg-[#262626] rounded-xl h-[75vh] fixed inset-0 z-[100] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition duration-500 ${selectCover ? "opacity-100" : "pointer-events-none"}`}>
+        <div className={`w-full max-w-[30rem] overflow-hidden bg-[#262626] rounded-xl h-[75vh] fixed inset-0 z-[100] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition duration-500 ${selectCover ? "opacity-100" : "pointer-events-none"}`}>
             <div className="text-center w-full py-3 border-b-[1px] border-[#363636]">
                 <button className="absolute text-[30px] top-2.5 left-0" onClick={() => {
                     setSelectCover(false)
@@ -42,7 +44,23 @@ export function SelectedHighLights({ selectCover, setSelectCover, setSelectedIDs
             </div>
             <div className="w-full border-t-[1px] border-[#363636]">
                 {!sendLoading ?
-                    <button onClick={() => createHighLight(setSendLoading, userData, highlightName, selectedIDs, currentID, handleClose)} className={`w-full py-3 text-[15px] transition-all duration-150 font-semibold  text-[#0095F6]`} >Done</button>
+                    <button onClick={() => {
+                        if (!editingHighlight) {
+                            createHighLight(setSendLoading, userData, highlightName, selectedIDs, currentID, handleClose)
+                        } else {
+                            console.log("Test Edit")
+                            editHighLight(setSendLoading,
+                                highlights,
+                                currentHighLight,
+                                userData,
+                                highLightStories,
+                                highlightName,
+                                selectedIDs,
+                                currentID,
+                                handleClose,
+                                navigate)
+                        }
+                    }} className={`w-full py-3 text-[15px] transition-all duration-150 font-semibold  text-[#0095F6]`} >Done</button>
                     : <Loader height="15vh mt-1.5" widthHeight={false} />}
             </div>
         </div></>

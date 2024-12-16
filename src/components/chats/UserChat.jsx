@@ -4,7 +4,7 @@ import { EmojiIcon } from "../../assets/Constants";
 import { useEffect, useRef, useState } from "react";
 import { useChat } from "../../context/ChatContext";
 import { useSearch, useUser } from "../../context/UserContext";
-import { fetchUserDataOnClick } from "../../utils/helper";
+import { fetchUserDataOnClick } from "../../services/searchProfile";
 import { deleteMessageAndUpdateThread, handleSendMessage } from "../../services/chat";
 import { Loader } from "../helpers/Loader";
 import { BsThreeDots } from "react-icons/bs";
