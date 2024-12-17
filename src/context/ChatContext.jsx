@@ -31,7 +31,7 @@ export function ChatProvider({ children }) {
         if (userData && selectedChat) {
             setMessages([])
             setMessagesLoading(true)
-            const querySearch = query(collection(db, "messagesThread", [userData.data.user._id, selectedChat._id].sort().join("_"), "messages"), orderBy("timeStamp"))
+            const querySearch = query(collection(db, "messagesThread", [userData?.data?.user._id, selectedChat?._id].sort().join("_"), "messages"), orderBy("timeStamp"))
             const unsubscribe = onSnapshot(querySearch, (querySnapShote) => {
                 setMessages(querySnapShote.docs.map((item) => ({
                     ...item.data(),

@@ -1,7 +1,7 @@
 import { FaChevronLeft } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { usePost } from "../../context/PostContext";
-import { ChatIcon, ChatSearchIcon } from "../../assets/Constants";
+import { ActiveChatInfoSVG, ChatIcon, ChatInfoSVG, ChatSearchIcon } from "../../assets/Constants";
 import { useChat } from "../../context/ChatContext";
 import { useSearch, useUser } from "../../context/UserContext";
 import { fetchUserDataOnClick } from "../../services/searchProfile";
@@ -10,7 +10,7 @@ export function PostPageHeader({ isArrowNeeded, isHomePage, isInbox, isChat, isC
     const { setSelectedPost, setComments } = usePost()
     const { setSelectedProfile } = useSearch()
     const { userData, setMainLoading } = useUser()
-    const { notifications, selectedChat, setIsChatSearch } = useChat()
+    const { notifications, selectedChat, setIsChatSearch, isInfoOpen, setIsInfoOpen } = useChat()
     const navigate = useNavigate()
 
     return <div className={`fixed py-5 z-[1000] top-0 bg-[#000] flex md:hidden items-center ${isChat && !isChatting ? "" : " border-b-[2px] border-[#111111]"} w-full h-[2rem]`}>
@@ -27,6 +27,7 @@ export function PostPageHeader({ isArrowNeeded, isHomePage, isInbox, isChat, isC
             }} className="font-bold ml-3 text-[13px]">
                 {selectedChat?.fullName}
             </Link>
+            <button className="absolute right-2" onClick={() => setIsInfoOpen((prev) => !prev)}>{isInfoOpen ? <ActiveChatInfoSVG /> : <ChatInfoSVG />}</button>
         </>}
         {!isHomePage ?
             <p className={`absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-[18px] font-semibold ${isChatting ? "hidden" : ""}`}>{isInbox ? "Inbox" : isChat ? userData?.data?.user.userName : "Post"}</p> : <img src="/images/instagramiconswhite.png" className="w-24 absolute left-1/2 -translate-x-1/2 mt-1.5" />

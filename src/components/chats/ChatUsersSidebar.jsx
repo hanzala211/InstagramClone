@@ -23,7 +23,7 @@ export function ChatUsersSidebar() {
         fetchNote(setNoteLoading, userData, setNote);
     }, [selectedChat?._id])
 
-    return <div className={`bg-[#000] mt-0 overflow-auto scrollbar-hidden md:border-r-[2px] md:border-[#262626] md:w-[23.5rem] md:h-[100vh] relative top-0 flex flex-col items-center md:block md:gap-12 gap-5 left-0 md:py-12 py-7 ${location.pathname.slice(16, -1) === "" ? "w-full h-[95vh]" : "w-0"}`}>
+    return <div className={`bg-[#000] mt-0 overflow-auto scrollbar-hidden md:border-r-[2px] md:border-[#262626] md:w-[17.5rem] lg:w-[23.5rem] md:h-[100vh] relative top-0 flex flex-col items-center md:block md:gap-12 gap-5 left-0 md:py-12 py-7 ${location.pathname.slice(16, -1) === "" ? "w-full h-[95vh]" : "w-0"}`}>
         <div className="md:flex justify-between px-5 hidden">
             <h1 className="text-[22px] font-semibold">{userData.data.user.userName}</h1>
             <button onClick={() => setIsChatSearch(true)} className=" hover:opacity-70 transition duration-200"><ChatSearchIcon /></button>
