@@ -8,7 +8,7 @@ import { PostModal } from "../post/PostModal";
 import { usePost } from "../../context/PostContext";
 
 export function ProfileTabs({ isPosts, isTagged, isSaved, isSearchPosts }) {
-    const { selectedPost, setSelectedPost, comments, setComments, page, setPage, totalPages, setTotalPages } = usePost()
+    const { selectedPost, setSelectedPost, setComments, page, setPage, totalPages, setTotalPages } = usePost()
     const { searchUserPosts, selectedProfile } = useSearch()
     const { userPosts, userData, userSaves } = useUser();
     const [isPostOpen, setIsPostOpen] = useState(false);
@@ -65,7 +65,7 @@ export function ProfileTabs({ isPosts, isTagged, isSaved, isSearchPosts }) {
             </div>
         }
 
-        <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={isPosts || isTagged ? userData.data.user : isSearchPosts ? selectedProfile : isSaved ? userSaves[currentPost]?.postBy : ""} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} page={page} setPage={setPage} totalPages={totalPages} setTotalPages={setTotalPages} comments={comments} setComments={setComments} />
+        <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={isPosts || isTagged ? userData.data.user : isSearchPosts ? selectedProfile : isSaved ? userSaves[currentPost]?.postBy : ""} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} page={page} setPage={setPage} totalPages={totalPages} setTotalPages={setTotalPages} />
 
         {selectedPost !== null &&
             (

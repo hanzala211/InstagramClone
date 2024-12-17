@@ -14,8 +14,8 @@ import { fetchUserDataOnClick } from "../../services/searchProfile";
 import { SearchChat } from "../chats/SearchChat";
 import { PostUserCard } from "./PostUserCard";
 
-export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, comments, setComments, isMobile }) {
-    const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, setCommentValue, setIsPostSettingOpen, isCommented, commentsLoading, setCommentsLoading, isPostSettingOpen, isMyPost } = usePost()
+export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, isMobile }) {
+    const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, setCommentValue, setIsPostSettingOpen, isCommented, commentsLoading, setCommentsLoading, isPostSettingOpen, isMyPost, comments, setComments } = usePost()
     const { userData, setMainLoading } = useUser();
     const { setSelectedProfile } = useSearch()
     const [isHovered, setIsHovered] = useState(false)

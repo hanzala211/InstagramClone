@@ -123,7 +123,6 @@ export function SearchProfile() {
                     {!postsLoading ? <Outlet /> : <Loader height="h-[34vh]" />}
                 </div>
             </section>
-
             : <LoadingPage />}
     </>
 }

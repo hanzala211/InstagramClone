@@ -8,7 +8,6 @@ import { formatDate } from "../../utils/helper"
 import { useEffect, useRef, useState } from "react"
 import { UserHoverModal } from "../usermodals/UserHoverModal"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card"
-import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer"
 import { CommentDrawerOpener } from "./CommentDrawerOpener"
 import { LikeAnimation } from "./LikeAnimation"
 import { PostComment } from "../comments/PostComment"
@@ -16,8 +15,6 @@ import { savePost, unSavePost, likePost, unLikePost } from "../../services/homeP
 import { fetchComments } from "../../services/post"
 import { fetchUserDataOnClick } from "../../services/searchProfile"
 import { SearchChat } from "../chats/SearchChat"
-import { CommentDrawer } from "../comments/CommentDrawer"
-
 
 export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost, setCurrentPostIndex, setIsPostOpen, isPost }) {
     const { userData, setMainLoading, setUserData, setMessage, innerWidth } = useUser()
@@ -197,13 +194,7 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
                     }} className="font-semibold text-[12px] text-white hover:opacity-70 transition duration-200 mr-2">{item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName}</Link>
                     {item.caption !== null && item.caption}
                 </p>
-                {innerWidth < 768 &&
-                    <Drawer onClose={() => setComments([])}>
-                        <DrawerContent className="bg-[#000] border-t-[1px] border-[#a8a8a8]">
-                            <CommentDrawer />
-                        </DrawerContent>
-                        <DrawerTrigger>{item.commentsCount > 1 && <button onClick={() => setSelectedPost(item)} className="text-[#a8a8a8] text-[14px]">View all {item.commentsCount} comments</button>}</DrawerTrigger>
-                    </Drawer>}
+                <CommentDrawerOpener item={item} setCurrentPost={setCurrentPost} index={index} setCurrentPostIndex={setCurrentPostIndex} isText={true} />
                 {!isPost &&
                     <div className={`md:hidden ${item.commentsCount > 1 ? "" : "-mt-3"}`}>
                         <PostComment commentRef={commentRef} item={item} />

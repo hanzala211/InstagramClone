@@ -13,7 +13,7 @@ export function MobilePostPage() {
     return <section className="w-full min-h-screen">
         <PostPageHeader isArrowNeeded={true} />
         <div className="w-full 440:max-w-[27rem] h-[100vh] max-w-[25rem] md:max-w-[60rem] mx-auto mt-12">
-            <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={selectedPost?.postBy ? (typeof selectedPost?.postBy === "object" && selectedPost?.postBy !== null) ? selectedPost?.postBy : selectedPost?.user : selectedPost?.user} page={page} setPage={setPage} currentIndex={currentPostIndex} setCurrentIndex={setCurrentPostIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} totalPages={totalPages} setTotalPages={setTotalPages} comments={comments} setComments={setComments} isMobile={true} />
+            <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={selectedPost?.postBy ? (typeof selectedPost?.postBy === "object" && selectedPost?.postBy !== null) ? selectedPost?.postBy : selectedPost?.user : selectedPost?.user} page={page} setPage={setPage} currentIndex={currentPostIndex} setCurrentIndex={setCurrentPostIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} totalPages={totalPages} setTotalPages={setTotalPages} isMobile={true} />
         </div>
     </section>
 }
