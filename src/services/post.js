@@ -429,3 +429,30 @@ export async function unLikePost(
 		console.error(error);
 	}
 }
+
+export async function fetchPost(
+	id,
+	userData,
+	setSelectedPost,
+	setIsPostsLoading
+) {
+	try {
+		setIsPostsLoading(true);
+		const response = await fetch(
+			`${import.meta.env.VITE_APP_URL}api/v1/post/${id}`,
+			{
+				method: 'GET',
+				headers: {
+					Authorization: userData.data.token,
+				},
+				redirect: 'follow',
+			}
+		);
+		const result = await response.json();
+		setSelectedPost(result.post);
+	} catch (error) {
+		console.error(error);
+	} finally {
+		setIsPostsLoading(false);
+	}
+}

@@ -187,7 +187,7 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
             </div>
             <p className="text-[14px] font-medium">{item.likeCount} likes</p>
             <div className="w-full text-[15px]">
-                <PostCaption postData={item?.user || item?.postBy || userData?.data?.user} isImg={false} />
+                <PostCaption selectedPost={item} postData={item?.user || item?.postBy || userData?.data?.user} isImg={false} />
                 <CommentDrawerOpener item={item} setCurrentPost={setCurrentPost} index={index} setCurrentPostIndex={setCurrentPostIndex} isText={true} />
                 {!isPost &&
                     <div className={`md:hidden ${item.commentsCount > 1 ? "" : "-mt-3"}`}>

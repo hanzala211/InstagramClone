@@ -64,7 +64,7 @@ export function Login() {
                                 {!loading ? <><div className="w-full">
                                     <Link><img src="/images/instagramiconswhite.png" alt="" className="w-1/2 mx-auto mt-10" /></Link>
                                 </div>
-                                    <div className="flex flex-col gap-2 border-b-[1px] border-[#262626] pb-6">
+                                    <div className="flex flex-col gap-0.5 md:gap-2 border-b-[1px] border-[#262626] pb-6">
                                         {loginForm.map((item, index) => (
                                             <InputLabel key={index} onChange={item.onChange} value={item.value} text={item.text} type={item.type} />
                                         ))}

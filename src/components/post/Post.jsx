@@ -112,7 +112,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                             </div>
                         )}
                     </div>
-                    <PostCaption postData={postData} isImg={false} />
+                    <PostCaption selectedPost={selectedPost} postData={postData} isImg={false} />
                     <PostComment commentRef={commentRef} />
                 </div>
             </div>

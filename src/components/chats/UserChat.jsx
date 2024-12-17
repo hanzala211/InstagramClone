@@ -121,11 +121,11 @@ export function UserChat() {
                             if (innerWidth > 770) {
                                 setIsPostOpen(true)
                             } else {
-                                navigate(`/${message.post.user.userName}/p/${message.post._id}/`)
+                                navigate(`/${message?.post?.user?.userName}/p/${message.post._id}/`)
                             }
                         }} className="md:w-[18rem] w-[13rem] cursor-pointer bg-[#262626] rounded-lg">
                             <div className="px-3 py-2 flex gap-2 items-center">
-                                <img src={message.post.user.profilePic} className="w-8 rounded-full" alt="" />
+                                <img src={message?.post?.user?.profilePic} className="w-8 rounded-full" alt="" />
                                 <Link className="text-[14px]">{message.post.user.userName}</Link>
                             </div>
                             <img src={message.post.imageUrls[0]} alt={`${message.post.user.userName} post`} />
