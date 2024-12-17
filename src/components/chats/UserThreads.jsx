@@ -50,7 +50,7 @@ export function UserThreads({ isNewChat, item, isChat, handleClose }) {
         </div>
         <div className={`flex flex-col gap-1 ${isNewChat ? "" : ""}`}>
             <h3 className={`font-semibold text-left text-[15px] ${isReceived ? "font-extrabold" : "font-semibold"}`}>{item?.userName}</h3>
-            <p className={`text-[13px] text-left text-[#a8a8a8] ${isReceived ? "text-white font-bold" : ""}`}>{isNewChat ? "" : item?.lastMessageSender === userData?.data?.user?._id ? "You: " : ""} {isNewChat ? item?.fullName : item?.lastMessage}</p>
+            <p className={`text-[13px] text-left text-[#a8a8a8] ${isReceived ? "text-white font-bold" : ""}`}>{isNewChat ? "" : item?.lastMessageSender === userData?.data?.user?._id ? "You: " : ""} {isNewChat ? item?.fullName : item?.lastMessage === "Sent an attachement" ? item?.fullName + " " + item?.lastMessage : item?.lastMessage}</p>
             {!isNewChat && isReceived && <div className="absolute right-5 w-2 top-[47%] -translate-x-1/2 h-2 rounded-full bg-[#0096f4]"></div>}
         </div>
     </button>
