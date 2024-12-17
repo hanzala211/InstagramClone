@@ -13,6 +13,10 @@ export function SearchChat({ header, isChat, index }) {
     const { userData } = useUser()
     const [searchLoading, setSearchLoading] = useState(false)
 
+    const isVisible = isChat
+        ? isChatSearch
+        : isShareOpen || isShareOpenHome[index];
+
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
@@ -41,10 +45,10 @@ export function SearchChat({ header, isChat, index }) {
 
     return <>
         <div
-            className={`overlay z-[150] transition-all duration-500 ${!isShareOpen && !isChatSearch && !isShareOpenHome[index] ? "pointer-events-none opacity-0" : "backdrop-blur-sm opacity-100"}`}
+            className={`overlay z-[150] transition-all duration-500 ${!isVisible ? "pointer-events-none opacity-0" : "backdrop-blur-sm opacity-100"}`}
             onClick={handleClose}
         ></div>
-        <div className={`fixed top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2 bg-[#262626] 440:w-[25rem] w-[21rem] flex flex-col rounded-xl h-[60vh] sm:w-[40rem] sm:h-[70vh] md:w-[40rem] md:h-[70vh] z-[170] ${isChatSearch || isShareOpen || isShareOpenHome[index] ? "opacity-100" : "pointer-events-none opacity-0"} transition duration-300`}>
+        <div className={`fixed top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2 bg-[#262626] 440:w-[25rem] w-[21rem] flex flex-col rounded-xl h-[60vh] sm:w-[40rem] sm:h-[70vh] md:w-[40rem] md:h-[70vh] z-[170] ${isVisible ? "opacity-100" : "pointer-events-none opacity-0"} transition duration-300`}>
             <div className="w-full py-2 border-b-[1px] border-[#363636] flex justify-center">
                 <h1 className="text-[18px] font-semibold">{header}</h1>
                 <button onClick={handleClose} className="text-[28px] absolute right-2"><IoCloseSharp /></button>
