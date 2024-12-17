@@ -182,25 +182,27 @@ export async function fetchUserDataOnClick(
 	setSelectedProfile,
 	setMainLoading
 ) {
-	setMainLoading(true);
-	try {
-		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/user/search/${username}`,
-			{
-				method: 'GET',
-				headers: {
-					Authorization: `${userData !== null ? userData.data.token : token}`,
-				},
-				redirect: 'follow',
-			}
-		);
-		const result = await response.json();
-		setSelectedProfile(result.data[0]);
-	} catch (error) {
-		console.error(error);
-	} finally {
-		setTimeout(() => {
-			setMainLoading(false);
-		}, 1000);
+	if (username !== undefined) {
+		setMainLoading(true);
+		try {
+			const response = await fetch(
+				`${import.meta.env.VITE_APP_URL}api/v1/user/search/${username}`,
+				{
+					method: 'GET',
+					headers: {
+						Authorization: `${userData !== null ? userData.data.token : token}`,
+					},
+					redirect: 'follow',
+				}
+			);
+			const result = await response.json();
+			setSelectedProfile(result.data[0]);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setTimeout(() => {
+				setMainLoading(false);
+			}, 1000);
+		}
 	}
 }
