@@ -18,6 +18,7 @@ export function ChatProvider({ children }) {
     const [notifications, setNotifications] = useState([])
     const [messagesLoading, setMessagesLoading] = useState(false)
     const [threadsLoading, setThreadsLoading] = useState(false)
+    const [isInfoOpen, setIsInfoOpen] = useState(false)
     const location = useLocation()
 
     useEffect(() => {
@@ -78,7 +79,7 @@ export function ChatProvider({ children }) {
         return () => unsubscribe()
     }, [userData?.data?.user?._id])
 
-    return <ChatContext.Provider value={{ isChatSearch, setIsChatSearch, selectedChat, setSelectedChat, searchChatValue, setSearchChatValue, searchData, setSearchData, messages, setMessages, threads, setThreads, notifications, setNotifications, messagesLoading, setMessagesLoading, threadsLoading, setThreadsLoading }}>{children}</ChatContext.Provider>
+    return <ChatContext.Provider value={{ isChatSearch, setIsChatSearch, selectedChat, setSelectedChat, searchChatValue, setSearchChatValue, searchData, setSearchData, messages, setMessages, threads, setThreads, notifications, setNotifications, messagesLoading, setMessagesLoading, threadsLoading, setThreadsLoading, isInfoOpen, setIsInfoOpen }}>{children}</ChatContext.Provider>
 }
 
 export function useChat() {

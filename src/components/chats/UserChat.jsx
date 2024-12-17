@@ -1,6 +1,6 @@
 import EmojiPicker from "emoji-picker-react";
 import { Link, useNavigate } from "react-router-dom";
-import { EmojiIcon, ShareIcon } from "../../assets/Constants";
+import { ActiveChatInfoSVG, ChatInfoSVG, EmojiIcon, ShareIcon } from "../../assets/Constants";
 import { useEffect, useRef, useState } from "react";
 import { useChat } from "../../context/ChatContext";
 import { useSearch, useUser } from "../../context/UserContext";
@@ -12,9 +12,9 @@ import { Post } from "../post/Post";
 import { usePost } from "../../context/PostContext";
 
 export function UserChat() {
+    const { selectedChat, messages, setMessages, messagesLoading, isInfoOpen, setIsInfoOpen } = useChat()
     const { userData, setMainLoading, innerWidth } = useUser()
     const { setSelectedProfile } = useSearch()
-    const { selectedChat, messages, setMessages, messagesLoading } = useChat()
     const { comments, setComments, page, setPage, totalPages, setTotalPages, setSelectedPost, selectedPost } = usePost()
     const [currentPostIndex, setCurrentPostIndex] = useState(0)
     const [isPostOpen, setIsPostOpen] = useState(false)
@@ -69,15 +69,17 @@ export function UserChat() {
     }
 
     return <><div className="md:w-[80%] mt-12 md:mt-0 w-[100%] bg-[#000] overflow-hidden">
-        <><div className="py-2 px-4 border-b-[2px] md:block hidden border-[#262626]">
-            <Link to={`/search/${selectedChat?.userName}/`} onClick={() => {
-                fetchUserDataOnClick(selectedChat?.userName, userData, null, setSelectedProfile, setMainLoading)
-                setMainLoading(true)
-            }} className="flex w-[12rem] items-center gap-3">
-                <img src={selectedChat?.profilePic} className="w-12 rounded-full" alt="Profile Image" />
-                <h2 className="font-semibold text-[15px]">{selectedChat?.fullName}</h2>
-            </Link>
-        </div>
+        <>
+            <div className="py-2  px-4 border-b-[2px] md:flex justify-between items-center hidden border-[#262626]">
+                <Link to={`/search/${selectedChat?.userName}/`} onClick={() => {
+                    fetchUserDataOnClick(selectedChat?.userName, userData, null, setSelectedProfile, setMainLoading)
+                    setMainLoading(true)
+                }} className="flex w-[12rem] items-center gap-3">
+                    <img src={selectedChat?.profilePic} className="w-12 rounded-full" alt="Profile Image" />
+                    <h2 className="font-semibold text-[15px]">{selectedChat?.fullName}</h2>
+                </Link>
+                <button onClick={() => setIsInfoOpen((prev) => !prev)}>{isInfoOpen ? <ActiveChatInfoSVG /> : <ChatInfoSVG />}</button>
+            </div>
             <div ref={scrollRef}
                 className="overflow-y-auto h-full max-h-[calc(100vh-170px)] md:max-h-[calc(100vh-130px)] scrollbar-hidden py-3 px-3 flex flex-col gap-5">
                 {messagesLoading ? <div><Loader height="h-[10vh]" widthHeight={true} /></div> : messages.length > 0 ? messages.map((message, index) => (

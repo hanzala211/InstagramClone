@@ -62,8 +62,6 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         setSelectedPost(null);
     }
 
-    console.log(isMobile)
-
     return (
         <>
             {!isMobile && <Overlay handleClose={handleClose} isPostOpen={isPostOpen} />}
