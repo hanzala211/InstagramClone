@@ -16,15 +16,19 @@ import { db } from '../firebaseConfig';
 
 export function handleSendMessage(
 	setMessages,
-	messages,
 	messageValue,
 	userData,
 	setMessageValue,
 	selectedChat
 ) {
-	setMessages([
-		...messages,
-		{ text: messageValue, sender: userData.data.user._id },
+	setMessages((prev) => [
+		...prev,
+		{
+			sender: userData?.data?.user._id,
+			content: messageValue,
+			timeStamp: new Date().toISOString(),
+			status: 'sending',
+		},
 	]);
 	setMessageValue('');
 	setDoc(
@@ -135,7 +139,7 @@ export async function fetchSelectedChat(userData, setSelectedChat, location) {
 			{
 				method: 'GET',
 				headers: {
-					Authorization: `${userData.data.token}`,
+					Authorization: `${userData?.data?.token}`,
 				},
 				redirect: 'follow',
 			}

@@ -45,13 +45,12 @@ export function UserThreads({ isNewChat, item, isChat, handleClose }) {
         }
     }} className={`flex gap-3 items-center px-5 w-full relative cursor-pointer ${isNewChat ? "" : "hover:bg-[#262626] hover:bg-opacity-50"} py-2 transition-all duration-300`}>
         <div className="relative">
-            {!isNewChat && isReceived && <div className="absolute md:hidden block right-1 w-2 top-0 h-2 rounded-full bg-[#0096f4]"></div>}
             <img src={item.profilePic} className="w-14 rounded-full" alt="UserProfile" />
         </div>
-        <div className={`flex flex-col gap-1 ${isNewChat ? "" : "md:block hidden"}`}>
+        <div className={`flex flex-col gap-1 ${isNewChat ? "" : ""}`}>
             <h3 className={`font-semibold text-left text-[15px] ${isReceived ? "font-extrabold" : "font-semibold"}`}>{item.userName}</h3>
             <p className={`text-[13px] text-left text-[#a8a8a8] ${isReceived ? "text-white font-bold" : ""}`}>{isNewChat ? "" : item.lastMessageSender === userData.data.user._id ? "You: " : ""} {isNewChat ? item.fullName : item.lastMessage}</p>
-            {!isNewChat && isReceived && <div className="absolute md:block hidden right-5 w-2 top-[47%] -translate-x-1/2 h-2 rounded-full bg-[#0096f4]"></div>}
+            {!isNewChat && isReceived && <div className="absolute right-5 w-2 top-[47%] -translate-x-1/2 h-2 rounded-full bg-[#0096f4]"></div>}
         </div>
     </button>
 }

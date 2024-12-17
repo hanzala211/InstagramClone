@@ -4,7 +4,7 @@ import { useChat } from "../../context/ChatContext";
 export function ChatDiv() {
     const { setIsChatSearch } = useChat()
 
-    return <div className="flex flex-col gap-2 items-center justify-center md:w-[80%] w-[90%]">
+    return <div className="md:flex flex-col md:gap-2 items-center justify-center md:w-[80%] hidden">
         <StartChatIcon />
         <h1>Your messages</h1>
         <p className="text-[#A8A8A8] text-[13px] text-center">Send private photos and messages to a friend or group.</p>

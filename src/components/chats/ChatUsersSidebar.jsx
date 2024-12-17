@@ -6,13 +6,14 @@ import { useChat } from "../../context/ChatContext"
 import { UserThreads } from "./UserThreads"
 import { Skeleton } from "../helpers/Skeleton";
 import { fetchNote } from "../../services/note"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 
 export function ChatUsersSidebar() {
     const { userData, note, setNote } = useUser()
     const { setIsChatSearch, threads, threadsLoading, selectedChat } = useChat()
     const [noteLoading, setNoteLoading] = useState(false)
+    const location = useLocation()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -22,19 +23,19 @@ export function ChatUsersSidebar() {
         fetchNote(setNoteLoading, userData, setNote);
     }, [selectedChat?._id])
 
-    return <div className="bg-[#000] mt-7 md:mt-0 overflow-auto scrollbar-hidden border-r-[2px] border-[#262626] md:w-[23.5rem] h-[95vh] md:h-[100vh] relative top-0 flex flex-col items-center md:block gap-12 left-0 py-12">
-        <div className="flex justify-between px-5">
-            <h1 className="text-[22px] md:block hidden font-semibold">{userData.data.user.userName}</h1>
-            <button onClick={() => setIsChatSearch(true)} className="hover:opacity-70 transition duration-200"><ChatSearchIcon /></button>
+    return <div className={`bg-[#000] mt-0 overflow-auto scrollbar-hidden md:border-r-[2px] md:border-[#262626] md:w-[23.5rem] md:h-[100vh] relative top-0 flex flex-col items-center md:block md:gap-12 gap-5 left-0 md:py-12 py-7 ${location.pathname.slice(16, -1) === "" ? "w-full h-[95vh]" : "w-0"}`}>
+        <div className="md:flex justify-between px-5 hidden">
+            <h1 className="text-[22px] font-semibold">{userData.data.user.userName}</h1>
+            <button onClick={() => setIsChatSearch(true)} className=" hover:opacity-70 transition duration-200"><ChatSearchIcon /></button>
         </div>
-        <div className="relative mt-14 px-5 md:block hidden">
+        <div className="relative w-full mt-14 px-5">
             {note.length !== 0 && <NoteDiv notes={note} isChat={true} />}
             <img src={userData.data.user.profilePic} className="w-16 rounded-full" alt="ProfilePic" />
             <p className="text-[#A8A8A8] text-[13px] ml-1 mt-1">Your Note</p>
         </div>
-        <h1 className="mt-8 mb-3 text-[17px] px-5 font-semibold md:block hidden">Messages</h1>
-        <div className="flex flex-col gap-3">
-            {!threadsLoading ? threads.map((item, index) => <UserThreads key={index} item={item} isChat={true} />) : Array.from({ length: 5 }, (_, i) => <div key={i} className="mt-2 md:ml-5"><Skeleton isThread={true} width={true} /></div>)}
+        <h1 className="md:mt-8 md:mb-3 text-[17px] w-full px-5 font-semibold">Messages</h1>
+        <div className="flex flex-col gap-3 w-full">
+            {!threadsLoading ? threads.map((item, index) => <UserThreads key={index} item={item} isChat={true} />) : Array.from({ length: 5 }, (_, i) => <div key={i} className="ml-5"><Skeleton width={true} /></div>)}
         </div>
     </div>
 }
