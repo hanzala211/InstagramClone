@@ -18,7 +18,7 @@ export function PostOptions({ postData, commentRef }) {
                 <CommentSVG className="hover:stroke-gray-600 hover:opacity-80 transition-all duration-150 cursor-pointer" />
             </button>
             <CommentDrawerOpener item={selectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} index={0} setCurrentPostIndex={setCurrentPostIndex} />
-            <button onClick={() => setIsShareOpen(true)} className="hover:opacity-70 transition duration-300 mt-0.5"><ShareIcon /></button>
+            <button onClick={() => setIsShareOpen(true)} className="hover:opacity-70 mt-0.5 transition duration-300"><ShareIcon /></button>
         </div>
         <SavedComponent />
     </div>

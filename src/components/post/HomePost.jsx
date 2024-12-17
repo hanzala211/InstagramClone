@@ -15,6 +15,7 @@ import { savePost, unSavePost, likePost, unLikePost } from "../../services/homeP
 import { fetchComments } from "../../services/post"
 import { fetchUserDataOnClick } from "../../services/searchProfile"
 import { SearchChat } from "../chats/SearchChat"
+import { PostCaption } from "./PostCaption"
 
 export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost, setCurrentPostIndex, setIsPostOpen, isPost }) {
     const { userData, setMainLoading, setUserData, setMessage, innerWidth } = useUser()
@@ -186,14 +187,7 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
             </div>
             <p className="text-[14px] font-medium">{item.likeCount} likes</p>
             <div className="w-full text-[15px]">
-                <p className="text-[13px] text-[#a8a8a1]">
-                    <Link to={`/search/${item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName}/`} onClick={() => {
-                        fetchUserDataOnClick(item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName, userData, null, setSelectedProfile, setMainLoading)
-                        setMainLoading(true)
-                        navigate(`/search/${item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName}/`)
-                    }} className="font-semibold text-[12px] text-white hover:opacity-70 transition duration-200 mr-2">{item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName}</Link>
-                    {item.caption !== null && item.caption}
-                </p>
+                <PostCaption postData={item?.user || item?.postBy || userData?.data?.user} isImg={false} />
                 <CommentDrawerOpener item={item} setCurrentPost={setCurrentPost} index={index} setCurrentPostIndex={setCurrentPostIndex} isText={true} />
                 {!isPost &&
                     <div className={`md:hidden ${item.commentsCount > 1 ? "" : "-mt-3"}`}>

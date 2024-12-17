@@ -13,6 +13,7 @@ import { fetchComments } from "../../services/post";
 import { fetchUserDataOnClick } from "../../services/searchProfile";
 import { SearchChat } from "../chats/SearchChat";
 import { PostUserCard } from "./PostUserCard";
+import { PostCaption } from "./PostCaption";
 
 export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, isMobile }) {
     const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, setCommentValue, setIsPostSettingOpen, isCommented, commentsLoading, setCommentsLoading, isPostSettingOpen, isMyPost, comments, setComments } = usePost()
@@ -75,19 +76,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                             <PostUserCard postData={postData} setIsHovered={setIsHovered} handleClick={handleClick} isHovered={isHovered} setIsPostSettingOpen={setIsPostSettingOpen} />
                         </div>
                         <div className="w-full flex  flex-col 1280:h-[60.5vh] lg:h-[56%] h-[48%] gap-4 overflow-auto scrollbar-hidden">
-                            {selectedPost !== null && selectedPost.caption && (
-                                <div>
-                                    <div className="w-full px-6 mt-4 text-[15px]">
-                                        <div className="flex flex-row gap-4 items-start">
-                                            <img src={postData?.profilePic} alt="Profile Picture" className="w-9 rounded-full" />
-                                            <p>
-                                                <span className="text-[14px] font-semibold mr-3 cursor-default">{postData?.userName}</span>
-                                                {selectedPost.caption}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
+                            <PostCaption postData={postData} />
                             <div className="flex flex-col gap-4 ml-5 pt-2">
                                 <CommentsStructure handleClick={handleClick} />
                                 <div className="w-full flex justify-center items-center mb-2">
@@ -119,10 +108,11 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                         {selectedPost !== null && (
                             <div className="mt-2 px-2">
                                 <p className="text-[15px] font-semibold">{selectedPost.likeCount} likes</p>
-                                <p className="text-[12px] text-[#3f3b3b]">{formatDate(selectedPost.createdAt)} ago</p>
+                                <p className="text-[12px] text-[#a8a8a8]">{formatDate(selectedPost.createdAt)} ago</p>
                             </div>
                         )}
                     </div>
+                    <PostCaption postData={postData} isImg={false} />
                     <PostComment commentRef={commentRef} />
                 </div>
             </div>

@@ -6,6 +6,6 @@ export function CommentHome({ setIsPostOpen, setCurrentIndex, setCurrentPost, i 
         setCurrentPost(i)
         setCurrentIndex(0)
     }}>
-        <CommentSVG className="hover:stroke-gray-600 hover:opacity-80 transition-all duration-150 cursor-pointer" />
+        <CommentSVG className="hover:stroke-gray-600 hover:opacity-80 transition-all duration-150 cursor-pointer mt-1" />
     </button>
 }
