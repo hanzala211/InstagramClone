@@ -28,8 +28,8 @@ export function Story({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSe
             alt="Instagram Icon"
             className="w-20 md:w-28 mb-4 md:mb-0"
         />
-        <div className="w-full md:w-[32rem] rounded-xl">
-            <div className="absolute left-0 md:left-auto px-5 top-16 md:top-7 md:px-3 w-full md:w-[32rem]">
+        <div className="w-full md:w-[32rem] rounded-xl relative">
+            <div className="absolute left-0 md:left-auto px-5 top-[1rem] md:top-4 md:px-3 w-full md:w-[32rem]">
                 <div className="w-full flex gap-1.5">
                     {isOwnProfile ? stories.map((item, i) => (
                         <div
@@ -68,8 +68,7 @@ export function Story({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSe
                         <div className="flex flex-col gap-0.5">
                             <Link
                                 to={isArchive || isOwnProfile || isHighLight ? `/${userData.data.user.userName}/` : isSearchUser || isSearchHighLight ? `/search/${selectedProfile?.userName}/` : ""}
-                                className="font-semibold text-[12px] md:text-[14px] flex items-center gap-1"
-                            >
+                                className="font-semibold text-[12px] md:text-[14px] flex items-center gap-1">
                                 {isArchive || isOwnProfile || isHighLight ? userData.data.user.userName : isSearchUser || isSearchHighLight ? selectedProfile.userName : ""}
                                 {isOwnProfile || isArchive || isHighLight ? userData.data.user.followingCount > 10 && <MdVerified className="fill-white" /> : isSearchUser || isSearchHighLight ? selectedProfile.followingCount > 10 && <MdVerified className="fill-white" /> : ""}
                             </Link>
@@ -90,6 +89,46 @@ export function Story({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSe
                 alt="Story"
                 className="w-full rounded-xl"
             />
+            {(isOwnProfile
+                ? stories.length > 1
+                : isArchive
+                    ? archives.length > 1
+                    : isHighLight
+                        ? highLightStories.length > 1
+                        : isSearchUser
+                            ? searchUserStatus.length > 1
+                            : isSearchHighLight
+                                ? searchUserHighLights.length > 1
+                                : "") && (
+                    <>
+                        {(isOwnProfile
+                            ? currentStory !== stories.length - 1
+                            : isArchive
+                                ? currentStory !== archives.length - 1
+                                : isHighLight
+                                    ? currentStory !== highLightStories.length - 1
+                                    : isSearchUser
+                                        ? currentStory !== searchUserStatus.length - 1
+                                        : isSearchHighLight
+                                            ? currentStory !== searchUserHighLights.length - 1
+                                            : "") && (
+                                <button
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md hover:scale-110 transition-transform duration-200"
+                                    onClick={handleIncrease}
+                                >
+                                    <FaArrowRight className="fill-black text-lg" />
+                                </button>
+                            )}
+                        {currentStory !== 0 && (
+                            <button
+                                className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md hover:scale-110 transition-transform duration-200"
+                                onClick={handleDecrease}
+                            >
+                                <FaArrowLeft className="fill-black text-lg" />
+                            </button>
+                        )}
+                    </>
+                )}
         </div>
         <button
             onClick={() => {
@@ -99,26 +138,6 @@ export function Story({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSe
         >
             <IoCloseSharp className="text-[28px] md:text-[35px] absolute top-3 right-3" />
         </button>
-        {(isOwnProfile ? stories.length > 1 : isArchive ? archives.length > 1 : isHighLight ? highLightStories.length > 1 : isSearchUser ? searchUserStatus.length > 1 : isSearchHighLight ? searchUserHighLights.length > 1 : "") && (
-            <>
-                {(isOwnProfile ? currentStory !== stories.length - 1 : isArchive ? currentStory !== archives.length - 1 : isHighLight ? currentStory !== highLightStories.length - 1 : isSearchUser ? currentStory !== searchUserStatus.length - 1 : isSearchHighLight ? currentStory !== searchUserHighLights.length - 1 : "") && (
-                    <button
-                        className="absolute right-4 md:right-[38rem] top-1/2 -translate-y-1/2 p-2 bg-white rounded-full"
-                        onClick={handleIncrease}
-                    >
-                        <FaArrowRight className="fill-black" />
-                    </button>
-                )}
-                {currentStory !== 0 && (
-                    <button
-                        className="absolute left-4 md:left-[43rem] top-1/2 -translate-y-1/2 p-2 bg-white rounded-full"
-                        onClick={handleDecrease}
-                    >
-                        <FaArrowLeft className="fill-black" />
-                    </button>
-                )}
-            </>
-        )}
         <HighlightsEditor highLightsModal={highLightsModal} setHighLightsModal={setHighLightsModal} />
     </section>
 
