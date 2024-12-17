@@ -15,7 +15,7 @@ export function PostPageHeader({ isArrowNeeded, isHomePage, isInbox, isChat, isC
 
     return <div className={`fixed py-5 z-[1000] top-0 bg-[#000] flex md:hidden items-center ${isChat && !isChatting ? "" : " border-b-[2px] border-[#111111]"} w-full h-[2rem]`}>
         {isArrowNeeded && <FaChevronLeft onClick={() => {
-            navigate(isChatting ? "/direct/inbox/" : -1)
+            navigate(isChatting ? "/direct/inbox/" : isChat ? "/home" : -1)
             setSelectedPost(null)
             setComments([])
         }} className="text-[20px] ml-3" />}
@@ -34,6 +34,6 @@ export function PostPageHeader({ isArrowNeeded, isHomePage, isInbox, isChat, isC
         }
         {isHomePage ? <Link to="/direct/inbox/" className="relative left-[93%]">
             {notifications.length > 0 && <div className="absolute w-4 h-4 border-[1px] border-black text-white bg-red-600 rounded-full text-[10px] text-center -right-1 -top-1">{notifications.length}</div>}<ChatIcon /></Link> : ""}
-        {isChat && !isChatting && <button onClick={() => setIsChatSearch(true)} className="relative left-[85%] hover:opacity-70 transition duration-200"><ChatSearchIcon /></button>}
+        {isChat && !isChatting && <button onClick={() => setIsChatSearch(true)} className="relative left-[82%] hover:opacity-70 transition duration-200"><ChatSearchIcon /></button>}
     </div>
 }

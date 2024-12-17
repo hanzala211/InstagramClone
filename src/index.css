@@ -92,3 +92,9 @@ body::-webkit-scrollbar {
 	object-fit: cover;
 	opacity: 1;
 }
+
+@media (max-width: 640px) {
+	body {
+	  padding-bottom: 3.5rem;
+	}
+  }

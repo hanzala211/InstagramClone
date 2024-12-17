@@ -5,9 +5,7 @@ export function UserChatInfo() {
     const { isInfoOpen, selectedChat } = useChat()
 
     return <div
-        className={`${isInfoOpen ? "lg:max-w-[23rem] md:max-w-[220px] w-full h-[100vh]" : "w-0"
-            } transition-all duration-300 xl:transition-none border-[#262626] border-l-[2px] md:relative absolute top-0 right-0 bg-[#000]`}
-    >
+        className={`${isInfoOpen ? "lg:max-w-[23rem] md:max-w-[220px] w-full h-[100vh] block " : "w-0 hidden"} md:block transition-all duration-300 xl:transition-none border-[#262626] border-l-[2px] md:relative absolute top-0 right-0 bg-[#000]`}>
         <div className="border-[#262626] py-[1.17rem] mt-10 md:mt-0 border-b-[2px]">
             <h1 className="ml-5 text-[18px] font-semibold">Details</h1>
         </div>

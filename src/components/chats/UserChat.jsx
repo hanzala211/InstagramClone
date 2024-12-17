@@ -24,12 +24,21 @@ export function UserChat() {
     const [messageValue, setMessageValue] = useState("")
     const [messagesDelete, setMessagesDelete] = useState([])
     const [isClicked, setIsClicked] = useState([])
+    const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
     const emojiIconRef = useRef(null)
     const emojiPickerRef = useRef(null)
     const scrollRef = useRef(null);
     const deleteDivRef = useRef(null)
     const iconRef = useRef(null)
     const navigate = useNavigate()
+
+    useEffect(() => {
+        if (isKeyboardOpen) {
+            document.body.style.paddingBottom = "3rem";
+        } else {
+            document.body.style.paddingBottom = "0";
+        }
+    }, [isKeyboardOpen]);
 
     useEffect(() => {
         window.addEventListener("click", handleClick)
@@ -68,10 +77,17 @@ export function UserChat() {
             handleSendMessage(setMessages, messageValue, userData, setMessageValue, selectedChat)
         }
     }
+    const handleFocus = () => {
+        setIsKeyboardOpen(true);
+    };
+
+    const handleBlur = () => {
+        setIsKeyboardOpen(false);
+    };
 
     return <>
         <div className={`mt-12 md:mt-0 transition-[width] duration-200 ${isInfoOpen ? "w-0" : "w-[100%] "} md:w-[80%]  bg-[#000] overflow-hidden flex`}>
-            <div className={`${isInfoOpen ? "w-[80%]" : "lg:w-full w-full"}`}>
+            <div className={`${isInfoOpen ? "w-[80%] lg:w-full" : " w-full"}`}>
                 <div className="py-2 px-4 border-b-[2px] md:flex justify-between items-center hidden border-[#262626]">
                     <Link to={`/search/${selectedChat?.userName}/`} onClick={() => {
                         fetchUserDataOnClick(selectedChat?.userName, userData, null, setSelectedProfile, setMainLoading)
@@ -150,8 +166,16 @@ export function UserChat() {
                             <EmojiPicker width={innerWidth > 768 ? 350 : 300} height={innerWidth > 768 ? 350 : 300} onEmojiClick={(emoji) => setMessageValue((prev) => prev + emoji.emoji)} theme="dark" />
                         </div>
                     }
-                    <input type="text" value={messageValue} className="w-[100%] rounded-3xl bg-transparent outline-none border-[1px] border-[#a2a2a2] px-12 py-2" placeholder="Message..." onChange={(e) => setMessageValue(e.target.value)} />
-                    <button className={`text-[#0096f4] ${messageValue.length === 0 ? "opacity-70" : " hover:text-white"} text-[14px] absolute right-10 top-[1.3rem] md:top-[1.1rem] transition duration-100`} disabled={messageValue.length === 0} onClick={() => handleSendMessage(setMessages, messageValue, userData, setMessageValue, selectedChat)}>Send</button>
+                    <input
+                        type="text"
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        value={messageValue}
+                        className="w-[100%] rounded-3xl bg-transparent outline-none border-[1px] border-[#a2a2a2] px-12 py-2"
+                        placeholder="Message..."
+                        onChange={(e) => setMessageValue(e.target.value)}
+                    />
+                    <button className={`text-[#0096f4] ${messageValue.length === 0 ? "opacity-70" : " hover:text-white"} text-[14px] absolute right-10 top-[1.4rem] md:top-[1.1rem] transition duration-100`} disabled={messageValue.length === 0} onClick={() => handleSendMessage(setMessages, messageValue, userData, setMessageValue, selectedChat)}>Send</button>
                 </div>
             </div>
             <UserChatInfo />
