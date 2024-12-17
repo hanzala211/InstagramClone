@@ -11,9 +11,9 @@ import { PostPageHeader } from "../components/sidebar/PostPageHeader";
 
 export function Home() {
     const { userData } = useUser()
-    const { homePosts, setHomePosts, comments, setComments, page, setPage, totalPages, setTotalPages } = usePost()
+    const { homePosts, setHomePosts, page, setPage, totalPages, setTotalPages } = usePost()
     const [currentPostIndex, setCurrentPostIndex] = useState(0)
-    const [isPostsLoading, setIsPostsLoading] = useState(false)
+    const [isPostsLoading, setIsPostsLoading] = useState(true)
     const [isPostOpen, setIsPostOpen] = useState(false)
     const [currentPost, setCurrentPost] = useState(null)
     const [hasMore, setHasMore] = useState(true)

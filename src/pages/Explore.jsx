@@ -13,9 +13,9 @@ import { fetchExplorePosts } from "../services/post";
 export function Explore() {
     const { userData } = useUser();
     const { searchQuery, setSearchQuery, searchData, setSearchData, setSelectedProfile } = useSearch();
-    const { setSelectedPost, selectedPost, comments, setComments, page, setPage, totalPages, setTotalPages } = usePost()
+    const { setSelectedPost, selectedPost, setComments, page, setPage, totalPages, setTotalPages } = usePost()
     const [explorePagePosts, setExplorePagePosts] = useState([]);
-    const [isPostsLoading, setIsPostsLoading] = useState(false);
+    const [isPostsLoading, setIsPostsLoading] = useState(true);
     const [currentPost, setCurrentPost] = useState(0);
     const [isPostOpen, setIsPostOpen] = useState(false);
     const [count, setCount] = useState(0);
