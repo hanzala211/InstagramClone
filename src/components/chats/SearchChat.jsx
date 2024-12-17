@@ -12,10 +12,7 @@ export function SearchChat({ header, isChat, index }) {
     const { isShareOpen, setIsShareOpen, isShareSearch, setIsShareSearch, isShareOpenHome, setIsShareOpenHome } = usePost()
     const { userData } = useUser()
     const [searchLoading, setSearchLoading] = useState(false)
-
-    const isVisible = isChat
-        ? isChatSearch
-        : isShareOpen || isShareOpenHome[index];
+    const isVisible = isChat ? isChatSearch : isShareOpen || isShareOpenHome[index];
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -70,7 +67,7 @@ export function SearchChat({ header, isChat, index }) {
                         <UserThreads index={index} isNewChat={true} item={item} isChat={isChat} />
                     </div>
                 )) : isChat ? "" : threads.map((item, index) => (<div key={index} className="hover:bg-[#a8a8a8] hover:bg-opacity-30 transition-all duration-300">
-                    <UserThreads index={index} isNewChat={true} item={item} isChat={isChat} />
+                    <UserThreads handleClose={handleClose} isNewChat={true} item={item} isChat={isChat} />
                 </div>))}
             </div>
         </div>

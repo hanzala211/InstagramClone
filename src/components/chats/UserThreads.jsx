@@ -7,9 +7,9 @@ import { db } from "../../firebaseConfig";
 import { handleSharePost } from "../../services/chat";
 import { usePost } from "../../context/PostContext";
 
-export function UserThreads({ isNewChat, item, isChat, index }) {
-    const { setIsChatSearch, setSelectedChat, setSearchChatValue, setSearchData, notifications } = useChat()
-    const { selectedPost, setIsShareOpen, setIsShareSearch, setIsShareOpenHome } = usePost()
+export function UserThreads({ isNewChat, item, isChat, handleClose }) {
+    const { setSelectedChat, notifications } = useChat()
+    const { selectedPost, setIsShareOpen, setIsShareSearch } = usePost()
     const { userData, setMessage } = useUser()
     const [isReceived, setIsReceived] = useState(false);
     const [foundNotification, setFoundNotification] = useState(null)
@@ -32,23 +32,15 @@ export function UserThreads({ isNewChat, item, isChat, index }) {
         }
     }
 
+
     return <button onClick={() => {
         if (isChat) {
             navigate(`/direct/inbox/t/${item._id}`)
-            setIsChatSearch(false)
             setSelectedChat(item)
-            setTimeout(() => {
-                setSearchData([])
-                setSearchChatValue([])
-            }, 400)
             handleUpdateNotification()
             setIsReceived(false)
         } else {
-            setIsShareOpenHome((prev) => {
-                const updated = [...prev]
-                updated[index] = false;
-                return updated;
-            })
+            handleClose()
             handleSharePost(userData, item, selectedPost, setMessage, setIsShareOpen, setIsShareSearch)
         }
     }} className={`flex gap-3 items-center px-5 w-full relative cursor-pointer ${isNewChat ? "" : "hover:bg-[#262626] hover:bg-opacity-50"} py-2 transition-all duration-300`}>

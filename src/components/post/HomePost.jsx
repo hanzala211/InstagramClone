@@ -29,6 +29,7 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
     const [isHovered, setIsHovered] = useState(Array(homePosts.length).fill(false))
     const [showHeart, setShowHeart] = useState(false);
     const [heartIndex, setHeartIndex] = useState(null);
+    const [selectedIndex, setSelectedIndex] = useState(0)
     const lastTouchTime = useRef(0);
     const commentRef = useRef(null)
     const navigate = useNavigate()
