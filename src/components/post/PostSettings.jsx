@@ -14,7 +14,6 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
     const [isShared, setIsShared] = useState(false)
     const [shareLoading, setShareLoading] = useState(false);
 
-
     useEffect(() => {
         setCaptionValue(selectedPost !== null ? selectedPost.caption : "");
     }, [isEditingOpen])

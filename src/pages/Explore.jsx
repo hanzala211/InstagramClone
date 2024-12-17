@@ -28,11 +28,7 @@ export function Explore() {
 
     useEffect(() => {
         setIsPostsLoading(true)
-        fetchExplorePosts(setCount,
-            setExplorePagePosts,
-            userData,
-            setHasMore,
-            setIsPostsLoading);
+        fetchExplorePosts(setCount, setExplorePagePosts, userData, setHasMore, setIsPostsLoading);
     }, [])
 
     useEffect(() => {
@@ -83,7 +79,7 @@ export function Explore() {
         setTotalPages(null)
     }
 
-    return <><section className={`w-full lg:max-w-[80%] xl:max-w-[60%] sm:max-w-[80%] max-w-[95%] mt-10 mx-auto ${isPostsLoading || explorePagePosts.length === 0 ? "h-[85vh]" : ""} ${explorePagePosts.length < 4 ? "xl:h-[95vh]" : ""}`}>
+    return <><section className={`w-full lg:max-w-[80%] xl:max-w-[60%] sm:max-w-[80%] max-w-[97%] mt-7 mx-auto ${isPostsLoading || explorePagePosts.length === 0 ? "h-[85vh]" : ""} ${explorePagePosts.length < 4 ? "xl:h-[95vh]" : ""}`}>
         <div ref={containerRef} className="bg-[#121212] w-full md:hidden flex gap-3 items-center p-3 h-[3.5rem] fixed top-0 z-[50] left-0">
             <input ref={inputRef} type="text" name="search" id="search" placeholder="Search" className={`bg-[#000] border-[1px] border-[#6F6F6F] rounded-md py-1 px-3 outline-none ${isSearching ? "w-[22rem]" : "w-96"}`} onFocus={() => setIsSearching(true)} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             {isSearching && <button className="text-[14px]" onClick={() => setIsSearching(false)}>Cancel</button>}
@@ -98,17 +94,12 @@ export function Explore() {
                 No posts available. Check back later!
             </p>
         ) : isPostsLoading ? <Loader /> : (
-            <InfiniteScroll
-                dataLength={explorePagePosts.length}
-                next={() => fetchExplorePosts(setCount, setExplorePagePosts, userData, setHasMore, setIsPostsLoading)}
-                loader={
-                    <div className="flex justify-center py-4">
-                        <Loader height="h-[5vh]" />
-                    </div>
-                }
-                hasMore={count < 8 && hasMore}
-            >
-                <div className={`grid grid-flow-row grid-cols-3 gap-2 mt-5 md:mt-0`}>
+            <InfiniteScroll dataLength={explorePagePosts.length} next={() => fetchExplorePosts(setCount, setExplorePagePosts, userData, setHasMore, setIsPostsLoading)} loader={
+                <div className="flex justify-center py-4">
+                    <Loader height="h-[5vh]" />
+                </div>}
+                hasMore={count < 8 && hasMore}>
+                <div className={`grid grid-flow-row grid-cols-3 gap-1 mt-5 md:mt-0`}>
                     {explorePagePosts.map((item, index, arr) => (
                         <PostModal key={index} arr={arr} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} item={item} i={index} />
                     ))}

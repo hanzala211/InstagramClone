@@ -15,7 +15,7 @@ export function PostComment({ commentRef, className, item }) {
         }
     }, [commentValue])
 
-    return <div className={`mt-5 border-t-[1px] flex items-center border-[#262626] px-5 py-2 ${className}`}>
+    return <div className={`mt-5 border-t-[1px] flex items-center border-[#262626] px-3 py-2 ${className}`}>
         <input
             ref={commentRef}
             type="text"

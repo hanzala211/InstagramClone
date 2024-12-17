@@ -15,7 +15,7 @@ export function PostModal({ arr, i, setSelectedPost, setIsPostOpen, setCurrentPo
         setInnerHeight(window.innerWidth)
     }, [window.innerWidth])
 
-    return <div className="w-full max-w-[25rem] h-full max-h-[25rem] cursor-pointer group relative overflow-hidden" onClick={() => {
+    return <div className="w-full max-w-[35rem] h-full max-h-[35rem] cursor-pointer group relative overflow-hidden" onClick={() => {
         if (innerHeight > 768) {
             setIsPostOpen(true)
             setCurrentPost(i);

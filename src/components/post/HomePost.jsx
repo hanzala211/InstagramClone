@@ -9,16 +9,17 @@ import { useEffect, useRef, useState } from "react"
 import { UserHoverModal } from "../usermodals/UserHoverModal"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card"
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer"
-import { CommentDrawer } from "../comments/CommentDrawer"
+import { CommentDrawerOpener } from "./CommentDrawerOpener"
 import { LikeAnimation } from "./LikeAnimation"
 import { PostComment } from "../comments/PostComment"
 import { savePost, unSavePost, likePost, unLikePost } from "../../services/homePage"
 import { fetchComments } from "../../services/post"
 import { fetchUserDataOnClick } from "../../services/searchProfile"
 import { SearchChat } from "../chats/SearchChat"
+import { CommentDrawer } from "../comments/CommentDrawer"
 
 
-export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost, setCurrentPostIndex, setIsPostOpen, isPost, arr }) {
+export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost, setCurrentPostIndex, setIsPostOpen, isPost }) {
     const { userData, setMainLoading, setUserData, setMessage, innerWidth } = useUser()
     const { setSelectedProfile } = useSearch()
     const { setSelectedPost, selectedPost, setComments, setCommentsLoading, setTotalPages, page, isCommented, setIsShareOpenHome } = usePost()
@@ -170,15 +171,7 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
                             userData,
                             setMessage)}><UnLike className={`hover:opacity-80 fill-red-700 mb-1 transition-all duration-150 cursor-pointer`} /></button>}
                     {innerWidth >= 768 && <span onClick={() => setSelectedPost(item)}><CommentHome setCurrentIndex={setCurrentPostIndex} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} i={index} /></span>}
-                    {innerWidth < 768 &&
-                        <Drawer onClose={() => {
-                            setComments([])
-                        }}>
-                            <DrawerContent className="bg-[#000] border-t-[1px] border-[#a8a8a8]">
-                                <CommentDrawer />
-                            </DrawerContent>
-                            <DrawerTrigger><span onClick={() => setSelectedPost(item)}><CommentHome setCurrentIndex={setCurrentPostIndex} item={item} setCurrentPost={setCurrentPost} arr={arr} i={index} /></span></DrawerTrigger>
-                        </Drawer>}
+                    <CommentDrawerOpener item={item} setCurrentPost={setCurrentPost} index={index} setCurrentPostIndex={setCurrentPostIndex} />
                     <button onClick={() => {
                         setSelectedPost(item)
                         setIsShareOpenHome((prev) => {

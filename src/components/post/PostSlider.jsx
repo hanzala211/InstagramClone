@@ -36,7 +36,7 @@ export function PostSlider({ currentIndex, setCurrentIndex }) {
             setIsAnimating(false)
         }, 400);
     }
-    return <div className="1280:w-[47rem] lg:w-[50rem] md:w-[55rem] w-[22rem] relative overflow-hidden">
+    return <div className="1280:w-[47rem] lg:w-[65rem] md:w-[85rem] w-[100vw] 440:w-[26.9rem] relative overflow-hidden">
         <div className={`w-full relative flex h-full ${isAnimating ? "transition-transform duration-300 ease-in-out" : ""} `} style={{ transform: `translateX(${-currentIndex * 100}%)` }}>
             {selectedPost !== null
                 ? selectedPost.imageUrls.map((item, index) => {
