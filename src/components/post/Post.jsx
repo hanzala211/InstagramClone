@@ -62,10 +62,12 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
         setSelectedPost(null);
     }
 
+    console.log(isMobile)
+
     return (
         <>
             {!isMobile && <Overlay handleClose={handleClose} isPostOpen={isPostOpen} />}
-            <div className={`${isMobile ? "" : "fixed opacity-0 top-[40%] md:top-1/2 1280:top-[35%] -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150]"}  w-full 1280:max-w-[90rem] lg:max-w-[68rem] lg:h-[35rem] md:h-[30rem] md:max-w-[52rem] h-[30rem] max-w-[27rem] ${isPostOpen ? "opacity-100 pointer-events-auto" : "pointer-events-none"}`}>
+            <div className={`${isMobile ? "1280:max-w-[100rem]" : "fixed 1280:max-w-[90rem] opacity-0 top-[40%] md:top-1/2 1280:top-[35%] -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150]"} w-full lg:max-w-[68rem] lg:h-[35rem] md:h-[30rem] md:max-w-[52rem] h-[30rem] max-w-[27rem] ${isPostOpen ? "opacity-100 pointer-events-auto" : "pointer-events-none"}`}>
                 <div className="flex flex-col md:flex-row">
                     <div className="flex md:hidden relative px-2 mb-2 justify-between items-center">
                         <PostUserCard postData={postData} setIsHovered={setIsHovered} handleClick={handleClick} isHovered={isHovered} setIsPostSettingOpen={setIsPostSettingOpen} />
@@ -75,7 +77,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                         <div className="flex relative  justify-between items-center p-5 border-b-[1px] border-[#262626]">
                             <PostUserCard postData={postData} setIsHovered={setIsHovered} handleClick={handleClick} isHovered={isHovered} setIsPostSettingOpen={setIsPostSettingOpen} />
                         </div>
-                        <div className="w-full flex  flex-col 1280:h-[60.5vh] lg:h-[56%] h-[48%] gap-4 overflow-auto scrollbar-hidden">
+                        <div className={`w-full flex flex-col ${isMobile ? "h-[45vh]" : "1280:h-[60.5vh] lg:h-[56%] h-[48%]"}  gap-4 overflow-auto scrollbar-hidden`}>
                             <PostCaption postData={postData} />
                             <div className="flex flex-col gap-4 ml-5 pt-2">
                                 <CommentsStructure handleClick={handleClick} />

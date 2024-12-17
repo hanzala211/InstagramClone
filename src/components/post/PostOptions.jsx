@@ -11,7 +11,7 @@ export function PostOptions({ postData, commentRef }) {
     const [isPostOpen, setIsPostOpen] = useState(false)
     const [currentPost, setCurrentPost] = useState(null)
 
-    return <div className="flex justify-between pt-5 px-2">
+    return <div className="flex justify-between pt-5 px-3">
         <div className="flex flex-row gap-5">
             <LikedComponent postData={postData} selectedPost={selectedPost} setSelectedPost={setSelectedPost} />
             <button className="md:block hidden" onClick={() => commentRef.current.focus()}>

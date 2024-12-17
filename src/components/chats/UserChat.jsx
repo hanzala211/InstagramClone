@@ -23,7 +23,6 @@ export function UserChat() {
     const [messageValue, setMessageValue] = useState("")
     const [messagesDelete, setMessagesDelete] = useState([])
     const [isClicked, setIsClicked] = useState([])
-    const [isSending, setIsSending] = useState(false)
     const emojiIconRef = useRef(null)
     const emojiPickerRef = useRef(null)
     const scrollRef = useRef(null);
