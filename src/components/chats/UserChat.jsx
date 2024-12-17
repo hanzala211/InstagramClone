@@ -159,7 +159,7 @@ export function UserChat() {
                         </div>
                     )) : ""}
                 </div>
-                <div className="bg-[#000] h-20 md:h-12 w-full px-4 py-3 md:py-2 relative">
+                <div className="bg-[#000] h-20 md:h-12 w-full px-4 py-3 md:py-2 md:relative fixed md:bottom-0 bottom-10">
                     <button className="absolute left-7 top-5 md:top-4 hover:opacity-55 transition duration-200" ref={emojiIconRef} onClick={() => setIsPickingEmoji((prev) => !prev)}><EmojiIcon /></button>
                     {isPickingEmoji &&
                         <div className="absolute md:-top-[22rem] -top-[18rem] md:left-5 left-0" ref={emojiPickerRef}>

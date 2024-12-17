@@ -15,7 +15,6 @@ import {
 	writeBatch,
 } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
-import { useNavigate } from 'react-router-dom';
 
 export function handleSendMessage(
 	setMessages,
