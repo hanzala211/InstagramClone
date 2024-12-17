@@ -114,7 +114,7 @@ export function Profile() {
             </div>
         </div>
         <LaptopProfileBar />
-        <div className="flex justify-evenly py-2 border-y-[1px] border-[#262626] md:hidden">
+        <div className="flex  justify-evenly py-2 border-y-[1px] border-[#262626] md:hidden">
             <UserFollowDetails />
         </div>
         <MobileProfileBar />

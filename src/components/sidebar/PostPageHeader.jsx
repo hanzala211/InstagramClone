@@ -20,6 +20,7 @@ export function PostPageHeader({ isArrowNeeded, isHomePage, isInbox, isChat, isC
                 setSelectedPost(null)
             }, 400)
             setComments([])
+            setIsInfoOpen(false)
         }} className="text-[20px] ml-3" />}
         {isChatting && <>
             <img src={selectedChat?.profilePic} className="w-6 ml-3 rounded-full" alt={selectedChat?.userName} />

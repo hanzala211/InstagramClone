@@ -33,10 +33,15 @@ export function ChatProvider({ children }) {
             setMessagesLoading(true)
             const querySearch = query(collection(db, "messagesThread", [userData?.data?.user._id, selectedChat?._id].sort().join("_"), "messages"), orderBy("timeStamp"))
             const unsubscribe = onSnapshot(querySearch, (querySnapShote) => {
-                setMessages(querySnapShote.docs.map((item) => ({
-                    ...item.data(),
-                    id: item.id
-                })))
+                setMessages(querySnapShote.docs
+                    .map((item) => ({
+                        ...item.data(),
+                        id: item.id
+                    }))
+                    .filter((item) => {
+                        const deleted = item.deleted || {};
+                        return !(deleted[userData.data.user._id]);
+                    }))
                 setMessagesLoading(false)
             })
             return () => unsubscribe()
@@ -48,10 +53,14 @@ export function ChatProvider({ children }) {
         setThreadsLoading(true)
         const querySearch = query(
             collection(db, "messagesThread"),
-            where("participants", "array-contains", userData.data.user._id)
-        );
+            where("participants", "array-contains", userData.data.user._id));
         const unsubscribe = onSnapshot(querySearch, (querySnapshot) => {
-            const foundArr = querySnapshot.docs.map((item) => item.data())
+            const foundArr = querySnapshot.docs
+                .map((item) => item.data())
+                .filter((thread) => {
+                    const deleted = thread.deleted || {};
+                    return deleted[userData.data.user._id] !== true;
+                })
             const foundIds = foundArr.map((item) => item.participants.find((id) => userData.data.user._id !== id))
             if (foundIds.length > 0) {
                 Promise.all(foundIds.map((item, index) => fetchUserById(item, index, userData, foundArr))).then((res) => {
@@ -65,7 +74,7 @@ export function ChatProvider({ children }) {
         });
 
         return () => unsubscribe();
-    }, [userData?.data?.user?._id])
+    }, [userData?.data?.user?._id, threads.length])
 
     useEffect(() => {
         if (!userData?.data?.user?._id) return;

@@ -8,7 +8,7 @@ import { handleSharePost } from "../../services/chat";
 import { usePost } from "../../context/PostContext";
 
 export function UserThreads({ isNewChat, item, isChat, handleClose }) {
-    const { setSelectedChat, notifications } = useChat()
+    const { setSelectedChat, notifications, setIsInfoOpen, setIsChatSearch } = useChat()
     const { selectedPost, setIsShareOpen, setIsShareSearch } = usePost()
     const { userData, setMessage } = useUser()
     const [isReceived, setIsReceived] = useState(false);
@@ -38,6 +38,8 @@ export function UserThreads({ isNewChat, item, isChat, handleClose }) {
             setSelectedChat(item)
             handleUpdateNotification()
             setIsReceived(false)
+            setIsInfoOpen(false)
+            setIsChatSearch(false)
         } else {
             handleClose()
             handleSharePost(userData, item, selectedPost, setMessage, setIsShareOpen, setIsShareSearch)

@@ -89,17 +89,12 @@ export function Story({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSe
                 alt="Story"
                 className="w-full rounded-xl"
             />
-            {(isOwnProfile
-                ? stories.length > 1
-                : isArchive
-                    ? archives.length > 1
-                    : isHighLight
-                        ? highLightStories.length > 1
-                        : isSearchUser
-                            ? searchUserStatus.length > 1
-                            : isSearchHighLight
-                                ? searchUserHighLights.length > 1
-                                : "") && (
+            {(isOwnProfile ? stories.length > 1 : isArchive ? archives.length > 1 : isHighLight ? highLightStories.length > 1
+                : isSearchUser
+                    ? searchUserStatus.length > 1
+                    : isSearchHighLight
+                        ? searchUserHighLights.length > 1
+                        : "") && (
                     <>
                         {(isOwnProfile
                             ? currentStory !== stories.length - 1

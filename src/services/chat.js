@@ -3,6 +3,7 @@ import {
 	collection,
 	deleteDoc,
 	doc,
+	getDoc,
 	getDocs,
 	limit,
 	orderBy,
@@ -11,8 +12,10 @@ import {
 	setDoc,
 	updateDoc,
 	where,
+	writeBatch,
 } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
+import { useNavigate } from 'react-router-dom';
 
 export function handleSendMessage(
 	setMessages,
@@ -35,13 +38,17 @@ export function handleSendMessage(
 		doc(
 			db,
 			'messagesThread',
-			[userData.data.user._id, selectedChat._id].sort().join('_')
+			[userData?.data?.user?._id, selectedChat._id].sort().join('_')
 		),
 		{
 			participants: [userData.data.user._id, selectedChat._id],
 			lastMessage: null,
 			timeStamp: serverTimestamp(),
 			lastMessageSender: userData.data.user._id,
+			deleted: {
+				[userData?.data.user._id]: false,
+				[selectedChat?._id]: false,
+			},
 		}
 	)
 		.then(() => {
@@ -246,4 +253,53 @@ export function handleSharePost(
 			setMessage('Post Sent Successfully');
 			setIsShareSearch('');
 		});
+}
+
+export async function deleteChatForUser(
+	userId,
+	selectedId,
+	setThreads,
+	navigate,
+	setIsDeleting
+) {
+	setIsDeleting(true);
+	try {
+		const threadId = [userId, selectedId].sort().join('_');
+		const threadRef = doc(db, 'messagesThread', threadId);
+
+		const threadSnapshot = await getDoc(threadRef);
+
+		if (threadSnapshot.exists()) {
+			await updateDoc(threadRef, {
+				[`deleted.${userId}`]: true,
+				timeStamp: serverTimestamp(),
+			});
+		} else {
+			await setDoc(threadRef, {
+				participants: [userId, selectedId],
+				deleted: {
+					[userId]: true,
+					[selectedId]: false,
+				},
+				timeStamp: serverTimestamp(),
+			});
+		}
+		const messagesRef = collection(db, 'messagesThread', threadId, 'messages');
+		const messagesSnapshot = await getDocs(messagesRef);
+
+		const batch = writeBatch(db);
+		messagesSnapshot.forEach((messageDoc) => {
+			const messageRef = doc(messagesRef, messageDoc.id);
+			batch.update(messageRef, {
+				[`deleted.${userId}`]: true,
+			});
+		});
+
+		await batch.commit();
+		setThreads((prev) => prev.filter((item) => item._id !== selectedId));
+		navigate('/direct/inbox');
+		setIsDeleting(false);
+	} catch (error) {
+		console.error('Error deleting chat for user:', error.message);
+	}
 }
