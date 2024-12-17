@@ -99,7 +99,7 @@ export function UserChat() {
                     <button onClick={() => setIsInfoOpen((prev) => !prev)}>{isInfoOpen ? <ActiveChatInfoSVG /> : <ChatInfoSVG />}</button>
                 </div>
                 <div ref={scrollRef}
-                    className="overflow-y-auto h-full max-h-[calc(100vh-170px)] md:max-h-[calc(100vh-130px)] scrollbar-hidden py-3 px-3 flex flex-col gap-5">
+                    className="overflow-y-auto h-full max-h-[calc(100vh-230px)] md:max-h-[calc(100vh-130px)] scrollbar-hidden py-3 px-3 flex flex-col gap-5">
                     {messagesLoading ? <div><Loader height="h-[10vh]" widthHeight={true} /></div> : messages.length > 0 ? messages.map((message, index) => (
                         <div key={index} onMouseEnter={() => {
                             setMessagesDelete(Array.from(messages.length).fill(false))
@@ -175,7 +175,11 @@ export function UserChat() {
                         placeholder="Message..."
                         onChange={(e) => setMessageValue(e.target.value)}
                     />
-                    <button className={`text-[#0096f4] ${messageValue.length === 0 ? "opacity-70" : " hover:text-white"} text-[14px] absolute right-10 top-[1.4rem] md:top-[1.1rem] transition duration-100`} disabled={messageValue.length === 0} onClick={() => handleSendMessage(setMessages, messageValue, userData, setMessageValue, selectedChat)}>Send</button>
+                    <button
+                        className={`text-[#0096f4] ${messageValue.length === 0 ? "opacity-70" : "hover:text-white"} h-[60%] text-[14px] absolute right-10 top-[0.5rem] md:top-[0.8rem] transition duration-100`}
+                        disabled={messageValue.length === 0}
+                        onClick={() => handleSendMessage(setMessages, messageValue, userData, setMessageValue, selectedChat)}
+                        onTouchStart={() => handleSendMessage(setMessages, messageValue, userData, setMessageValue, selectedChat)}>Send</button>
                 </div>
             </div>
             <UserChatInfo />
