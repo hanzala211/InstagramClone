@@ -118,7 +118,7 @@ export function UserChat() {
                             <div className={`p-2.5 rounded-xl text-sm max-w-xs ${message?.senderId === userData.data.user._id || message?.status === "sending" ? "bg-[#0096f4] text-white" : "bg-[#262626]"}`}>
                                 {message?.content}
                             </div>
-                            {message?.status === "sending" && <span className=""><ShareIcon className="w-4" /></span>}
+                            {message?.status === "sending" && <ShareIcon className="w-4" />}
                         </div>}
                         {message.post && <div onClick={() => {
                             setSelectedPost(message.post)
