@@ -117,8 +117,7 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
                     <button
                         onClick={() => changeData(changeUserName, userData, setErrorMessage, setSuccessMessage, setIsDisabled, changeBio, isPublic, setUserData, selectedImage, setIsEditOpen)}
                         className={`w-full relative py-3 rounded-xl bg-[#0095F6] text-white ${!isChanged ? "opacity-50 cursor-not-allowed" : "opacity-100"} ${isDisabled ? "opacity-60 cursor-not-allowed" : ""}`}
-                        disabled={!isChanged || isDisabled}
-                    >
+                        disabled={!isChanged || isDisabled} >
                         Save Changes
                         {isDisabled && <div className="absolute z-[10000] w-10 -top-44 left-1/2 -translate-x-1/2 ">
                             <Loader />
