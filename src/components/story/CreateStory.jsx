@@ -2,6 +2,7 @@ import { CreatePosts } from "../../assets/Constants";
 import { useRef, useState } from "react";
 import Pintura from "../helpers/Pintura";
 import { Overlay } from "../helpers/Overlay";
+import { SelectImage } from "../post/SelectImage";
 
 export function CreateStory({ creatingStory, setIsCreatingStory }) {
     const [selectedImage, setSelectedImage] = useState(null)
@@ -44,23 +45,7 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
 
             <div className="bg-[#262626] flex items-center justify-center flex-col gap-2 w-full h-full px-5 py-5">
                 {selectedImage === null ? (
-                    <>
-                        <CreatePosts />
-                        <p className="text-[20px] sm:text-[18px]">Drag photos and videos here</p>
-                        <button
-                            onClick={handleFile}
-                            className="bg-[#0095F6] hover:bg-opacity-70 transition-all duration-200 px-3 py-2 text-[14px] rounded-lg sm:px-2 sm:py-1 sm:text-[12px]"
-                        >
-                            Select From Computer
-                        </button>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            ref={fileInputRef}
-                            onChange={handleFileChange}
-                            style={{ display: "none" }}
-                        />
-                    </>
+                    <SelectImage handleFile={handleFile} fileInputRef={fileInputRef} handleFileChange={handleFileChange} />
                 ) : !isUploading ? (
                     <Pintura
                         selectedImage={selectedImage}
