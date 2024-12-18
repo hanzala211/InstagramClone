@@ -4,7 +4,7 @@ const NoteTooltip = ({ isProfile, noteValue, setNoteValue, note, className, note
     return (
         <div className={`relative ${isProfile ? "" : "md:w-48 w-36"}`}>
             <div
-                className={`absolute -top-8 left-[45%] transform -translate-x-1/2 bg-[rgb(54,54,54)] text-white text-sm md:rounded-2xl rounded-xl md:px-4 md:py-3 p-2 md:flex md:items-center space-x-1 shadow-lg ${isProfile ? "" : "w-full pt-3 md:pt-5"
+                className={`absolute -top-6 md:-top-8 left-[45%] transform -translate-x-1/2 bg-[rgb(54,54,54)] text-white text-sm md:rounded-2xl rounded-xl md:px-4 md:py-3 p-2 md:flex md:items-center space-x-1 shadow-lg ${isProfile ? "" : "w-full pt-3 md:pt-5"
                     }`}>
                 {!noteLoading ? (
                     isProfile ? (
