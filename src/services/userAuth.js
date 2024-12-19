@@ -99,20 +99,16 @@ export async function fetchData(
 			setSignupPassword('');
 			setFullName('');
 			setUserName('');
-			addDoc(collection(db, 'users', `${result.data.user._id}`), {
+			navigate('/home');
+			addDoc(doc(db, 'users', `${result.data.user._id}`), {
 				userName: `${userName}`,
 				id: `${result.data.user._id}`,
 			});
 			setSuccessMessage(result.status);
-			navigate('/home');
 			localStorage.setItem('token', JSON.stringify(result.data.token));
 		}
 	} catch (error) {
-		setUserData({
-			status: 'fail',
-			data: 'Server Is Down.Please try after sometime',
-			error: error,
-		});
+		console.error(error);
 	} finally {
 		setLoading(false);
 		setMainLoading(false);
