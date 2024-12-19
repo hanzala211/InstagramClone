@@ -108,7 +108,11 @@ export async function fetchData(
 			localStorage.setItem('token', JSON.stringify(result.data.token));
 		}
 	} catch (error) {
-		console.error(error);
+		setUserData({
+			status: 'fail',
+			data: 'Server Is Down.Please try after sometime',
+			error: error,
+		});
 	} finally {
 		setLoading(false);
 		setMainLoading(false);
