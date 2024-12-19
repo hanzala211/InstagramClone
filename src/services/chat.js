@@ -12,7 +12,6 @@ import {
 	setDoc,
 	updateDoc,
 	where,
-	writeBatch,
 } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 
@@ -285,16 +284,12 @@ export async function deleteChatForUser(
 		}
 		const messagesRef = collection(db, 'messagesThread', threadId, 'messages');
 		const messagesSnapshot = await getDocs(messagesRef);
-
-		const batch = writeBatch(db);
-		messagesSnapshot.forEach((messageDoc) => {
-			const messageRef = doc(messagesRef, messageDoc.id);
-			batch.update(messageRef, {
+		messagesSnapshot.forEach((item) => {
+			const messageRef = doc(messagesRef, item.id);
+			updateDoc(messageRef, {
 				[`deleted.${userId}`]: true,
 			});
 		});
-
-		await batch.commit();
 		setThreads((prev) => prev.filter((item) => item._id !== selectedId));
 		navigate('/direct/inbox');
 		setIsDeleting(false);

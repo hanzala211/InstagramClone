@@ -57,7 +57,7 @@ body::-webkit-scrollbar {
 	mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
 	-webkit-mask-composite: xor;
 	mask-composite: exclude;
-	padding: 2px;
+	padding:2px;
 }
 .circle-preview-container {
 	position: relative;

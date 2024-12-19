@@ -112,7 +112,7 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
         })
     };
 
-    return <><div className={`flex flex-col gap-2 mt-7 ${isPost ? "" : "border-b-[2px] border-[#262626]"} pb-4`}>
+    return <><div className={`flex flex-col gap-2 mt-5 ${isPost ? "" : "border-b-[2px] border-[#262626]"} pb-4`}>
         <div className={`flex flex-row items-center gap-2`}>
             <img src={item?.user?.profilePic || item?.postBy?.profilePic || userData?.data?.user?.profilePic} className="rounded-full w-10" alt="" />
             <div className="flex flex-row gap-1 items-center relative">

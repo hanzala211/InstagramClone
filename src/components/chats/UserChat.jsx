@@ -99,7 +99,7 @@ export function UserChat() {
                     <button onClick={() => setIsInfoOpen((prev) => !prev)}>{isInfoOpen ? <ActiveChatInfoSVG /> : <ChatInfoSVG />}</button>
                 </div>
                 <div ref={scrollRef}
-                    className="overflow-y-auto h-full max-h-[calc(100vh-230px)] md:max-h-[calc(100vh-130px)] scrollbar-hidden py-3 px-3 flex flex-col gap-5">
+                    className="overflow-y-auto h-full max-h-[calc(100vh-160px)] md:max-h-[calc(100vh-130px)] scrollbar-hidden py-3 px-3 flex flex-col gap-5">
                     {messagesLoading ? <div><Loader height="h-[10vh]" widthHeight={true} /></div> : messages.length > 0 ? messages.map((message, index) => (
                         <div key={index} onMouseEnter={() => {
                             setMessagesDelete(Array.from(messages.length).fill(false))
@@ -117,8 +117,16 @@ export function UserChat() {
                                     return updated;
                                 })
                             }
-                        }} className={`flex items-end gap-3 ${message?.senderId === userData?.data?.user._id || message?.status === "sending" ? "justify-end" : "justify-start"
-                            }`}>
+                        }}
+                            onTouchStart={() => {
+                                setMessagesDelete(Array.from(messages.length).fill(false))
+                                setMessagesDelete((prev) => {
+                                    const updated = [...prev];
+                                    updated[index] = true;
+                                    return updated;
+                                })
+                            }} className={`flex items-end gap-3 ${message?.senderId === userData?.data?.user._id || message?.status === "sending" ? "justify-end" : "justify-start"
+                                }`}>
                             {messagesDelete[index] && message?.senderId === userData?.data.user._id && <button className="relative" onClick={() => setIsClicked((prev) => {
                                 const updated = [...prev];
                                 updated[index] = !updated[index];
@@ -171,7 +179,7 @@ export function UserChat() {
                         onFocus={handleFocus}
                         onBlur={handleBlur}
                         value={messageValue}
-                        className="w-[100%] rounded-3xl bg-transparent outline-none border-[1px] border-[#a2a2a2] px-12 py-2"
+                        className="w-[100%] rounded-3xl bg-transparent outline-none border-[1px] border-[#a2a2a2] px-12 pr-16 py-2"
                         placeholder="Message..."
                         onChange={(e) => setMessageValue(e.target.value)}
                     />

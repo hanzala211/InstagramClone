@@ -41,7 +41,7 @@ export function Layout({ token }) {
                 <SideBar />
                 <MobileBar />
             </SideBarProvider>
-            <div className="flex flex-col gap-10 w-full">
+            <div className="flex flex-col md:gap-2 w-full">
                 <Outlet />
                 <Footer />
             </div>

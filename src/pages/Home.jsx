@@ -8,6 +8,7 @@ import { fetchHomePosts } from "../services/homePage";
 import { HomePost } from "../components/post/HomePost";
 import { usePost } from "../context/PostContext";
 import { PostPageHeader } from "../components/sidebar/PostPageHeader";
+import { HomeStories } from "../components/story/HomeStories";
 
 export function Home() {
     const { userData } = useUser()
@@ -25,7 +26,8 @@ export function Home() {
 
     return <>
         <PostPageHeader isArrowNeeded={false} isHomePage={true} />
-        <section className="w-full lg:max-w-[40%] sm:max-w-[85%] max-w-[95%] mb-20 md:mb-2 mt-7 md:mt-0 mx-auto">
+        {/* <HomeStories /> */}
+        <section className="w-full lg:max-w-[40%] sm:max-w-[85%] max-w-[95%] mt-12 md:mt-0 mb-20 md:mb-2 mx-auto">
             <div className={`flex flex-col gap-2 w-full ${isPostsLoading || homePosts.length === 0 ? "h-[90vh]" : ""} ${homePosts.length < 2 ? "h-[90vh]" : ""}`}>
                 {!isPostsLoading ?
                     <InfiniteScroll dataLength={homePosts.length} loader={homePosts.length > 0 && <Loader height="md:h-[10vh] h-[15vh] overflow-scroll scrollbar-hidden" />} next={() => {
