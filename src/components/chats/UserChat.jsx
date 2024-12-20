@@ -99,7 +99,7 @@ export function UserChat() {
                     <button onClick={() => setIsInfoOpen((prev) => !prev)}>{isInfoOpen ? <ActiveChatInfoSVG /> : <ChatInfoSVG />}</button>
                 </div>
                 <div ref={scrollRef}
-                    className="overflow-y-auto h-full max-h-[calc(100vh-160px)] md:max-h-[calc(100vh-130px)] scrollbar-hidden py-3 px-3 flex flex-col gap-5">
+                    className="overflow-y-auto h-full max-h-[calc(100vh-230px)] md:max-h-[calc(100vh-130px)] scrollbar-hidden py-3 px-3 flex flex-col gap-5">
                     {messagesLoading ? <div><Loader height="h-[10vh]" widthHeight={true} /></div> : messages.length > 0 ? messages.map((message, index) => (
                         <div key={index} onMouseEnter={() => {
                             setMessagesDelete(Array.from(messages.length).fill(false))
