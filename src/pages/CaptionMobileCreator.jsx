@@ -7,8 +7,6 @@ export function CaptionMobileCreator() {
     const { captionValue, setCaptionValue, croppedImages } = usePost()
     const location = useLocation()
 
-    console.log(location.pathname.slice(0, 7))
-
     return <section className="mt-12">
         <PostPageHeader isArrowNeeded={true} isDetails={true} isCreating={location.pathname.slice(0, 7) === "/create"} />
         <div className="flex items-end">
