@@ -41,7 +41,19 @@ export function PostPageHeader({ isArrowNeeded, isHomePage, isInbox, isChat, isC
             <button className="absolute right-2" onClick={() => setIsInfoOpen((prev) => !prev)}>{isInfoOpen ? <ActiveChatInfoSVG /> : <ChatInfoSVG />}</button>
         </>}
         {!isHomePage ?
-            <p className={`absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 font-semibold ${isChatting ? "hidden" : ""} ${isCross ? "" : "text-[18px]"}`}>{isInbox ? "Inbox" : isChat ? userData?.data?.user.userName : isCross ? "New photo post" : isCreating && !isShared ? "New Post" : !isCreating && !isShared ? "Edit Post" : isShared ? "Sharing..." : "Post"}</p> : <img src="/images/instagramiconswhite.png" className="w-24 absolute left-1/2 -translate-x-1/2 mt-1.5" />
+            <h1 className={`absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 font-semibold ${isChatting ? "hidden" : ""} ${isCross ? "" : "text-[18px]"}`}>{isInbox
+                ? "Inbox"
+                : isChat
+                    ? userData?.data?.user.userName
+                    : isCross
+                        ? "New photo post"
+                        : isCreating && !isShared
+                            ? "New Post"
+                            : !isCreating && !isShared && isCreating !== undefined
+                                ? "Edit Post"
+                                : isShared
+                                    ? "Sharing..."
+                                    : "Post"}</h1> : <img src="/images/instagramiconswhite.png" className="w-24 absolute left-1/2 -translate-x-1/2 mt-1.5" />
         }
         {isHomePage ? <Link to="/direct/inbox/" className="relative left-[92%]">
             {notifications.length > 0 && <div className="absolute w-4 h-4 border-[1px] border-black text-white bg-red-600 rounded-full text-[10px] text-center -right-1 -top-1">{notifications.length}</div>}<ChatIcon /></Link> : ""}

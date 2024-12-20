@@ -19,9 +19,10 @@ export function MobilePostPage() {
 
     useEffect(() => {
         if (selectedPost === null) {
+            setIsPostLoading(true)
             fetchPost(location.pathname.split('/p/')[1].split('/')[0], userData, setSelectedPost, setIsPostLoading)
         }
-    }, [])
+    }, [selectedPost])
 
     return <section className="w-full min-h-screen">
         <PostPageHeader isArrowNeeded={true} />
