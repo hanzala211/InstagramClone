@@ -18,6 +18,8 @@ import { Chat } from './pages/Chat'
 import { ChatDiv } from './components/chats/ChatDiv'
 import { ChatProvider } from './context/ChatContext'
 import { UserChat } from './components/chats/UserChat'
+import { MobilePostCreator } from './pages/PostMobileCreator'
+import { CaptionMobileCreator } from './pages/CaptionMobileCreator'
 
 function App() {
   const localitem = JSON.parse(localStorage.getItem("token"))
@@ -38,6 +40,9 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path='/signup' element={<SignUp />} />
                 <Route path='/' element={<Layout token={localitem} />}>
+                  <Route path="create/post/" element={<MobilePostCreator />} />
+                  <Route path="create/details/" element={<CaptionMobileCreator />} />
+                  <Route path="edit/details/" element={<CaptionMobileCreator />} />
                   <Route path='direct/inbox/' element={<Chat />}>
                     <Route index element={<ChatDiv />} />
                     <Route path='t/:id' element={<UserChat />} />

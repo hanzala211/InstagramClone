@@ -4,15 +4,15 @@ import { EditPost } from "../post/EditPost";
 import { usePost } from "../../context/PostContext";
 import { Overlay } from "../helpers/Overlay";
 import { deletePost, updatePost } from "../../services/post";
+import { useNavigate } from "react-router-dom";
 
 export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPostOpen, isMyPost }) {
-    const { userData, setMessage, setUserData, setUserPosts } = useUser();
-    const { selectedPost, setSelectedPost } = usePost();
+    const { userData, setMessage, setUserData, setUserPosts, innerWidth } = useUser();
+    const { selectedPost, setSelectedPost, setCurrentIndex, captionValue, setCaptionValue, setCroppedImages } = usePost();
     const [isEditingOpen, setIsEditingOpen] = useState(false)
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [captionValue, setCaptionValue] = useState(selectedPost !== null ? selectedPost?.caption : "");
     const [isShared, setIsShared] = useState(false)
     const [shareLoading, setShareLoading] = useState(false);
+    const navigate = useNavigate()
 
     useEffect(() => {
         setCaptionValue(selectedPost !== null ? selectedPost.caption : "");
@@ -52,7 +52,12 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
                     <button className="text-red-600 w-full p-3 xl:text-[14px] text-[10px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]" onClick={() => deletePost(userData, setMessage, setUserData, setUserPosts, selectedPost, setSelectedPost, setIsPostSettingOpen, setIsPostOpen)}>Delete
                     </button>
                     <button className="w-full p-3 border-b-[1px] xl:text-[14px] text-[10px] active:opacity-70 font-semibold border-[#363636]" onClick={() => {
-                        setIsEditingOpen(true);
+                        if (innerWidth > 768) {
+                            setIsEditingOpen(true);
+                        } else {
+                            setCroppedImages(selectedPost.imageUrls)
+                            navigate("/edit/details/")
+                        }
                         setIsPostSettingOpen(false);
                     }}>Edit</button>
                 </>
@@ -70,16 +75,15 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
                 Cancel
             </button>
         </div>
-
         <Overlay handleClose={handleClose} isPostOpen={isEditingOpen} />
         <div
             className={`fixed opacity-0 top-[51%] -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isEditingOpen ? "opacity-100" : "pointer-events-none"
                 } border-y-[1px] border-[#363636]`}
         >
             <div className={`bg-[#262626] xl:w-[70vw] w-[85vw] h-[92vh] transition-all duration-300 flex flex-col opacity-0 ${isEditingOpen ? "opacity-100" : "pointer-events-none"}`}>
-                <EditPost croppedImage={selectedPost !== null ? selectedPost.imageUrls : []} handleIncrease={handleIncrease} handleDecrease={handleDecrease} currentIndex={currentIndex} isCaption={isEditingOpen} captionValue={captionValue} setCaptionValue={setCaptionValue} userData={userData} loading={false} />
+                <EditPost croppedImage={selectedPost !== null ? selectedPost.imageUrls : []} handleIncrease={handleIncrease} handleDecrease={handleDecrease} isCaption={isEditingOpen} userData={userData} />
             </div>
-            <button className="text-[#0095F6] absolute z-[200] -top-7 right-0 hover:text-white text-[15px]" onClick={() => updatePost(setShareLoading, setIsShared, setIsEditingOpen, userData, captionValue, selectedPost, setMessage)}>Update</button>
+            <button className="text-[#0095F6] absolute z-[200] -top-7 right-0 hover:text-white text-[15px]" onClick={() => updatePost(setShareLoading, setIsShared, setIsEditingOpen, userData, captionValue, selectedPost, setMessage, setCaptionValue)}>Update</button>
         </div>
         <div
             className={`overlay opacity-0 transition-all z-[150] backdrop-blur-sm duration-500 ${!isShared ? "pointer-events-none" : "opacity-100"

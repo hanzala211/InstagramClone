@@ -28,7 +28,7 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
         fileInputRef.current.value = null;
     }
 
-    function handleFile() {
+    function handleClickForStory() {
         fileInputRef.current.click();
     }
 
@@ -43,7 +43,7 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
 
             <div className="bg-[#262626] flex items-center justify-center flex-col gap-2 w-full h-full px-5 py-5">
                 {selectedImage === null ? (
-                    <SelectImage handleFile={handleFile} fileInputRef={fileInputRef} handleFileChange={handleFileChange} />
+                    <SelectImage handleFile={handleClickForStory} fileInputRef={fileInputRef} handleFileChange={handleFileChange} />
                 ) : !isUploading ? (
                     <Pintura
                         selectedImage={selectedImage}

@@ -1,6 +1,9 @@
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { usePost } from "../../context/PostContext";
 
-export function EditPost({ croppedImage, currentIndex, handleDecrease, handleIncrease, loading, isCaption, setCaptionValue, userData, captionValue }) {
+export function EditPost({ handleDecrease, handleIncrease, userData, croppedImage, isCaption }) {
+    const { captionValue, setCaptionValue, currentIndex, loading } = usePost()
+
     return <div className="w-full flex flex-row h-full">
         <div className="sm:w-[65%] w-[60%] h-full overflow-hidden relative">
             <img src={croppedImage[currentIndex]} alt="Selected Images" className="object-cover w-full h-full" />

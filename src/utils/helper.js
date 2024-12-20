@@ -1,3 +1,5 @@
+import { getCroppedImg } from './cropUtils';
+
 export function formatNumber(num) {
 	if (num >= 1_000_000_000) {
 		return (num / 1_000_000_000).toFixed(1) + 'B';
@@ -37,3 +39,47 @@ export function formatDate(dateString) {
 		return `${minutes} m`;
 	}
 }
+
+export function handleFileChange(
+	event,
+	setSelectedImage,
+	innerWidth,
+	navigate
+) {
+	const files = Array.from(event.target.files);
+	const imageUrls = files
+		.filter((file) => file.type.startsWith('image/'))
+		.map((file) => URL.createObjectURL(file));
+	if (imageUrls.length > 0) {
+		setSelectedImage(imageUrls);
+		if (innerWidth < 768) {
+			navigate('/create/post/');
+		}
+	} else {
+		alert('Please select an image file');
+	}
+}
+
+export function handleFile(fileInputRef) {
+	fileInputRef.current.click();
+}
+
+export const onCropImage = async (
+	selectedImage,
+	croppedAreas,
+	setCroppedImages,
+	setLoading,
+	setCurrentIndex,
+	setIsCaption
+) => {
+	if (selectedImage && croppedAreas.length) {
+		const croppedImageUrls = await getCroppedImg(selectedImage, croppedAreas);
+		setCroppedImages(croppedImageUrls);
+		setLoading(true);
+		setCurrentIndex(0);
+		setTimeout(() => {
+			setIsCaption(true);
+			setLoading(false);
+		}, 500);
+	}
+};

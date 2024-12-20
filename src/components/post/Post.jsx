@@ -75,8 +75,8 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
                         <div className="flex relative  justify-between items-center p-5 border-b-[1px] border-[#262626]">
                             <PostUserCard postData={postData} setIsHovered={setIsHovered} handleClick={handleClick} isHovered={isHovered} setIsPostSettingOpen={setIsPostSettingOpen} />
                         </div>
-                        <div className={`w-full flex flex-col ${isMobile ? "h-[45vh]" : "1280:h-[60.5vh] lg:h-[56%] h-[48%]"}  gap-4 overflow-auto scrollbar-hidden`}>
-                            <PostCaption postData={postData} />
+                        <div className={`w-full flex flex-col ${isMobile ? "h-[45vh]" : "1280:h-[60.5vh] lg:h-[40vh] h-[35vh]"} gap-4 overflow-auto scrollbar-hidden`}>
+                            <PostCaption isImg={true} postData={postData} selectedPost={selectedPost} />
                             <div className="flex flex-col gap-4 ml-5 pt-2">
                                 <CommentsStructure handleClick={handleClick} />
                                 <div className="w-full flex justify-center items-center mb-2">

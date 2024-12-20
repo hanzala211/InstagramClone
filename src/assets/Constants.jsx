@@ -133,6 +133,9 @@ export function ChatInfoSVG() {
 export function ActiveChatInfoSVG() {
     return <svg aria-label="Conversation information" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Conversation information</title><path d="M12.001.504a11.5 11.5 0 1 0 11.5 11.5 11.513 11.513 0 0 0-11.5-11.5Zm-.182 5.955a1.25 1.25 0 1 1-1.25 1.25 1.25 1.25 0 0 1 1.25-1.25Zm1.614 11.318h-2.865a1 1 0 0 1 0-2H11V12.05h-.432a1 1 0 0 1 0-2H12a1 1 0 0 1 1 1v4.727h.433a1 1 0 1 1 0 2Z"></path></svg>
 }
+export function CrossIcon({ className }) {
+    return <svg aria-label="Close" className={className} fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Close</title><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="21" x2="3" y1="3" y2="21"></line><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="21" x2="3" y1="21" y2="3"></line></svg>
+}
 export const footerArr = ["Meta", "About", "Blog", "Jobs", "Help", "Api", "Privacy", "Terms", "Locations", "Instagram Lite", "Threads", "Contact uploading and non-users", "Meta Verified"]
 
 export const imagesArr = ["/images/screenshot1.png", "/images/screenshot2.png", "/images/screenshot3.png", "/images/screenshot4.png"]

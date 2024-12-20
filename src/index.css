@@ -92,3 +92,7 @@ body::-webkit-scrollbar {
 	object-fit: cover;
 	opacity: 1;
 }
+.fixed-height > div{
+	height: 400px;
+	margin-top: 2.8rem;
+}

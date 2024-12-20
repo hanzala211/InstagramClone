@@ -2,9 +2,12 @@ import { FaHistory } from "react-icons/fa"
 import { ActiveExplore, ActiveHome, CreateIcon, ExploreIcon, HomeIcon } from "../../assets/Constants"
 import { useSideBar, useUser } from "../../context/UserContext"
 import { NavLink } from "react-router-dom"
+import { handleFile } from "../../utils/helper"
+import { usePost } from "../../context/PostContext"
 
 export function MobileBar() {
-    const { setIsCreating, setCreateStory } = useSideBar()
+    const { setCreateStory } = useSideBar()
+    const { fileInputRef } = usePost()
     const { userData } = useUser()
 
     const sideBarItems = [
@@ -21,7 +24,7 @@ export function MobileBar() {
             to: "/explore"
         }, {
             icon: <CreateIcon />,
-            onClick: () => setIsCreating(true),
+            onClick: () => handleFile(fileInputRef),
         }, {
             icon: <FaHistory />,
             onClick: () => setCreateStory(true),

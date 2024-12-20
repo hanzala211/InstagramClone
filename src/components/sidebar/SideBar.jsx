@@ -14,10 +14,8 @@ export function SideBar() {
     const { setSearchQuery, setSearchData } = useSearch()
     const { userData } = useUser();
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(null);
     const checkref = useRef(null);
     const searchRef = useRef(null);
-    const fileInputRef = useRef(null);
     const searchBoxRef = useRef(null);
     const dropdownRef = useRef(null);
     const location = useLocation();
@@ -67,10 +65,6 @@ export function SideBar() {
     ]
 
     useEffect(() => {
-
-    }, [isSearching])
-
-    useEffect(() => {
         window.addEventListener("click", handleClick)
         return () => window.removeEventListener("click", handleClick)
     }, [])
@@ -85,23 +79,6 @@ export function SideBar() {
             setSearchData([]);
         }
     }
-
-    function handleFileChange(event) {
-        const files = Array.from(event.target.files);
-        const imageUrls = files
-            .filter(file => file.type.startsWith("image/"))
-            .map(file => URL.createObjectURL(file));
-        if (imageUrls.length > 0) {
-            setSelectedImage(imageUrls);
-        } else {
-            alert("Please select an image file")
-        }
-    }
-
-    function handleFile() {
-        fileInputRef.current.click();
-    }
-
     return <><aside
         className={`px-4 py-10 hidden md:block transition-[width] bg-[#000] border-r-[2px] border-[#262626] duration-300 ease-in-out 
       ${isSearching || location.pathname.slice(0, 7) === "/direct" ? "w-[5rem]" : "w-[5rem] lg:w-[15rem] xl:w-[18rem]"} 
@@ -129,7 +106,7 @@ export function SideBar() {
         <div>
             <LogOutDiv isOpen={isOpen} dropdownRef={dropdownRef} />
         </div>
-        <CreatePost isCreating={isCreating} fileInputRef={fileInputRef} selectedImage={selectedImage} setIsCreating={setIsCreating} setSelectedImage={setSelectedImage} handleFileChange={handleFileChange} handleFile={handleFile} />
+        <CreatePost isCreating={isCreating} setIsCreating={setIsCreating} />
         <CreateStory creatingStory={createStory} setIsCreatingStory={setCreateStory} />
     </>
 }

@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-import ReactCropper from "react-easy-crop";
-import { getCroppedImg } from "../../utils/cropUtils";
+import { useEffect } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { Loader } from "../helpers/Loader";
 import { useUser } from "../../context/UserContext";
@@ -8,19 +6,15 @@ import { EditPost } from "./EditPost";
 import { SelectImage } from "./SelectImage";
 import { Overlay } from "../helpers/Overlay";
 import { createPost } from "../../services/post";
+import { handleFile, handleFileChange, onCropImage } from "../../utils/helper";
+import { usePost } from "../../context/PostContext";
+import { useNavigate } from "react-router-dom";
+import { PostCropper } from "./PostCropper";
 
-export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelectedImage, setIsCreating, handleFileChange, handleFile }) {
-    const { userData } = useUser();
-    const [crop, setCrop] = useState([]);
-    const [zoom, setZoom] = useState([]);
-    const [croppedAreas, setCroppedAreas] = useState([]);
-    const [croppedImages, setCroppedImages] = useState([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [loading, setLoading] = useState(false);
-    const [isCaption, setIsCaption] = useState(false);
-    const [captionValue, setCaptionValue] = useState("");
-    const [isShared, setIsShared] = useState(false);
-    const [shareLoading, setShareLoading] = useState(false);
+export function CreatePost({ isCreating, setIsCreating }) {
+    const { userData, innerWidth } = useUser();
+    const { fileInputRef, selectedImage, setSelectedImage, croppedAreas, setCroppedAreas, setCroppedImages, croppedImages, currentIndex, setCurrentIndex, loading, setLoading, isCaption, setIsCaption, captionValue, setCaptionValue, isShared, setIsShared, shareLoading, setShareLoading } = usePost()
+    const navigate = useNavigate()
 
     useEffect(() => {
         const body = document.querySelector("body");
@@ -38,27 +32,6 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
         }, 800);
     }
 
-    const onCropComplete = (croppedArea, croppedAreaPixels) => {
-        setCroppedAreas((prev) => {
-            const updatedAreas = [...prev];
-            updatedAreas[currentIndex] = croppedAreaPixels;
-            return updatedAreas;
-        });
-    };
-
-    const onCropImage = async () => {
-        if (selectedImage && croppedAreas.length) {
-            const croppedImageUrls = await getCroppedImg(selectedImage, croppedAreas);
-            setCroppedImages(croppedImageUrls);
-            setLoading(true);
-            setCurrentIndex(0);
-            setTimeout(() => {
-                setIsCaption(true);
-                setLoading(false);
-            }, 500);
-        }
-    };
-
     return (
         <>
             <Overlay handleClose={handleClose} isPostOpen={isCreating} />
@@ -67,43 +40,18 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
                 <p className="text-[18px] absolute -top-9 left-1/2 -translate-x-1/2">
                     {!isCaption ? "Create New Post" : !isShared ? "Share" : !shareLoading ? "Post shared" : "Post sharing"}</p>
                 {!selectedImage || selectedImage.length === 0 ? (
-                    <SelectImage handleFile={handleFile} fileInputRef={fileInputRef} handleFileChange={handleFileChange} />
+                    <SelectImage handleFile={() => handleFile(fileInputRef)} fileInputRef={fileInputRef} handleFileChange={(e) => handleFileChange(e, setSelectedImage, innerWidth, navigate)} />
                 ) : (
                     <div
                         className={`bg-[#262626] ${isShared ? "md:w-[40rem] md:h-[40rem] w-[23rem] h-[32rem] 440:w-[25rem] 440:h-[35rem]" : "1280:w-[70rem] 440:w-[25rem] w-[22rem] h-[70vh] sm:w-[40rem] sm:h-[50vh] md:w-[50rem] lg:w-[60rem] lg:h-[85vh] 2xl:w-[86rem] 2xl:h-[90vh] 1280:h-[88vh]"}  transition-all duration-300 flex flex-col overflow-auto scrollbar-hidden`}>
                         <div className="relative w-full h-full">
                             {!loading && !isCaption ? (
-                                <ReactCropper
-                                    image={selectedImage[currentIndex]}
-                                    crop={crop[currentIndex] || { x: 0, y: 0 }}
-                                    zoom={zoom[currentIndex] || 1}
-                                    aspect={1}
-                                    onCropChange={(newCrop) =>
-                                        setCrop((prev) => {
-                                            const updatedCrop = [...prev];
-                                            updatedCrop[currentIndex] = newCrop;
-                                            return updatedCrop;
-                                        })
-                                    }
-                                    onZoomChange={(newZoom) =>
-                                        setZoom((prev) => {
-                                            const updatedZoom = [...prev];
-                                            updatedZoom[currentIndex] = newZoom;
-                                            return updatedZoom;
-                                        })
-                                    }
-                                    onCropComplete={onCropComplete}
-                                />
+                                <PostCropper currentIndex={currentIndex} setCroppedAreas={setCroppedAreas} />
                             ) : isCaption && !isShared ? (
-                                <EditPost croppedImage={croppedImages} currentIndex={currentIndex}
+                                <EditPost isCaption={isCaption} croppedImage={croppedImages}
                                     handleDecrease={() => setCurrentIndex((prev) => prev - 1)}
                                     handleIncrease={() => setCurrentIndex((prev) => prev + 1)}
-                                    loading={loading}
-                                    isCaption={isCaption}
-                                    setCaptionValue={setCaptionValue}
-                                    captionValue={captionValue}
-                                    userData={userData}
-                                />
+                                    userData={userData} />
                             ) : isShared ? (
                                 <div
                                     className={`bg-[#262626] w-full h-[60vh] flex flex-col justify-center items-center`}
@@ -123,8 +71,8 @@ export function CreatePost({ isCreating, fileInputRef, selectedImage, setSelecte
                             )}
                         </div>
                         {!isCaption && !isShared &&
-                            <button className="absolute -top-7 right-0 text-[20px]" onClick={onCropImage}><FaArrowRight /></button>}
-                        {!isShared && isCaption && <button className="absolute -top-7 right-0 text-[15px] text-[#0096f4] hover:text-white" onClick={() => createPost(setShareLoading, setIsShared, croppedImages, userData, captionValue, setCaptionValue)}>Share</button>}
+                            <button className="absolute -top-7 right-0 text-[20px]" onClick={() => onCropImage(selectedImage, croppedAreas, setCroppedImages, setLoading, setCurrentIndex, setIsCaption)}><FaArrowRight /></button>}
+                        {!isShared && isCaption && <button className="absolute -top-7 right-0 text-[15px] text-[#0096f4] hover:text-white" onClick={() => createPost(setShareLoading, setIsShared, croppedImages, userData, captionValue, setCaptionValue, false, navigate)}>Share</button>}
                     </div>
                 )}
             </div >

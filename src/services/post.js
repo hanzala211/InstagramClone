@@ -4,7 +4,9 @@ export async function createPost(
 	croppedImages,
 	userData,
 	captionValue,
-	setCaptionValue
+	setCaptionValue,
+	isMobile,
+	navigate
 ) {
 	const formData = new FormData();
 	try {
@@ -28,7 +30,7 @@ export async function createPost(
 		const result = await response.json();
 		if (captionValue.length > 0) {
 			await fetch(
-				`https://instagram-backend-dkh3c2bghbcqgpd9.canadacentral-01.azurewebsites.net/api/v1/post/caption/${result.post._id}`,
+				`${import.meta.env.VITE_APP_URL}api/v1/post/caption/${result.post._id}`,
 				{
 					method: 'PUT',
 					headers: {
@@ -44,6 +46,9 @@ export async function createPost(
 		console.error(error);
 	} finally {
 		setShareLoading(false);
+		if (isMobile) {
+			navigate('/home');
+		}
 		setCaptionValue('');
 	}
 }
@@ -189,12 +194,16 @@ export async function updatePost(
 	userData,
 	captionValue,
 	selectedPost,
-	setMessage
+	setMessage,
+	navigate,
+	setCaptionValue
 ) {
 	try {
 		setShareLoading(true);
 		setIsShared(true);
-		setIsEditingOpen(false);
+		if (setIsEditingOpen !== null) {
+			setIsEditingOpen(false);
+		}
 		const response = await fetch(
 			`${import.meta.env.VITE_APP_URL}api/v1/post/${selectedPost._id}`,
 			{
@@ -217,7 +226,12 @@ export async function updatePost(
 	} catch (error) {
 		console.error(error);
 	} finally {
+		if (setIsEditingOpen === null) {
+			navigate('/home');
+		}
+		setIsShared(false);
 		setShareLoading(false);
+		setCaptionValue('');
 	}
 }
 

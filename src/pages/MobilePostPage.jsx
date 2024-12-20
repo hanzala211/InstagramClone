@@ -26,7 +26,7 @@ export function MobilePostPage() {
     return <section className="w-full min-h-screen">
         <PostPageHeader isArrowNeeded={true} />
         {!isPostLoading ?
-            <div className="w-full 440:max-w-[27rem] h-[100vh] max-w-[25rem] md:max-w-[60rem] mx-auto mt-12">
+            <div className="w-full 440:max-w-[27rem] h-[100vh] max-w-[25rem] md:max-w-[60rem] mx-auto mt-14">
                 <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={selectedPost?.postBy ? (typeof selectedPost?.postBy === "object" && selectedPost?.postBy !== null) ? selectedPost?.postBy : selectedPost?.user : selectedPost?.user} page={page} setPage={setPage} currentIndex={currentPostIndex} setCurrentIndex={setCurrentPostIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} totalPages={totalPages} setTotalPages={setTotalPages} isMobile={true} />
             </div> : <div><Loader height="h-[30vh]" widthHeight={true} /></div>}
     </section>
