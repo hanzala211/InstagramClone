@@ -34,7 +34,7 @@ export function MobileBar() {
             to: `/${userData.data.user.userName}/`
         }
     ]
-    return <div className="fixed block md:hidden bottom-0 z-[10] bg-[#000] w-full h-[3.5rem] pt-1 border-t-[2px] border-[#323232]">
+    return <div className="fixed block md:hidden bottom-0 z-[20] bg-[#000] w-full h-[3.5rem] pt-1 border-t-[2px] border-[#323232]">
         <div className="flex items-center justify-around">
             {sideBarItems.map((item, i) => (
                 <NavLink
