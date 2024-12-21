@@ -18,11 +18,6 @@ export default function Pintura({ selectedImage, result, setResult, setIsUploadi
     const { userData, innerWidth } = useUser()
     const { setSelectedImage, isUploading } = useStories()
     const navigate = useNavigate()
-    useEffect(() => {
-        if (result) {
-            uploadStory(result, userData, setUploaded, innerWidth, navigate, setSelectedImage, setIsUploading, setResult);
-        }
-    }, [result, setIsUploading, uploadStory]);
 
     return (
         <div className="dark w-full md:h-[70vh] h-[100vh]" style={{ position: "relative" }}>
@@ -32,7 +27,8 @@ export default function Pintura({ selectedImage, result, setResult, setIsUploadi
                 imageCropAspectRatio={1}
                 theme="dark"
                 onProcess={({ dest }) => {
-                    setResult(URL.createObjectURL(dest));
+                    console.log(URL.createObjectURL(dest))
+                    uploadStory(URL.createObjectURL(dest), userData, setUploaded, innerWidth, navigate, setSelectedImage, setIsUploading, setResult);
                 }}
                 style={{
                     backgroundColor: "transparent",

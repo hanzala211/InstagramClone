@@ -32,12 +32,12 @@ export async function uploadStory(
 			navigate('/home');
 			setSelectedImage(null);
 			setIsUploading(false);
+			setResult(null);
 		}
 	} catch (error) {
 		console.error(error);
 	} finally {
-		setIsUploading(false);
-		setResult(null);
+		setSelectedImage(null);
 		setUploaded(true);
 	}
 }
