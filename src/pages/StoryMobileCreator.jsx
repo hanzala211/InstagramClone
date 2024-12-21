@@ -8,7 +8,7 @@ export function StoryMobileCreator() {
     const navigate = useNavigate()
 
     return <section className="relative">
-        <IoCloseSharp className="absolute z-10 text-[30px] top-3 left-3" onClick={() => {
+        <IoCloseSharp className="absolute z-10 text-[30px] top-14 left-3" onClick={() => {
             setSelectedImage(null)
             navigate("/home")
         }} />
