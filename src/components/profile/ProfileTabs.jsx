@@ -1,11 +1,12 @@
 import { SharePhotosIcon, TaggedIcon } from "../../assets/Constants";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { useSearch, useUser } from "../../context/UserContext";
+import { useUser } from "../../context/UserContext";
 import { useEffect, useState } from "react";
 import { Post } from "../post/Post";
 import { IoSaveOutline } from "react-icons/io5";
 import { PostModal } from "../post/PostModal";
 import { usePost } from "../../context/PostContext";
+import { useSearch } from "../../context/SearchContext";
 
 export function ProfileTabs({ isPosts, isTagged, isSaved, isSearchPosts }) {
     const { selectedPost, setSelectedPost, setComments, page, setPage, totalPages, setTotalPages } = usePost()

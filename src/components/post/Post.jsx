@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { MoreCommentsSVG } from "../../assets/Constants";
 import { PostSettings } from "./PostSettings";
-import { useSearch, useUser } from "../../context/UserContext";
+import { useUser } from "../../context/UserContext";
 import { formatDate } from "../../utils/helper";
 import { usePost } from "../../context/PostContext";
 import { PostComment } from "../comments/PostComment";
@@ -14,6 +14,7 @@ import { fetchUserDataOnClick } from "../../services/searchProfile";
 import { SearchChat } from "../chats/SearchChat";
 import { PostUserCard } from "./PostUserCard";
 import { PostCaption } from "./PostCaption";
+import { useSearch } from "../../context/SearchContext";
 
 export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, isMobile }) {
     const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, setCommentValue, setIsPostSettingOpen, isCommented, commentsLoading, setCommentsLoading, isPostSettingOpen, isMyPost, comments, setComments } = usePost()

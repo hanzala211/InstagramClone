@@ -1,20 +1,21 @@
 import { MdVerified } from "react-icons/md";
 import { Link, NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useSearch, useUser } from "../context/UserContext";
+import { useUser } from "../context/UserContext";
 import { Loader } from "../components/helpers/Loader";
 import { MobilePostIcon, PostsIcon } from "../assets/Constants";
 import { HighLights } from "../components/story/Highlights";
 import { LoadingPage } from "./LoadingPage";
 import { UserFollowDetails } from "../components/usermodals/UserFollowDetails";
 import { NoteDiv } from "../components/note/NoteDiv";
-import { followUser, unfollowUser, fetchPosts } from "../services/searchProfile";
+import { followUser, unfollowUser, fetchPosts, fetchUserDataOnClick } from "../services/searchProfile";
 import { useChat } from "../context/ChatContext";
+import { useSearch } from "../context/SearchContext";
 
 export function SearchProfile() {
     const { setSearchUserPosts, selectedProfile, searchUserStatus, setSearchUserStatus, searchUserHighLights, setSearchUserHighLights, setSelectedProfile } = useSearch();
     const { setSelectedChat } = useChat()
-    const { userData, setUserData, setHighLightStories, setCurrentHighLight, setCurrentStory, mainLoading, setMessage } = useUser()
+    const { userData, setUserData, setHighLightStories, setCurrentHighLight, setCurrentStory, mainLoading, setMessage, setMainLoading } = useUser()
     const [postsLoading, setPostsLoading] = useState(false);
     const [isFollowed, setIsFollowed] = useState(false);
     const [searchUserNotes, setSearchUserNotes] = useState([])
@@ -29,6 +30,19 @@ export function SearchProfile() {
     }, [params.username, userData?.data.user.userName, navigate])
 
     useEffect(() => {
+        if (selectedProfile.followersCount === undefined) {
+            console.log("TEST")
+            fetchUserDataOnClick(
+                selectedProfile.userName,
+                userData,
+                null,
+                setSelectedProfile,
+                setMainLoading
+            );
+        }
+    }, [selectedProfile])
+
+    useEffect(() => {
         if (userData?.data.user.following) {
             setIsFollowed(userData.data.user.following.includes(selectedProfile?._id))
         }
@@ -38,7 +52,7 @@ export function SearchProfile() {
     }, [selectedProfile._id, userData.data.user.following])
 
     useEffect(() => {
-        Promise.all(selectedProfile?.posts.map((item) => fetchPosts(item, setPostsLoading, userData))).then((res) => {
+        Promise.all(selectedProfile?.posts?.map((item) => fetchPosts(item, setPostsLoading, userData))).then((res) => {
             setSearchUserPosts(res.map((item) => item.post))
         }).finally(() => setPostsLoading(false))
     }, [selectedProfile.posts, userData.data.token])
@@ -60,7 +74,7 @@ export function SearchProfile() {
                             <div className="flex md:flex-row flex-col gap-3 sm:gap-6 md:items-center">
                                 <Link className="text-[20px] flex items-center gap-1">
                                     {selectedProfile.userName}
-                                    {selectedProfile?.followers.length > 10 && <MdVerified className="fill-[#0095F6]" />}
+                                    {selectedProfile?.followers?.length > 10 && <MdVerified className="fill-[#0095F6]" />}
                                 </Link>
                                 <div className="flex gap-3">
                                     {isFollowed ?
@@ -83,8 +97,8 @@ export function SearchProfile() {
                             </div>
                         </div>
                     </div>
-                    <div className={`flex gap-10 ml-5 md:mt-16 mt-7 ${searchUserHighLights.length === 0 ? "h-24" : "md:h-36 h-24"} overflow-x-auto scrollbar-hidden`}>
-                        {searchUserHighLights.length > 0 && searchUserHighLights.map((item, i, arr) =>
+                    <div className={`flex gap-10 ml-5 md:mt-16 mt-7 ${searchUserHighLights?.length === 0 ? "h-24" : "md:h-36 h-24"} overflow-x-auto scrollbar-hidden`}>
+                        {searchUserHighLights?.length > 0 && searchUserHighLights?.map((item, i, arr) =>
                             <Link to={`/search/stories/highlight/${arr[i]._id}/`} key={i} onClick={() => {
                                 setHighLightStories(searchUserHighLights[i].stories)
                                 setCurrentStory(0)

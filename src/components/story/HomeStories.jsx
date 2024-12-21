@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselNext, CarouselPrevious } from "../ui/carousel";
 import { useHome } from "../../context/HomeContext";
-import { useSearch } from "../../context/UserContext";
+import { useSearch } from "../../context/SearchContext";
 
 export function HomeStories() {
     const { homeStories } = useHome()
     const { setSearchUserStatus, setSelectedProfile } = useSearch()
 
-    return <div className="w-full lg:max-w-[45%] max-w-[96%] mt-14 md:mt-5 mx-auto relative">
+    return <div className="w-full lg:max-w-[45%] max-w-[100%] px-1 border-b-[2px] border-[#363636] md:border-[0] pb-2 mt-[3.8rem] md:mt-5 mx-auto relative">
         <Carousel>
             <CarouselContent className="flex md:gap-5 gap-3">
                 {homeStories.map((item, index) => (
@@ -18,9 +18,9 @@ export function HomeStories() {
                                 setSelectedProfile(item.user)
                             }}
                         >
-                            <img src="images/testUser.jpg" className="rounded-full w-16 h-16 p-1.5" alt="Stories Picture" />
+                            <img src={item.user.profilePic} className="rounded-full w-16 h-16 p-1.5" alt="Stories Picture" />
                         </Link>
-                        <p className="text-[#A8A8A8] text-[13px] font-semibold">{item.user.fullName}</p>
+                        <p className="text-[#A8A8A8] text-[13px] text-center font-semibold">{item.user.fullName}</p>
                     </div>
                 ))}
             </CarouselContent>

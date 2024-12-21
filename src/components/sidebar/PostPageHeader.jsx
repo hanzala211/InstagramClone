@@ -3,10 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { usePost } from "../../context/PostContext";
 import { ActiveChatInfoSVG, ChatIcon, ChatInfoSVG, ChatSearchIcon, CrossIcon } from "../../assets/Constants";
 import { useChat } from "../../context/ChatContext";
-import { useSearch, useUser } from "../../context/UserContext";
+import { useUser } from "../../context/UserContext";
 import { fetchUserDataOnClick } from "../../services/searchProfile";
 import { onCropImage } from "../../utils/helper";
 import { createPost, updatePost } from "../../services/post";
+import { useSearch } from "../../context/SearchContext";
 
 export function PostPageHeader({ isArrowNeeded, isHomePage, isInbox, isChat, isChatting, isCross, isDetails, isCreating }) {
     const { setSelectedPost, setComments, setSelectedImage, croppedAreas, setCroppedImages, selectedImage, setCurrentIndex, setLoading, setIsCaption, croppedImages, setIsShared, setCaptionValue, captionValue, isShared, setShareLoading, selectedPost } = usePost()

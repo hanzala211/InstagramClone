@@ -3,7 +3,7 @@ import { usePost } from "../context/PostContext"
 import { PostCropper } from "../components/post/PostCropper"
 
 export function MobilePostCreator() {
-    const { selectedImage, setCroppedAreas, currentIndex, setCurrentIndex, } = usePost()
+    const { selectedImage, setCroppedAreas, currentIndex, setCurrentIndex } = usePost()
 
     return <section>
         <PostPageHeader isCross={true} />

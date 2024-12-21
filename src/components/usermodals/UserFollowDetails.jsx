@@ -1,4 +1,5 @@
-import { useSearch, useUser } from "../../context/UserContext";
+import { useSearch } from "../../context/SearchContext";
+import { useUser } from "../../context/UserContext";
 import { formatNumber } from "../../utils/helper";
 
 export function UserFollowDetails({ isSearchProfile }) {

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { useSearch, useUser } from "../context/UserContext";
+import { useUser } from "../context/UserContext";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Loader } from "../components/helpers/Loader";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
@@ -9,11 +9,14 @@ import { PostModal } from "../components/post/PostModal";
 import { UserModal } from "../components/usermodals/UserModal";
 import { fetchSearch } from "../services/search";
 import { fetchExplorePosts } from "../services/post";
+import { useSearch } from "../context/SearchContext";
+import { useHome } from "../context/HomeContext";
 
 export function Explore() {
     const { userData } = useUser();
     const { searchQuery, setSearchQuery, searchData, setSearchData, setSelectedProfile } = useSearch();
-    const { setSelectedPost, selectedPost, setComments, page, setPage, totalPages, setTotalPages } = usePost()
+    const { setSelectedPost, selectedPost, setComments } = usePost()
+    const { page, setPage, totalPages, setTotalPages } = useHome()
     const [explorePagePosts, setExplorePagePosts] = useState([]);
     const [isPostsLoading, setIsPostsLoading] = useState(true);
     const [currentPost, setCurrentPost] = useState(0);
@@ -84,7 +87,7 @@ export function Explore() {
             <input ref={inputRef} type="text" name="search" id="search" placeholder="Search" className={`bg-[#000] border-[1px] border-[#6F6F6F] rounded-md py-1 px-3 outline-none ${isSearching ? "w-[22rem]" : "w-96"}`} onFocus={() => setIsSearching(true)} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             {isSearching && <button className="text-[14px]" onClick={() => setIsSearching(false)}>Cancel</button>}
         </div>
-        <div className={`w-full flex mt-5 flex-col gap-1 bg-[#000] ${isSearching ? "h-[100vh]" : ""}`}>
+        <div className={`w-full flex md:hidden mt-5 flex-col gap-1 bg-[#000] ${isSearching ? "h-[100vh]" : ""}`}>
             {searchData?.map((item, i) => (
                 <UserModal key={i} item={item} setSelectedProfile={setSelectedProfile} isSearchModal={true} />
             ))}

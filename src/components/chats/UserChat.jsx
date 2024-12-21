@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ActiveChatInfoSVG, ChatInfoSVG, EmojiIcon, ShareIcon } from "../../assets/Constants";
 import { useEffect, useRef, useState } from "react";
 import { useChat } from "../../context/ChatContext";
-import { useSearch, useUser } from "../../context/UserContext";
+import { useUser } from "../../context/UserContext";
 import { fetchUserDataOnClick } from "../../services/searchProfile";
 import { deleteMessageAndUpdateThread, handleSendMessage } from "../../services/chat";
 import { Loader } from "../helpers/Loader";
@@ -11,6 +11,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { Post } from "../post/Post";
 import { usePost } from "../../context/PostContext";
 import { UserChatInfo } from "./UserChatInfo";
+import { useSearch } from "../../context/SearchContext";
 
 export function UserChat() {
     const { selectedChat, messages, setMessages, messagesLoading, isInfoOpen, setIsInfoOpen } = useChat()

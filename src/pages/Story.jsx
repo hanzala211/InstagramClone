@@ -1,5 +1,5 @@
 import { IoCloseSharp } from "react-icons/io5";
-import { useSearch, useUser } from "../context/UserContext"
+import { useUser } from "../context/UserContext"
 import { Link, useNavigate } from "react-router-dom";
 import { MdVerified } from "react-icons/md";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
@@ -7,6 +7,7 @@ import { MoreSVG } from "../assets/Constants";
 import { useState } from "react";
 import { HighlightsEditor } from "../components/story/HighlightsEditor";
 import { formatDate } from "../utils/helper";
+import { useSearch } from "../context/SearchContext";
 
 export function Story({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSearchHighLight }) {
     const { stories, userData, archives, setCurrentStory, currentStory, highLightStories } = useUser();

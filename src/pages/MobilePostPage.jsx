@@ -6,10 +6,12 @@ import { useLocation } from "react-router-dom";
 import { fetchPost } from "../services/post";
 import { useUser } from "../context/UserContext";
 import { Loader } from "../components/helpers/Loader";
+import { useHome } from "../context/HomeContext";
 
 
 export function MobilePostPage() {
-    const { page, setPage, totalPages, setTotalPages, selectedPost, setSelectedPost } = usePost()
+    const { selectedPost, setSelectedPost } = usePost()
+    const { page, setPage, totalPages, setTotalPages } = useHome()
     const { userData } = useUser()
     const [currentPostIndex, setCurrentPostIndex] = useState(0)
     const [isPostOpen, setIsPostOpen] = useState(true)

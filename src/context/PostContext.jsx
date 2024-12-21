@@ -13,10 +13,7 @@ export function PostProvider({ children }) {
     const [isCommented, setIsCommented] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
     const [isLiked, setIsLiked] = useState(false)
-    const [homePosts, setHomePosts] = useState([])
     const [comments, setComments] = useState([])
-    const [page, setPage] = useState(1)
-    const [totalPages, setTotalPages] = useState(0);
     const [isShareOpen, setIsShareOpen] = useState(false)
     const [isShareOpenHome, setIsShareOpenHome] = useState([])
     const [isShareSearch, setIsShareSearch] = useState("")
@@ -32,7 +29,7 @@ export function PostProvider({ children }) {
     const fileInputRef = useRef(null);
 
 
-    return <PostContext.Provider value={{ commentValue, setCommentValue, isAnimating, setIsAnimating, isPostSettingOpen, setIsPostSettingOpen, isDisabled, setIsDisabled, commentsLoading, setCommentsLoading, isSaved, setIsSaved, isMyPost, setIsMyPost, isCommented, setIsCommented, selectedPost, setSelectedPost, isLiked, setIsLiked, homePosts, setHomePosts, comments, setComments, page, setPage, totalPages, setTotalPages, isShareOpen, setIsShareOpen, isShareSearch, setIsShareSearch, isShareOpenHome, setIsShareOpenHome, fileInputRef, selectedImage, setSelectedImage, croppedAreas, setCroppedAreas, setCroppedImages, croppedImages, currentIndex, setCurrentIndex, loading, setLoading, isCaption, setIsCaption, captionValue, setCaptionValue, isShared, setIsShared, shareLoading, setShareLoading }}>{children}</PostContext.Provider>
+    return <PostContext.Provider value={{ commentValue, setCommentValue, isAnimating, setIsAnimating, isPostSettingOpen, setIsPostSettingOpen, isDisabled, setIsDisabled, commentsLoading, setCommentsLoading, isSaved, setIsSaved, isMyPost, setIsMyPost, isCommented, setIsCommented, selectedPost, setSelectedPost, isLiked, setIsLiked, comments, setComments, isShareOpen, setIsShareOpen, isShareSearch, setIsShareSearch, isShareOpenHome, setIsShareOpenHome, fileInputRef, selectedImage, setSelectedImage, croppedAreas, setCroppedAreas, setCroppedImages, croppedImages, currentIndex, setCurrentIndex, loading, setLoading, isCaption, setIsCaption, captionValue, setCaptionValue, isShared, setIsShared, shareLoading, setShareLoading }}>{children}</PostContext.Provider>
 }
 export function usePost() {
     const context = useContext(PostContext)

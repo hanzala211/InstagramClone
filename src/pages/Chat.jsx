@@ -6,6 +6,7 @@ import { PostPageHeader } from "../components/sidebar/PostPageHeader";
 
 export function Chat() {
     const location = useLocation()
+
     return <div className="flex flex-row">
         <PostPageHeader isArrowNeeded={true} isChat={true} isChatting={location.pathname.slice(16, -1) !== ""} />
         <ChatUsersSidebar />

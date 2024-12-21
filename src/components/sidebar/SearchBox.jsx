@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useSearch, useUser } from "../../context/UserContext";
+import { useUser } from "../../context/UserContext";
 import { Skeleton } from "../helpers/Skeleton";
 import { UserModal } from "../usermodals/UserModal";
 import { useLocation } from "react-router-dom";
 import { fetchSearch } from "../../services/search";
+import { useSearch } from "../../context/SearchContext";
 
 export function SearchBox({ refere, isSearching }) {
     const { userData } = useUser()

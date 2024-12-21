@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom"
-import { useSearch, useUser } from "../../context/UserContext"
+import { useUser } from "../../context/UserContext"
 import { CommentHome } from "../comments/CommentHome"
 import { usePost } from "../../context/PostContext"
 import { Like, SaveSVG, ShareIcon, UnLike, UnSave } from "../../assets/Constants"
@@ -16,11 +16,14 @@ import { fetchComments } from "../../services/post"
 import { fetchUserDataOnClick } from "../../services/searchProfile"
 import { SearchChat } from "../chats/SearchChat"
 import { PostCaption } from "./PostCaption"
+import { useHome } from "../../context/HomeContext"
+import { useSearch } from "../../context/SearchContext"
 
 export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost, setCurrentPostIndex, setIsPostOpen, isPost }) {
     const { userData, setMainLoading, setUserData, setMessage, innerWidth } = useUser()
     const { setSelectedProfile } = useSearch()
-    const { setSelectedPost, selectedPost, setComments, setCommentsLoading, setTotalPages, page, isCommented, setIsShareOpenHome } = usePost()
+    const { setSelectedPost, selectedPost, setComments, setCommentsLoading, setTotalPages, isCommented, setIsShareOpenHome } = usePost()
+    const { page } = useHome()
     const [isAnimating, setIsAnimating] = useState(false)
     const [currentIndex, setCurrentIndex] = useState(Array(homePosts.length).fill(0))
     const [totalIndex, setTotalIndex] = useState(Array(homePosts.length).fill(0))
@@ -29,7 +32,6 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
     const [isHovered, setIsHovered] = useState(Array(homePosts.length).fill(false))
     const [showHeart, setShowHeart] = useState(false);
     const [heartIndex, setHeartIndex] = useState(null);
-    const [selectedIndex, setSelectedIndex] = useState(0)
     const lastTouchTime = useRef(0);
     const commentRef = useRef(null)
     const navigate = useNavigate()
@@ -112,7 +114,7 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
         })
     };
 
-    return <><div className={`flex flex-col gap-2 mt-5 ${isPost ? "" : "border-b-[2px] border-[#262626]"} pb-4`}>
+    return <><div className={`flex flex-col gap-2 ${index === 0 ? "" : "mt-5"} ${isPost ? "" : "border-b-[2px] border-[#262626]"} pb-4`}>
         <div className={`flex flex-row items-center gap-2`}>
             <img src={item?.user?.profilePic || item?.postBy?.profilePic || userData?.data?.user?.profilePic} className="rounded-full w-10" alt="" />
             <div className="flex flex-row gap-1 items-center relative">

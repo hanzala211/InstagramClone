@@ -1,9 +1,10 @@
-import { useSearch, useUser } from "../../context/UserContext";
+import { useUser } from "../../context/UserContext";
 import { useEffect, useState } from "react";
 import { UserModal } from "./UserModal";
 import { Skeleton } from "../helpers/Skeleton";
 import { Overlay } from "../helpers/Overlay";
 import { fetchFollowers, fetchFollowing } from "../../services/followerModal";
+import { useSearch } from "../../context/SearchContext";
 
 export function UserFollowModal({ isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen }) {
     const { userData, userFollowers, setUserFollowers, userFollowing, setUserFollowing } = useUser();
