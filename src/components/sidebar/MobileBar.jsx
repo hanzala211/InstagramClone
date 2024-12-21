@@ -1,12 +1,13 @@
 import { FaHistory } from "react-icons/fa"
 import { ActiveExplore, ActiveHome, CreateIcon, ExploreIcon, HomeIcon } from "../../assets/Constants"
-import { useSideBar, useUser } from "../../context/UserContext"
+import { useUser } from "../../context/UserContext"
 import { NavLink } from "react-router-dom"
-import { handleFile } from "../../utils/helper"
+import { handleClickForStory, handleFile } from "../../utils/helper"
 import { usePost } from "../../context/PostContext"
+import { useStories } from "../../context/StoriesContext"
 
 export function MobileBar() {
-    const { setCreateStory } = useSideBar()
+    const { fileInputRef: fileStoriesRef } = useStories()
     const { fileInputRef } = usePost()
     const { userData } = useUser()
 
@@ -27,7 +28,7 @@ export function MobileBar() {
             onClick: () => handleFile(fileInputRef),
         }, {
             icon: <FaHistory />,
-            onClick: () => setCreateStory(true),
+            onClick: () => handleClickForStory(fileStoriesRef)
         }, {
             isImg: true,
             profileImg: userData.data.user.profilePic,

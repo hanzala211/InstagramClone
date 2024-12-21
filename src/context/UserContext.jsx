@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 const UserContext = createContext();
 export function UserProvider({ children }) {
@@ -61,6 +61,7 @@ export function SearchProvider({ children }) {
     const [searchUserPosts, setSearchUserPosts] = useState([])
     const [searchUserStatus, setSearchUserStatus] = useState([])
     const [searchUserHighLights, setSearchUserHighLights] = useState([]);
+
 
     return <SearchContext.Provider value={{ searchQuery, setSearchQuery, searchData, setSearchData, selectedProfile, setSelectedProfile, searchUserPosts, setSearchUserPosts, searchUserStatus, setSearchUserStatus, searchUserHighLights, setSearchUserHighLights }}>{children}</SearchContext.Provider>
 }

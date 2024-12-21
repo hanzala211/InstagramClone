@@ -4,6 +4,8 @@ import { getEditorDefaults } from "@pqina/pintura";
 import { useEffect } from "react";
 import { uploadStory } from "../../services/story";
 import { useUser } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
+import { useStories } from "../../context/StoriesContext";
 
 const editorDefaults = getEditorDefaults({
     stickers: [],
@@ -13,26 +15,36 @@ const editorDefaults = getEditorDefaults({
 });
 
 export default function Pintura({ selectedImage, result, setResult, setIsUploading, setUploaded }) {
-    const { userData } = useUser()
+    const { userData, innerWidth } = useUser()
+    const { setSelectedImage, isUploading } = useStories()
+    const navigate = useNavigate()
     useEffect(() => {
         if (result) {
-            setIsUploading(true);
-            uploadStory(result, userData, setUploaded);
+            uploadStory(result, userData, setUploaded, innerWidth, navigate, setSelectedImage, setIsUploading, setResult);
         }
     }, [result, setIsUploading, uploadStory]);
+
     return (
-        <div className="dark w-full">
-            <div style={{ height: "70vh" }}>
-                <PinturaEditor
-                    {...editorDefaults}
-                    src={selectedImage}
-                    imageCropAspectRatio={1}
-                    theme="dark"
-                    onProcess={({ dest }) => {
-                        setResult(URL.createObjectURL(dest))
-                    }}
-                />
-            </div>
+        <div className="dark w-full md:h-[70vh] h-[100vh]" style={{ position: "relative" }}>
+            <PinturaEditor
+                {...editorDefaults}
+                src={selectedImage}
+                imageCropAspectRatio={1}
+                theme="dark"
+                onProcess={({ dest }) => {
+                    setResult(URL.createObjectURL(dest));
+                }}
+                style={{
+                    backgroundColor: "transparent",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                }}
+                disabled={isUploading}
+            />
         </div>
     );
 }

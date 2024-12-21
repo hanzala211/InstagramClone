@@ -1,14 +1,15 @@
-import { useRef, useState } from "react";
 import Pintura from "../helpers/Pintura";
 import { Overlay } from "../helpers/Overlay";
 import { SelectImage } from "../post/SelectImage";
+import { handleClickForStory, handleFileChangeForStories } from "../../utils/helper";
+import { useStories } from "../../context/StoriesContext";
+import { useUser } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export function CreateStory({ creatingStory, setIsCreatingStory }) {
-    const [selectedImage, setSelectedImage] = useState(null)
-    const [result, setResult] = useState(null);
-    const [isUploading, setIsUploading] = useState(false);
-    const [uploaded, setUploaded] = useState(false);
-    const fileInputRef = useRef(null)
+    const { fileInputRef, selectedImage, setSelectedImage, result, setResult, isUploading, setIsUploading, uploaded, setUploaded } = useStories()
+    const { innerWidth } = useUser()
+    const navigate = useNavigate()
 
     function handleClose() {
         setIsCreatingStory(false);
@@ -18,18 +19,6 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
             setSelectedImage(null)
             setResult(null);
         }, 500)
-    }
-
-    function handleFileChange(event) {
-        const file = event.target.files[0];
-        if (file && file.type.startsWith("image/")) {
-            setSelectedImage(URL.createObjectURL(file));
-        }
-        fileInputRef.current.value = null;
-    }
-
-    function handleClickForStory() {
-        fileInputRef.current.click();
     }
 
     return <>
@@ -43,7 +32,7 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
 
             <div className="bg-[#262626] flex items-center justify-center flex-col gap-2 w-full h-full px-5 py-5">
                 {selectedImage === null ? (
-                    <SelectImage handleFile={handleClickForStory} fileInputRef={fileInputRef} handleFileChange={handleFileChange} />
+                    <SelectImage handleFile={() => handleClickForStory(fileInputRef)} fileInputRef={fileInputRef} handleFileChange={(e) => handleFileChangeForStories(e, setSelectedImage, fileInputRef, innerWidth, navigate)} />
                 ) : !isUploading ? (
                     <Pintura
                         selectedImage={selectedImage}

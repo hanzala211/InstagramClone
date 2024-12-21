@@ -96,3 +96,30 @@ body::-webkit-scrollbar {
 	height: 400px;
 	margin-top: 2.8rem;
 }
+
+@media (max-width: 768px) {
+    .pintura-editor {
+        background-color: transparent !important;
+        position: absolute !important;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .pintura-toolbar,
+    .pintura-toolbar * {
+        background-color: rgba(0, 0, 0, 0.5) !important; 
+        color: white !important; 
+        z-index: 10;
+    }
+    .pintura-canvas {
+        background-color: transparent !important;
+    }
+
+    .pintura-button {
+        background-color: rgba(0, 0, 0, 0.7) !important;
+        color: white !important;
+    }
+}

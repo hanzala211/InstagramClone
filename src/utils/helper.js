@@ -83,3 +83,35 @@ export const onCropImage = async (
 		}, 500);
 	}
 };
+
+export function handleFileChangeForStories(
+	event,
+	setSelectedImage,
+	fileInputRef,
+	innerWidth,
+	navigate
+) {
+	const file = event.target.files[0];
+
+	if (file && file.type && file.type.startsWith('image/')) {
+		const imageUrl = URL.createObjectURL(file);
+		setSelectedImage(imageUrl);
+		if (innerWidth < 768) {
+			navigate('/create/story/');
+		}
+	} else {
+		console.error('Please select a valid image file.');
+	}
+
+	if (fileInputRef.current) {
+		fileInputRef.current.value = null;
+	}
+}
+
+export function handleClickForStory(fileInputRef) {
+	if (fileInputRef?.current) {
+		fileInputRef.current.click();
+	} else {
+		console.error('fileInputRef is not connected to an input element.');
+	}
+}

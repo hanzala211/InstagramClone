@@ -1,8 +1,18 @@
-export async function uploadStory(result, userData, setUploaded) {
+export async function uploadStory(
+	result,
+	userData,
+	setUploaded,
+	innerWidth,
+	navigate,
+	setSelectedImage,
+	setIsUploading,
+	setResult
+) {
 	const formdata = new FormData();
 	const blobImage = await fetch(result).then((req) => req.blob());
 	formdata.append('image', blobImage, 'storyImage.jpg');
 	try {
+		setIsUploading(true);
 		const response = await fetch(
 			`${import.meta.env.VITE_APP_URL}api/v1/story`,
 			{
@@ -15,9 +25,19 @@ export async function uploadStory(result, userData, setUploaded) {
 			}
 		);
 		const resultAwait = await response.json();
+		if (
+			resultAwait.message === 'Story created successfully.' &&
+			innerWidth < 770
+		) {
+			navigate('/home');
+			setSelectedImage(null);
+			setIsUploading(false);
+		}
 	} catch (error) {
 		console.error(error);
 	} finally {
+		setIsUploading(false);
+		setResult(null);
 		setUploaded(true);
 	}
 }
