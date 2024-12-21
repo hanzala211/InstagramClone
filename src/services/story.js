@@ -37,7 +37,6 @@ export async function uploadStory(
 	} catch (error) {
 		console.error(error);
 	} finally {
-		setSelectedImage(null);
 		setUploaded(true);
 	}
 }

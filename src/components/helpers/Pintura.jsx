@@ -27,7 +27,6 @@ export default function Pintura({ selectedImage, result, setResult, setIsUploadi
                 imageCropAspectRatio={1}
                 theme="dark"
                 onProcess={({ dest }) => {
-                    console.log(URL.createObjectURL(dest))
                     uploadStory(URL.createObjectURL(dest), userData, setUploaded, innerWidth, navigate, setSelectedImage, setIsUploading, setResult);
                 }}
                 style={{
