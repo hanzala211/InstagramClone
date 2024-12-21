@@ -7,7 +7,7 @@ export function SelectImage({ handleFile, fileInputRef, handleFileChange }) {
         <button
             onClick={handleFile}
             className="bg-[#0095F6] hover:bg-opacity-70 transition-all duration-200 px-3 py-2 text-[14px] rounded-lg">
-            Browse
+            Select from Computer
         </button>
         <input
             type="file"
