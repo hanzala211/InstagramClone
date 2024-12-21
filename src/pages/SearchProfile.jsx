@@ -32,6 +32,9 @@ export function SearchProfile() {
         if (userData?.data.user.following) {
             setIsFollowed(userData.data.user.following.includes(selectedProfile?._id))
         }
+        setSearchUserHighLights(selectedProfile.highlights);
+        setSearchUserNotes(selectedProfile.notes)
+        setSearchUserStatus(selectedProfile.stories)
     }, [selectedProfile._id, userData.data.user.following])
 
     useEffect(() => {
@@ -39,18 +42,6 @@ export function SearchProfile() {
             setSearchUserPosts(res.map((item) => item.post))
         }).finally(() => setPostsLoading(false))
     }, [selectedProfile.posts, userData.data.token])
-
-    useEffect(() => {
-        if (selectedProfile?.highlights) {
-            setSearchUserHighLights(selectedProfile.highlights);
-        }
-        if (selectedProfile?.stories) {
-            setSearchUserStatus(selectedProfile.stories)
-        }
-        if (selectedProfile?.notes) {
-            setSearchUserNotes(selectedProfile.notes)
-        }
-    }, [selectedProfile])
 
     return <>
         {!mainLoading ?

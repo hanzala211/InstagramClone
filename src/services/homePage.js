@@ -254,3 +254,24 @@ export async function fetchHomePosts(
 		setIsPostsLoading(false);
 	}
 }
+
+export async function fetchStories(userData, setHomeStories) {
+	try {
+		const response = await fetch(
+			`${import.meta.env.VITE_APP_URL}api/v1/story/following`,
+			{
+				method: 'GET',
+				headers: {
+					Authorization: userData?.data.token,
+				},
+				redirect: 'follow',
+			}
+		);
+		const result = await response.json();
+		setHomeStories(
+			result.stories.filter((item) => item.user.stories.length > 0)
+		);
+	} catch (error) {
+		console.error(error);
+	}
+}

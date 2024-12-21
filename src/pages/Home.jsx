@@ -4,15 +4,17 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Loader } from "../components/helpers/Loader";
 import { RiUserFollowFill } from "react-icons/ri";
 import { Post } from "../components/post/Post";
-import { fetchHomePosts } from "../services/homePage";
+import { fetchHomePosts, fetchStories } from "../services/homePage";
 import { HomePost } from "../components/post/HomePost";
 import { usePost } from "../context/PostContext";
 import { PostPageHeader } from "../components/sidebar/PostPageHeader";
 import { HomeStories } from "../components/story/HomeStories";
+import { useHome } from "../context/HomeContext";
 
 export function Home() {
     const { userData } = useUser()
     const { homePosts, setHomePosts, page, setPage, totalPages, setTotalPages } = usePost()
+    const { homeStories, setHomeStories } = useHome()
     const [currentPostIndex, setCurrentPostIndex] = useState(0)
     const [isPostsLoading, setIsPostsLoading] = useState(true)
     const [isPostOpen, setIsPostOpen] = useState(false)
@@ -22,11 +24,12 @@ export function Home() {
     useEffect(() => {
         setIsPostsLoading(true)
         fetchHomePosts(userData, setHomePosts, setIsPostsLoading, setHasMore)
+        fetchStories(userData, setHomeStories)
     }, [])
 
     return <>
         <PostPageHeader isArrowNeeded={false} isHomePage={true} />
-        {/* <HomeStories /> */}
+        {homeStories.length > 0 && <HomeStories />}
         <section className="w-full lg:max-w-[40%] sm:max-w-[85%] max-w-[95%] mt-12 md:mt-0 mb-20 md:mb-2 mx-auto">
             <div className={`flex flex-col gap-2 w-full ${isPostsLoading || homePosts.length === 0 ? "h-[90vh]" : ""} ${homePosts.length < 2 ? "h-[90vh]" : ""}`}>
                 {!isPostsLoading ?
