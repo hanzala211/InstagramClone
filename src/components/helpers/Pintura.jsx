@@ -14,7 +14,7 @@ const editorDefaults = getEditorDefaults({
     enableWatermark: false,
 });
 
-export default function Pintura({ selectedImage, result, setResult, setIsUploading, setUploaded }) {
+export default function Pintura({ selectedImage, setResult, setIsUploading, setUploaded }) {
     const { userData, innerWidth } = useUser()
     const { setSelectedImage, isUploading } = useStories()
     const navigate = useNavigate()
