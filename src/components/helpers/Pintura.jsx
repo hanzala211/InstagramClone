@@ -1,7 +1,6 @@
 import { PinturaEditor } from "@pqina/react-pintura";
 import "@pqina/pintura/pintura.css";
 import { getEditorDefaults } from "@pqina/pintura";
-import { useEffect } from "react";
 import { uploadStory } from "../../services/story";
 import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";

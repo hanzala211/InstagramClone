@@ -84,7 +84,7 @@ export function SearchProfile() {
                                 </div>
                             </div>
                             <div className="md:flex hidden gap-10 items-center">
-                                <UserFollowDetails selectedProfile={true} />
+                                <UserFollowDetails isSearchProfile={true} />
                             </div>
                             <div className="relative -left-[5.5rem] top-3 sm:left-0 sm:top-0">
                                 <p className="font-semibold text-[14px]">{selectedProfile.fullName}</p>
