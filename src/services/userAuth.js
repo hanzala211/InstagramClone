@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 
 export async function fetchUser(
@@ -100,12 +100,12 @@ export async function fetchData(
 			setFullName('');
 			setUserName('');
 			navigate('/home');
-			addDoc(doc(db, 'users', `${result.data.user._id}`), {
-				userName: `${userName}`,
+			setDoc(doc(db, 'users', `${result.data.user._id}`), {
+				userName: `${result.data.user.userName}`,
 				id: `${result.data.user._id}`,
 			});
-			setSuccessMessage(result.status);
 			localStorage.setItem('token', JSON.stringify(result.data.token));
+			setSuccessMessage(result.status);
 		}
 	} catch (error) {
 		setUserData({
