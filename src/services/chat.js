@@ -120,8 +120,12 @@ export async function deleteMessageAndUpdateThread(
 		const latestMessageSnapshot = await getDocs(latestMessageQuery);
 		if (!latestMessageSnapshot.empty) {
 			const latestMessage = latestMessageSnapshot.docs[0].data();
+			console.log(latestMessage);
 			updateDoc(threadDocRef, {
-				lastMessage: latestMessage.content || '',
+				lastMessage:
+					latestMessage.content || latestMessage.post
+						? 'Sent an attachment'
+						: '',
 				lastMessageSender: latestMessage.senderId,
 			});
 		} else {
