@@ -76,7 +76,7 @@ export function Profile() {
                 </div>
                 <Link
                     to={stories.length > 0 ? `/stories/${userData.data.user.userName}/${stories[0]._id}/` : ""}
-                    className={`p-2 ${stories.length > 0 ? "relative rounded-full multicolor-border h-[5.8rem] sm:h-32 md:h-auto" : ""} flex justify-center items-center`}
+                    className={`p-2 ${stories.length > 0 ? "relative rounded-full multicolor-border " : ""} h-[5.8rem] sm:h-32 md:h-auto flex justify-center items-center`}
                     onClick={() => setCurrentStory(0)}
                 >
                     <img
