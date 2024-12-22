@@ -15,6 +15,7 @@ export function UserThreads({ isNewChat, item, isChat, handleClose }) {
     const [foundNotification, setFoundNotification] = useState(null)
     const navigate = useNavigate()
 
+
     useEffect(() => {
         if (notifications.length > 0) {
             setIsReceived(notifications.some((notifi) => {
