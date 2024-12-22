@@ -1,22 +1,16 @@
 import { Loader } from "../helpers/Loader";
 
-const NoteTooltip = ({ isProfile, noteValue, setNoteValue, note, className, noteLoading }) => {
+const NoteTooltip = ({ isProfile, noteValue, setNoteValue, note, className, noteLoading, isEditor }) => {
     return (
         <div className={`relative ${isProfile ? "" : "md:w-48 w-36"}`}>
             <div
-                className={`absolute -top-6 md:-top-8 left-[45%] transform -translate-x-1/2 bg-[rgb(54,54,54)] text-white text-sm md:rounded-2xl rounded-xl md:px-4 md:py-3 p-2 md:flex md:items-center space-x-1 shadow-lg ${isProfile ? "" : "w-full pt-3 md:pt-5"
-                    }`}>
+                className={`absolute -top-6 md:-top-8 left-[45%] transform -translate-x-1/2 bg-[rgb(54,54,54)] text-white text-sm md:rounded-2xl rounded-xl md:p-3 p-2 space-x-1 ${note?.length === 0 ? "" : "w-[4.5rem] md:w-auto"} shadow-lg ${isProfile ? "" : "w-full pt-3 md:pt-5"}`}>
                 {!noteLoading ? (
                     isProfile ? (
                         <span
-                            className={`text-[#A8A8A8] text-[10px] md:text-[15px] ${note && note.length !== 0 ? "text-white text-[15px] px-2 " : ""
-                                } ${className} text-center`}
+                            className={`text-[#A8A8A8] ${note?.content?.length > 12 && !isEditor ? "text-[10px] line-clamp-3" : "text-[12px] md:text-[15px]"} ${note && note.length !== 0 ? "text-white px-2 " : ""} ${className}`}
                             style={{
-                                wordWrap: "break-word",
-                                overflowWrap: "break-word",
-                                whiteSpace: "normal",
-                                display: "block",
-                                maxWidth: "4rem",
+                                lineHeight: "1.3"
                             }}
                         >
                             {note && note.length !== 0 ? note.content : "Note..."}
@@ -24,7 +18,7 @@ const NoteTooltip = ({ isProfile, noteValue, setNoteValue, note, className, note
                     ) : (
                         <textarea
                             type="text"
-                            className={`bg-transparent resize-none scrollbar-hidden text-[15px] outline-none xl:text-[19px] placeholder:text-[#737373] ${noteValue.length > 0 ? "text-center" : ""
+                            className={`bg-transparent resize-none scrollbar-hidden text-[13px] outline-none xl:text-[19px] placeholder:text-[#737373] ${noteValue.length > 0 ? "text-center" : ""
                                 }`}
                             maxLength={60}
                             placeholder="Share a thought..."
@@ -35,8 +29,7 @@ const NoteTooltip = ({ isProfile, noteValue, setNoteValue, note, className, note
                                 overflowWrap: "break-word",
                                 whiteSpace: "normal",
                                 height: "auto",
-                                width: "100%",
-                                maxWidth: "10rem",
+                                lineHeight: "1.5",
                             }}
                         ></textarea>
                     )

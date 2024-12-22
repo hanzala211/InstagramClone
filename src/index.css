@@ -44,21 +44,28 @@ body::-webkit-scrollbar {
 .PinturaShapeStyle {
 	color: white;
 }
-.multicolor-border::before {
+.multicolor-border {
+	position: relative;
+	display: inline-block; /* Ensure the container adjusts to the image size */
+  }
+  
+  .multicolor-border::before {
 	content: '';
 	position: absolute;
 	top: 0;
 	left: 0;
 	bottom: 0;
 	right: 0;
-	border-radius: inherit;
+	border-radius: 50%; /* Match the rounded corners of the image */
 	background: linear-gradient(45deg, pink, hotpink, magenta, purple, violet);
+	padding: 2px; /* Adjust the thickness of the border */
 	-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
 	mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
 	-webkit-mask-composite: xor;
 	mask-composite: exclude;
-	padding:2px;
-}
+	pointer-events: none; /* Prevent interference with interactions */
+  }
+  
 .circle-preview-container {
 	position: relative;
 	width: 100%;

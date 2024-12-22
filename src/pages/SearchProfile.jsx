@@ -68,7 +68,7 @@ export function SearchProfile() {
                         <Link to={searchUserStatus.length > 0 ? `/search/stories/${selectedProfile.userName}/${searchUserStatus[0]._id}/` : ""}
                             className={`p-2 ${searchUserStatus.length > 0 ? "relative rounded-full multicolor-border" : ""} h-[5.9rem] sm:h-32 md:h-auto flex justify-center items-center`}
                             onClick={() => setCurrentStory(0)}>
-                            <img src={selectedProfile.profilePic} alt="User Profile" className="rounded-full w-[5rem] sm:w-28 lg:w-40 lg:min-w-[10rem] min-w-[3rem] sm:h-28 lg:h-40 object-cover" />
+                            <img src={selectedProfile.profilePic} alt="User Profile" className="rounded-full w-[5rem] h-full sm:w-28 lg:w-40 lg:min-w-[10rem] min-w-[5rem] sm:h-28 lg:h-40 object-cover" />
                         </Link>
                         <div className="flex flex-col gap-2 sm:gap-5 mt-2 xl:mt-0">
                             <div className="flex md:flex-row flex-col gap-3 sm:gap-6 md:items-center">
