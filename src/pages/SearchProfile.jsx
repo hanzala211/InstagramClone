@@ -91,13 +91,13 @@ export function SearchProfile() {
                             <div className="md:flex hidden gap-10 items-center">
                                 <UserFollowDetails isSearchProfile={true} />
                             </div>
-                            <div className="relative ml-2 md:ml-0 -left-[5.5rem] top-3 sm:left-0 sm:top-0">
+                            <div className="relative -left-[5.5rem] top-3 sm:left-0 sm:top-0">
                                 <p className="font-semibold text-[14px]">{selectedProfile.fullName}</p>
                                 <p className="font-semibold text-[14px] text-[#a8a8a8] w-[250px] break-words">{selectedProfile.bio}</p>
                             </div>
                         </div>
                     </div>
-                    <div className={`flex gap-10 ml-5 md:mt-16 mt-7 ${searchUserHighLights?.length === 0 ? "h-10" : "md:h-36 h-24"} overflow-x-auto scrollbar-hidden`}>
+                    <div className={`flex gap-10 ml-5 md:mt-16 mt-7 ${searchUserHighLights?.length === 0 ? "h-2" : "md:h-36 h-24"} overflow-x-auto scrollbar-hidden`}>
                         {searchUserHighLights?.length > 0 && searchUserHighLights?.map((item, i, arr) =>
                             <Link to={`/search/stories/highlight/${arr[i]._id}/`} key={i} onClick={() => {
                                 setHighLightStories(searchUserHighLights[i].stories)

@@ -76,13 +76,13 @@ export function Profile() {
                 </div>
                 <Link
                     to={stories.length > 0 ? `/stories/${userData.data.user.userName}/${stories[0]._id}/` : ""}
-                    className={`p-2 ${stories.length > 0 ? "relative rounded-full multicolor-border " : ""} h-[5.8rem] sm:h-32 md:h-auto flex justify-center items-center`}
+                    className={`p-2 ${stories.length > 0 ? "relative rounded-full multicolor-border" : ""} h-[5rem] 440:h-[5.7rem] sm:h-32 md:h-auto flex justify-center items-center`}
                     onClick={() => setCurrentStory(0)}
                 >
                     <img
                         src={userData?.data?.user.profilePic}
                         alt="User Profile"
-                        className="rounded-full w-[5rem] sm:w-28 lg:w-40 lg:min-w-[10rem] min-w-[3rem]  sm:h-28 lg:h-40 object-cover"
+                        className="rounded-full w-[5rem] sm:w-28 lg:w-40 lg:min-w-[10rem] min-w-[3rem] sm:h-28 lg:h-40 object-cover"
                     />
                 </Link>
                 <div className="flex flex-col gap-4 sm:gap-6 mt-2 xl:mt-0 relative ">
