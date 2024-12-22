@@ -28,7 +28,7 @@ export function Home() {
     return <>
         <PostPageHeader isArrowNeeded={false} isHomePage={true} />
         {homeStories.length > 0 && <HomeStories />}
-        <section className={`w-full lg:max-w-[40%] sm:max-w-[85%] max-w-[95%] mb-20 md:mb-2 mx-auto ${homeStories.length > 0 ? "mt-16" : "mt-5"} md:mt-0`}>
+        <section className={`w-full lg:max-w-[40%] sm:max-w-[85%] max-w-[95%] mb-20 md:mb-2 mx-auto ${homeStories.length === 0 ? "mt-16" : "mt-5"} md:mt-0`}>
             <div className={`flex flex-col gap-2 w-full ${isPostsLoading || homePosts.length === 0 ? "h-[90vh]" : ""} ${homePosts.length < 2 ? "h-[90vh]" : ""}`}>
                 {!isPostsLoading ?
                     <InfiniteScroll dataLength={homePosts.length} loader={homePosts.length > 0 && <Loader height="md:h-[10vh] h-[15vh] overflow-scroll scrollbar-hidden" />} next={() => {
