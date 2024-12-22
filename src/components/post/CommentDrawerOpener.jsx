@@ -9,7 +9,7 @@ export function CommentDrawerOpener({ item, setCurrentPost, index, setCurrentPos
     const { setSelectedPost, setComments } = usePost()
 
     return <>
-        {innerWidth < 768 &&
+        {innerWidth < 770 &&
             <Drawer onClose={() => setComments([])}>
                 <DrawerContent className="bg-[#000] border-t-[1px] border-[#a8a8a8]">
                     <CommentDrawer />

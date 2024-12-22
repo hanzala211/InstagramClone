@@ -3,20 +3,14 @@ import { PiCopySimpleLight } from "react-icons/pi";
 import { TbMessageCircleFilled } from "react-icons/tb";
 import { formatNumber } from "../../utils/helper";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
 
 export function PostModal({ arr, i, setSelectedPost, setIsPostOpen, setCurrentPost, item }) {
-    const { userData } = useUser()
-    const [innerHeight, setInnerHeight] = useState(0)
+    const { userData, innerWidth } = useUser()
     const navigate = useNavigate()
 
-    useEffect(() => {
-        setInnerHeight(window.innerWidth)
-    }, [window.innerWidth])
-
     return <div className="w-full max-w-[35rem] h-full max-h-[35rem] cursor-pointer group relative overflow-hidden" onClick={() => {
-        if (innerHeight > 768) {
+        if (innerWidth > 770) {
             setIsPostOpen(true)
             setCurrentPost(i);
         } else {

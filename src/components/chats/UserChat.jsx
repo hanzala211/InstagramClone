@@ -172,7 +172,7 @@ export function UserChat() {
                     <button className="absolute left-7 top-5 md:top-4 hover:opacity-55 transition duration-200" ref={emojiIconRef} onClick={() => setIsPickingEmoji((prev) => !prev)}><EmojiIcon /></button>
                     {isPickingEmoji &&
                         <div className="absolute md:-top-[22rem] -top-[18rem] md:left-5 left-0" ref={emojiPickerRef}>
-                            <EmojiPicker width={innerWidth > 768 ? 350 : 300} height={innerWidth > 768 ? 350 : 300} onEmojiClick={(emoji) => setMessageValue((prev) => prev + emoji.emoji)} theme="dark" />
+                            <EmojiPicker width={innerWidth > 770 ? 350 : 300} height={innerWidth > 770 ? 350 : 300} onEmojiClick={(emoji) => setMessageValue((prev) => prev + emoji.emoji)} theme="dark" />
                         </div>
                     }
                     <input

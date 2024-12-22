@@ -52,7 +52,7 @@ export function PostSettings({ isPostSettingOpen, setIsPostSettingOpen, setIsPos
                     <button className="text-red-600 w-full p-3 xl:text-[14px] text-[10px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]" onClick={() => deletePost(userData, setMessage, setUserData, setUserPosts, selectedPost, setSelectedPost, setIsPostSettingOpen, setIsPostOpen)}>Delete
                     </button>
                     <button className="w-full p-3 border-b-[1px] xl:text-[14px] text-[10px] active:opacity-70 font-semibold border-[#363636]" onClick={() => {
-                        if (innerWidth > 768) {
+                        if (innerWidth > 770) {
                             setIsEditingOpen(true);
                         } else {
                             setCroppedImages(selectedPost.imageUrls)
