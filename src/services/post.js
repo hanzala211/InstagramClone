@@ -328,6 +328,7 @@ export async function fetchComments(
 	try {
 		setComments([]);
 		setCommentsLoading(true);
+
 		const response = await fetch(
 			`${import.meta.env.VITE_APP_URL}api/v1/post/comments/${
 				selectedPost._id
@@ -342,6 +343,7 @@ export async function fetchComments(
 			}
 		);
 		const result = await response.json();
+
 		setTotalPages(result.data.totalPages);
 		setComments((prev) => {
 			const newComments = result.data.comments.filter((newComment) => {
@@ -351,13 +353,23 @@ export async function fetchComments(
 			});
 			return [...newComments, ...prev];
 		});
+		await Promise.all(
+			result.data.comments.map((comment) => {
+				return new Promise((resolve) => {
+					const img = new Image();
+					img.src = comment.user.profilePic;
+					img.onload = resolve;
+					img.onerror = resolve;
+				});
+			})
+		).finally(() => {
+			if (!signal.aborted) {
+				setCommentsLoading(false);
+			}
+		});
 	} catch (error) {
 		if (error.name !== 'AbortError' && error.name !== 'TypeError') {
 			console.error('Fetch failed:', error);
-		}
-	} finally {
-		if (!signal.aborted) {
-			setCommentsLoading(false);
 		}
 	}
 }
