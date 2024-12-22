@@ -20,7 +20,7 @@ export function HomeStories() {
                         >
                             <img src={item.user.profilePic} className="rounded-full w-20 h-20 p-1.5" alt="Stories Picture" />
                         </Link>
-                        <p className="text-[#A8A8A8] text-[13px] text-center font-semibold">{item.user.fullName}</p>
+                        <p className="text-[#A8A8A8] text-[13px] text-center font-semibold">{item.user.fullName.split(" ").slice(0, 2).join(" ") + (item.user.fullName.split(" ").length > 2 ? "..." : "")}</p>
                     </div>
                 ))}
             </CarouselContent>
