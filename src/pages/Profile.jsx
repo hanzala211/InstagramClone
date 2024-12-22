@@ -75,7 +75,7 @@ export function Profile() {
                     {!isNoteEditOpen ? <div className="absolute md:top-7 lg:top-4 xl:top-3 top-1 left-[2.5rem] sm:top-6 sm:left-[4rem] md:left-[4rem] lg:left-[5.5rem] xl:left-[9rem] z-[1]"><NoteTooltip isProfile={true} note={note} noteLoading={noteLoading} /></div> : <div ref={noteEditorRef} className="absolute md:top-2 lg:top-20 top-2 left-[22rem] md:left-[20rem] lg:left-0 xl:left-[8rem] z-[1]"><NoteEditor /></div>}
                 </div>
                 <Link to={stories.length > 0 ? `/stories/${userData.data.user.userName}/${stories[0]._id}/` : ""} className={`p-2 ${stories.length > 0 ? "relative rounded-full multicolor-border h-[5.9rem] sm:h-32 md:h-auto" : ""}`} onClick={() => setCurrentStory(0)}>
-                    <img src={userData?.data?.user.profilePic} alt="User Profile" className="rounded-full 440:w-[5.4rem] w-[6.49rem] sm:w-28 lg:w-40 lg:min-w-[7rem] min-w-[3rem]" />
+                    <img src={userData?.data?.user.profilePic} alt="User Profile" className="rounded-full 440:w-[5.4rem] w-[6.6rem] sm:w-28 lg:w-40 lg:min-w-[7rem] min-w-[3rem]" />
                 </Link>
                 <div className="flex flex-col gap-4 sm:gap-6 mt-2 xl:mt-0 relative ">
                     <div className="flex gap-4 sm:gap-6 md:flex-row flex-col md:items-center">
