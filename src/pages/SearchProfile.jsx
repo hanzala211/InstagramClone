@@ -59,8 +59,8 @@ export function SearchProfile() {
 
     return <>
         {!mainLoading ?
-            <section className="w-full lg:max-w-[57%] md:max-w-[87%] mx-auto">
-                <div className="w-full max-w-[61rem] pb-9 lg:pt-20 pt-8 md:border-b-[2px] md:border-[#262626]">
+            <section className="w-full lg:max-w-[57%] md:max-w-[87%] max-w-[100%] mx-auto">
+                <div className="w-full max-w-[61rem] sm:pl-5 pl-1 md:pl-0 pb-9 lg:pt-20 pt-8 md:border-b-[2px] md:border-[#262626]">
                     <div className="flex w-full xl:gap-20 lg:gap-5 gap-2 sm:items-center relative">
                         {searchUserNotes.length > 0 &&
                             <NoteDiv notes={searchUserNotes[0]} />
@@ -68,7 +68,7 @@ export function SearchProfile() {
                         <Link to={searchUserStatus.length > 0 ? `/search/stories/${selectedProfile.userName}/${searchUserStatus[0]._id}/` : ""}
                             className={`p-2 ${searchUserStatus.length > 0 ? "relative rounded-full multicolor-border" : ""} h-[5.9rem] sm:h-32 md:h-auto flex justify-center items-center`}
                             onClick={() => setCurrentStory(0)}>
-                            <img src={selectedProfile.profilePic} alt="User Profile" className="rounded-full w-[5rem] sm:w-28 lg:w-40 lg:min-w-[7rem] min-w-[3rem]  sm:h-28 lg:h-40 object-cover" />
+                            <img src={selectedProfile.profilePic} alt="User Profile" className="rounded-full w-[5rem] sm:w-28 lg:w-40 lg:min-w-[10rem] min-w-[3rem] sm:h-28 lg:h-40 object-cover" />
                         </Link>
                         <div className="flex flex-col gap-2 sm:gap-5 mt-2 xl:mt-0">
                             <div className="flex md:flex-row flex-col gap-3 sm:gap-6 md:items-center">
@@ -97,7 +97,7 @@ export function SearchProfile() {
                             </div>
                         </div>
                     </div>
-                    <div className={`flex gap-10 ml-5 md:mt-16 mt-7 ${searchUserHighLights?.length === 0 ? "h-24" : "md:h-36 h-24"} overflow-x-auto scrollbar-hidden`}>
+                    <div className={`flex gap-10 ml-5 md:mt-16 mt-7 ${searchUserHighLights?.length === 0 ? "h-10" : "md:h-36 h-24"} overflow-x-auto scrollbar-hidden`}>
                         {searchUserHighLights?.length > 0 && searchUserHighLights?.map((item, i, arr) =>
                             <Link to={`/search/stories/highlight/${arr[i]._id}/`} key={i} onClick={() => {
                                 setHighLightStories(searchUserHighLights[i].stories)

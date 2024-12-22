@@ -62,8 +62,8 @@ export function Profile() {
         };
     }, [setIsNoteEditOpen]);
 
-    return <section className="w-full lg:max-w-[57%] md:max-w-[87%] mx-auto">
-        <div className="w-full max-w-[61rem] pb-9 lg:pt-20 pt-8 md:border-b-[2px] md:border-[#262626]">
+    return <section className="w-full lg:max-w-[57%] md:max-w-[87%] max-w-[100%] mx-auto">
+        <div className="w-full max-w-[61rem] pb-9 lg:pt-20 pt-8 pl-1 sm:pl-5 md:pl-0 md:border-b-[2px] md:border-[#262626]">
             <div className="flex w-full xl:gap-20 lg:gap-5 gap-2 sm:items-center relative">
                 <div className="cursor-pointer" onClick={() => {
                     if (note.length === 0) {
@@ -82,7 +82,7 @@ export function Profile() {
                     <img
                         src={userData?.data?.user.profilePic}
                         alt="User Profile"
-                        className="rounded-full w-[5rem] sm:w-28 lg:w-40 lg:min-w-[7rem] min-w-[3rem]  sm:h-28 lg:h-40 object-cover"
+                        className="rounded-full w-[5rem] sm:w-28 lg:w-40 lg:min-w-[10rem] min-w-[3rem]  sm:h-28 lg:h-40 object-cover"
                     />
                 </Link>
                 <div className="flex flex-col gap-4 sm:gap-6 mt-2 xl:mt-0 relative ">
