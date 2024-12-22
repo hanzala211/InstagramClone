@@ -158,9 +158,9 @@ export function UserChat() {
                             }} className="md:w-[18rem] w-[13rem] cursor-pointer bg-[#262626] rounded-lg">
                                 <div className="px-3 py-2 flex gap-2 items-center">
                                     <img src={message?.post?.user?.profilePic} className="w-8 rounded-full" alt="" />
-                                    <Link className="text-[14px]">{message.post.user.userName}</Link>
+                                    <Link className="text-[14px]">{message?.post?.user?.userName}</Link>
                                 </div>
-                                <img src={message.post.imageUrls[0]} alt={`${message.post.user.userName} post`} />
+                                <img src={message?.post?.imageUrls[0]} alt={`${message?.post?.user?.userName} post`} />
                                 <div className={`text-[15px] font-semibold ${message.post.caption !== null && message?.post.caption.length > 0 ? "px-4 py-3" : ""}`}>
                                     {message.post.caption}
                                 </div>
