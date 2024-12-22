@@ -93,7 +93,7 @@ export function SearchProfile() {
                             </div>
                             <div className="relative ml-2 md:ml-0 -left-[5.5rem] top-3 sm:left-0 sm:top-0">
                                 <p className="font-semibold text-[14px]">{selectedProfile.fullName}</p>
-                                <p className="font-semibold text-[14px] text-[#a8a8a8] w-[200px] break-words">{selectedProfile.bio}</p>
+                                <p className="font-semibold text-[14px] text-[#a8a8a8] w-[250px] break-words">{selectedProfile.bio}</p>
                             </div>
                         </div>
                     </div>
