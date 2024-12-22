@@ -97,9 +97,11 @@ export function Explore() {
                 No posts available. Check back later!
             </p>
         ) : isPostsLoading ? <Loader /> : (
-            <InfiniteScroll dataLength={explorePagePosts.length} next={() => fetchExplorePosts(setCount, setExplorePagePosts, userData, setHasMore, setIsPostsLoading)} loader={
-                <div className="flex justify-center py-4">
-                    <Loader height="h-[5vh]" />
+            <InfiniteScroll dataLength={explorePagePosts.length} next={() => {
+                fetchExplorePosts(setCount, setExplorePagePosts, userData, setHasMore, setIsPostsLoading)
+            }} loader={
+                <div className="flex justify-center items-end py-4">
+                    <Loader height={`${explorePagePosts.length > 7 ? "h-[10vh]" : "md:h-[5vh] h-[75vh]"} `} />
                 </div>}
                 hasMore={count < 8 && hasMore}>
                 <div className={`grid grid-flow-row grid-cols-3 gap-1 mt-5 md:mt-0`}>
