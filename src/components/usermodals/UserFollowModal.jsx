@@ -9,52 +9,66 @@ import { useSearch } from "../../context/SearchContext";
 export function UserFollowModal({ isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen }) {
     const { userData, userFollowers, setUserFollowers, userFollowing, setUserFollowing } = useUser();
     const { setSelectedProfile } = useSearch();
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+    const [modalType, setModalType] = useState("");
 
     useEffect(() => {
         const body = document.querySelector("body");
-        body.style.overflowY = isFollowerModalOpen ? "hidden" : "auto";
+        body.style.overflowY = isFollowerModalOpen || isFollowingModalOpen ? "hidden" : "auto";
 
-        return () => body.style.overflowY = "auto"
-    }, [isFollowerModalOpen])
-
+        return () => body.style.overflowY = "auto";
+    }, [isFollowerModalOpen, isFollowingModalOpen]);
 
     useEffect(() => {
-        if (isFollowerModalOpen === true) {
+        if (isFollowerModalOpen) {
+            setModalType("followers");
             fetchFollowers(setIsLoading, userData, setUserFollowers);
-        }
-        else if (isFollowingModalOpen) {
+        } else if (isFollowingModalOpen) {
+            setModalType("following");
             fetchFollowing(setIsLoading, userData, setUserFollowing);
         }
-    }, [isFollowerModalOpen, isFollowingModalOpen])
+    }, [isFollowerModalOpen, isFollowingModalOpen, userData, setUserFollowers, setUserFollowing]);
 
     function handleClose() {
         if (isFollowerModalOpen) {
             setIsFollowerModalOpen(false);
-            setTimeout(() => {
-                setUserFollowers([])
-            }, 900)
+            setTimeout(() => setUserFollowers([]), 900);
         } else if (isFollowingModalOpen) {
-            setTimeout(() => {
-                setUserFollowing([]);
-            }, 900)
-            setIsFollowingModalOpen(false)
+            setIsFollowingModalOpen(false);
+            setTimeout(() => setUserFollowing([]), 900);
         }
     }
 
-    return <>
-        <Overlay handleClose={handleClose} isPostOpen={isFollowerModalOpen || isFollowingModalOpen} />
-        <div className={`fixed opacity-0 top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isFollowerModalOpen || isFollowingModalOpen ? "opacity-100" : "pointer-events-none"} w-full max-w-[20rem] rounded-xl border-y-[1px] bg-[#363636] border-[#363636]`}>
-            <div className="border-b-[1px] border-[#252525] h-[2rem]">
-                <h1 className="absolute left-1/2 top-1 text-[14px] -translate-x-1/2">User {isFollowerModalOpen ? "Followers" : "Following"} </h1>
+    const modalTitle = modalType === "followers" ? "Followers" : modalType === "following" ? "Following" : "";
+    const modalContent = modalType === "followers" ? userFollowers : modalType === "following" ? userFollowing : [];
+
+    return (
+        <>
+            <Overlay handleClose={handleClose} isPostOpen={isFollowerModalOpen || isFollowingModalOpen} />
+            <div className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-[20rem] rounded-xl border-y-[1px] bg-[#363636] border-[#363636] transition-all duration-500 z-[150] ${isFollowerModalOpen || isFollowingModalOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}>
+                <div className="border-b-[1px] border-[#252525] h-[2rem] relative">
+                    <h1 className="absolute left-1/2 top-1 text-[14px] -translate-x-1/2">{`User ${modalTitle}`}</h1>
+                </div>
+                <div className="overflow-auto scrollbar-hidden h-[20rem]">
+                    {isLoading ? (
+                        Array.from({ length: 15 }, (_, i) => (
+                            <div key={i} className="ml-3 mt-5">
+                                <Skeleton />
+                            </div>
+                        ))
+                    ) : (
+                        modalContent.map((item, i) => (
+                            <UserModal
+                                key={i}
+                                index={i}
+                                item={item}
+                                isSearchModal={false}
+                                setSelectedProfile={setSelectedProfile}
+                            />
+                        ))
+                    )}
+                </div>
             </div>
-            <div className="overflow-auto scrollbar-hidden h-[20rem]">
-                {isLoading ? Array.from(({ length: 15 }), (_, i) => <div key={i} className="ml-3 mt-5"><Skeleton /></div>) : isFollowerModalOpen ? userFollowers.map((item, i) => (
-                    <UserModal key={i} index={i} item={item} isSearchModal={false} setSelectedProfile={setSelectedProfile} />
-                )) : isFollowingModalOpen ? userFollowing.map((item, i) => (
-                    <UserModal key={i} index={i} item={item} isSearchModal={false} setSelectedProfile={setSelectedProfile} />
-                )) : ""}
-            </div>
-        </div>
-    </>
+        </>
+    );
 }

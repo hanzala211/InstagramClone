@@ -16,6 +16,7 @@ import { UserFollowDetails } from "../components/usermodals/UserFollowDetails";
 import { LaptopProfileBar } from "../components/profile/LaptopProfileBar";
 import { fetchPosts, fetchSaves, getHighLights, getStatus } from "../services/profile";
 import { fetchNote } from "../services/note";
+import { ProfileButton } from "../components/profile/ProfileSettingButton";
 
 export function Profile() {
     const { userData, setUserPosts, note, setNote, setStories, stories, setCurrentStory, highlights, setHighlights, setHighLightStories, setCurrentHighLight, setUserSaves, isNoteEditOpen, setIsNoteEditOpen, isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen } = useUser();
@@ -87,18 +88,9 @@ export function Profile() {
                             <LogOutDiv isOpen={isOpen} dropdownRef={dropdownRef} isMobile={true} />
                         </p>
                         <div className="flex gap-3">
-                            <Link
-                                to="/accounts/edit/"
-                                className="bg-[#363636] px-3 py-1 rounded-[0.5rem] text-[14px] flex justify-center min-w-[6rem] md:min-w-[8rem] hover:bg-[rgb(38,38,38)] transition duration-150">
-                                Edit Profile
-                            </Link>
-                            <Link
-                                to="/archive/stories/"
-                                className="bg-[#363636] px-5 py-1 rounded-[0.5rem] text-[14px] flex justify-center min-w-[7rem] md:min-w-[10rem] hover:bg-[rgb(38,38,38)] transition duration-150">
-                                View Archive
-                            </Link>
+                            <ProfileButton to="/accounts/edit/" label="Edit Profile" />
+                            <ProfileButton to="/archive/stories/" label="View Archive" />
                         </div>
-
                     </div>
                     <div className="md:flex hidden gap-10 items-center">
                         <UserFollowDetails />
@@ -132,7 +124,6 @@ export function Profile() {
         </div>
         <NoteCreator isEditing={false} isNoteOpen={isNoteOpen} setIsNoteOpen={setIsNoteOpen} />
         <HighLightsModal isCreatingHighLight={isCreatingHighLight} setIsCreatingHighLight={setIsCreatingHighLight} />
-        <UserFollowModal isFollowerModalOpen={isFollowerModalOpen} setIsFollowerModalOpen={setIsFollowerModalOpen} isFollowingModalOpen={false} />
-        <UserFollowModal isFollowingModalOpen={isFollowingModalOpen} setIsFollowingModalOpen={setIsFollowingModalOpen} isFollowerModalOpen={false} />
+        <UserFollowModal isFollowerModalOpen={isFollowerModalOpen} setIsFollowerModalOpen={setIsFollowerModalOpen} isFollowingModalOpen={isFollowingModalOpen} setIsFollowingModalOpen={setIsFollowingModalOpen} />
     </section>
 }

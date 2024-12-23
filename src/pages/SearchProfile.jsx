@@ -11,6 +11,8 @@ import { NoteDiv } from "../components/note/NoteDiv";
 import { followUser, unfollowUser, fetchPosts, fetchUserDataOnClick } from "../services/searchProfile";
 import { useChat } from "../context/ChatContext";
 import { useSearch } from "../context/SearchContext";
+import { FollowButton } from "../components/profile/FollowButtons";
+import { ProfileNavLink } from "../components/profile/ProfileNavLink";
 
 export function SearchProfile() {
     const { setSearchUserPosts, selectedProfile, searchUserStatus, setSearchUserStatus, searchUserHighLights, setSearchUserHighLights, setSelectedProfile } = useSearch();
@@ -77,11 +79,11 @@ export function SearchProfile() {
                                     {selectedProfile?.followers?.length > 10 && <MdVerified className="fill-[#0095F6]" />}
                                 </Link>
                                 <div className="flex gap-3">
-                                    {isFollowed ?
-                                        <button disabled={isDisabled} className={`bg-[#363636] px-7 py-1 rounded-lg sm:w-32 1280:w-auto ${isDisabled ? "opacity-50" : ""}`} onClick={() => unfollowUser(setUserData, selectedProfile, setIsDisabled, setSelectedProfile, userData, setMessage)}>Unfollow</button>
-                                        :
-                                        <button disabled={isDisabled} className={`bg-[#0095F6] px-7 py-1 rounded-lg ${isDisabled ? "opacity-50" : ""}`} onClick={() => followUser(setUserData, selectedProfile, setIsDisabled, setSelectedProfile, setMessage, userData)}>Follow</button>
-                                    }
+                                    <FollowButton
+                                        isFollowed={isFollowed}
+                                        isDisabled={isDisabled}
+                                        onClick={isFollowed ? () => unfollowUser(setUserData, selectedProfile, setIsDisabled, setSelectedProfile, userData, setMessage) : () => followUser(setUserData, selectedProfile, setIsDisabled, setSelectedProfile, setMessage, userData)}
+                                    />
                                     <button onClick={() => {
                                         setSelectedChat(selectedProfile)
                                         navigate("/direct/inbox/")
@@ -97,7 +99,7 @@ export function SearchProfile() {
                             </div>
                         </div>
                     </div>
-                    <div className={`flex gap-10 ml-5 md:mt-16 mt-7 ${searchUserHighLights?.length === 0 ? "h-2" : "md:h-36 h-24"} overflow-x-auto scrollbar-hidden`}>
+                    <div className={`flex gap-10 ml-5 md:mt-16 mt-7 ${searchUserHighLights?.length === 0 ? "h-2 md:h-24" : "md:h-36 h-24"} overflow-x-auto scrollbar-hidden`}>
                         {searchUserHighLights?.length > 0 && searchUserHighLights?.map((item, i, arr) =>
                             <Link to={`/search/stories/highlight/${arr[i]._id}/`} key={i} onClick={() => {
                                 setHighLightStories(searchUserHighLights[i].stories)
@@ -112,18 +114,11 @@ export function SearchProfile() {
                 <div className="flex justify-evenly py-2 border-y-[1px] border-[#262626] md:hidden">
                     <UserFollowDetails isSearchProfile={true} />
                 </div>
-                <div className="absolute left-[58%] xl:left-[55.5%] -translate-x-1/2 md:flex hidden gap-10">
-                    <NavLink end to={`/search/${selectedProfile.userName}/`}
-                        className={({ isActive }) => `flex items-center tracking-wider py-3 gap-1 text-[12px] ${isActive ? "font-semibold border-t-[2px]" : "text-[#A8A8A8]"}`}>
-                        <PostsIcon /> POSTS
-                    </NavLink>
-                </div>
-                <div className="flex md:hidden justify-center border-b-[1px] border-[#262626] gap-10">
-                    <NavLink end to={`/search/${selectedProfile.userName}/`}
-                        className={({ isActive }) => `flex w-[35%] items-center justify-center tracking-wider py-3 gap-1 ${isActive ? "font-semibold border-t-[2px]" : "text-[#A8A8A8]"}`}>
-                        <MobilePostIcon />
-                    </NavLink>
-                </div>
+                <ProfileNavLink
+                    icon={innerWidth > 770 ? PostsIcon : MobilePostIcon}
+                    label={innerWidth > 770 ? "POSTS" : ""}
+                    to={`/search/${selectedProfile.userName}/`}
+                />
                 <div className="md:mt-[4rem] mt-6">
                     {!postsLoading ? <Outlet /> : <Loader height="h-[34vh]" />}
                 </div>

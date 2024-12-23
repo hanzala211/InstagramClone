@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Loader } from "../components/helpers/Loader";
