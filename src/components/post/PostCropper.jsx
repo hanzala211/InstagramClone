@@ -36,5 +36,6 @@ export function PostCropper({ currentIndex, setCroppedAreas, isMobile }) {
                 })
             }
             onCropComplete={onCropComplete}
-        /></div>
+        />
+    </div>
 }
