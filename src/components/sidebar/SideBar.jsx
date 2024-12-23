@@ -89,7 +89,7 @@ export function SideBar() {
 
     return (
         <>
-            <aside className={`px-4 py-10 hidden md:block transition-[width] bg-[#000] border-r-[2px] border-[#262626] duration-300 ease-in-out ${isSearching || location.pathname.slice(0, 7) === "/direct" ? "w-[5rem]" : "w-[5rem] lg:w-[15rem] xl:w-[18rem]"} fixed z-[100] left-0 top-0 h-[100vh]`}>
+            <aside className={`px-4 py-10 hidden md:block transition-[width] bg-[#000] border-r-[2px] border-[#262626] duration-300 ease-in-out ${isSearching || location.pathname.slice(0, 7) === "/direct" ? "w-[5rem]" : "w-[5rem] lg:w-[15rem] xl:w-[18rem]"} fixed z-[20] left-0 top-0 h-[100vh]`}>
                 <Link to="/home">
                     <img src="/images/instagramiconswhite.png" alt="Instagram Logo" className={`w-[6.5rem] ml-2 mb-9 ${isSearching || location.pathname.slice(0, 7) === "/direct" ? "hidden" : "hidden lg:block"}`} />
                 </Link>
