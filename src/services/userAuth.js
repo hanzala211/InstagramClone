@@ -165,3 +165,63 @@ export async function fetchMe(
 		}
 	}
 }
+
+export async function forgotPassword(emailValue, setLoading, setForgotResult) {
+	try {
+		setLoading(true);
+		const response = await fetch(
+			`${import.meta.env.VITE_APP_URL}api/v1/auth/forgot-password`,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					email: emailValue,
+				}),
+				redirect: 'follow',
+			}
+		);
+		const result = await response.json();
+		setForgotResult(result);
+	} catch (error) {
+		console.error(error);
+	} finally {
+		setLoading(false);
+	}
+}
+
+export async function resetPassword(
+	emailValue,
+	codeValue,
+	newPassword,
+	setLoading,
+	navigate
+) {
+	try {
+		setLoading(true);
+		const response = await fetch(
+			`${import.meta.env.VITE_APP_URL}api/v1/auth/reset-password`,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					email: emailValue,
+					forgotPasswordCode: codeValue,
+					newPassword: newPassword,
+				}),
+				redirect: 'follow',
+			}
+		);
+		const result = await response.json();
+		if (result.status === 'success') {
+			navigate('/login');
+		}
+	} catch (error) {
+		console.error(error);
+	} finally {
+		setLoading(false);
+	}
+}

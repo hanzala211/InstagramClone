@@ -24,6 +24,7 @@ import { StoryMobileCreator } from './pages/StoryMobileCreator'
 import { StoriesProvider } from './context/StoriesContext'
 import { HomeProvider } from './context/HomeContext'
 import { SearchProvider } from './context/SearchContext'
+import { ForgotPassword } from './pages/ForgotPassword'
 
 function App() {
   const localitem = JSON.parse(localStorage.getItem("token"))
@@ -42,6 +43,7 @@ function App() {
                     <Route path='/stories/highlight/:id/' element={<Story isHighLight={true} />} />
                     <Route path='/search/stories/:username/:id/' element={<Story isSearchUser={true} />} />
                     <Route path='/search/stories/highlight/:id/' element={<Story isSearchHighLight={true} />} />
+                    <Route path='/accounts/password/forgot/' element={<ForgotPassword />} />
                     <Route index element={<Navigate to={localitem === null ? "/login" : "/home"} />} />
                     <Route path="/login" element={<Login />} />
                     <Route path='/signup' element={<SignUp />} />

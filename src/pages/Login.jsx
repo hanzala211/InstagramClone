@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { FaFacebook } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { imagesArr } from "../assets/Constants";
 import { Footer } from "../components/helpers/Footer";
@@ -75,7 +74,7 @@ export function Login() {
                                     <div className="relative">
                                         <h2 className="absolute z-[20] left-1/2 -translate-x-1/2 -top-[2.8rem] bg-[#000] p-3 text-[13px] rounded-full text-[#A8A8A8]">OR</h2>
                                     </div>
-                                    <Link className="flex items-center gap-2 text-[#3897F1] hover:text-white"><span><FaFacebook style={{ fill: "#3897F1" }} className="text-[25px]" /></span>Log in with Facebook</Link>
+                                    <Link to="/accounts/password/forgot/" className="flex items-center gap-2 text-[#3897F1] hover:text-white">Forgotten your password?</Link>
                                     {userData?.status === "fail" && <p className="text-red-500">{userData.data}</p>}
                                 </> : <div className="mt-2"><Loader /></div>}
                             </div>
