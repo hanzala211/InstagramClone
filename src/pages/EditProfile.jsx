@@ -61,15 +61,15 @@ export function EditProfile() {
 
     return <section className="w-full xl:max-w-[54%] 1280:max-w-[40%] lg:max-w-[60%] md:max-w-[80%] max-w-[95%] mt-8 md:mt-0 h-[80vh] mx-auto relative">
         <h2 className="text-[25px] font-semibold">Edit Profile</h2>
-        <div className="flex flex-row items-center justify-between bg-[#424242] rounded-2xl my-5 px-2 md:px-4 py-2 w-full">
-            <div className="flex gap-4 items-center">
+        <div className="flex flex-row items-center justify-between bg-[#424242] rounded-2xl my-5 px-2 md:px-4 py-2 md:gap-0 gap-2 w-full">
+            <div className="flex md:gap-4 gap-2 items-center">
                 <img src={`${selectedImage === null ? userData?.data?.user?.profilePic : selectedImage}`} className="rounded-full md:w-20 md:h-20 w-16 h-16 md:min-w-[5rem] min-w-[4rem] object-cover" alt="User Profile" />
                 <div className="flex flex-col">
                     <p className="font-semibold">{userData?.data?.user?.userName}</p>
                     <p className="text-[#A8A8A8] text-[15px]">{userData?.data?.user?.fullName}</p>
                 </div>
             </div>
-            <button onClick={handleClick} className="bg-[#0095F6] hover:bg-opacity-70 lg:w-[30%] 1280:w-[35%] w-full max-w-[45%] transition-all duration-200 px-2 py-2 text-[14px] rounded-lg">Change Photo</button>
+            <button onClick={handleClick} className="bg-[#0095F6] hover:bg-opacity-70 w-full max-w-[45%] lg:max-w-[30%] 1280:max-w-[30%] transition-all duration-200 px-2 py-2 text-[14px] rounded-lg">Change Photo</button>
             <input type="file" accept="image/" ref={fileInputRef} onChange={handleFileChange} style={{ display: "none" }} />
         </div>
         {editForm.map((item, i) => (

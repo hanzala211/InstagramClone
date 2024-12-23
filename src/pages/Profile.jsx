@@ -5,7 +5,6 @@ import { HighLights } from "../components/story/Highlights";
 import { useEffect, useRef, useState } from "react";
 import { Loader } from "../components/helpers/Loader";
 import { MdVerified } from "react-icons/md";
-import { ProfileSettings } from "../components/profile/ProfileSettings";
 import NoteTooltip from "../components/note/Note";
 import { NoteCreator } from "../components/note/NoteCreator";
 import { NoteEditor } from "../components/note/NoteEditor";
