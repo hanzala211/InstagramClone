@@ -25,12 +25,11 @@ export function Home() {
         fetchStories(userData, setHomeStories);
     }, [userData, setHomePosts, setIsPostsLoading, setHasMore, setHomeStories]);
 
-    const fetchNextPosts = useCallback(() => {
+    const fetchNextPosts = () => {
         if (!isPostsLoading) {
             fetchHomePosts(userData, setHomePosts, setIsPostsLoading, setHasMore);
         }
-    }, [isPostsLoading, userData, setHomePosts, setIsPostsLoading, setHasMore]);
-
+    }
 
     return (
         <>
