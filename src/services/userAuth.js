@@ -118,6 +118,7 @@ export async function fetchData(
 		setMainLoading(false);
 	}
 }
+
 export async function fetchMe(
 	setMainLoading,
 	setUserData,
