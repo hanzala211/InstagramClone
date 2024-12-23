@@ -17,5 +17,6 @@ export function SavedComponent() {
             </button>
             :
             <button onClick={() => unSavePost(setIsSaved, userData, setUserData, setMessage, selectedPost)}><UnSave className="hover:stroke-gray-300 hover:opacity-80 transition-all duration-150 cursor-pointer stroke-[rgb(245,245,245)]" /></button>
-        }</>
+        }
+    </>
 }

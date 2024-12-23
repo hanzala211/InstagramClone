@@ -20,9 +20,9 @@ import { useHome } from "../../context/HomeContext"
 import { useSearch } from "../../context/SearchContext"
 
 export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost, setCurrentPostIndex, setIsPostOpen, isPost }) {
+    const { setSelectedPost, selectedPost, setComments, setCommentsLoading, setTotalPages, isCommented, setIsShareOpenHome } = usePost()
     const { userData, setMainLoading, setUserData, setMessage, innerWidth } = useUser()
     const { setSelectedProfile } = useSearch()
-    const { setSelectedPost, selectedPost, setComments, setCommentsLoading, setTotalPages, isCommented, setIsShareOpenHome } = usePost()
     const { page } = useHome()
     const [isAnimating, setIsAnimating] = useState(false)
     const [currentIndex, setCurrentIndex] = useState(Array(homePosts.length).fill(0))
@@ -38,16 +38,15 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
 
     useEffect(() => {
         if (homePosts !== null) {
-            const updatedLikedPosts = homePosts.map((post) => post.likes.includes(userData?.data.user._id))
+            const updatedLikedPosts = homePosts.map(post => post.likes.includes(userData?.data.user._id))
+            const updatedSavedPosts = homePosts.map(post => userData.data.user.savedPosts.includes(post._id))
+            const updatedCurrentIndex = homePosts.map(post => post?.imageUrls.length)
+
             setLikedPosts(updatedLikedPosts)
-            const updatedCurrentIndex = homePosts.map((post) => post?.imageUrls.length)
+            setSavedPosts(updatedSavedPosts)
             setTotalIndex(updatedCurrentIndex)
             setCurrentIndex(Array(homePosts.length).fill(0))
             setIsHovered(Array(homePosts.length).fill(false))
-            const updatedSavedPosts = homePosts.map((post) =>
-                userData.data.user.savedPosts.includes(post._id)
-            );
-            setSavedPosts(updatedSavedPosts);
             setIsShareOpenHome(Array(homePosts.length).fill(false))
         }
 
@@ -141,7 +140,7 @@ export function HomePost({ index, item, homePosts, setHomePosts, setCurrentPost,
         </div>
         <div className={`w-full bg-[#000000] border-[1px] border-[#2B2B2D] relative overflow-hidden ${isPost ? "" : "rounded-md"}`}>
             <div className={`w-full ${isPost ? "440:h-[30rem] max-h-[23rem]" : "h-full"} flex items-start ${isAnimating ? "transition-transform duration-300 ease-in-out" : ""} `} style={{ transform: `translateX(${-currentIndex[index] * 100}%)` }}>
-                {item !== null ? item.imageUrls.map((item, i) => {
+                {item !== null ? item?.imageUrls?.map((item, i) => {
                     return <div className="relative flex-shrink-0 w-full h-full"
                         key={i}>
                         <img onDoubleClick={() => handleDoubleClick(homePosts[index]._id, index)}

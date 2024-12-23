@@ -12,8 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { PostCropper } from "./PostCropper";
 
 export function CreatePost({ isCreating, setIsCreating }) {
-    const { userData, innerWidth } = useUser();
     const { fileInputRef, selectedImage, setSelectedImage, croppedAreas, setCroppedAreas, setCroppedImages, croppedImages, currentIndex, setCurrentIndex, loading, setLoading, isCaption, setIsCaption, captionValue, setCaptionValue, isShared, setIsShared, shareLoading, setShareLoading } = usePost()
+    const { userData, innerWidth } = useUser();
     const navigate = useNavigate()
 
     useEffect(() => {

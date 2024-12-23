@@ -343,7 +343,6 @@ export async function fetchComments(
 			}
 		);
 		const result = await response.json();
-
 		setTotalPages(result.data.totalPages);
 		setComments((prev) => {
 			const newComments = result.data.comments.filter((newComment) => {
@@ -371,6 +370,8 @@ export async function fetchComments(
 		if (error.name !== 'AbortError' && error.name !== 'TypeError') {
 			console.error('Fetch failed:', error);
 		}
+	} finally {
+		setCommentsLoading(false);
 	}
 }
 
