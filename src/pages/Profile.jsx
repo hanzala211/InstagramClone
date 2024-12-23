@@ -22,7 +22,6 @@ export function Profile() {
     const { userData, setUserPosts, note, setNote, setStories, stories, setCurrentStory, highlights, setHighlights, setHighLightStories, setCurrentHighLight, setUserSaves, isNoteEditOpen, setIsNoteEditOpen, isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen } = useUser();
     const [isNoteOpen, setIsNoteOpen] = useState(false)
     const [postsLoading, setPostsLoading] = useState(false);
-    const [isEditOpen, setIsEditOpen] = useState(false);
     const [noteLoading, setNoteLoading] = useState(false);
     const [isCreatingHighLight, setIsCreatingHighLight] = useState(false);
     const [isOpen, setIsOpen] = useState(false)
@@ -41,26 +40,20 @@ export function Profile() {
     }, [])
 
     useEffect(() => {
-        const body = document.querySelector("body");
-        body.style.overflowY = isEditOpen ? "hidden" : "auto";
-
-        return () => body.style.overflowY = "auto"
-    }, [isEditOpen])
-
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (noteEditorRef.current && !noteEditorRef.current.contains(event.target)) {
-                setIsNoteEditOpen(false);
-            }
-            if (checkref.current && dropdownRef.current && !checkref.current.contains(event.target) && !dropdownRef.current.contains(event.target)) {
-                setIsOpen(false);
-            }
-        }
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [setIsNoteEditOpen]);
+
+    function handleClickOutside(event) {
+        if (noteEditorRef.current && !noteEditorRef.current.contains(event.target)) {
+            setIsNoteEditOpen(false);
+        }
+        if (checkref.current && dropdownRef.current && !checkref.current.contains(event.target) && !dropdownRef.current.contains(event.target)) {
+            setIsOpen(false);
+        }
+    }
 
     return <section className="w-full lg:max-w-[57%] md:max-w-[87%] max-w-[100%] mx-auto">
         <div className="w-full max-w-[61rem] pb-9 lg:pt-20 pt-8 pl-1 sm:pl-5 md:pl-0 md:border-b-[2px] md:border-[#262626]">
@@ -85,8 +78,6 @@ export function Profile() {
                         className="rounded-full w-[5rem] h-full sm:w-28 lg:w-40 lg:min-w-[10rem] min-w-[5rem] sm:h-28 lg:h-40 object-cover"
                     />
                 </Link>
-
-
                 <div className="flex flex-col gap-4 sm:gap-6 mt-2 xl:mt-0 relative ">
                     <div className="flex gap-4 sm:gap-6 md:flex-row flex-col md:items-center">
                         <p className="text-[20px] relative flex items-center gap-1">{userData?.data?.user.userName}
@@ -96,10 +87,19 @@ export function Profile() {
                             </button>
                             <LogOutDiv isOpen={isOpen} dropdownRef={dropdownRef} isMobile={true} />
                         </p>
-                        <div className="flex gap-3 flex-row 440:items-center">
-                            <button className="bg-[#363636] md:px-4 py-1 w-24 440:w-32 1280:w-auto rounded-[0.5rem] text-[14px] hover:bg-[rgb(38,38,38)] transition duration-150" onClick={() => setIsEditOpen(true)}>Edit Profile</button>
-                            <Link to="/archive/stories/" className="bg-[#363636] w-32 440:w-32 1280:w-auto px-5 py-1 rounded-[0.5rem] text-[14px] flex justify-center hover:bg-[rgb(38,38,38)] transition duration-150">View Archive</Link>
+                        <div className="flex gap-3">
+                            <Link
+                                to="/accounts/edit/"
+                                className="bg-[#363636] px-3 py-1 rounded-[0.5rem] text-[14px] flex justify-center min-w-[6rem] md:min-w-[8rem] hover:bg-[rgb(38,38,38)] transition duration-150">
+                                Edit Profile
+                            </Link>
+                            <Link
+                                to="/archive/stories/"
+                                className="bg-[#363636] px-5 py-1 rounded-[0.5rem] text-[14px] flex justify-center min-w-[7rem] md:min-w-[10rem] hover:bg-[rgb(38,38,38)] transition duration-150">
+                                View Archive
+                            </Link>
                         </div>
+
                     </div>
                     <div className="md:flex hidden gap-10 items-center">
                         <UserFollowDetails />
@@ -131,7 +131,6 @@ export function Profile() {
         <div className="md:mt-[4rem] mt-6">
             {!postsLoading ? <Outlet /> : <Loader height="h-[22vh] 1280:h-[34vh]" />}
         </div>
-        <ProfileSettings userData={userData} isEditOpen={isEditOpen} setIsEditOpen={setIsEditOpen} />
         <NoteCreator isEditing={false} isNoteOpen={isNoteOpen} setIsNoteOpen={setIsNoteOpen} />
         <HighLightsModal isCreatingHighLight={isCreatingHighLight} setIsCreatingHighLight={setIsCreatingHighLight} />
         <UserFollowModal isFollowerModalOpen={isFollowerModalOpen} setIsFollowerModalOpen={setIsFollowerModalOpen} isFollowingModalOpen={false} />

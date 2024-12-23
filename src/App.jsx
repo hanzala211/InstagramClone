@@ -25,6 +25,7 @@ import { StoriesProvider } from './context/StoriesContext'
 import { HomeProvider } from './context/HomeContext'
 import { SearchProvider } from './context/SearchContext'
 import { ForgotPassword } from './pages/ForgotPassword'
+import { EditProfile } from './pages/EditProfile'
 
 function App() {
   const localitem = JSON.parse(localStorage.getItem("token"))
@@ -48,6 +49,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path='/signup' element={<SignUp />} />
                     <Route path='/' element={<Layout token={localitem} />}>
+                      <Route path="accounts/edit/" element={<EditProfile />} />
                       <Route path="create/post/" element={<MobilePostCreator />} />
                       <Route path="create/story/" element={<StoryMobileCreator />} />
                       <Route path="create/details/" element={<CaptionMobileCreator />} />

@@ -5,10 +5,8 @@ export async function changeData(
 	setSuccessMessage,
 	setIsDisabled,
 	changeBio,
-	isPublic,
 	setUserData,
-	selectedImage,
-	setIsEditOpen
+	selectedImage
 ) {
 	const raw = JSON.stringify({
 		userName: changeUserName,
@@ -16,7 +14,6 @@ export async function changeData(
 		websiteUrl: userData.data.user.websiteUrl,
 		gender: 'Male',
 		bio: changeBio,
-		isPublic: !isPublic,
 	});
 	try {
 		setErrorMessage('');
@@ -88,7 +85,6 @@ export async function changeData(
 		console.error(error);
 	} finally {
 		setIsDisabled(false);
-		setIsEditOpen(false);
 		setTimeout(() => {
 			setSuccessMessage('');
 			setErrorMessage('');

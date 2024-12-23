@@ -69,13 +69,12 @@ export function ProfileSettings({ userData, isEditOpen, setIsEditOpen }) {
         <div className={`fixed flex items-center left-1/2 -translate-x-1/2 top-[48%] md:top-1/2 -translate-y-1/2 justify-center z-[150] w-full md:max-w-[45rem] md:h-[75vh] 440:max-w-[25rem] max-w-[23rem] h-[75vh] transition-opacity duration-500 ${isEditOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         >
             <div className="bg-[#262626] w-full h-full overflow-auto scrollbar-hidden md:rounded-3xl rounded-xl px-5 md:px-10 md:py-10 py-6">
-                <h2 className="text-[25px] font-semibold">Edit Profile</h2>
                 <div className="flex flex-row items-center justify-between bg-[#424242] rounded-2xl my-5 px-2 md:px-4 py-2 w-full">
                     <div className="flex gap-4 items-center">
-                        <img src={`${selectedImage === null ? userData.data.user.profilePic : selectedImage}`} className="rounded-full md:w-20 md:h-20 w-16 h-16 min-w-[1rem] object-cover" alt="User Profile" />
+                        <img src={`${selectedImage === null ? userData?.data?.user?.profilePic : selectedImage}`} className="rounded-full md:w-20 md:h-20 w-16 h-16 min-w-[1rem] object-cover" alt="User Profile" />
                         <div className="flex flex-col">
-                            <p className="font-semibold">{userData.data.user.userName}</p>
-                            <p className="text-[#A8A8A8] text-[15px]">{userData.data.user.fullName}</p>
+                            <p className="font-semibold">{userData?.data?.user?.userName}</p>
+                            <p className="text-[#A8A8A8] text-[15px]">{userData?.data?.user?.fullName}</p>
                         </div>
                     </div>
                     <button onClick={handleClick} className="bg-[#0095F6] hover:bg-opacity-70 transition-all duration-200 px-2 py-2 text-[14px] rounded-lg">Change Photo</button>
