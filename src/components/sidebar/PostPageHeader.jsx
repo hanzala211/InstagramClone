@@ -16,7 +16,7 @@ export function PostPageHeader({ isArrowNeeded, isHomePage, isInbox, isChat, isC
     const { notifications, selectedChat, setIsChatSearch, isInfoOpen, setIsInfoOpen } = useChat();
     const navigate = useNavigate();
 
-    const handleNavigateBack = () => {
+    function handleNavigateBack() {
         navigate(isChatting ? "/direct/inbox/" : isChat ? "/home" : -1);
         setTimeout(() => {
             setSelectedPost(null);
@@ -25,23 +25,23 @@ export function PostPageHeader({ isArrowNeeded, isHomePage, isInbox, isChat, isC
         setIsInfoOpen(false);
     };
 
-    const handleCrossClick = () => {
+    function handleCrossClick() {
         navigate(-1);
         setTimeout(() => {
             setSelectedImage(null);
         }, 300);
     };
 
-    const handleUserClick = () => {
+    function handleUserClick() {
         fetchUserDataOnClick(selectedChat?.userName, userData, null, setSelectedProfile, setMainLoading);
         setMainLoading(true);
     };
 
-    const handleCropImage = () => {
+    function handleCropImage() {
         onCropImage(selectedImage, croppedAreas, setCroppedImages, setLoading, setCurrentIndex, setIsCaption);
     };
 
-    const handlePostAction = () => {
+    function handlePostAction() {
         if (isCreating) {
             createPost(setShareLoading, setIsShared, croppedImages, userData, captionValue, setCaptionValue, true, navigate);
         } else {
@@ -55,20 +55,9 @@ export function PostPageHeader({ isArrowNeeded, isHomePage, isInbox, isChat, isC
 
         return (
             <h1 className={`absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 font-semibold ${isCross ? "" : "text-[18px]"}`}>
-                {isInbox
-                    ? "Inbox"
-                    : isChat
-                        ? userData?.data?.user.userName
-                        : isCross
-                            ? "New photo post"
-                            : isCreating && !isShared
-                                ? "New Post"
-                                : !isCreating && !isShared && isCreating !== undefined
-                                    ? "Edit Post"
-                                    : isShared
-                                        ? "Sharing..."
-                                        : "Post"}
-            </h1>
+                {isInbox ? "Inbox" : isChat ? userData?.data?.user.userName : isCross
+                    ? "New photo post" : isCreating && !isShared ? "New Post" : !isCreating && !isShared && isCreating !== undefined ? "Edit Post" : isShared ? "Sharing..." : "Post"
+                }</h1>
         );
     };
 
