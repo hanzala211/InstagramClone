@@ -101,7 +101,7 @@ export function Explore() {
                 fetchExplorePosts(setCount, setExplorePagePosts, userData, setHasMore, setIsPostsLoading)
             }} loader={
                 <div className="flex justify-center items-end py-4">
-                    <Loader height={`${explorePagePosts.length > 10 ? "h-[15vh] mb-5" : "md:h-[5vh] h-[50vh]"} `} />
+                    <Loader height={`${explorePagePosts.length > 10 ? "h-[15vh] mb-5" : "md:h-[5vh] h-[65vh]"} `} />
                 </div>}
                 hasMore={count < 8 && hasMore}>
                 <div className={`grid grid-flow-row grid-cols-3 gap-1 mt-5 mb-20 md:mb-0 md:mt-0`}>
