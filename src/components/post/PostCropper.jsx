@@ -15,7 +15,7 @@ export function PostCropper({ currentIndex, setCroppedAreas, isMobile }) {
         });
     };
 
-    return <div className={`h-full ${isMobile ? "fixed-height" : " increasing_width"}`}>
+    return <div className={`h-full relative w-full ${isMobile ? "fixed-height" : ""}`}>
         <ReactCropper
             image={selectedImage[currentIndex]}
             crop={crop[currentIndex] || { x: 0, y: 0 }}
@@ -36,6 +36,7 @@ export function PostCropper({ currentIndex, setCroppedAreas, isMobile }) {
                 })
             }
             onCropComplete={onCropComplete}
+            className="cropper-image"
         />
     </div>
 }
