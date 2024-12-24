@@ -101,10 +101,10 @@ export function Explore() {
                 fetchExplorePosts(setCount, setExplorePagePosts, userData, setHasMore, setIsPostsLoading)
             }} loader={
                 <div className="flex justify-center items-end py-4">
-                    <Loader height={`${explorePagePosts.length > 10 ? "h-[15vh] mb-5" : "md:h-[5vh] h-[75vh]"} `} />
+                    <Loader height={`${explorePagePosts.length > 10 ? "h-[15vh] mb-5" : "md:h-[5vh] h-[50vh]"} `} />
                 </div>}
                 hasMore={count < 8 && hasMore}>
-                <div className={`grid grid-flow-row grid-cols-3 gap-1 mt-5 ${!hasMore ? "mb-20 md:mb-0" : ""}  md:mt-0`}>
+                <div className={`grid grid-flow-row grid-cols-3 gap-1 mt-5 mb-20 md:mb-0 md:mt-0`}>
                     {explorePagePosts.map((item, index, arr) => (
                         <PostModal key={index} arr={arr} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} item={item} i={index} />
                     ))}
@@ -112,7 +112,6 @@ export function Explore() {
             </InfiniteScroll>
         )}
     </section>
-
         <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={explorePagePosts[currentPost]?.user} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} page={page} setPage={setPage} totalPages={totalPages} setTotalPages={setTotalPages} />
 
         {selectedPost !== null && explorePagePosts.length > 1 && <>
