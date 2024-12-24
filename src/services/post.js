@@ -332,7 +332,7 @@ export async function fetchComments(
 		const response = await fetch(
 			`${import.meta.env.VITE_APP_URL}api/v1/post/comments/${
 				selectedPost._id
-			}?page=${page}&limit=10`,
+			}?page=${page}&limit=15`,
 			{
 				method: 'GET',
 				headers: {
