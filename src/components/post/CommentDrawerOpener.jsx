@@ -8,6 +8,7 @@ export function CommentDrawerOpener({ item, setCurrentPost, index, setCurrentPos
     const { innerWidth } = useUser()
     const { setSelectedPost, setComments } = usePost()
 
+
     return <>
         {innerWidth < 770 &&
             <Drawer onClose={() => {

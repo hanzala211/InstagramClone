@@ -352,6 +352,9 @@ export async function fetchComments(
 			});
 			return [...newComments, ...prev];
 		});
+		if (result.data.comments.length > 0) {
+			setCommentsLoading(false);
+		}
 		await Promise.all(
 			result.data.comments.map((comment) => {
 				return new Promise((resolve) => {
@@ -370,8 +373,6 @@ export async function fetchComments(
 		if (error.name !== 'AbortError' && error.name !== 'TypeError') {
 			console.error('Fetch failed:', error);
 		}
-	} finally {
-		setCommentsLoading(false);
 	}
 }
 
