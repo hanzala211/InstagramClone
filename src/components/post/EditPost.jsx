@@ -58,14 +58,14 @@ export function EditPost({ handleDecrease, handleIncrease, userData, croppedImag
 
                 <textarea
                     className="bg-transparent border-b-[1px] md:h-[10rem] h-[7rem] text-white outline-none resize-none w-full mt-4 md:text-[16px] text-[12px]"
-                    maxLength={150}
+                    maxLength={200}
                     value={captionValue}
                     placeholder="Write a Caption"
                     onChange={handleCaptionChange}
                 ></textarea>
                 <div className="flex justify-end">
                     <p className="text-[#737373] text-[13px] font-semibold">
-                        {captionValue?.length}/150
+                        {captionValue?.length}/200
                     </p>
                 </div>
             </div>
