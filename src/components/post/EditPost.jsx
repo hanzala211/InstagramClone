@@ -35,11 +35,11 @@ export function EditPost({ handleDecrease, handleIncrease, userData, croppedImag
 
     return (
         <div className="w-full flex flex-row h-full">
-            <div className="sm:w-[65%] w-[60%] h-full overflow-hidden relative">
+            <div className="sm:w-[65%] flex items-center w-[60%] h-full overflow-hidden relative">
                 <img
                     src={croppedImage[currentIndex]}
                     alt="Selected Images"
-                    className="object-cover w-full h-full"
+                    className="object-contain w-full h-[97%]"
                 />
                 {renderArrowButtons()}
             </div>

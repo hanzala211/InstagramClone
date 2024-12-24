@@ -55,9 +55,9 @@ export function Profile() {
         }
     }
 
-    return <section className="w-full lg:max-w-[57%] md:max-w-[87%] max-w-[100%] mx-auto">
+    return <section className="w-full lg:max-w-[58%] md:max-w-[87%] max-w-[100%] mx-auto">
         <div className="w-full max-w-[61rem] pb-9 lg:pt-20 pt-8 pl-1 sm:pl-5 md:pl-0 md:border-b-[2px] md:border-[#262626]">
-            <div className="flex w-full xl:gap-20 lg:gap-5 gap-2 sm:items-center relative">
+            <div className="flex w-full xl:gap-20 lg:gap-5 gap-2 relative">
                 <div className="cursor-pointer" onClick={() => {
                     if (note.length === 0) {
                         setIsNoteOpen(true);

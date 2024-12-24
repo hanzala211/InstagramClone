@@ -17,7 +17,7 @@ export const ProfileNavLink = ({ icon: Icon, label, to, isMyProfile }) => {
                 end
                 to={to}
                 className={({ isActive }) =>
-                    `flex items-center tracking-wider py-3 ${isMyProfile ? "px-5" : "px-10"} gap-1.5 text-[14px] ${isActive ? "font-semibold border-t-[2px]" : "text-[#A8A8A8]"}`
+                    `flex items-center tracking-wider py-3 ${isMyProfile ? "xl:px-5 md:px-3 px-5" : "px-10"} gap-1.5 text-[14px] ${isActive ? "font-semibold border-t-[2px]" : "text-[#A8A8A8]"}`
                 }
             >
                 <Icon />

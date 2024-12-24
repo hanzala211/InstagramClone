@@ -343,6 +343,9 @@ export async function fetchComments(
 			}
 		);
 		const result = await response.json();
+		if (result.data.comments.length === 0) {
+			setCommentsLoading(false);
+		}
 		setTotalPages(result.data.totalPages);
 		setComments((prev) => {
 			const newComments = result.data.comments.filter((newComment) => {
@@ -352,9 +355,7 @@ export async function fetchComments(
 			});
 			return [...newComments, ...prev];
 		});
-		if (result.data.comments.length > 0) {
-			setCommentsLoading(false);
-		}
+
 		await Promise.all(
 			result.data.comments.map((comment) => {
 				return new Promise((resolve) => {
