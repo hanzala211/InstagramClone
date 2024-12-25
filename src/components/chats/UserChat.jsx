@@ -93,7 +93,7 @@ export function UserChat() {
                     <Link to={`/search/${selectedChat?.userName}/`} onClick={() => {
                         fetchUserDataOnClick(selectedChat?.userName, userData, null, setSelectedProfile, setMainLoading)
                         setMainLoading(true)
-                    }} className="flex w-[12rem] items-center gap-3">
+                    }} className="flex w-[30%] items-center gap-3">
                         <img src={selectedChat?.profilePic} className="w-12 rounded-full" alt="Profile Image" />
                         <h2 className="font-semibold text-[15px]">{selectedChat?.fullName}</h2>
                     </Link>
