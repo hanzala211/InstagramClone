@@ -16,8 +16,8 @@ import { useSearch } from "../../context/SearchContext";
 export function UserChat() {
     const { selectedChat, messages, setMessages, messagesLoading, isInfoOpen, setIsInfoOpen } = useChat()
     const { userData, setMainLoading, innerWidth } = useUser()
-    const { setSelectedProfile } = useSearch()
     const { comments, setComments, page, setPage, totalPages, setTotalPages, setSelectedPost, selectedPost } = usePost()
+    const { setSelectedProfile } = useSearch()
     const [currentPostIndex, setCurrentPostIndex] = useState(0)
     const [isPostOpen, setIsPostOpen] = useState(false)
     const [currentPost, setCurrentPost] = useState(null)
@@ -78,6 +78,7 @@ export function UserChat() {
             handleSendMessage(setMessages, messageValue, userData, setMessageValue, selectedChat)
         }
     }
+
     const handleFocus = () => {
         setIsKeyboardOpen(true);
     };
@@ -93,7 +94,7 @@ export function UserChat() {
                     <Link to={`/search/${selectedChat?.userName}/`} onClick={() => {
                         fetchUserDataOnClick(selectedChat?.userName, userData, null, setSelectedProfile, setMainLoading)
                         setMainLoading(true)
-                    }} className="flex w-[30%] items-center gap-3">
+                    }} className="flex items-center gap-3">
                         <img src={selectedChat?.profilePic} className="w-12 rounded-full" alt="Profile Image" />
                         <h2 className="font-semibold text-[15px]">{selectedChat?.fullName}</h2>
                     </Link>

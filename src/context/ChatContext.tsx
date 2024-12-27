@@ -1,24 +1,29 @@
-import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
-import { createContext, useContext, useEffect, useState } from "react";
-import { useUser } from "./UserContext";
-import { db } from "../firebaseConfig";
-import { useLocation } from "react-router-dom";
-import { fetchSelectedChat, fetchUserById } from "../services/chat";
+import { createContext, useContext, useEffect, useState } from "react"
+import { useUser } from "./UserContext"
+import { useLocation } from "react-router-dom"
+import { fetchSelectedChat, fetchUserById } from "../services/chat"
+import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore"
+import { db } from "../firebaseConfig"
+import { ChatContextType } from "../types/contextTypes"
+import { ContextChild } from "../types/contextTypes"
+import { UserData } from "../types/user"
+import { Messages } from "../types/chatType"
 
-const ChatContext = createContext()
 
-export function ChatProvider({ children }) {
+const ChatContext = createContext<ChatContextType | undefined>(undefined)
+
+export const  ChatProvider: React.FC<ContextChild>  = ({ children }) => {
     const { userData } = useUser()
-    const [isChatSearch, setIsChatSearch] = useState(false)
-    const [selectedChat, setSelectedChat] = useState(null)
-    const [searchData, setSearchData] = useState([])
-    const [searchChatValue, setSearchChatValue] = useState("")
-    const [messages, setMessages] = useState([])
-    const [threads, setThreads] = useState([])
-    const [notifications, setNotifications] = useState([])
-    const [messagesLoading, setMessagesLoading] = useState(false)
-    const [threadsLoading, setThreadsLoading] = useState(false)
-    const [isInfoOpen, setIsInfoOpen] = useState(false)
+    const [isChatSearch, setIsChatSearch] = useState<boolean>(false)
+    const [selectedChat, setSelectedChat] = useState<UserData | null>(null)
+    const [searchData, setSearchData] = useState<UserData[]>([])
+    const [searchChatValue, setSearchChatValue] = useState<string>("")
+    const [messages, setMessages] = useState<Messages[]>([])
+    const [threads, setThreads] = useState<[]>([])
+    const [notifications, setNotifications] = useState<[]>([])
+    const [messagesLoading, setMessagesLoading] = useState<boolean>(false)
+    const [threadsLoading, setThreadsLoading] = useState<boolean>(false)
+    const [isInfoOpen, setIsInfoOpen] = useState<boolean>(false)
     const location = useLocation()
 
     useEffect(() => {

@@ -1,6 +1,8 @@
 export async function fetchPosts(postID, setPostsLoading, userData) {
 	try {
-		setPostsLoading(true);
+		if (setPostsLoading !== null) {
+			setPostsLoading(true);
+		}
 		const response = await fetch(
 			`${import.meta.env.VITE_APP_URL}api/v1/post/${postID}`,
 			{
@@ -123,25 +125,6 @@ export async function fetchUserDataOnHover(
 	setPosts,
 	setIsLoading
 ) {
-	async function fetchPostData(id, userData) {
-		try {
-			const response = await fetch(
-				`${import.meta.env.VITE_APP_URL}api/v1/post/${id}`,
-				{
-					method: 'GET',
-					headers: {
-						Authorization: `${userData?.data.token}`,
-					},
-					redirect: 'follow',
-				}
-			);
-			const result = await response.json();
-			return result;
-		} catch (error) {
-			console.error(error);
-		}
-	}
-
 	try {
 		const response = await fetch(
 			`${import.meta.env.VITE_APP_URL}api/v1/user/search/${username}`,
@@ -160,7 +143,7 @@ export async function fetchUserDataOnHover(
 			await Promise.all(
 				result.data[0]?.posts
 					.slice(0, 3)
-					.map((item) => fetchPostData(item, userData))
+					.map((item) => fetchPosts(item, null, userData))
 			)
 				.then((res) =>
 					setPosts((prev) => [...prev, ...res.map((item) => item.post)])

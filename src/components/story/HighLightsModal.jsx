@@ -74,6 +74,7 @@ export function HighLightsModal({ setIsCreatingHighLight, isCreatingHighLight })
         </div>
 
         <ArchivesModal selectStatus={selectStatus} setSelectCover={setSelectCover} selectedIDs={selectedIDs} selectCover={selectCover} setSelectStatus={setSelectStatus} isCreatingHighLight={isCreatingHighLight} handleClose={handleClose} setSelectedIDs={setSelectedIDs} left="left-1/2" />
+
         <SelectedHighLights selectCover={selectCover} setSelectCover={setSelectCover} setSelectedIDs={setSelectedIDs} isCreatingHighLight={isCreatingHighLight} handleClose={handleClose} selectedIDs={selectedIDs} formatDate={formatDate} formatMonth={formatMonth} currentID={currentID} setSendLoading={setSendLoading} highlightName={highlightName} sendLoading={sendLoading} setCurrentID={setCurrentID} />
     </>
 }

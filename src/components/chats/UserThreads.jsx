@@ -18,12 +18,9 @@ export function UserThreads({ isNewChat, item, isChat, handleClose }) {
 
     useEffect(() => {
         if (notifications.length > 0) {
-            setIsReceived(notifications.some((notifi) => {
-                return notifi.messageSender === item?._id && notifi.read === false;
-            }))
-            setFoundNotification(notifications.find((notif) => {
-                return notif.messageSender === item?._id && notif.userId === userData.data.user._id
-            }))
+            setIsReceived(notifications.some((notifi) => notifi.messageSender === item?._id && notifi.read === false))
+
+            setFoundNotification(notifications.find((notif) => notif.messageSender === item?._id && notif.userId === userData.data.user._id))
         }
     }, [notifications.length])
 

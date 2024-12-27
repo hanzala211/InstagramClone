@@ -1,5 +1,5 @@
 import { MdVerified } from "react-icons/md";
-import { Link, NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
+import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
 import { Loader } from "../components/helpers/Loader";

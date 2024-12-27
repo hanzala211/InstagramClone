@@ -69,7 +69,7 @@ export function Story({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSe
                         <div className="flex flex-col gap-0.5">
                             <Link
                                 to={isArchive || isOwnProfile || isHighLight ? `/${userData.data.user.userName}/` : isSearchUser || isSearchHighLight ? `/search/${selectedProfile?.userName}/` : ""}
-                                className="font-semibold text-[12px] md:text-[14px] flex items-center gap-1">
+                                className="font-semibold text-[12px] md:text-[14px] flex items-center gap-1 ">
                                 {isArchive || isOwnProfile || isHighLight ? userData.data.user.userName : isSearchUser || isSearchHighLight ? selectedProfile.userName : ""}
                                 {isOwnProfile || isArchive || isHighLight ? userData.data.user.followingCount > 10 && <MdVerified className="fill-white" /> : isSearchUser || isSearchHighLight ? selectedProfile?.followingCount > 10 && <MdVerified className="fill-white" /> : ""}
                             </Link>

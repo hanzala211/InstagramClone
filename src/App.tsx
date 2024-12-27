@@ -28,7 +28,7 @@ import { ForgotPassword } from './pages/ForgotPassword'
 import { EditProfile } from './pages/EditProfile'
 
 function App() {
-  const localitem = JSON.parse(localStorage.getItem("token"))
+  const localitem: string | null = JSON.parse(localStorage.getItem("token") || "null");
 
   return (
     <BrowserRouter>
