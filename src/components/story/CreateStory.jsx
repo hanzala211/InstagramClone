@@ -7,7 +7,7 @@ import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
 export function CreateStory({ creatingStory, setIsCreatingStory }) {
-    const { fileInputRef, selectedImage, setSelectedImage, result, setResult, isUploading, setIsUploading, uploaded, setUploaded } = useStories()
+    const { fileInputRef, selectedImage, setSelectedImage, isUploading, setIsUploading, uploaded, setUploaded } = useStories()
     const { innerWidth } = useUser()
     const navigate = useNavigate()
 
@@ -17,7 +17,6 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
             setIsUploading(false)
             setUploaded(false)
             setSelectedImage(null)
-            setResult(null);
         }, 500)
     }
 
@@ -37,8 +36,6 @@ export function CreateStory({ creatingStory, setIsCreatingStory }) {
                     <Pintura
                         selectedImage={selectedImage}
                         setSelectedImage={setSelectedImage}
-                        setResult={setResult}
-                        result={result}
                         setIsUploading={setIsUploading}
                         setUploaded={setUploaded}
                     />

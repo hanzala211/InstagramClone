@@ -1,6 +1,6 @@
 import { MobilePostIcon, MobileSaveIcon, MobileTagIcon } from "../../assets/Constants";
-import { useUser } from "../../context/UserContext";
 import { ProfileNavLink } from "./ProfileNavLink";
+import { useUser } from "../../context/UserContext";
 
 export function MobileProfileBar() {
     const { userData } = useUser()

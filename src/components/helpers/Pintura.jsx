@@ -13,7 +13,7 @@ const editorDefaults = getEditorDefaults({
     enableWatermark: false,
 });
 
-export default function Pintura({ selectedImage, setResult, setIsUploading, setUploaded }) {
+export default function Pintura({ selectedImage, setIsUploading, setUploaded }) {
     const { userData, innerWidth } = useUser()
     const { setSelectedImage, isUploading } = useStories()
     const navigate = useNavigate()
@@ -26,7 +26,7 @@ export default function Pintura({ selectedImage, setResult, setIsUploading, setU
                 imageCropAspectRatio={1}
                 theme="dark"
                 onProcess={({ dest }) => {
-                    uploadStory(URL.createObjectURL(dest), userData, setUploaded, innerWidth, navigate, setSelectedImage, setIsUploading, setResult);
+                    uploadStory(URL.createObjectURL(dest), userData, setUploaded, innerWidth, navigate, setSelectedImage, setIsUploading);
                 }}
                 style={{
                     backgroundColor: "transparent",

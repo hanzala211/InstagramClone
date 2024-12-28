@@ -6,21 +6,21 @@ import { collection, onSnapshot, orderBy, query, where } from "firebase/firestor
 import { db } from "../firebaseConfig"
 import { ChatContextType } from "../types/contextTypes"
 import { ContextChild } from "../types/contextTypes"
-import { UserData } from "../types/user"
-import { Messages } from "../types/chatType"
+import {  UserData, UserInfo } from "../types/user"
+import { Messages, Notification, Thread } from "../types/chatType"
 
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined)
 
-export const  ChatProvider: React.FC<ContextChild>  = ({ children }) => {
-    const { userData } = useUser()
+export const ChatProvider: React.FC<ContextChild> = ({ children }) => {
+    const { userData }= useUser();
     const [isChatSearch, setIsChatSearch] = useState<boolean>(false)
     const [selectedChat, setSelectedChat] = useState<UserData | null>(null)
-    const [searchData, setSearchData] = useState<UserData[]>([])
+    const [searchData, setSearchData] = useState<UserInfo[]>([])
     const [searchChatValue, setSearchChatValue] = useState<string>("")
     const [messages, setMessages] = useState<Messages[]>([])
-    const [threads, setThreads] = useState<[]>([])
-    const [notifications, setNotifications] = useState<[]>([])
+    const [threads, setThreads] = useState<Thread[] | []>([])
+    const [notifications, setNotifications] = useState<Notification[]>([])
     const [messagesLoading, setMessagesLoading] = useState<boolean>(false)
     const [threadsLoading, setThreadsLoading] = useState<boolean>(false)
     const [isInfoOpen, setIsInfoOpen] = useState<boolean>(false)
@@ -44,7 +44,7 @@ export const  ChatProvider: React.FC<ContextChild>  = ({ children }) => {
                         id: item.id
                     }))
                     .filter((item) => {
-                        const deleted = item.deleted || {};
+                        const deleted = item?.deleted || {};
                         return !(deleted[userData.data.user._id]);
                     }))
                 setMessagesLoading(false)
@@ -66,7 +66,7 @@ export const  ChatProvider: React.FC<ContextChild>  = ({ children }) => {
                     const deleted = thread.deleted || {};
                     return deleted[userData.data.user._id] !== true;
                 })
-            const foundIds = foundArr.map((item) => item.participants.find((id) => userData.data.user._id !== id))
+            const foundIds = foundArr.map((item) => item.participants.find((id: string) => userData.data.user._id !== id))
             if (foundIds.length > 0) {
                 Promise.all(foundIds.map((item, index) => fetchUserById(item, index, userData, foundArr))).then((res) => {
                     setThreads(res)
@@ -93,10 +93,13 @@ export const  ChatProvider: React.FC<ContextChild>  = ({ children }) => {
         return () => unsubscribe()
     }, [userData?.data?.user?._id])
 
-    return <ChatContext.Provider value={{ isChatSearch, setIsChatSearch, selectedChat, setSelectedChat, searchChatValue, setSearchChatValue, searchData, setSearchData, messages, setMessages, threads, setThreads, notifications, setNotifications, messagesLoading, setMessagesLoading, threadsLoading, setThreadsLoading, isInfoOpen, setIsInfoOpen }}>{children}</ChatContext.Provider>
+    return <ChatContext.Provider value={{ isChatSearch, setIsChatSearch, selectedChat, setSelectedChat, searchChatValue, setSearchChatValue, searchData, setSearchData, messages, setMessages, threads, setThreads, notifications, setNotifications, messagesLoading, setMessagesLoading, threadsLoading, setThreadsLoading, isInfoOpen, setIsInfoOpen, location, userData }}>{children}</ChatContext.Provider>
 }
 
-export function useChat() {
+export const useChat = (): ChatContextType =>  {
     let context = useContext(ChatContext)
+    if(!context){
+        throw new Error("use useUser in User Provider");
+    }
     return context;
 }

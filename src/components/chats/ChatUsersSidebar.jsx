@@ -36,7 +36,7 @@ export function ChatUsersSidebar() {
                     if (note.length === 0) {
                         setIsNoteOpen(true)
                     }
-                }} className={`${note.length === 0 ? "cursor-pointer" : ""}`}>
+                }} className={`${note?.length === 0 ? "cursor-pointer" : ""}`}>
                     <NoteDiv notes={note} isChat={true} />
                 </span>
                 <img src={userData.data.user.profilePic} className="w-16 rounded-full" alt="ProfilePic" />

@@ -3,7 +3,7 @@ import { useUser } from "../../context/UserContext";
 import NoteTooltip from "./Note";
 import { Loader } from "../helpers/Loader";
 import { useState } from "react";
-import { createNote, updateNote } from "../../services/note";
+import { updateNote, createNote } from "../../services/note";
 
 export function NoteCreator({ isEditing, isNoteOpen, setIsNoteOpen }) {
     const { userData, setMessage, setNote, setIsNoteEditOpen } = useUser();

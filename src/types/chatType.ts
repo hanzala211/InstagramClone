@@ -1,24 +1,29 @@
-export interface Messages{
-    id: string;
+import { Post } from "./postType";
+
+export interface Messages {
+    id?: string;
     content?: string;
     senderId?: number;
     timeStamp?: unknown;
     post?: Post;
+    status?: string;
+    sender?: string;
+  }
+
+export interface Thread{
+    lastMessage: string;
+    lastMessageSender: string;
+    participants?: string[];
+    timeStamp?: unknown;
+    deleted?: {
+        userId: boolean;
+    }
 }
 
-export interface Post{
-    _id: string;
-    caption: string | null;
-    commentsCount: number;
-    createdAt: string;
-    imageUrls: string[];
-    likeCount: number;
-    likes: string[];
-    user: PostUserData;
-}
-
-export interface PostUserData{
-    _id: string;
-    profilePic: string;
-    userName: string;
+export interface Notification {
+    messageSender?: string;
+    read?: boolean;
+    timeStamp?: unknown;
+    userId?: string;
+    id?: string;
 }

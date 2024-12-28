@@ -1,6 +1,10 @@
+import { Highlights } from "./highlightsType";
+import { Note } from "./note";
+import { StoriesStructure } from "./stories";
+
 export interface User{
     status: string;
-    data: UserData;
+    data: UserData | any;
 }
 
 export interface UserData{
@@ -15,7 +19,7 @@ export interface UserInfo{
     profilePic: string;
     bio: string;
     followers: string[];
-    notes: string[];
+    notes: string[] | Note[];
     following: string[];
     savedPosts: string[];
     posts: string[];
@@ -30,12 +34,20 @@ export interface UserInfo{
     forgotPasswordCode?: unknown;
     passwordResetCodeExpiry?: unknown;
     postCount: number;
-    followersCount: number;
-    followingCount: number;
-    stories: string[];
-    highlights: string[];
+    followersCount: number | undefined;
+    followingCount: number | undefined;
+    stories: string[] | StoriesStructure[];
+    highlights: string[] | Highlights[];
     highlightsCount: number;
     createdAt: string;
     updatedAt: string;
     __v: number;
+}
+
+export interface UserFollowDetailsType{
+    fullName: string;
+    userName: string;
+    gender: "Male";
+    id: string;
+    profilePic: string;
 }

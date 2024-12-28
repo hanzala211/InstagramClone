@@ -46,7 +46,7 @@ export function Post({ isPostOpen, setIsPostOpen, postData, currentIndex, setCur
     function handleClose() {
         setIsPostOpen(false);
         setTimeout(() => {
-            setCurrentPost(null);
+            setCurrentPost(0);
             setCurrentIndex(0);
             setSelectedPost(null);
             setCommentValue("");

@@ -1,7 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { ActiveChatIcon, ActiveExplore, ActiveHome, ChatIcon, CreateIcon, ExploreIcon, HomeIcon, InstagramSvg, MoreIcon, SearchIcon } from "../../assets/Constants";
-import { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { useSideBar, useUser } from "../../context/UserContext";
+import { useEffect, useRef, useState } from "react";
+import { useUser } from "../../context/UserContext";
 import { SearchBox } from "./SearchBox";
 import { CreatePost } from "../post/CreatePosts";
 import { FaHistory } from "react-icons/fa";
@@ -9,6 +9,7 @@ import { CreateStory } from "../story/CreateStory";
 import { SideBarItems } from "./SideBarItems";
 import { LogOutDiv } from "../profile/LogOutDiv";
 import { useSearch } from "../../context/SearchContext";
+import { useSideBar } from "../../context/SideBarContext";
 
 export function SideBar() {
     const { isSearching, setIsSearching, isCreating, setIsCreating, createStory, setCreateStory } = useSideBar();

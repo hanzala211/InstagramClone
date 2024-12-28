@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useUser } from "../../context/UserContext"
+import { useUser } from "../../context/UserContext";
 import NoteTooltip from "./Note";
 import { Loader } from "../helpers/Loader";
 import { NoteCreator } from "./NoteCreator";
