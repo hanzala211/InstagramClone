@@ -6,7 +6,7 @@ import { CommentDrawer } from "../comments/CommentDrawer"
 import { Post } from "../../types/postType"
 import React from "react"
 
-interface CommentDrawerOpenerProps{
+interface CommentDrawerOpenerProps {
     item: Post | null;
     setCurrentPost: (value: number) => void;
     index: number;
@@ -20,10 +20,7 @@ export const CommentDrawerOpener: React.FC<CommentDrawerOpenerProps> = ({ item, 
 
     return <>
         {innerWidth < 770 &&
-            <Drawer onClose={() => {
-                setComments([])
-                setSelectedPost(null)
-            }}>
+            <Drawer>
                 <DrawerContent className="bg-[#000] border-t-[1px] border-[#a8a8a8]">
                     <CommentDrawer />
                 </DrawerContent>
