@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
 import { Loader } from "../components/helpers/Loader";
 import { MobilePostIcon, PostsIcon } from "../assets/Constants";
-import { HighLights } from "../components/story/Highlights";
+import { HighLights } from "../components/story/Highlights"
 import { LoadingPage } from "./LoadingPage";
 import { UserFollowDetails } from "../components/usermodals/UserFollowDetails";
 import { NoteDiv } from "../components/note/NoteDiv";

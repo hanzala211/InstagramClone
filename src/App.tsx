@@ -5,7 +5,7 @@ import { Layout } from './Layout'
 import { Home } from './pages/Home'
 import { UserProvider } from './context/UserContext'
 import { Profile } from './pages/Profile'
-import { ProfileTabs } from './components/profile/ProfileTabs'
+import { ProfileTabs } from "./components/profile/ProfileTabs"
 import { SignUp } from './pages/SignUp'
 import { Story } from './pages/Story'
 import { Archive } from './pages/Archive'

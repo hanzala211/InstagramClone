@@ -2,7 +2,7 @@ import { useSearch } from "../../context/SearchContext";
 import { useUser } from "../../context/UserContext";
 import { formatNumber } from "../../utils/helper";
 
-export function UserFollowDetails({ isSearchProfile }) {
+export const UserFollowDetails = ({ isSearchProfile }: { isSearchProfile: boolean }) => {
     const { setIsFollowerModalOpen, setIsFollowingModalOpen, userData } = useUser();
     const { selectedProfile } = useSearch()
 

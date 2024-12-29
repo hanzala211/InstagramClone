@@ -1,8 +1,15 @@
 import { Link } from "react-router-dom"
 import { useUser } from "../../context/UserContext"
 import { fetchUserDataOnClick } from "../../services/searchProfile"
+import { UserInfo } from "../../types/user"
 
-export function UserModal({ setSelectedProfile, item, isSearchModal }) {
+interface UserModalProps {
+    setSelectedProfile: (value: UserInfo) => void;
+    item: UserInfo;
+    isSearchModal: boolean
+}
+
+export const UserModal: React.FC<UserModalProps> = ({ setSelectedProfile, item, isSearchModal }) => {
     const { userData, setMainLoading } = useUser()
     return <Link to={`/search/${item.userName}/`} onClick={() => {
         if (isSearchModal) {

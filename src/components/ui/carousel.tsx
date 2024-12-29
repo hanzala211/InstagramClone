@@ -26,7 +26,7 @@ const Carousel = React.forwardRef((
     className,
     children,
     ...props
-  },
+  }: {orientation?: string; opts?: any; setApi?: any; plugins?: any; className?: string; children?: any},
   ref
 ) => {
   const [carouselRef, api] = useEmblaCarousel({
@@ -53,7 +53,7 @@ const Carousel = React.forwardRef((
     api?.scrollNext()
   }, [api])
 
-  const handleKeyDown = React.useCallback((event) => {
+  const handleKeyDown = React.useCallback((event: any) => {
     if (event.key === "ArrowLeft") {
       event.preventDefault()
       scrollPrev()

@@ -9,12 +9,12 @@ import { ProfileStories } from "../../types/stories";
 interface ArchivesModalProps{
     selectStatus: boolean;
     setSelectCover: (value: boolean) => void;
-    selectedIDs: any;
+    selectedIDs: ProfileStories[];
     selectCover: boolean;
     setSelectStatus: (value: boolean) => void;
     isCreatingHighLight: boolean;
     handleClose: () => void;
-    setSelectedIDs: (value: any) => void;
+    setSelectedIDs: (value: ProfileStories[]) => void;
     left: string
 }
 

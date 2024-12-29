@@ -4,8 +4,26 @@ import { Loader } from "../helpers/Loader"
 import { createHighLight, editHighLight } from "../../services/story"
 import { useUser } from "../../context/UserContext"
 import { useNavigate } from "react-router-dom"
+import { formatDate } from "../../utils/helper"
+import { ProfileStories } from "../../types/stories"
 
-export function SelectedHighLights({ selectCover, setSelectCover, setSelectedIDs, isCreatingHighLight, handleClose, selectedIDs, formatDate, formatMonth, currentID, sendLoading, setCurrentID, setSendLoading, highlightName, editingHighlight }) {
+interface SelectedHighLightsProps{
+    selectCover?: boolean;
+    setSelectCover?: (value: boolean) => void;
+    setSelectedIDs?: (value: ProfileStories[]) => void;
+    isCreatingHighLight: boolean;
+    handleClose?: () => void;
+    selectedIDs?: ProfileStories[];
+    formatMonth: (value: string) => void;
+    currentID: number;
+    sendLoading: boolean;
+    setCurrentID: (value: number) => void;
+    setSendLoading: (value: boolean) => void;
+    highlightName: string;
+    editingHighlight: boolean
+}
+
+export const SelectedHighLights: React.FC<SelectedHighLightsProps> = ({ selectCover, setSelectCover, setSelectedIDs, isCreatingHighLight, handleClose, selectedIDs, formatMonth, currentID, sendLoading, setCurrentID, setSendLoading, highlightName, editingHighlight }) => {
     const { currentHighLight, highlights, highLightStories, userData, setMessage } = useUser()
     const navigate = useNavigate();
 

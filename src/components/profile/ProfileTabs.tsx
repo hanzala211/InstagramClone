@@ -9,14 +9,21 @@ import { usePost } from "../../context/PostContext";
 import { useSearch } from "../../context/SearchContext";
 import { useHome } from "../../context/HomeContext";
 
-export function ProfileTabs({ isPosts, isTagged, isSaved, isSearchPosts }) {
+interface ProfileTabsProps{
+    isPosts: boolean;
+    isTagged: boolean;
+    isSaved: boolean;
+    isSearchPosts: boolean;
+}
+
+export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isSaved, isSearchPosts }) => {
     const { selectedPost, setSelectedPost, setComments } = usePost()
     const { page, setPage, totalPages, setTotalPages } = useHome()
     const { searchUserPosts, selectedProfile } = useSearch()
     const { userPosts, userData, userSaves } = useUser();
-    const [isPostOpen, setIsPostOpen] = useState(false);
-    const [currentPost, setCurrentPost] = useState(null);
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isPostOpen, setIsPostOpen] = useState<boolean>(false);
+    const [currentPost, setCurrentPost] = useState<number | null>(null);
+    const [currentIndex, setCurrentIndex] = useState<number>(0);
     const reversedPosts = userPosts?.slice().reverse() || [];
     const reversedUserPosts = searchUserPosts?.slice().reverse() || [];
     const reversedSavedPosts = userSaves?.slice().reverse() || [];
@@ -36,7 +43,7 @@ export function ProfileTabs({ isPosts, isTagged, isSaved, isSearchPosts }) {
         setCurrentIndex(0)
         setComments([])
         setPage(1);
-        setTotalPages(null)
+        setTotalPages(0)
     }
 
     function handleDecrease() {
@@ -44,7 +51,7 @@ export function ProfileTabs({ isPosts, isTagged, isSaved, isSearchPosts }) {
         setCurrentIndex(0)
         setComments([])
         setPage(1);
-        setTotalPages(null)
+        setTotalPages(0)
     }
 
     return <>

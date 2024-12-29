@@ -2,17 +2,23 @@ import { useEffect, useState } from "react"
 import { IoCloseSharp } from "react-icons/io5"
 import { SelectedHighLights } from "./SelectedHighLights";
 import { ArchivesModal } from "../archives/ArchivesModal";
+import { ProfileStories } from "../../types/stories";
 
-export function HighLightsModal({ setIsCreatingHighLight, isCreatingHighLight }) {
-    const [highlightName, setHighlightName] = useState("");
-    const [selectStatus, setSelectStatus] = useState(false);
-    const [selectedIDs, setSelectedIDs] = useState([]);
-    const [currentID, setCurrentID] = useState(0)
-    const [selectCover, setSelectCover] = useState(false);
-    const [sendLoading, setSendLoading] = useState(false)
+interface HighLightsModalProps {
+    isCreatingHighLight: boolean;
+    setIsCreatingHighLight: (value: boolean) => void;
+}
+
+export const HighLightsModal: React.FC<HighLightsModalProps> = ({ setIsCreatingHighLight, isCreatingHighLight }) => {
+    const [highlightName, setHighlightName] = useState<string>("");
+    const [selectStatus, setSelectStatus] = useState<boolean>(false);
+    const [selectedIDs, setSelectedIDs] = useState<ProfileStories[]>([]);
+    const [currentID, setCurrentID] = useState<number>(0)
+    const [selectCover, setSelectCover] = useState<boolean>(false);
+    const [sendLoading, setSendLoading] = useState<boolean>(false)
 
     useEffect(() => {
-        const body = document.querySelector("body");
+        const body: any = document.querySelector("body");
         body.style.overflow = selectStatus ? "hidden" : "auto";
         return () => {
             body.style.overflow = "auto"
@@ -27,13 +33,13 @@ export function HighLightsModal({ setIsCreatingHighLight, isCreatingHighLight })
         setHighlightName("")
     }
 
-    function formatDate(num) {
+    function formatDate(num: number) {
         const date = new Date(num);
         const day = date.getDate();
         return `${day}`
     }
 
-    function formatMonth(num) {
+    function formatMonth(num: number) {
         const date = new Date(num);
         const month = date.toLocaleString('default', { month: "short" });
         return `${month} `

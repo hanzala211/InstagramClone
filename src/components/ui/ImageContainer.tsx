@@ -1,4 +1,4 @@
-export function ImageContainer({ images }) {
+export const ImageContainer = ({ images }: {images: string[]}) => {
     return (
         <div className="relative w-40 mx-auto">
             {images[2] !== undefined && <img

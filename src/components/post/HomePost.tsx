@@ -6,7 +6,6 @@ import { Like, SaveSVG, ShareIcon, UnLike, UnSave } from "../../assets/Constants
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 import { formatDate } from "../../utils/helper"
 import { useEffect, useRef, useState } from "react"
-import { UserHoverModal } from "../usermodals/UserHoverModal"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card"
 import { LikeAnimation } from "./LikeAnimation"
 import { PostComment } from "../comments/PostComment"
@@ -19,6 +18,7 @@ import { useHome } from "../../context/HomeContext"
 import { useSearch } from "../../context/SearchContext"
 import { CommentDrawerOpener } from "./CommentDrawerOpener"
 import { Post } from "../../types/postType"
+import { UserHoverModal } from "../usermodals/UserHoverModal"
 
 interface HomePostProps{
     index: number;

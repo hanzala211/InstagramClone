@@ -5,21 +5,28 @@ import { IoCloseSharp } from "react-icons/io5"
 import { SelectedHighLights } from "./SelectedHighLights"
 import { ArchivesModal } from "../archives/ArchivesModal"
 import { deleteHighlight } from "../../services/story"
+import { ProfileStories } from "../../types/stories"
 
-export function HighlightsEditor({ highLightsModal, setHighLightsModal }) {
+interface HighlightsEditorProps{
+    highLightsModal: boolean;
+    setHighLightsModal: (value: boolean) => void
+}
+
+export const HighlightsEditor: React.FC<HighlightsEditorProps> = ({ highLightsModal, setHighLightsModal }) => {
     const { currentHighLight, setCurrentHighLight, highlights, userData } = useUser()
-    const [isEditing, setIsEditing] = useState(false)
-    const [selectStatus, setSelectStatus] = useState(false)
-    const [highlightName, setHighlightName] = useState("")
-    const [selectedIDs, setSelectedIDs] = useState([])
-    const [selectCover, setSelectCover] = useState(false);
-    const [currentID, setCurrentID] = useState(0)
-    const [sendLoading, setSendLoading] = useState(false)
+    const [isEditing, setIsEditing] = useState<boolean>(false)
+    const [selectStatus, setSelectStatus] = useState<boolean>(false)
+    const [highlightName, setHighlightName] = useState<string>("")
+    const [selectedIDs, setSelectedIDs] = useState<ProfileStories[]>([])
+    const [selectCover, setSelectCover] = useState<boolean>(false);
+    const [currentID, setCurrentID] = useState<number>(0)
+    const [sendLoading, setSendLoading] = useState<boolean>(false)
     const navigate = useNavigate()
 
     useEffect(() => {
         setSelectedIDs((prev) => [...prev])
     }, [])
+
 
     function handleClose() {
         setSelectStatus(false)
@@ -30,13 +37,13 @@ export function HighlightsEditor({ highLightsModal, setHighLightsModal }) {
         setIsEditing(false)
     }
 
-    function formatDate(num) {
+    function formatDate(num: number) {
         const date = new Date(num);
         const day = date.getDate();
         return `${day}`
     }
 
-    function formatMonth(num) {
+    function formatMonth(num: number) {
         const date = new Date(num);
         const month = date.toLocaleString('default', { month: "short" });
         return `${month} `
@@ -70,7 +77,9 @@ export function HighlightsEditor({ highLightsModal, setHighLightsModal }) {
                 <button className={`w-full py-3 text-[15px] transition-all duration-150 font-semibold ${highlightName.length > 0 ? "text-[#0095F6]" : "text-[#A8A8A8] "}`} disabled={highlightName.length === 0} onClick={() => setSelectStatus(true)}>Next</button>
             </div>
         </div>
-        <ArchivesModal selectStatus={selectStatus} setSelectStatus={setSelectStatus} selectedIDs={selectedIDs} setSelectedIDs={setSelectedIDs} selectCover={selectCover} setSelectCover={setSelectCover} isCreatingHighLight={isEditing} handleClose={handleClose} left="left-[52%]" highlights={highlights} currentHighLight={currentHighLight} />
+
+        <ArchivesModal selectStatus={selectStatus} setSelectStatus={setSelectStatus} selectedIDs={selectedIDs} setSelectedIDs={setSelectedIDs} selectCover={selectCover} setSelectCover={setSelectCover} isCreatingHighLight={isEditing} handleClose={handleClose} left="left-[52%]" />
+
         <SelectedHighLights selectCover={selectCover} setSelectCover={setSelectCover} setSelectedIDs={setSelectedIDs} isCreatingHighLight={isEditing} handleClose={handleClose} selectedIDs={selectedIDs} formatMonth={formatMonth} formatDate={formatDate} currentID={currentID} setCurrentID={setCurrentID} sendLoading={sendLoading} setSendLoading={setSendLoading} editingHighlight={true} highlightName={highlightName} />
     </>
 }

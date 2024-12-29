@@ -1,14 +1,14 @@
 import { Link, Outlet } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { SettingIcon } from "../assets/Constants";
-import { HighLights } from "../components/story/Highlights";
+import { HighLights } from "../components/story/Highlights"
 import { useEffect, useRef, useState } from "react";
 import { Loader } from "../components/helpers/Loader";
 import { MdVerified } from "react-icons/md";
 import NoteTooltip from "../components/note/Note";
 import { NoteCreator } from "../components/note/NoteCreator";
 import { NoteEditor } from "../components/note/NoteEditor";
-import { HighLightsModal } from "../components/story/HighLightsModal";
+import { HighLightsModal } from "../components/story/HighLightsModal"
 import { UserFollowModal } from "../components/usermodals/UserFollowModal";
 import { LogOutDiv } from "../components/profile/LogOutDiv";
 import { MobileProfileBar } from "../components/profile/MobileProfileBar";

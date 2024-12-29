@@ -1,4 +1,4 @@
-import { PostPageHeader } from "../components/sidebar/PostPageHeader"
+import { PageHeader } from "../components/sidebar/PageHeader"
 import { PostCropper } from "../components/post/PostCropper"
 import { usePost } from "../context/PostContext"
 
@@ -6,7 +6,7 @@ export const MobilePostCreator: React.FC = () => {
     const { selectedImage, setCroppedAreas, currentIndex, setCurrentIndex } = usePost()
 
     return <section>
-        <PostPageHeader isCross={true} />
+        <PageHeader isCross={true} />
         <div className="h-[435px]">
             <PostCropper currentIndex={currentIndex} isMobile={true} setCroppedAreas={setCroppedAreas} />
         </div>

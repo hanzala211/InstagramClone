@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { Carousel, CarouselContent, CarouselNext, CarouselPrevious } from "../ui/carousel";
+import { Carousel, CarouselContent, CarouselNext, CarouselPrevious } from "../ui/carousel"
 import { useHome } from "../../context/HomeContext";
 import { useSearch } from "../../context/SearchContext";
 
-export function HomeStories() {
+export const HomeStories = () => {
     const { homeStories } = useHome()
     const { setSearchUserStatus, setSelectedProfile } = useSearch()
 

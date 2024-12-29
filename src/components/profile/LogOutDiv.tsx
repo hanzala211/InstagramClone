@@ -2,7 +2,13 @@ import { Link } from "react-router-dom"
 import { useUser } from "../../context/UserContext"
 import { ReportIcon, SaveIcon } from "../../assets/Constants"
 
-export function LogOutDiv({ isOpen, dropdownRef, isMobile }) {
+interface LogOutDivProps{
+    isOpen?: boolean;
+    dropdownRef: any;
+    isMobile?: boolean;
+}
+
+export const LogOutDiv: React.FC<LogOutDivProps> = ({ isOpen, dropdownRef, isMobile }) => {
     const { setMainLoading, setUserData, userData } = useUser()
 
     const moreArr = [
@@ -38,7 +44,7 @@ export function LogOutDiv({ isOpen, dropdownRef, isMobile }) {
                         className="gap-4 items-center group w-full py-3 hover:bg-[rgba(255,255,255,.1)] transition duration-300 inline-flex p-4 rounded-md"
                         onClick={() => {
                             setMainLoading(true)
-                            setUserData([])
+                            setUserData(null)
                             localStorage.removeItem("token")
                             setTimeout(() => {
                                 window.location.reload();

@@ -6,7 +6,12 @@ import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import Pintura from "../helpers/Pintura";
 
-export function CreateStory({ creatingStory, setIsCreatingStory }) {
+interface CreateStoryProps{
+    creatingStory?: boolean;
+    setIsCreatingStory: (value: boolean) => void
+}
+
+export const CreateStory: React.FC<CreateStoryProps> = ({ creatingStory, setIsCreatingStory }) => {
     const { fileInputRef, selectedImage, setSelectedImage, isUploading, setIsUploading, uploaded, setUploaded } = useStories()
     const { innerWidth } = useUser()
     const navigate = useNavigate()

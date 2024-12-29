@@ -9,7 +9,18 @@ import { onCropImage } from "../../utils/helper";
 import { createPost, updatePost } from "../../services/post";
 import { useSearch } from "../../context/SearchContext";
 
-export function PostPageHeader({ isArrowNeeded, isHomePage, isInbox, isChat, isChatting, isCross, isDetails, isCreating, }) {
+interface PageHeaderProps{
+    isArrowNeeded?: boolean;
+    isHomePage?: boolean;
+    isInbox?: boolean;
+    isChat?: boolean;
+    isChatting?: boolean;
+    isCross?: boolean;
+    isDetails?: boolean;
+    isCreating?: boolean;
+}
+
+export const PageHeader: React.FC<PageHeaderProps> = ({ isArrowNeeded, isHomePage, isInbox, isChat, isChatting, isCross, isDetails, isCreating }) => {
     const { setSelectedPost, setComments, setSelectedImage, croppedAreas, setCroppedImages, selectedImage, setCurrentIndex, setLoading, setIsCaption, croppedImages, setIsShared, setCaptionValue, captionValue, isShared, setShareLoading, selectedPost, } = usePost();
     const { setSelectedProfile } = useSearch();
     const { userData, setMainLoading, setMessage } = useUser();

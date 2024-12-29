@@ -1,7 +1,13 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useChat } from "../../context/ChatContext";
+import { SideBarItemsType } from "../../types/sideBarTypes";
 
-export function SideBarItems({ item, isSearching }) {
+interface SideBarItemsProps{
+    item: SideBarItemsType;
+    isSearching?: boolean
+}
+
+export const SideBarItems: React.FC<SideBarItemsProps> = ({ item, isSearching }) => {
     const { notifications } = useChat();
     const location = useLocation();
 
@@ -11,7 +17,7 @@ export function SideBarItems({ item, isSearching }) {
                 return "font-bold";
             }
         }
-        return "";
+        return;
     };
 
     return (

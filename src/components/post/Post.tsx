@@ -21,7 +21,7 @@ import { UserInfo } from "../../types/user";
 interface PostProps{
     isPostOpen: boolean;
     setIsPostOpen: (value: boolean) => void;
-    postData: PostUserData | UserInfo;
+    postData: PostUserData | UserInfo | any;
     currentIndex: number;
     setCurrentIndex: (value: number) => void;
     setCurrentPost: (value: number | null) => void;
@@ -29,7 +29,7 @@ interface PostProps{
     setPage: (value: number) => void;
     totalPages: number;
     setTotalPages?: (value: number) => void;
-    currentPost: number;
+    currentPost: number | null;
     isMobile?: boolean
 }
 

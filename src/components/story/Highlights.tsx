@@ -1,6 +1,12 @@
 import { PlusIcon } from "../../assets/Constants";
 
-export function HighLights({ title, image, onClick }) {
+interface HighLightsProps{
+    title?: string;
+    image?: string;
+    onClick?: () => void
+}
+
+export const HighLights: React.FC<HighLightsProps> = ({ title, image, onClick }) => {
     return (
         <div className="relative cursor-pointer" onClick={onClick}>
             <div className="w-[4rem] h-[4rem] md:w-[6rem] md:h-[6rem] p-1 border-[2px] border-[#1F1F1F] rounded-full">

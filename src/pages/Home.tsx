@@ -5,8 +5,8 @@ import { Loader } from "../components/helpers/Loader";
 import { RiUserFollowFill } from "react-icons/ri";
 import { Post } from "../components/post/Post";
 import { fetchHomePosts, fetchStories } from "../services/homePage";
-import { PostPageHeader } from "../components/sidebar/PostPageHeader";
-import { HomeStories } from "../components/story/HomeStories";
+import { PageHeader } from "../components/sidebar/PageHeader";
+import { HomeStories } from "../components/story/HomeStories"
 import { useHome } from "../context/HomeContext";
 import { HomePost } from "../components/post/HomePost"
 
@@ -16,7 +16,7 @@ export const Home: React.FC = () => {
     const [currentPostIndex, setCurrentPostIndex] = useState<number>(0);
     const [isPostsLoading, setIsPostsLoading] = useState<boolean>(true);
     const [isPostOpen, setIsPostOpen] = useState<boolean>(false);
-    const [currentPost, setCurrentPost] = useState<number>(0);
+    const [currentPost, setCurrentPost] = useState<number | null>(0);
     const [hasMore, setHasMore] = useState<boolean>(true);
 
     useEffect(() => {
@@ -33,7 +33,7 @@ export const Home: React.FC = () => {
 
     return (
         <>
-            <PostPageHeader isArrowNeeded={false} isHomePage={true} />
+            <PageHeader isArrowNeeded={false} isHomePage={true} />
             {homeStories.length > 0 && <HomeStories />}
             <section className={`w-full lg:max-w-[40%] sm:max-w-[85%] max-w-[95%] mb-20 md:mb-2 mx-auto ${homeStories.length === 0 ? "mt-16 md:mt-10" : "mt-5"
                 }`}>

@@ -6,14 +6,21 @@ import { Overlay } from "../helpers/Overlay";
 import { fetchFollowers, fetchFollowing } from "../../services/followerModal";
 import { useSearch } from "../../context/SearchContext";
 
-export function UserFollowModal({ isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen }) {
+interface UserFollowModalProps {
+    isFollowerModalOpen: boolean;
+    setIsFollowerModalOpen: (value: boolean) => void;
+    isFollowingModalOpen: boolean;
+    setIsFollowingModalOpen: (value: boolean) => void
+}
+
+export const UserFollowModal: React.FC<UserFollowModalProps> =({ isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen }) => {
     const { userData, userFollowers, setUserFollowers, userFollowing, setUserFollowing } = useUser();
     const { setSelectedProfile } = useSearch();
-    const [isLoading, setIsLoading] = useState(false);
-    const [modalType, setModalType] = useState("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [modalType, setModalType] = useState<string>("");
 
     useEffect(() => {
-        const body = document.querySelector("body");
+        const body: any = document.querySelector("body");
         body.style.overflowY = isFollowerModalOpen || isFollowingModalOpen ? "hidden" : "auto";
 
         return () => body.style.overflowY = "auto";

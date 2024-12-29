@@ -2,34 +2,33 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { ActiveChatIcon, ActiveExplore, ActiveHome, ChatIcon, CreateIcon, ExploreIcon, HomeIcon, InstagramSvg, MoreIcon, SearchIcon } from "../../assets/Constants";
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "../../context/UserContext";
-import { SearchBox } from "./SearchBox";
+import { SearchBox } from "./SearchBox"
 import { CreatePost } from "../post/CreatePosts";
 import { FaHistory } from "react-icons/fa";
-import { CreateStory } from "../story/CreateStory";
-import { SideBarItems } from "./SideBarItems";
+import { CreateStory } from "../story/CreateStory"
+import { SideBarItems } from "./SideBarItems"
 import { LogOutDiv } from "../profile/LogOutDiv";
 import { useSearch } from "../../context/SearchContext";
 import { useSideBar } from "../../context/SideBarContext";
+import { SideBarItemsType } from "../../types/sideBarTypes";
 
-export function SideBar() {
+export const SideBar = () => {
     const { isSearching, setIsSearching, isCreating, setIsCreating, createStory, setCreateStory } = useSideBar();
     const { setSearchQuery, setSearchData } = useSearch();
     const { userData } = useUser();
-    const [isOpen, setIsOpen] = useState(false);
-    const checkref = useRef(null);
-    const searchRef = useRef(null);
-    const searchBoxRef = useRef(null);
-    const dropdownRef = useRef(null);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const checkref = useRef<HTMLDivElement>(null);
+    const searchRef = useRef<HTMLInputElement>(null);
+    const searchBoxRef = useRef<HTMLDivElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
     const location = useLocation();
-
 
     useEffect(() => {
         window.addEventListener("click", handleClick);
         return () => window.removeEventListener("click", handleClick);
     }, []);
 
-
-    const sideBarItems = [
+    const sideBarItems: SideBarItemsType[] = [
         {
             text: 'Home',
             icon: <HomeIcon />,
@@ -77,7 +76,7 @@ export function SideBar() {
         }
     ]
 
-    function handleClick(e) {
+    function handleClick(e: any) {
         if (checkref.current && dropdownRef.current && !checkref.current.contains(e.target) && !dropdownRef.current.contains(e.target)) {
             setIsOpen(false);
         }

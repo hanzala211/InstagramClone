@@ -51,3 +51,11 @@ export interface UserFollowDetailsType{
     id: string;
     profilePic: string;
 }
+
+export interface EditForm {
+    heading: string;
+    maxLength: number;
+    minLength: number;
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}

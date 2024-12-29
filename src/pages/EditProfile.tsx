@@ -3,14 +3,7 @@ import { useUser } from "../context/UserContext";
 import { ProfileSettingInput } from "../components/profile/ProfileSettingInput";
 import { changeData } from "../services/profile";
 import { Loader } from "../components/helpers/Loader";
-
-interface EditForm {
-    heading: string;
-    maxLength: number;
-    minLength: number;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+import { EditForm } from "../types/user";
 
 interface InitialData{
     userName: string;

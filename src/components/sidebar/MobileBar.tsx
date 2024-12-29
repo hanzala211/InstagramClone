@@ -6,7 +6,7 @@ import { handleClickForStory, handleFile } from "../../utils/helper"
 import { usePost } from "../../context/PostContext"
 import { useStories } from "../../context/StoriesContext"
 
-export function MobileBar() {
+export const MobileBar = () => {
     const { fileInputRef: fileStoriesRef } = useStories()
     const { fileInputRef } = usePost()
     const { userData } = useUser()

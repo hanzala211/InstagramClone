@@ -1,4 +1,6 @@
-export function ProfileSettingInput({ item }) {
+import { EditForm } from "../../types/user"
+
+export const ProfileSettingInput = ({ item }: {item: EditForm}) => {
     return <>
         <div>
             <h3 className="text-[20px] font-bold">{item.heading}</h3>

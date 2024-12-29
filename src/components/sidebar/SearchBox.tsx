@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import { Skeleton } from "../helpers/Skeleton";
 import { UserModal } from "../usermodals/UserModal";
@@ -6,10 +6,15 @@ import { useLocation } from "react-router-dom";
 import { fetchSearch } from "../../services/search";
 import { useSearch } from "../../context/SearchContext";
 
-export function SearchBox({ refere, isSearching }) {
+interface SearchBoxProps{
+    refere?: any;
+    isSearching?: boolean;
+}
+
+export const SearchBox: React.FC<SearchBoxProps> = ({ refere, isSearching }) => { 
     const { userData } = useUser();
     const { searchQuery, setSearchQuery, searchData, setSearchData, setSelectedProfile } = useSearch();
-    const [searchLoading, setSearchLoading] = useState(false);
+    const [searchLoading, setSearchLoading] = useState<boolean>(false);
     const location = useLocation();
 
     useEffect(() => {

@@ -20,7 +20,7 @@ export function Explore() {
     const { page, setPage, totalPages, setTotalPages } = useHome()
     const [explorePagePosts, setExplorePagePosts] = useState<PostData[]>([]);
     const [isPostsLoading, setIsPostsLoading] = useState<boolean>(true);
-    const [currentPost, setCurrentPost] = useState<number>(0);
+    const [currentPost, setCurrentPost] = useState<number | null>(null);
     const [isPostOpen, setIsPostOpen] = useState<boolean>(false);
     const [count, setCount] = useState<number>(0);
     const [currentIndex, setCurrentIndex] = useState<number>(0);

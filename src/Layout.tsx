@@ -1,10 +1,10 @@
 import { Outlet, useLocation, useParams } from "react-router-dom";
-import { SideBar } from "./components/sidebar/SideBar";
+import { SideBar } from "./components/sidebar/SideBar"
 import { useUser } from "./context/UserContext";
 import { LoadingPage } from "./pages/LoadingPage";
 import { Footer } from "./components/helpers/Footer";
 import { useEffect } from "react";
-import { MobileBar } from "./components/sidebar/MobileBar";
+import { MobileBar } from "./components/sidebar/MobileBar"
 import { fetchMe } from "./services/userAuth";
 import { fetchUserDataOnClick } from "./services/searchProfile";
 import { useChat } from "./context/ChatContext";

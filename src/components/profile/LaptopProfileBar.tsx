@@ -2,7 +2,7 @@ import { PostsIcon, SavedIcon, TaggedUser } from "../../assets/Constants";
 import { useUser } from "../../context/UserContext";
 import { ProfileNavLink } from "./ProfileNavLink";
 
-export function LaptopProfileBar() {
+export const LaptopProfileBar = () => {
     const { userData } = useUser()
 
     return <div className="absolute hidden 1280:left-[55%] lg:left-[59%] md:left-[60%] -translate-x-1/2 md:flex flex-row gap-10 mt-0">

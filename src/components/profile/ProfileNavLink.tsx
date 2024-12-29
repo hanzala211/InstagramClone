@@ -1,7 +1,15 @@
 import { NavLink } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
+import { ReactNode } from "react";
 
-export const ProfileNavLink = ({ icon: Icon, label, to, isMyProfile }) => {
+interface ProfileNavLinkProps{
+    icon?: any;
+    label?: string;
+    to: string;
+    isMyProfile?: boolean  
+}
+
+export const ProfileNavLink: React.FC<ProfileNavLinkProps> = ({ icon: Icon, label, to, isMyProfile }) => {
     const { innerWidth } = useUser();
 
     return (
