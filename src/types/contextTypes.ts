@@ -131,8 +131,8 @@ export interface UserContextType{
     setUserPosts: React.Dispatch<React.SetStateAction<Post[]>>;
     message: any;
     setMessage: React.Dispatch<React.SetStateAction<string>>;
-    note: Note | null;
-    setNote: React.Dispatch<React.SetStateAction<Note | null>>;
+    note: Note | [];
+    setNote: React.Dispatch<React.SetStateAction<Note | []>>;
     stories: ProfileStories[];
     setStories: React.Dispatch<React.SetStateAction<ProfileStories[]>>;
     archives: ProfileStories[];

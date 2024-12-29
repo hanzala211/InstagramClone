@@ -1,10 +1,10 @@
-import Pintura from "../helpers/Pintura";
 import { Overlay } from "../helpers/Overlay";
 import { SelectImage } from "../post/SelectImage";
 import { handleClickForStory, handleFileChangeForStories } from "../../utils/helper";
 import { useStories } from "../../context/StoriesContext";
 import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import Pintura from "../helpers/Pintura";
 
 export function CreateStory({ creatingStory, setIsCreatingStory }) {
     const { fileInputRef, selectedImage, setSelectedImage, isUploading, setIsUploading, uploaded, setUploaded } = useStories()

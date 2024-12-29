@@ -5,10 +5,10 @@ import { Loader } from "../components/helpers/Loader";
 import { RiUserFollowFill } from "react-icons/ri";
 import { Post } from "../components/post/Post";
 import { fetchHomePosts, fetchStories } from "../services/homePage";
-import { HomePost } from "../components/post/HomePost";
 import { PostPageHeader } from "../components/sidebar/PostPageHeader";
 import { HomeStories } from "../components/story/HomeStories";
 import { useHome } from "../context/HomeContext";
+import { HomePost } from "../components/post/HomePost"
 
 export const Home: React.FC = () => {
     const { homeStories, setHomeStories, totalPages, setTotalPages, homePosts, setHomePosts, page, setPage } = useHome();

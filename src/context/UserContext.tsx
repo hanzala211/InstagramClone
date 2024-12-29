@@ -12,7 +12,7 @@ export const UserProvider: React.FC<ContextChild> = ({ children }) => {
     const [mainLoading, setMainLoading] = useState<boolean>(true);
     const [userPosts, setUserPosts] = useState<Post[]>([]);
     const [message, setMessage] = useState<any>("");
-    const [note, setNote] = useState<Note | null>(null);
+    const [note, setNote] = useState<Note | []>([]);
     const [stories, setStories] = useState<ProfileStories[]>([]);
     const [archives, setArchives] = useState<ProfileStories[]>([])
     const [currentStory, setCurrentStory] = useState<number>(0);

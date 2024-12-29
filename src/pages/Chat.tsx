@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { ChatUsersSidebar } from "../components/chats/ChatUsersSidebar";
-import { SearchChat } from "../components/chats/SearchChat";
 import { PostPageHeader } from "../components/sidebar/PostPageHeader";
+import { SearchChat } from "../components/chats/SearchChat";
 
 
 export function Chat() {

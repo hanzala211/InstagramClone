@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { IoCloseSharp } from "react-icons/io5"
 import { SelectedHighLights } from "./SelectedHighLights";
-import { ArchivesModal } from "../archives/ArchivesModal"
+import { ArchivesModal } from "../archives/ArchivesModal";
 
 export function HighLightsModal({ setIsCreatingHighLight, isCreatingHighLight }) {
     const [highlightName, setHighlightName] = useState("");

@@ -1,6 +1,6 @@
 import { PostPageHeader } from "../components/sidebar/PostPageHeader"
-import { usePost } from "../context/PostContext"
 import { PostCropper } from "../components/post/PostCropper"
+import { usePost } from "../context/PostContext"
 
 export const MobilePostCreator: React.FC = () => {
     const { selectedImage, setCroppedAreas, currentIndex, setCurrentIndex } = usePost()

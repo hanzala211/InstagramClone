@@ -7,9 +7,11 @@ import { IoSaveOutline } from "react-icons/io5";
 import { PostModal } from "../post/PostModal";
 import { usePost } from "../../context/PostContext";
 import { useSearch } from "../../context/SearchContext";
+import { useHome } from "../../context/HomeContext";
 
 export function ProfileTabs({ isPosts, isTagged, isSaved, isSearchPosts }) {
-    const { selectedPost, setSelectedPost, setComments, page, setPage, totalPages, setTotalPages } = usePost()
+    const { selectedPost, setSelectedPost, setComments } = usePost()
+    const { page, setPage, totalPages, setTotalPages } = useHome()
     const { searchUserPosts, selectedProfile } = useSearch()
     const { userPosts, userData, userSaves } = useUser();
     const [isPostOpen, setIsPostOpen] = useState(false);
@@ -55,7 +57,7 @@ export function ProfileTabs({ isPosts, isTagged, isSaved, isSearchPosts }) {
             </div> :
             <div className="xl:max-w-[100%] mb-16 md:mb-0 h-auto grid lg:grid-cols-3 grid-cols-2 gap-[10px]">
                 {isPosts ? reversedPosts.map((item, i, arr) =>
-                    <PostModal key={i} i={i} arr={arr} item={item} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} />) :
+                    <PostModal key={i} i={i} arr={arr} item={item} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} setTotalPages={setTotalPages} />) :
                     isTagged ? reversedPosts.map((item, i, arr) =>
                         <PostModal key={i} i={i} arr={arr} item={item} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} />) :
                         isSaved ? reversedSavedPosts.map((item, i, arr) =>

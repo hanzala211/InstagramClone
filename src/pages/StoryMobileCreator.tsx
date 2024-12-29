@@ -1,9 +1,9 @@
 import { IoCloseSharp } from "react-icons/io5"
-import Pintura from "../components/helpers/Pintura"
 import { useStories } from "../context/StoriesContext"
 import { useNavigate } from "react-router-dom"
+import Pintura from "../components/helpers/Pintura"
 
-export function StoryMobileCreator() {
+export const StoryMobileCreator = () => {
     const { selectedImage, setSelectedImage, setUploaded, setIsUploading, isUploading } = useStories()
     const navigate = useNavigate()
 

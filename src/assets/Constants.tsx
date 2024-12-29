@@ -1,5 +1,5 @@
 interface ConstantsClasses {
-    className: string
+    className?: string
 }
 
 export const HomeIcon: React.FC<ConstantsClasses> = ({ className }) => {
