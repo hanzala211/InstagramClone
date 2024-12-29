@@ -22,7 +22,6 @@ export const CommentDrawerOpener: React.FC<CommentDrawerOpenerProps> = ({ item, 
         {innerWidth < 770 &&
             <Drawer onClose={() => {
                 setComments([])
-                setSelectedPost(null)
             }}>
                 <DrawerContent className="bg-[#000] border-t-[1px] border-[#a8a8a8]">
                     <CommentDrawer />
