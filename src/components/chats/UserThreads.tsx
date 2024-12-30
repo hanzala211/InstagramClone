@@ -37,7 +37,7 @@ export const UserThreads: React.FC<UserThreadsProp> = ({ isNewChat, item, isChat
             }
             return existingPost;
         })
-    }, [selectedPost])
+    }, [selectedPost?._id])
 
     useEffect(() => {
         if (notifications.length > 0) {
