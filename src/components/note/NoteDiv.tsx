@@ -1,8 +1,8 @@
 import { Note } from "../../types/note"
 import NoteTooltip from "./Note"
 
-interface NoteDivProps{
-    notes: Note;
+interface NoteDivProps {
+    notes?: Note | [];
     isChat: boolean
 }
 

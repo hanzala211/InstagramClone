@@ -15,8 +15,8 @@ export interface ChatContextType{
     userData: User | null;
     isChatSearch: boolean;
     setIsChatSearch: React.Dispatch<React.SetStateAction<boolean>>;
-    selectedChat: UserData | null;
-    setSelectedChat: React.Dispatch<React.SetStateAction<UserData | null>>;
+    selectedChat: UserData | UserInfo | null;
+    setSelectedChat: React.Dispatch<React.SetStateAction<UserData | UserInfo | null>>;
     searchData: UserInfo[];
     setSearchData: React.Dispatch<React.SetStateAction<UserInfo[]>>;
     searchChatValue: string;

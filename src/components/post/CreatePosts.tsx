@@ -11,7 +11,7 @@ import { usePost } from "../../context/PostContext";
 import { useNavigate } from "react-router-dom";
 import { PostCropper } from "./PostCropper";
 
-interface CreatePostProps{
+interface CreatePostProps {
     isCreating: boolean;
     setIsCreating: (value: boolean) => void
 }
@@ -21,7 +21,7 @@ export const CreatePost: React.FC<CreatePostProps> = ({ isCreating, setIsCreatin
     const { userData, innerWidth } = useUser();
     const navigate = useNavigate();
 
-    useEffect(() => {
+    useEffect((): any => {
         const body: any = document.querySelector("body");
         body.style.overflowY = isCreating ? "hidden" : "auto";
 
