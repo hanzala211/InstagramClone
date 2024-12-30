@@ -18,7 +18,7 @@ import { SearchChat } from "../chats/SearchChat";
 import { PostUserData } from "../../types/postType";
 import { UserInfo } from "../../types/user";
 
-interface PostProps{
+interface PostProps {
     isPostOpen: boolean;
     setIsPostOpen: (value: boolean) => void;
     postData: PostUserData | UserInfo | any;
@@ -84,8 +84,8 @@ export const Post: React.FC<PostProps> = ({ isPostOpen, setIsPostOpen, postData,
         <>
             {!isMobile && <Overlay handleClose={handleClose} isPostOpen={isPostOpen} />}
             <div
-                className={`${isMobile ? "1280:max-w-[100rem]" : "fixed 1280:max-w-[90rem] opacity-0 top-[40%] md:top-1/2 1280:top-[35%] -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150]"
-                    } w-full lg:max-w-[68rem] lg:h-[35rem] md:h-[30rem] md:max-w-[52rem] h-[30rem] max-w-[27rem] ${isPostOpen ? "opacity-100 pointer-events-auto" : "pointer-events-none"}`}
+                className={`${isMobile ? "1280:max-w-[100rem]" : "fixed 1280:max-w-[84rem] opacity-0 top-[40%] md:top-1/2 1280:top-[35%] -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150]"
+                    } w-full lg:max-w-[68rem] lg:h-[34rem] md:h-[30rem] md:max-w-[52rem] h-[30rem] max-w-[27rem] ${isPostOpen ? "opacity-100 pointer-events-auto" : "pointer-events-none"}`}
             >
                 <div className="flex flex-col md:flex-row">
                     <div className="flex md:hidden relative px-2 mb-2 justify-between items-center">
