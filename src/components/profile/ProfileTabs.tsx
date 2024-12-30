@@ -95,7 +95,7 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isS
                 (isPosts || isTagged ? reversedPosts && reversedPosts.length > 1 : isSearchPosts ? reversedUserPosts && reversedUserPosts.length > 1 : isSaved ? reversedSavedPosts.length > 1 : false)
                 && (
                     <>
-                        {((isPosts && currentPost !== userPosts.length - 1) || (isSaved && currentPost !== userSaves.length - 1) ||
+                        {((isPosts && currentPost !== userPosts.length - 1) || (isTagged && currentPost !== userPosts.length - 1) || (isSaved && currentPost !== userSaves.length - 1) ||
                             (isSearchPosts && currentPost !== searchUserPosts.length - 1)) && (
                                 <button
                                     className={`fixed z-[100] right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none"} xl:block hidden`}

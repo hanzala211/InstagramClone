@@ -7,12 +7,13 @@ import { db } from "../../firebaseConfig";
 import { handleSharePost } from "../../services/chat";
 import { usePost } from "../../context/PostContext";
 import { UserInfo } from "../../types/user";
+import { Post } from "../../types/postType";
 
-interface UserThreadsProp{
+interface UserThreadsProp {
     isNewChat: boolean;
     item: UserInfo;
-    isChat: boolean | undefined;  
-    handleClose: () => {};  
+    isChat: boolean | undefined;
+    handleClose: () => {};
 }
 
 export const UserThreads: React.FC<UserThreadsProp> = ({ isNewChat, item, isChat, handleClose }) => {
@@ -20,8 +21,23 @@ export const UserThreads: React.FC<UserThreadsProp> = ({ isNewChat, item, isChat
     const { selectedPost, setIsShareOpen, setIsShareSearch } = usePost()
     const { userData, setMessage } = useUser()
     const [isReceived, setIsReceived] = useState<boolean>(false);
-    const [foundNotification, setFoundNotification] = useState<Notification | undefined>()
+    const [foundNotification, setFoundNotification] = useState<Notification | undefined>();
+    const [selectedPostToSend, setSelectedPostToSend] = useState<Post | null>(null);
     const navigate = useNavigate()
+
+    useEffect(() => {
+        setSelectedPostToSend(() => {
+            const existingPost = { ...selectedPost }
+            if (existingPost?.postBy === userData?.data.user._id) {
+                existingPost.user = {
+                    profilePic: userData?.data.user.profilePic,
+                    _id: userData?.data.user._id,
+                    userName: userData?.data.user.userName
+                }
+            }
+            return existingPost;
+        })
+    }, [selectedPost])
 
     useEffect(() => {
         if (notifications.length > 0) {
@@ -55,7 +71,7 @@ export const UserThreads: React.FC<UserThreadsProp> = ({ isNewChat, item, isChat
             setIsChatSearch(false)
         } else {
             handleClose()
-            handleSharePost(userData, item, selectedPost, setMessage, setIsShareOpen, setIsShareSearch)
+            handleSharePost(userData, item, selectedPostToSend, setMessage, setIsShareOpen, setIsShareSearch)
         }
     }} className={`flex gap-3 items-center px-5 w-full relative cursor-pointer ${isNewChat ? "" : "hover:bg-[#262626] hover:bg-opacity-50"} py-2 transition-all duration-300`}>
         <div className="relative">

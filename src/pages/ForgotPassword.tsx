@@ -8,12 +8,12 @@ import { ForgetPassword } from "../assets/Constants";
 import { forgotPassword, resetPassword } from "../services/userAuth";
 import { FormType } from "../types/authType";
 
-interface ForgotResultType{
+interface ForgotResultType {
     status: string;
-    data:string;
+    data: string;
 }
 
-export const ForgotPassword: React.FC = () =>  {
+export const ForgotPassword: React.FC = () => {
     const { setUserData } = useUser();
     const [emailAddress, setEmailAddress] = useState<string>("");
     const [codeValue, setCodeValue] = useState<string>("")
@@ -45,7 +45,6 @@ export const ForgotPassword: React.FC = () =>  {
             value: newPassword,
             type: "password"
         }
-
     ]
 
     return <div className="flex flex-col h-[100vh] justify-between">

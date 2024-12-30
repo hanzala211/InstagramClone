@@ -5,7 +5,7 @@ import { changeData } from "../services/profile";
 import { Loader } from "../components/helpers/Loader";
 import { EditForm } from "../types/user";
 
-interface InitialData{
+interface InitialData {
     userName: string;
     bio: string;
 }
@@ -22,7 +22,7 @@ export const EditProfile: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string>("")
     const [successMessage, setSuccessMessage] = useState<string>("");
     const [isDisabled, setIsDisabled] = useState<boolean>(false);
-    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const isChanged =
         changeUserName !== initialData.userName ||

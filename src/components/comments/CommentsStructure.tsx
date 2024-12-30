@@ -2,13 +2,13 @@ import { usePost } from "../../context/PostContext";
 import { Skeleton } from "../helpers/Skeleton";
 import { CommentItem } from "./CommentItem";
 
-interface CommentStructureProps{
-    handleClick?: () => void
+interface CommentStructureProps {
+    handleClick?: (item: any, postData: any) => void
 }
 
 export const CommentsStructure: React.FC<CommentStructureProps> = ({ handleClick }) => {
     const { comments, commentsLoading } = usePost()
-    
+
     return <>
         {commentsLoading ? (
             <div className="flex flex-col gap-4">{Array.from({ length: 20 }, (_, i) => <Skeleton key={i} />)}</div>
