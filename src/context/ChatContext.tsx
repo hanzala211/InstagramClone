@@ -6,16 +6,16 @@ import { collection, onSnapshot, orderBy, query, where } from "firebase/firestor
 import { db } from "../firebaseConfig"
 import { ChatContextType } from "../types/contextTypes"
 import { ContextChild } from "../types/contextTypes"
-import {  UserData, UserInfo } from "../types/user"
+import { UserData, UserInfo } from "../types/user"
 import { Messages, Notification, Thread } from "../types/chatType"
 
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined)
 
 export const ChatProvider: React.FC<ContextChild> = ({ children }) => {
-    const { userData }= useUser();
+    const { userData } = useUser();
     const [isChatSearch, setIsChatSearch] = useState<boolean>(false)
-    const [selectedChat, setSelectedChat] = useState<UserData | null>(null)
+    const [selectedChat, setSelectedChat] = useState<UserData | UserInfo | null>(null)
     const [searchData, setSearchData] = useState<UserInfo[]>([])
     const [searchChatValue, setSearchChatValue] = useState<string>("")
     const [messages, setMessages] = useState<Messages[]>([])
@@ -96,9 +96,9 @@ export const ChatProvider: React.FC<ContextChild> = ({ children }) => {
     return <ChatContext.Provider value={{ isChatSearch, setIsChatSearch, selectedChat, setSelectedChat, searchChatValue, setSearchChatValue, searchData, setSearchData, messages, setMessages, threads, setThreads, notifications, setNotifications, messagesLoading, setMessagesLoading, threadsLoading, setThreadsLoading, isInfoOpen, setIsInfoOpen, location, userData }}>{children}</ChatContext.Provider>
 }
 
-export const useChat = (): ChatContextType =>  {
+export const useChat = (): ChatContextType => {
     let context = useContext(ChatContext)
-    if(!context){
+    if (!context) {
         throw new Error("use useUser in User Provider");
     }
     return context;

@@ -26,7 +26,7 @@ export const UserThreads: React.FC<UserThreadsProp> = ({ isNewChat, item, isChat
     const navigate = useNavigate()
 
     useEffect(() => {
-        setSelectedPostToSend(() => {
+        setSelectedPostToSend((): any => {
             const existingPost = { ...selectedPost }
             if (existingPost?.postBy === userData?.data.user._id) {
                 existingPost.user = {
