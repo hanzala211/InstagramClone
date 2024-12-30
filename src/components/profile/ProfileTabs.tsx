@@ -9,7 +9,7 @@ import { usePost } from "../../context/PostContext";
 import { useSearch } from "../../context/SearchContext";
 import { useHome } from "../../context/HomeContext";
 
-interface ProfileTabsProps{
+interface ProfileTabsProps {
     isPosts: boolean;
     isTagged: boolean;
     isSaved: boolean;
@@ -98,7 +98,7 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isS
                         {((isPosts && currentPost !== userPosts.length - 1) || (isSaved && currentPost !== userSaves.length - 1) ||
                             (isSearchPosts && currentPost !== searchUserPosts.length - 1)) && (
                                 <button
-                                    className={`fixed z-[100] right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none"} lg:block hidden`}
+                                    className={`fixed z-[100] right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none"} xl:block hidden`}
                                     onClick={handleIncrease}
                                 >
                                     <FaArrowRight className="fill-black" />
@@ -107,7 +107,7 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isS
 
                         {currentPost !== 0 && (
                             <button
-                                className={`fixed z-[100] left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none"} lg:block hidden`}
+                                className={`fixed z-[100] left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none"} xl:block hidden`}
                                 onClick={handleDecrease}
                             >
                                 <FaArrowLeft className="fill-black" />

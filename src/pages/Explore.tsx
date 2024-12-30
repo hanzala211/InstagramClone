@@ -118,7 +118,7 @@ export function Explore() {
         {selectedPost !== null && explorePagePosts.length > 1 && <>
             {currentPost !== explorePagePosts.length - 1 && (
                 <button
-                    className={`fixed z-[100] right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 invisible lg:visible  ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none "
+                    className={`fixed z-[100] right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 invisible xl:visible  ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none "
                         }`}
                     onClick={handleIncrease}
                 >
@@ -128,7 +128,7 @@ export function Explore() {
 
             {currentPost !== 0 && (
                 <button
-                    className={`fixed z-[100] left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 invisible lg:visible ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none "
+                    className={`fixed z-[100] left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 invisible xl:visible ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none "
                         }`}
                     onClick={handleDecrease}
                 >
