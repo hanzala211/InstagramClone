@@ -123,8 +123,8 @@ export interface StoriesContextType {
 }
 
 export interface UserContextType {
-    userData: User;
-    setUserData: React.Dispatch<React.SetStateAction<User>>;
+    userData: User | any;
+    setUserData: React.Dispatch<React.SetStateAction<User | any>>;
     mainLoading: boolean;
     setMainLoading: React.Dispatch<React.SetStateAction<boolean>>;
     userPosts: Post[];
