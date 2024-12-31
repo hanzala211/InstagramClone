@@ -24,17 +24,17 @@ export function handleSendMessage(
 	messageValue: string,
 	userData: User,
 	setMessageValue: (value: string) => void,
-	selectedChat: UserData | null
+	selectedChat: UserInfo | null
 ) {
 	setMessages((prev) => [
 		...prev,
 		{
-		  sender: userData?.data?.user?._id,
-		  content: messageValue,
-		  timeStamp: new Date().toISOString(),
-		  status: 'sending',
+			sender: userData?.data?.user?._id,
+			content: messageValue,
+			timeStamp: new Date().toISOString(),
+			status: 'sending',
 		},
-	  ]);
+	]);
 	setMessageValue('');
 	setDoc(
 		doc(
@@ -102,8 +102,8 @@ export function handleSendMessage(
 
 export async function deleteMessageAndUpdateThread(
 	userId: string,
-	selectedChatId: string,
-	messageId: string
+	selectedChatId: string | undefined,
+	messageId: string | undefined
 ): Promise<void> {
 	const threadId = [userId, selectedChatId].sort().join('_');
 	const threadDocRef = doc(db, 'messagesThread', threadId);
@@ -190,10 +190,10 @@ export async function fetchUserById(id: string, index: number, userData: User | 
 export function handleSharePost(
 	userData: User | null,
 	selectedChat: UserInfo,
-	post: Post,
+	post: Post | undefined,
 	setMessage: (value: string) => void,
 	setIsShareOpen: (value: boolean) => void,
-	setIsShareSearch:(value: string) => void
+	setIsShareSearch: (value: string) => void
 ) {
 	setIsShareOpen(false);
 	setDoc(

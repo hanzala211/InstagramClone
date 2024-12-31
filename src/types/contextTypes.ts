@@ -7,15 +7,15 @@ import { Location } from "react-router-dom";
 import { Highlights } from "./highlightsType";
 import { Note } from "./note";
 
-export interface ContextChild{
+export interface ContextChild {
     children: ReactNode;
 }
 
-export interface ChatContextType{
+export interface ChatContextType {
     userData: User | null;
     isChatSearch: boolean;
     setIsChatSearch: React.Dispatch<React.SetStateAction<boolean>>;
-    selectedChat: UserData | UserInfo | null;
+    selectedChat: UserInfo | null;
     setSelectedChat: React.Dispatch<React.SetStateAction<UserData | UserInfo | null>>;
     searchData: UserInfo[];
     setSearchData: React.Dispatch<React.SetStateAction<UserInfo[]>>;
@@ -28,15 +28,15 @@ export interface ChatContextType{
     notifications: Notification[];
     setNotifications: React.Dispatch<React.SetStateAction<Notification[]>>;
     messagesLoading: boolean;
-    setMessagesLoading:  React.Dispatch<React.SetStateAction<boolean>>;
+    setMessagesLoading: React.Dispatch<React.SetStateAction<boolean>>;
     threadsLoading: boolean;
     setThreadsLoading: React.Dispatch<React.SetStateAction<boolean>>;
     isInfoOpen: boolean;
     setIsInfoOpen: React.Dispatch<React.SetStateAction<boolean>>;
     location: Location;
-} 
+}
 
-export interface HomeContextType{
+export interface HomeContextType {
     homeStories: HomeStories[];
     setHomeStories: React.Dispatch<React.SetStateAction<HomeStories[]>>;
     totalPages: number;
@@ -47,7 +47,7 @@ export interface HomeContextType{
     setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export interface PostContextType{
+export interface PostContextType {
     commentValue: string;
     setCommentValue: React.Dispatch<React.SetStateAction<string>>;
     isAnimating: boolean;
@@ -85,19 +85,19 @@ export interface PostContextType{
     currentIndex: number;
     setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
     loading: boolean;
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>; 
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
     isCaption: boolean;
     setIsCaption: React.Dispatch<React.SetStateAction<boolean>>;
     captionValue: string;
-    setCaptionValue: React.Dispatch<React.SetStateAction<string>>; 
+    setCaptionValue: React.Dispatch<React.SetStateAction<string>>;
     isShared: boolean;
     setIsShared: React.Dispatch<React.SetStateAction<boolean>>;
     shareLoading: boolean;
     setShareLoading: React.Dispatch<React.SetStateAction<boolean>>;
-    fileInputRef: React.RefObject<HTMLInputElement>;  
+    fileInputRef: React.RefObject<HTMLInputElement>;
 }
 
-export interface SearchContextType{
+export interface SearchContextType {
     searchQuery: string;
     setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
     searchData: UserInfo[];
@@ -112,17 +112,17 @@ export interface SearchContextType{
     setSearchUserHighLights: React.Dispatch<React.SetStateAction<Highlights[] | string[]>;
 }
 
-export interface StoriesContextType{
+export interface StoriesContextType {
     selectedImage: string | null;
     setSelectedImage: React.Dispatch<React.SetStateAction<string | null>>;
     isUploading: boolean;
     setIsUploading: React.Dispatch<React.SetStateAction<boolean>>;
     uploaded: boolean;
     setUploaded: React.Dispatch<React.SetStateAction<boolean>>;
-    fileInputRef: React.RefObject<HTMLInputElement>;  
+    fileInputRef: React.RefObject<HTMLInputElement>;
 }
 
-export interface UserContextType{
+export interface UserContextType {
     userData: User;
     setUserData: React.Dispatch<React.SetStateAction<User>>;
     mainLoading: boolean;
@@ -161,13 +161,13 @@ export interface UserContextType{
     setIsFollowingModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     innerWidth: number;
     setInnerWidth: React.Dispatch<React.SetStateAction<number>>;
-}   
+}
 
-export interface SideBarContextType{
+export interface SideBarContextType {
     isSearching: boolean;
     setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
     isCreating: boolean;
     setIsCreating: React.Dispatch<React.SetStateAction<boolean>>;
     createStory: boolean;
-    setCreateStory: React.Dispatch<React.SetStateAction<boolean>>; 
+    setCreateStory: React.Dispatch<React.SetStateAction<boolean>>;
 }

@@ -5,13 +5,13 @@ import { Loader } from "../helpers/Loader";
 export const ArchiveStories: React.FC = () => {
     const { archives, loadingArchives, setCurrentStory } = useUser()
 
-    function formatDate(num: number) {
+    function formatDate(num: string) {
         const date = new Date(num);
         const day = date.getDate();
         return `${day}`
     }
 
-    function formatMonth(num: number) {
+    function formatMonth(num: string) {
         const date = new Date(num);
         const month = date.toLocaleString('default', { month: "short" });
         return `${month} `

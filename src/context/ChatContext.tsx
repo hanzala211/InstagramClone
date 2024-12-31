@@ -6,7 +6,7 @@ import { collection, onSnapshot, orderBy, query, where } from "firebase/firestor
 import { db } from "../firebaseConfig"
 import { ChatContextType } from "../types/contextTypes"
 import { ContextChild } from "../types/contextTypes"
-import { UserData, UserInfo } from "../types/user"
+import { UserInfo } from "../types/user"
 import { Messages, Notification, Thread } from "../types/chatType"
 
 
@@ -15,7 +15,7 @@ const ChatContext = createContext<ChatContextType | undefined>(undefined)
 export const ChatProvider: React.FC<ContextChild> = ({ children }) => {
     const { userData } = useUser();
     const [isChatSearch, setIsChatSearch] = useState<boolean>(false)
-    const [selectedChat, setSelectedChat] = useState<UserData | UserInfo | null>(null)
+    const [selectedChat, setSelectedChat] = useState<UserInfo | null>(null)
     const [searchData, setSearchData] = useState<UserInfo[]>([])
     const [searchChatValue, setSearchChatValue] = useState<string>("")
     const [messages, setMessages] = useState<Messages[]>([])

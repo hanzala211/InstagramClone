@@ -12,7 +12,6 @@ import { Post } from "../post/Post";
 import { usePost } from "../../context/PostContext";
 import { UserChatInfo } from "./UserChatInfo";
 import { useSearch } from "../../context/SearchContext";
-import { useHome } from "../../context/HomeContext";
 
 export const UserChat: React.FC = () => {
     const { selectedChat, messages, setMessages, messagesLoading, isInfoOpen, setIsInfoOpen } = useChat()
@@ -24,8 +23,8 @@ export const UserChat: React.FC = () => {
     const [currentPost, setCurrentPost] = useState<number | any>(0)
     const [isPickingEmoji, setIsPickingEmoji] = useState<boolean>(false)
     const [messageValue, setMessageValue] = useState<string>("")
-    const [messagesDelete, setMessagesDelete] = useState<boolean[]>([])
-    const [isClicked, setIsClicked] = useState<boolean[]>([])
+    const [messagesDelete, setMessagesDelete] = useState<any[]>([])
+    const [isClicked, setIsClicked] = useState<any[]>([])
     const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false);
     const emojiIconRef = useRef<HTMLButtonElement>(null)
     const emojiPickerRef = useRef<HTMLDivElement>(null)
@@ -74,7 +73,7 @@ export const UserChat: React.FC = () => {
         }
     }
 
-    function handleKeyDown(e) {
+    function handleKeyDown(e: any) {
         if (e.key === "Enter") {
             handleSendMessage(setMessages, messageValue, userData, setMessageValue, selectedChat)
         }
@@ -136,7 +135,7 @@ export const UserChat: React.FC = () => {
                                 return updated;
                             })}>
                                 {isClicked[index] && <div ref={deleteDivRef} onClick={() => {
-                                    deleteMessageAndUpdateThread(userData.data.user._id, selectedChat._id, message?.id);
+                                    deleteMessageAndUpdateThread(userData.data.user._id, selectedChat?._id, message?.id);
                                 }} className="absolute md:-left-36 440:-left-[4rem] flex hover:opacity-80 transition duration-200 items-center justify-center rounded-lg bg-[#262626] -top-10 md:-top-6 md:w-32 md:h-12 w-24 h-10 text-red-500">Delete</div>
                                 }
                                 <div ref={iconRef} className="text-[14px] hover:bg-[#a8a8a8] hover:bg-opacity-50 rounded-full p-1">

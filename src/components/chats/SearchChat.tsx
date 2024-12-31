@@ -7,10 +7,10 @@ import { Skeleton } from "../helpers/Skeleton"
 import { fetchSearch } from "../../services/search"
 import { usePost } from "../../context/PostContext"
 
-interface SearchChatProps{
+interface SearchChatProps {
     header: string;
     isChat: boolean;
-    index?: number | undefined;
+    index: number;
 }
 
 export const SearchChat: React.FC<SearchChatProps> = ({ header, isChat, index }) => {
@@ -70,7 +70,7 @@ export const SearchChat: React.FC<SearchChatProps> = ({ header, isChat, index })
                 {searchLoading ? Array.from(({ length: 30 }), (_, i) => <div key={i} className="ml-3 mt-5"><Skeleton /></div>) : ""}
                 {searchData.length > 0 ? searchData.map((item, index) => (
                     <div key={index} className="hover:bg-[#a8a8a8] hover:bg-opacity-30 transition-all duration-300">
-                        <UserThreads handleClose={handleClose} index={index} isNewChat={true} item={item} isChat={isChat} />
+                        <UserThreads handleClose={handleClose} isNewChat={true} item={item} isChat={isChat} />
                     </div>
                 )) : isChat ? "" : threads.map((item, index) => (<div key={index} className="hover:bg-[#a8a8a8] hover:bg-opacity-30 transition-all duration-300">
                     <UserThreads handleClose={handleClose} isNewChat={true} item={item} isChat={isChat} />

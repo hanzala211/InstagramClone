@@ -2,19 +2,19 @@ import { Highlights } from "./highlightsType";
 import { Note } from "./note";
 import { StoriesStructure } from "./stories";
 
-export interface User{
+export interface User {
     status: string;
     data: UserData | any;
     error?: any,
 }
 
-export interface UserData{
+export interface UserData {
     token?: string;
     user: UserInfo;
 }
 
-export interface UserInfo{
-    _id?: string;
+export interface UserInfo {
+    _id: string;
     fullName?: string;
     userName?: string;
     profilePic?: string;
@@ -43,9 +43,11 @@ export interface UserInfo{
     createdAt?: string;
     updatedAt?: string;
     __v?: number;
+    lastMessageSender?: string;
+    lastMessage?: string;
 }
 
-export interface UserFollowDetailsType{
+export interface UserFollowDetailsType {
     fullName: string;
     userName: string;
     gender: "Male";

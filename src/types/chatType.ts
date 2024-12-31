@@ -8,9 +8,10 @@ export interface Messages {
     post?: Post;
     status?: string;
     sender?: string;
-  }
+    userName?: string
+}
 
-export interface Thread{
+export interface Thread {
     lastMessage: string;
     lastMessageSender: string;
     participants?: string[];

@@ -8,12 +8,13 @@ import { handleSharePost } from "../../services/chat";
 import { usePost } from "../../context/PostContext";
 import { UserInfo } from "../../types/user";
 import { Post } from "../../types/postType";
+import { Notification } from "../../types/chatType";
 
 interface UserThreadsProp {
-    isNewChat: boolean;
+    isNewChat?: boolean;
     item: UserInfo;
     isChat: boolean | undefined;
-    handleClose: () => {};
+    handleClose?: (value: void) => void;
 }
 
 export const UserThreads: React.FC<UserThreadsProp> = ({ isNewChat, item, isChat, handleClose }) => {
@@ -21,8 +22,8 @@ export const UserThreads: React.FC<UserThreadsProp> = ({ isNewChat, item, isChat
     const { selectedPost, setIsShareOpen, setIsShareSearch } = usePost()
     const { userData, setMessage } = useUser()
     const [isReceived, setIsReceived] = useState<boolean>(false);
-    const [foundNotification, setFoundNotification] = useState<Notification | undefined>();
-    const [selectedPostToSend, setSelectedPostToSend] = useState<Post | null>(null);
+    const [foundNotification, setFoundNotification] = useState<Notification>();
+    const [selectedPostToSend, setSelectedPostToSend] = useState<Post>();
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -56,7 +57,7 @@ export const UserThreads: React.FC<UserThreadsProp> = ({ isNewChat, item, isChat
     }, [notifications, item, userData]);
 
     function handleUpdateNotification() {
-        if (foundNotification !== null) {
+        if (foundNotification !== undefined) {
             updateDoc(doc(db, "notifications", foundNotification.id), { read: true })
         }
     }
@@ -70,7 +71,9 @@ export const UserThreads: React.FC<UserThreadsProp> = ({ isNewChat, item, isChat
             setIsInfoOpen(false)
             setIsChatSearch(false)
         } else {
-            handleClose()
+            if (handleClose !== undefined) {
+                handleClose()
+            }
             handleSharePost(userData, item, selectedPostToSend, setMessage, setIsShareOpen, setIsShareSearch)
         }
     }} className={`flex gap-3 items-center px-5 w-full relative cursor-pointer ${isNewChat ? "" : "hover:bg-[#262626] hover:bg-opacity-50"} py-2 transition-all duration-300`}>

@@ -1,20 +1,20 @@
-export interface StoriesStructure{
-    createdAt?: string;
+export interface StoriesStructure {
+    createdAt: string;
     expiresAt?: string;
-    imageUrl?: string;
-    _id?: string;
+    imageUrl: string;
+    _id: string;
 }
 
-export interface ProfileStories extends StoriesStructure{
+export interface ProfileStories extends StoriesStructure {
     updatedAt?: string;
     __v?: number;
     user?: string;
 }
 
-export interface HomeStoriesUser{
+export interface HomeStoriesUser {
     fullName: string;
     userName: string;
-    _id:string;
+    _id: string;
     profilePic: string;
     stories: ProfileStories[];
 }

@@ -24,7 +24,7 @@ export async function fetchPosts(postID: string, setPostsLoading: (value: boolea
 }
 
 export async function followUser(
-	setUserData:(value: User) => void,
+	setUserData: (value: User) => void,
 	selectedProfile: UserInfo | null,
 	setIsDisabled: (value: boolean) => void,
 	setSelectedProfile: (value: UserInfo | null) => void,
@@ -50,8 +50,7 @@ export async function followUser(
 		}));
 		setIsDisabled(true);
 		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/user/follow/${
-				selectedProfile._id
+			`${import.meta.env.VITE_APP_URL}api/v1/user/follow/${selectedProfile._id
 			}`,
 			{
 				method: 'POST',
@@ -100,8 +99,7 @@ export async function unfollowUser(
 			followersCount: prev.followersCount - 1,
 		}));
 		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/user/unfollow/${
-				selectedProfile._id
+			`${import.meta.env.VITE_APP_URL}api/v1/user/unfollow/${selectedProfile._id
 			}`,
 			{
 				method: 'POST',
@@ -125,7 +123,7 @@ export async function fetchUserDataOnHover(
 	username: string,
 	userData: User,
 	setHoverProfile: (value: UserInfo) => void,
-	setPosts: (value:Post[]) => void,
+	setPosts: (value: Post[]) => void,
 	setIsLoading: (value: boolean) => void
 ): Promise<void> {
 	try {
@@ -148,9 +146,9 @@ export async function fetchUserDataOnHover(
 					.slice(0, 3)
 					.map((item) => fetchPosts(item, null, userData))
 			)
-				.then((res) =>{
+				.then((res) => {
 					setPosts((prev) => [...prev, ...res.map((item) => item.post)])
-		})
+				})
 				.catch((err) => console.error(err))
 				.finally(() => setIsLoading(false));
 		}
@@ -162,7 +160,7 @@ export async function fetchUserDataOnHover(
 }
 
 export async function fetchUserDataOnClick(
-	username: string,
+	username: string | undefined,
 	userData: User,
 	token: any,
 	setSelectedProfile: (value: UserInfo) => void,
