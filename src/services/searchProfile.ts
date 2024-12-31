@@ -120,7 +120,7 @@ export async function unfollowUser(
 
 export async function fetchUserDataOnHover(
 	signal: any,
-	username: string,
+	username: string | undefined,
 	userData: User,
 	setHoverProfile: (value: UserInfo) => void,
 	setPosts: (value: Post[]) => void,

@@ -383,7 +383,7 @@ export async function fetchComments(
 export async function likePost(
 	setSelectedPost: (value: Post) => void,
 	userData: User,
-	selectedPost: Post,
+	selectedPost: Post | null,
 	setIsLiked: (value: boolean) => void,
 	setMessage: (value: string) => void
 ): Promise<void> {
@@ -424,7 +424,7 @@ export async function likePost(
 export async function unLikePost(
 	setSelectedPost: (value: Post) => void,
 	userData: User,
-	selectedPost: Post,
+	selectedPost: Post | null,
 	setIsLiked: (value: boolean) => void,
 	setMessage: (value: string) => void
 ): Promise<void> {

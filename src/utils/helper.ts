@@ -2,7 +2,7 @@ import { NavigateFunction } from 'react-router-dom';
 import { getCroppedImg } from './cropUtils';
 import { CroppedAreas } from '../types/postType';
 
-export function formatNumber(num: number) {
+export function formatNumber(num: any) {
 	if (num >= 1_000_000_000) {
 		return (num / 1_000_000_000).toFixed(1) + 'B';
 	} else if (num >= 1_000_000) {

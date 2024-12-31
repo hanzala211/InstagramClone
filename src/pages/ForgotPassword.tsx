@@ -79,7 +79,7 @@ export const ForgotPassword: React.FC = () => {
                 {forgotResult?.status === "fail" && <p className="text-red-500">{forgotResult.data}</p>}
                 <div className="flex items-center justify-center border-[2px] border-[#363636] py-6 sm:w-[23.7rem] w-[22rem] gap-1">
                     <p>Have an account?</p>
-                    <Link to="/login" onClick={() => setUserData([])} className="text-[#3897F1]">Log in</Link>
+                    <Link to="/login" className="text-[#3897F1]">Log in</Link>
                 </div>
             </div>
         </section >

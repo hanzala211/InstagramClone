@@ -5,13 +5,13 @@ import { User } from "../types/user";
 export async function changeData(
 	changeUserName: string,
 	userData: User,
-	setErrorMessage: (value:string) => void,
-	setSuccessMessage:(value: string) => void,
-	setIsDisabled: (value: boolean) => void ,
+	setErrorMessage: (value: string) => void,
+	setSuccessMessage: (value: string) => void,
+	setIsDisabled: (value: boolean) => void,
 	changeBio: string,
 	setUserData: (value: User) => void,
-	selectedImage: string
-) : Promise<void> {
+	selectedImage: string | null
+): Promise<void> {
 	const raw = JSON.stringify({
 		userName: changeUserName,
 		fullName: userData.data.user.fullName,
@@ -99,7 +99,7 @@ export async function getHighLights(
 	setHighLightStories: (value: Highlight[]) => void,
 	userData: User,
 	setHighlights: (value: Highlight[]) => void
-) : Promise<void> {
+): Promise<void> {
 	try {
 		setHighLightStories([]);
 		const response = await fetch(
@@ -119,7 +119,7 @@ export async function getHighLights(
 	}
 }
 
-export async function getStatus(userData: User, setStories: (value: ProfileStories[]) => void) : Promise<void> {
+export async function getStatus(userData: User, setStories: (value: ProfileStories[]) => void): Promise<void> {
 	try {
 		const response = await fetch(
 			`${import.meta.env.VITE_APP_URL}api/v1/story`,
@@ -138,7 +138,7 @@ export async function getStatus(userData: User, setStories: (value: ProfileStori
 	}
 }
 
-export async function fetchSaves(userData: User, setUserSaves: (value: Post[]) => void) : Promise<void> {
+export async function fetchSaves(userData: User, setUserSaves: (value: Post[]) => void): Promise<void> {
 	try {
 		const response = await fetch(
 			`${import.meta.env.VITE_APP_URL}api/v1/saved-posts`,
@@ -157,7 +157,7 @@ export async function fetchSaves(userData: User, setUserSaves: (value: Post[]) =
 	}
 }
 
-export async function fetchPosts(setPostsLoading: (value:boolean) => void, userData: User, setUserPosts: (value: Post[]) => void) : Promise<void> {
+export async function fetchPosts(setPostsLoading: (value: boolean) => void, userData: User, setUserPosts: (value: Post[]) => void): Promise<void> {
 	try {
 		setPostsLoading(true);
 		const response = await fetch(

@@ -68,7 +68,7 @@ export function Explore() {
     };
 
     function handleIncrease() {
-        setCurrentPost((prev) => prev + 1)
+        setCurrentPost((prev: any) => prev + 1)
         setCurrentIndex(0)
         setComments([])
         setPage(1);
@@ -76,7 +76,7 @@ export function Explore() {
     }
 
     function handleDecrease() {
-        setCurrentPost((prev) => prev - 1)
+        setCurrentPost((prev: any) => prev - 1)
         setCurrentIndex(0)
         setComments([])
         setPage(1);

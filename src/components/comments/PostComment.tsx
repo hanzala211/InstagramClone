@@ -7,7 +7,7 @@ import { Post } from "../../types/postType";
 interface PostCommentProps {
     commentRef?: any;
     className?: string;
-    item: Post | null;
+    item?: Post | null;
 }
 
 export const PostComment: React.FC<PostCommentProps> = ({ commentRef, className, item }) => {
@@ -31,7 +31,7 @@ export const PostComment: React.FC<PostCommentProps> = ({ commentRef, className,
             placeholder="Add a comment...."
             className="w-[90%] bg-transparent outline-none placeholder:text-[14px]"
             onFocus={() => {
-                if (selectedPost === null) {
+                if (selectedPost === null && item !== undefined) {
                     setSelectedPost(item)
                 }
             }}

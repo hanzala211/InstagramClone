@@ -8,6 +8,7 @@ import { EditForm } from "../types/user";
 interface InitialData {
     userName: string;
     bio: string;
+    selectedImage?: any;
 }
 
 export const EditProfile: React.FC = () => {
@@ -22,7 +23,7 @@ export const EditProfile: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string>("")
     const [successMessage, setSuccessMessage] = useState<string>("");
     const [isDisabled, setIsDisabled] = useState<boolean>(false);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const fileInputRef = useRef<any>(null);
 
     const isChanged =
         changeUserName !== initialData.userName ||

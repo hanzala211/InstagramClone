@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { FullSkeleton } from "../helpers/FullSkeleton";
 import { formatNumber } from "../../utils/helper";
 import { fetchUserDataOnHover } from "../../services/searchProfile";
+import { UserInfo } from "../../types/user";
+import { Post } from "../../types/postType";
 
-export const UserHoverModal: React.FC = ({ username, isHovered }: {username?: string; isHovered?: boolean}) => {
+export const UserHoverModal: React.FC = ({ username, isHovered }: { username?: string; isHovered?: boolean }) => {
     const { userData } = useUser()
-    const [hoverProfile, setHoverProfile] = useState({})
-    const [isLoading, setIsLoading] = useState(false)
-    const [posts, setPosts] = useState([])
+    const [hoverProfile, setHoverProfile] = useState<UserInfo>()
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [posts, setPosts] = useState<Post[]>([])
 
     useEffect(() => {
         const abortController = new AbortController();

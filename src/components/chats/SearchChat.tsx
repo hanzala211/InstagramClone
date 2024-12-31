@@ -10,7 +10,7 @@ import { usePost } from "../../context/PostContext"
 interface SearchChatProps {
     header: string;
     isChat: boolean;
-    index: number;
+    index?: number;
 }
 
 export const SearchChat: React.FC<SearchChatProps> = ({ header, isChat, index }) => {
