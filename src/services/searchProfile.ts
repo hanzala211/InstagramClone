@@ -154,7 +154,7 @@ export async function fetchUserDataOnHover(
 				.catch((err) => console.error(err))
 				.finally(() => setIsLoading(false));
 		}
-	} catch (error) {
+	} catch (error: any) {
 		if (error.name !== 'AbortError') {
 			console.error('Error fetching user' + error);
 		}
@@ -164,7 +164,7 @@ export async function fetchUserDataOnHover(
 export async function fetchUserDataOnClick(
 	username: string,
 	userData: User,
-	token: string,
+	token: any,
 	setSelectedProfile: (value: UserInfo) => void,
 	setMainLoading: (value: boolean) => void
 ): Promise<void> {
