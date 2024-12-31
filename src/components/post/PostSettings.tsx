@@ -5,8 +5,8 @@ import { usePost } from "../../context/PostContext";
 import { Overlay } from "../helpers/Overlay";
 import { deletePost, updatePost } from "../../services/post";
 import { useNavigate } from "react-router-dom";
- 
-interface PostSettingsProps{
+
+interface PostSettingsProps {
     isPostSettingOpen: boolean;
     setIsPostSettingOpen: (value: boolean) => void;
     setIsPostOpen: (value: boolean) => void;
@@ -62,7 +62,7 @@ export const PostSettings: React.FC<PostSettingsProps> = ({ isPostSettingOpen, s
                         if (innerWidth > 770) {
                             setIsEditingOpen(true);
                         } else {
-                            setCroppedImages(selectedPost.imageUrls)
+                            setCroppedImages(selectedPost?.imageUrls)
                             navigate("/edit/details/")
                         }
                         setIsPostSettingOpen(false);

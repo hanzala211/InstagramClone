@@ -62,10 +62,10 @@ export async function savePost(
 	userData: User,
 	setUserData: (value: User) => void,
 	setMessage: (value: string) => void,
-	selectedPost: Post
+	selectedPost: Post | null
 ): Promise<void> {
 	try {
-		setIsSaved((prev) => !prev);
+		setIsSaved((prev: boolean) => !prev);
 		const response = await fetch(
 			`${import.meta.env.VITE_APP_URL}api/v1/save/${selectedPost._id}`,
 			{
@@ -104,7 +104,7 @@ export async function unSavePost(
 	userData: User,
 	setUserData: (value: User) => void,
 	setMessage: (value: string) => void,
-	selectedPost: Post
+	selectedPost: Post | null
 ): Promise<void> {
 	try {
 		setIsSaved((prev) => !prev);
@@ -148,7 +148,7 @@ export async function deletePost(
 	setMessage: (value: string) => void,
 	setUserData: (value: User) => void,
 	setUserPosts: (value: Post[]) => void,
-	selectedPost: Post,
+	selectedPost: Post | null,
 	setSelectedPost: (value: Post) => void,
 	setIsPostSettingOpen: (value: boolean) => void,
 	setIsPostOpen: (value: boolean) => void
@@ -197,7 +197,7 @@ export async function updatePost(
 	setIsEditingOpen: (value: boolean) => void,
 	userData: User,
 	captionValue: string,
-	selectedPost: Post,
+	selectedPost: Post | null,
 	setMessage: (value: string) => void,
 	navigate: NavigateFunction,
 	setCaptionValue: (value: string) => void

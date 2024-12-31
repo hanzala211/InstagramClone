@@ -1,10 +1,10 @@
-export interface Post{
+export interface Post {
     _id?: string;
     caption?: string | null;
     commentsCount?: number;
     comments?: CommentStructure[];
     createdAt?: string;
-    imageUrls?: string[];
+    imageUrls: string[];
     likeCount?: number;
     likes?: string[];
     user?: PostUserData | string;
@@ -14,22 +14,22 @@ export interface Post{
     isPublic?: boolean;
 }
 
-export interface PostUserData{
+export interface PostUserData {
     _id?: string;
     profilePic?: string;
     userName?: string;
-    email?:string;
+    email?: string;
     fullName?: string;
 }
 
-export interface CommentStructure{
+export interface CommentStructure {
     comment: string;
     createdAt: string;
     user?: PostUserData | string;
     _id: string;
 }
 
-export interface CroppedAreas{
+export interface CroppedAreas {
     width: number;
     height: number;
     x: number;

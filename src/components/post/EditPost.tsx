@@ -2,15 +2,15 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { usePost } from "../../context/PostContext";
 import { User } from "../../types/user";
 
-interface EditPostProps{
+interface EditPostProps {
     handleDecrease: () => void;
     handleIncrease: () => void;
     userData: User | null;
-    croppedImage: string[];
+    croppedImage?: string[];
     isCaption: boolean;
 }
 
-export const EditPost: React.FC<EditPostProps> = ({ handleDecrease, handleIncrease, userData, croppedImage, isCaption }) => { 
+export const EditPost: React.FC<EditPostProps> = ({ handleDecrease, handleIncrease, userData, croppedImage, isCaption }) => {
     const { captionValue, setCaptionValue, currentIndex, loading } = usePost();
 
     const handleCaptionChange = (e: any) => {
