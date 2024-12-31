@@ -68,7 +68,7 @@ export const ChatProvider: React.FC<ContextChild> = ({ children }) => {
                 })
             const foundIds = foundArr.map((item) => item.participants.find((id: string) => userData.data.user._id !== id))
             if (foundIds.length > 0) {
-                Promise.all(foundIds.map((item, index) => fetchUserById(item, index, userData, foundArr))).then((res) => {
+                Promise.all(foundIds.map((item, index) => fetchUserById(item, index, userData, foundArr))).then((res: any[]) => {
                     setThreads(res)
                 }).finally(() => setTimeout(() => {
                     setThreadsLoading(false)

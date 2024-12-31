@@ -142,7 +142,7 @@ export async function deleteMessageAndUpdateThread(
 	}
 }
 
-export async function fetchSelectedChat(userData: User | null, setSelectedChat: (value: UserInfo) => void, location: Location): Promise<void> {
+export async function fetchSelectedChat(userData: User | null, setSelectedChat: (value: UserInfo) => void, location: any): Promise<void> {
 	try {
 		const response = await fetch(
 			`${import.meta.env.VITE_APP_URL}api/v1/auth/${location.pathname.slice(
