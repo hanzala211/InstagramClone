@@ -35,7 +35,11 @@ const NoteTooltip: React.FC<NoteTooltipProps> = ({ isProfile, noteValue, setNote
                             maxLength={60}
                             placeholder="Share a thought..."
                             value={noteValue}
-                            onChange={(e) => setNoteValue(e.target.value)}
+                            onChange={(e) => {
+                                if (setNoteValue !== undefined) {
+                                    setNoteValue(e.target.value)
+                                }
+                            }}
                             style={{
                                 wordWrap: "break-word",
                                 overflowWrap: "break-word",
