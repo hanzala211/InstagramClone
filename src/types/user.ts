@@ -5,6 +5,7 @@ import { StoriesStructure } from "./stories";
 export interface User{
     status: string;
     data: UserData | any;
+    error?: any,
 }
 
 export interface UserData{

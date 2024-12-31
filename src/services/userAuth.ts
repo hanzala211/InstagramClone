@@ -1,16 +1,18 @@
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
+import { User, UserInfo } from '../types/user';
+import { NavigateFunction } from 'react-router-dom';
 
 export async function fetchUser(
-	userValue,
-	password,
-	setLoading,
-	setUserData,
-	setUserValue,
-	setPassword,
-	setMainLoading,
-	navigate
-) {
+	userValue: string,
+	password: string,
+	setLoading: (value: boolean) => void,
+	setUserData: (value: User | null) => void,
+	setUserValue: (value: string) => void,
+	setPassword: (value: string) => void,
+	setMainLoading: (value: boolean) => void,
+	navigate: NavigateFunction
+): Promise<void> {
 	const userId = {
 		identifier: userValue,
 		password: password,
@@ -56,19 +58,19 @@ export async function fetchUser(
 }
 
 export async function fetchData(
-	fullName,
-	userName,
-	emailAddress,
-	signupPassword,
-	setMainLoading,
-	setLoading,
-	setUserData,
-	setSuccessMessage,
-	setEmailAddress,
-	setSignupPassword,
-	setFullName,
-	setUserName,
-	navigate
+	fullName: string,
+	userName: string,
+	emailAddress: string,
+	signupPassword: string,
+	setMainLoading: (value: boolean) => void,
+	setLoading: (value: boolean) => void,
+	setUserData: (value: User |null) => void,
+	setSuccessMessage: (value: string) => void,
+	setEmailAddress: (value: string) => void,
+	setSignupPassword: (value: string) => void,
+	setFullName: (value: string) => void,
+	setUserName: (value: string) => void,
+	navigate: NavigateFunction
 ) {
 	const data = JSON.stringify({
 		fullName: fullName,
@@ -120,16 +122,16 @@ export async function fetchData(
 }
 
 export async function fetchMe(
-	setMainLoading,
-	setUserData,
-	token,
-	params,
-	fetchUserDataOnClick,
-	setSelectedProfile
+	setMainLoading: (value: boolean) => void,
+	setUserData: (value: User | null) => void,
+	token: any,
+	params: any,
+	fetchUserDataOnClick: (value: any) => void,
+	setSelectedProfile: (value: UserInfo) => void
 ) {
 	try {
 		setMainLoading(true);
-		setUserData([]);
+		setUserData(null);
 		const response = await fetch(
 			`${import.meta.env.VITE_APP_URL}api/v1/auth/me`,
 			{
@@ -166,7 +168,7 @@ export async function fetchMe(
 	}
 }
 
-export async function forgotPassword(emailValue, setLoading, setForgotResult) {
+export async function forgotPassword(emailValue: string, setLoading: (value: boolean) => void, setForgotResult: (value: any) => void) {
 	try {
 		setLoading(true);
 		const response = await fetch(
@@ -192,11 +194,11 @@ export async function forgotPassword(emailValue, setLoading, setForgotResult) {
 }
 
 export async function resetPassword(
-	emailValue,
-	codeValue,
-	newPassword,
-	setLoading,
-	navigate
+	emailValue: string,
+	codeValue: string,
+	newPassword: string,
+	setLoading: (value: boolean) => void,
+	navigate: NavigateFunction
 ) {
 	try {
 		setLoading(true);
