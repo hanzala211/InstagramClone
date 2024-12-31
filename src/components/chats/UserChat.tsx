@@ -19,10 +19,9 @@ export const UserChat: React.FC = () => {
     const { userData, setMainLoading, innerWidth } = useUser()
     const { setSelectedPost, selectedPost } = usePost()
     const { setSelectedProfile } = useSearch()
-    const { page, setPage, totalPages, setTotalPages } = useHome() 
     const [currentPostIndex, setCurrentPostIndex] = useState<number>(0)
     const [isPostOpen, setIsPostOpen] = useState<boolean>(false)
-    const [currentPost, setCurrentPost] = useState<number | null>(0)
+    const [currentPost, setCurrentPost] = useState<number | any>(0)
     const [isPickingEmoji, setIsPickingEmoji] = useState<boolean>(false)
     const [messageValue, setMessageValue] = useState<string>("")
     const [messagesDelete, setMessagesDelete] = useState<boolean[]>([])
@@ -196,6 +195,6 @@ export const UserChat: React.FC = () => {
             </div>
             <UserChatInfo />
         </div >
-        <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={selectedPost?.user} page={page} setPage={setPage} currentIndex={currentPostIndex} setCurrentIndex={setCurrentPostIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} totalPages={totalPages} setTotalPages={setTotalPages}  />
+        <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={selectedPost?.user} currentIndex={currentPostIndex} setCurrentIndex={setCurrentPostIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} />
     </>
 }

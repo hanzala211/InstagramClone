@@ -11,12 +11,12 @@ import { useHome } from "../context/HomeContext";
 import { HomePost } from "../components/post/HomePost"
 
 export const Home: React.FC = () => {
-    const { homeStories, setHomeStories, totalPages, setTotalPages, homePosts, setHomePosts, page, setPage } = useHome();
+    const { homeStories, setHomeStories, homePosts, setHomePosts } = useHome();
     const { userData } = useUser();
     const [currentPostIndex, setCurrentPostIndex] = useState<number>(0);
     const [isPostsLoading, setIsPostsLoading] = useState<boolean>(true);
     const [isPostOpen, setIsPostOpen] = useState<boolean>(false);
-    const [currentPost, setCurrentPost] = useState<number | null>(0);
+    const [currentPost, setCurrentPost] = useState<number | any>(0);
     const [hasMore, setHasMore] = useState<boolean>(true);
 
     useEffect(() => {
@@ -75,14 +75,10 @@ export const Home: React.FC = () => {
                 isPostOpen={isPostOpen}
                 setIsPostOpen={setIsPostOpen}
                 postData={homePosts[currentPost]?.user}
-                page={page}
-                setPage={setPage}
                 currentIndex={currentPostIndex}
                 setCurrentIndex={setCurrentPostIndex}
                 currentPost={currentPost}
                 setCurrentPost={setCurrentPost}
-                totalPages={totalPages}
-                setTotalPages={setTotalPages}
             />
         </>
     );

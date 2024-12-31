@@ -280,7 +280,7 @@ export async function postComment(
 
 export async function fetchExplorePosts(
 	setCount: (value: number) => void,
-	setExplorePagePosts: (value:PostData[]) => void,
+	setExplorePagePosts: (value: any) => void,
 	userData: User,
 	setHasMore: (value:boolean) => void,
 	setIsPostsLoading: (value: boolean) => void

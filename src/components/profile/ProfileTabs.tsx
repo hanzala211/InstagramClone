@@ -18,11 +18,11 @@ interface ProfileTabsProps {
 
 export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isSaved, isSearchPosts }) => {
     const { selectedPost, setSelectedPost, setComments } = usePost()
-    const { page, setPage, totalPages, setTotalPages } = useHome()
+    const { setPage, setTotalPages } = useHome()
     const { searchUserPosts, selectedProfile } = useSearch()
     const { userPosts, userData, userSaves } = useUser();
     const [isPostOpen, setIsPostOpen] = useState<boolean>(false);
-    const [currentPost, setCurrentPost] = useState<number | null>(null);
+    const [currentPost, setCurrentPost] = useState<number | any>(null);
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const reversedPosts = userPosts?.slice().reverse() || [];
     const reversedUserPosts = searchUserPosts?.slice().reverse() || [];
@@ -83,10 +83,6 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isS
             setCurrentIndex={setCurrentIndex}
             currentPost={currentPost}
             setCurrentPost={setCurrentPost}
-            page={page}
-            setPage={setPage}
-            totalPages={totalPages}
-            setTotalPages={setTotalPages}
         />
 
 

@@ -36,7 +36,7 @@ export const PostProvider: React.FC<ContextChild> = ({ children }) => {
 }
 export const usePost = (): PostContextType => {
     const context = useContext(PostContext)
-    if(!context){
+    if (!context) {
         throw new Error("use usePost in Post Provider");
     }
     return context;

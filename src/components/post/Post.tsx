@@ -17,6 +17,7 @@ import { useSearch } from "../../context/SearchContext";
 import { SearchChat } from "../chats/SearchChat";
 import { PostUserData } from "../../types/postType";
 import { UserInfo } from "../../types/user";
+import { useHome } from "../../context/HomeContext";
 
 interface PostProps {
     isPostOpen: boolean;
@@ -25,18 +26,15 @@ interface PostProps {
     currentIndex: number;
     setCurrentIndex: (value: number) => void;
     setCurrentPost: (value: number | null) => void;
-    page: number;
-    setPage: (value: number) => void;
-    totalPages: number;
-    setTotalPages?: (value: number) => void;
     currentPost: number | null;
     isMobile?: boolean
 }
 
-export const Post: React.FC<PostProps> = ({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, page, setPage, totalPages, setTotalPages, currentPost, isMobile }) => {
+export const Post: React.FC<PostProps> = ({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, currentPost, isMobile }) => {
     const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, setCommentValue, setIsPostSettingOpen, isCommented, commentsLoading, setCommentsLoading, isPostSettingOpen, isMyPost, comments, setComments } = usePost();
     const { userData, setMainLoading } = useUser();
     const { setSelectedProfile } = useSearch();
+    const { page, setPage, totalPages, setTotalPages } = useHome()
     const [isHovered, setIsHovered] = useState<boolean>(false);
     const commentRef = useRef<HTMLInputElement | null>(null);
 

@@ -28,7 +28,7 @@ interface HomePostProps {
     setCurrentPost: (value: number) => void;
     setCurrentPostIndex: (value: number) => void;
     setIsPostOpen: (value: boolean) => void;
-    isPost: boolean;
+    isPost?: boolean;
 }
 
 export const HomePost: React.FC<HomePostProps> = ({ index, item, homePosts, setHomePosts, setCurrentPost, setCurrentPostIndex, setIsPostOpen, isPost }) => {

@@ -1,10 +1,10 @@
 import { Post, PostUserData } from "../../types/postType"
 import { UserInfo } from "../../types/user"
 
-interface PostCaptionProps{
+interface PostCaptionProps {
     postData: PostUserData | UserInfo;
     isImg: boolean;
-    selectedPost: Post;
+    selectedPost?: Post | null;
 }
 
 export const PostCaption: React.FC<PostCaptionProps> = ({ postData, isImg, selectedPost }) => {

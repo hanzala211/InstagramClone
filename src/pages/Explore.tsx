@@ -17,10 +17,10 @@ export function Explore() {
     const { userData } = useUser();
     const { searchQuery, setSearchQuery, searchData, setSearchData, setSelectedProfile } = useSearch();
     const { setSelectedPost, selectedPost, setComments } = usePost()
-    const { page, setPage, totalPages, setTotalPages } = useHome()
+    const { setPage, setTotalPages } = useHome()
     const [explorePagePosts, setExplorePagePosts] = useState<PostData[]>([]);
     const [isPostsLoading, setIsPostsLoading] = useState<boolean>(true);
-    const [currentPost, setCurrentPost] = useState<number | null>(null);
+    const [currentPost, setCurrentPost] = useState<number | any>(null);
     const [isPostOpen, setIsPostOpen] = useState<boolean>(false);
     const [count, setCount] = useState<number>(0);
     const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -114,7 +114,7 @@ export function Explore() {
                 </InfiniteScroll>
             )}
         </section>
-        <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={explorePagePosts[currentPost]?.user} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} page={page} setPage={setPage} totalPages={totalPages} setTotalPages={setTotalPages} />
+        <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={explorePagePosts[currentPost]?.user} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} />
 
         {selectedPost !== null && explorePagePosts.length > 1 && <>
             {currentPost !== explorePagePosts.length - 1 && (

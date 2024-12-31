@@ -11,11 +11,10 @@ import { useHome } from "../context/HomeContext";
 
 export const MobilePostPage: React.FC = () => {
     const { selectedPost, setSelectedPost } = usePost()
-    const { page, setPage, totalPages, setTotalPages } = useHome()
     const { userData } = useUser()
     const [currentPostIndex, setCurrentPostIndex] = useState<number>(0)
     const [isPostOpen, setIsPostOpen] = useState<boolean>(true)
-    const [currentPost, setCurrentPost] = useState<number | null>(0)
+    const [currentPost, setCurrentPost] = useState<number | any>(0)
     const [isPostLoading, setIsPostLoading] = useState<boolean>(false)
     const location = useLocation()
 
@@ -31,7 +30,7 @@ export const MobilePostPage: React.FC = () => {
         <PageHeader isArrowNeeded={true} />
         {!isPostLoading ?
             <div className="w-full 440:max-w-[27rem] h-[100vh] max-w-[25rem] md:max-w-[60rem] mx-auto mt-14">
-                <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={selectedPost?.postBy ? (typeof selectedPost?.postBy === "object" && selectedPost?.postBy !== null) ? selectedPost?.postBy : selectedPost?.user : selectedPost?.user} page={page} setPage={setPage} currentIndex={currentPostIndex} setCurrentIndex={setCurrentPostIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} totalPages={totalPages} setTotalPages={setTotalPages} isMobile={true} />
+                <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={selectedPost?.postBy ? (typeof selectedPost?.postBy === "object" && selectedPost?.postBy !== null) ? selectedPost?.postBy : selectedPost?.user : selectedPost?.user} currentIndex={currentPostIndex} setCurrentIndex={setCurrentPostIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} isMobile={true} />
             </div> : <div><Loader height="h-[30vh]" widthHeight={true} /></div>}
     </section>
 }

@@ -1,12 +1,12 @@
 export interface Post{
-    _id: string;
-    caption: string | null;
-    commentsCount: number;
+    _id?: string;
+    caption?: string | null;
+    commentsCount?: number;
     comments?: CommentStructure[];
-    createdAt: string;
-    imageUrls: string[];
-    likeCount: number;
-    likes: string[];
+    createdAt?: string;
+    imageUrls?: string[];
+    likeCount?: number;
+    likes?: string[];
     user?: PostUserData | string;
     postBy?: PostUserData | string;
     __v?: number;

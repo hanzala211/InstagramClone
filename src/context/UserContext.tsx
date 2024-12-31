@@ -8,7 +8,7 @@ import { User, UserFollowDetailsType } from "../types/user";
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<ContextChild> = ({ children }) => {
-    const [userData, setUserData] = useState<User | null>(null);
+    const [userData, setUserData] = useState<User>();
     const [mainLoading, setMainLoading] = useState<boolean>(true);
     const [userPosts, setUserPosts] = useState<Post[]>([]);
     const [message, setMessage] = useState<any>("");
@@ -41,7 +41,7 @@ export const UserProvider: React.FC<ContextChild> = ({ children }) => {
 
 export const useUser = (): UserContextType => {
     const context = useContext(UserContext);
-    if(!context){
+    if (!context) {
         throw new Error("useUser")
     }
     return context;
