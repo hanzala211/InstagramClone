@@ -109,7 +109,7 @@ export interface SearchContextType {
     searchUserStatus: StoriesStructure[] | string[];
     setSearchUserStatus: React.Dispatch<React.SetStateAction<StoriesStructure[] | string[]>>;
     searchUserHighLights: Highlights[] | string[];
-    setSearchUserHighLights: React.Dispatch<React.SetStateAction<Highlights[] | string[]>;
+    setSearchUserHighLights: React.Dispatch<React.SetStateAction<Highlights[] | string[]>>
 }
 
 export interface StoriesContextType {
