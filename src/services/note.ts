@@ -42,7 +42,7 @@ export async function updateNote(
 	setMessage: (value: string) => void,
 	setNote: (value: Note) => void,
 	setIsNoteEditOpen: (value: boolean) => void,
-	setIsNoteOpen: (value:boolean) => void
+	setIsNoteOpen: (value: boolean) => void
 ): Promise<void> {
 	try {
 		setShareLoading(true);
@@ -70,11 +70,11 @@ export async function updateNote(
 }
 
 export async function deleteNote(
-	setDeleteLoading: (value:boolean) => void,
+	setDeleteLoading: (value: boolean) => void,
 	userData: User,
-	setMessage: (value:string) => void,
-	setIsNoteEditOpen: (value:boolean) => void,
-	setNote:(value: Note) => void
+	setMessage: (value: string) => void,
+	setIsNoteEditOpen: (value: boolean) => void,
+	setNote: (value: Note) => void
 ): Promise<void> {
 	try {
 		setDeleteLoading(true);
@@ -97,7 +97,7 @@ export async function deleteNote(
 	}
 }
 
-export async function fetchNote(setNoteLoading: (value:boolean) => void, userData: User, setNote: (value: Note) => void): Promise<void> {
+export async function fetchNote(setNoteLoading: (value: boolean) => void, userData: User, setNote: (value: Note) => void): Promise<void> {
 	try {
 		setNoteLoading(true);
 		const response = await fetch(`${import.meta.env.VITE_APP_URL}api/v1/note`, {
@@ -111,8 +111,7 @@ export async function fetchNote(setNoteLoading: (value:boolean) => void, userDat
 		if (result.message !== 'Note not found or expired.') {
 			setNote(result.note);
 		}
-	} catch (error) {
-		console.error(error);
+	} catch (error: any) {
 	} finally {
 		setNoteLoading(false);
 	}

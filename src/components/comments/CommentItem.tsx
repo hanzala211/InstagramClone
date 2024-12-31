@@ -24,7 +24,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({ item, comments, handle
         }
     }, [comments?.length])
 
-    const handleMouseEnterForComments = (i) => {
+    const handleMouseEnterForComments = (i: number) => {
         setIsCommentHovered((prev) => {
             const updated = [...prev]
             updated[i] = true;
@@ -32,7 +32,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({ item, comments, handle
         });
     };
 
-    const handleMouseLeaveForComments = (i) => {
+    const handleMouseLeaveForComments = (i: number) => {
         setIsCommentHovered((prev) => {
             const updated = [...prev]
             updated[i] = false;
@@ -48,7 +48,11 @@ export const CommentItem: React.FC<CommentItemProps> = ({ item, comments, handle
                     <HoverCardTrigger>
                         <Link
                             to={userData?.data.user._id !== item?.user?._id ? `/search/${item?.user?.userName}/` : `/${userData?.data.user.userName}/`}
-                            onClick={() => handleClick(item)}
+                            onClick={() => {
+                                if (handleClick !== undefined) {
+                                    handleClick(item, null)
+                                }
+                            }}
                             className="text-[13px] mr-2 font-semibold hover:opacity-50 transition duration-150"
                             onMouseEnter={() => handleMouseEnterForComments(i)}
                             onMouseLeave={() => handleMouseLeaveForComments(i)}
@@ -59,7 +63,9 @@ export const CommentItem: React.FC<CommentItemProps> = ({ item, comments, handle
                     {item?.comment}
                 </p>
                 <div className="absolute z-[200]" onClick={() => {
-                    handleClick(item)
+                    if (handleClick !== undefined) {
+                        handleClick(item, null)
+                    }
                     navigate(userData?.data.user._id !== item?.user._id
                         ? `/search/${item?.user.userName}/`
                         : `/${userData?.data?.user?.userName}/`)

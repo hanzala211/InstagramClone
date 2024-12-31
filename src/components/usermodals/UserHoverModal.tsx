@@ -30,7 +30,7 @@ export const UserHoverModal: React.FC = ({ username, isHovered }: { username?: s
                 <div className="flex gap-5 px-4 py-3">
                     <img src={hoverProfile?.profilePic} alt="Test User" className="rounded-full w-11 h-11" />
                     <div className="flex gap-1 flex-col">
-                        <Link className="text-[14px]">{hoverProfile?.userName}</Link>
+                        <button className="text-[14px]">{hoverProfile?.userName}</button>
                         <p className="text-[#a8a8a8] text-[12px]">{hoverProfile?.fullName}</p>
                     </div>
                 </div>
@@ -41,7 +41,7 @@ export const UserHoverModal: React.FC = ({ username, isHovered }: { username?: s
                 </div>
                 <div className={`flex mt-9 gap-1 ${posts.length > 2 ? "justify-evenly" : posts.length === 0 ? "justify-center" : ""}`}>
                     {posts.length > 0 ? posts?.map((item, i) => (
-                        <img key={i} src={item?.imageUrls[0]} alt={item?.caption} className="w-[32%] object-cover rounded" />
+                        <img key={i} src={item?.imageUrls[0]} alt={item?.caption || "User Modal"} className="w-[32%] object-cover rounded" />
                     )) : <div className="flex flex-col gap-2 items-center">
                         <img src="/images/icons.png" className="w-10" />
                         <h1 className="text-[20px]">No Posts</h1>

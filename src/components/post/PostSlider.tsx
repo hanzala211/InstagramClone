@@ -5,7 +5,7 @@ import { useUser } from "../../context/UserContext";
 import { LikeAnimation } from "./LikeAnimation";
 import { likePost } from "../../services/post";
 
-interface PostSliderProps{
+interface PostSliderProps {
     currentIndex: number;
     setCurrentIndex: (value: number) => void
 }
@@ -34,7 +34,7 @@ export const PostSlider: React.FC<PostSliderProps> = ({ currentIndex, setCurrent
 
     function handleIncrease() {
         setIsAnimating(true);
-        setCurrentIndex((prev: number) => prev + 1);
+        setCurrentIndex((prev) => prev + 1);
         setTimeout(() => setIsAnimating(false), 400);
     };
 
