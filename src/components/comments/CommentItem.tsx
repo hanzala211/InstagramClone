@@ -6,10 +6,10 @@ import { useEffect, useState } from "react"
 import { useUser } from "../../context/UserContext"
 import { CommentStructure } from "../../types/postType"
 
-interface CommentItemProps{ 
+interface CommentItemProps {
     item: CommentStructure;
     comments: CommentStructure[];
-    handleClick?: () => void;
+    handleClick?: (item: any, postData: any) => void;
     i: number;
 }
 

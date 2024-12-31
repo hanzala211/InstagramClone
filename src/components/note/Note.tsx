@@ -1,7 +1,7 @@
 import { Note } from "../../types/note";
 import { Loader } from "../helpers/Loader";
 
-interface NoteTooltipProps{
+interface NoteTooltipProps {
     isProfile?: boolean;
     noteValue?: string;
     setNoteValue?: (value: string) => void;

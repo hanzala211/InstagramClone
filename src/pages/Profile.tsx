@@ -65,7 +65,13 @@ export const Profile: React.FC = () => {
                         setIsNoteEditOpen(true);
                     }
                 }}>
-                    {!isNoteEditOpen ? <div className="absolute md:top-7 lg:top-4 xl:top-3 top-1 left-[3.5rem] sm:top-6 sm:left-[4rem] md:left-[4rem] lg:left-[5.5rem] xl:left-[9rem] z-[1]"><NoteTooltip isProfile={true} note={note} noteLoading={noteLoading} /></div> : <div ref={noteEditorRef} className="absolute md:top-2 lg:top-20 top-2 left-[22rem] md:left-[20rem] lg:left-0 xl:left-[8rem] z-[1]"><NoteEditor /></div>}
+                    {!isNoteEditOpen ?
+                        <div className="absolute md:top-7 lg:top-4 xl:top-3 top-1 left-[3.5rem] sm:top-6 sm:left-[4rem] md:left-[4rem] lg:left-[5.5rem] xl:left-[9rem] z-[1]">
+                            <NoteTooltip isProfile={true} note={note} noteLoading={noteLoading} />
+                        </div> :
+                        <div ref={noteEditorRef} className="absolute md:top-2 lg:top-20 top-2 left-[22rem] md:left-[20rem] lg:left-0 xl:left-[8rem] z-[1]">
+                            <NoteEditor />
+                        </div>}
                 </div>
                 <Link
                     to={stories.length > 0 ? `/stories/${userData.data.user.userName}/${stories[0]._id}/` : ""}

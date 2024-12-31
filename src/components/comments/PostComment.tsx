@@ -4,11 +4,11 @@ import { useUser } from "../../context/UserContext";
 import { postComment } from "../../services/post";
 import { Post } from "../../types/postType";
 
-interface PostCommentProps{
+interface PostCommentProps {
     commentRef?: any;
     className?: string;
-    item?: Post;
-} 
+    item: Post | null;
+}
 
 export const PostComment: React.FC<PostCommentProps> = ({ commentRef, className, item }) => {
     const { setIsDisabled, isDisabled, commentValue, setCommentValue, setIsCommented, selectedPost, setSelectedPost } = usePost()

@@ -12,7 +12,7 @@ import { Notification } from "../../types/chatType";
 
 interface UserThreadsProp {
     isNewChat?: boolean;
-    item: UserInfo;
+    item?: any;
     isChat: boolean | undefined;
     handleClose?: (value: void) => void;
 }
@@ -82,8 +82,12 @@ export const UserThreads: React.FC<UserThreadsProp> = ({ isNewChat, item, isChat
         </div>
         <div className={`flex w-[70%] flex-col gap-1 ${isNewChat ? "" : ""}`}>
             <h3 className={`font-semibold text-left text-[15px] ${isReceived ? "font-extrabold" : "font-semibold"}`}>{item?.userName}</h3>
-            <p className={`text-[13px] line-clamp-1 text-left text-[#a8a8a8] ${isReceived ? "text-white font-bold" : ""}`}>{isNewChat ? "" : item?.lastMessageSender === userData?.data?.user?._id ? "You: " : ""} {isNewChat ? item?.fullName : item?.lastMessageSender !== userData?.data?.user?._id && item?.lastMessage === "Sent an attachement" ? item?.fullName + " " + item?.lastMessage : item?.lastMessage}</p>
-            {!isNewChat && isReceived && <div className="absolute right-5 w-2 top-[47%] -translate-x-1/2 h-2 rounded-full bg-[#0096f4]"></div>}
+            <p className={`text-[13px] line-clamp-1 text-left text-[#a8a8a8] ${isReceived ? "text-white font-bold" : ""}`}>
+                {isNewChat ? "" : item?.lastMessageSender === userData?.data?.user?._id ? "You: " : ""} {isNewChat ? item?.fullName : item?.lastMessageSender !== userData?.data?.user?._id && item?.lastMessage === "Sent an attachement" ? item?.fullName + " " + item?.lastMessage : item?.lastMessage}
+            </p>
+            {!isNewChat && isReceived &&
+                <div className="absolute right-5 w-2 top-[47%] -translate-x-1/2 h-2 rounded-full bg-[#0096f4]"></div>
+            }
         </div>
     </button>
 }

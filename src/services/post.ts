@@ -8,7 +8,7 @@ export async function createPost(
 	croppedImages: (value: string[]) => void,
 	userData: User,
 	captionValue: string,
-	setCaptionValue: (value:string) => void,
+	setCaptionValue: (value: string) => void,
 	isMobile: boolean,
 	navigate: NavigateFunction
 ): Promise<void> {
@@ -58,7 +58,7 @@ export async function createPost(
 }
 
 export async function savePost(
-	setIsSaved: (value:boolean) => void,
+	setIsSaved: (value: boolean) => void,
 	userData: User,
 	setUserData: (value: User) => void,
 	setMessage: (value: string) => void,
@@ -128,8 +128,8 @@ export async function unSavePost(
 						...prev.data.user,
 						savedPosts: prev.data.user.savedPosts.includes(result.savedPosts[0])
 							? prev.data.user.savedPosts.filter(
-									(item) => item !== result.savedPosts[0]
-							  )
+								(item) => item !== result.savedPosts[0]
+							)
 							: [...prev.data.user.savedPosts, ...result.savedPosts],
 					},
 				},
@@ -243,11 +243,11 @@ export async function postComment(
 	setIsDisabled: (value: boolean) => void,
 	userData: User,
 	commentValue: string,
-	selectedPost: Post,
+	selectedPost: Post | null,
 	setMessage: (value: string) => void,
 	setCommentValue: (value: string) => void,
-	setIsCommented: (value:boolean) => void
-) : Promise<void> {
+	setIsCommented: (value: boolean) => void
+): Promise<void> {
 	try {
 		setIsDisabled(true);
 		const respone = await fetch(
@@ -282,9 +282,9 @@ export async function fetchExplorePosts(
 	setCount: (value: number) => void,
 	setExplorePagePosts: (value: any) => void,
 	userData: User,
-	setHasMore: (value:boolean) => void,
+	setHasMore: (value: boolean) => void,
 	setIsPostsLoading: (value: boolean) => void
-) : Promise<void> {
+): Promise<void> {
 	try {
 		setCount((prev) => prev + 1);
 		const response = await fetch(
@@ -322,20 +322,19 @@ export async function fetchExplorePosts(
 
 export async function fetchComments(
 	signal: any,
-	setComments: (value:CommentStructure[]) => void,
+	setComments: (value: CommentStructure[]) => void,
 	setCommentsLoading: (value: boolean) => void,
 	setTotalPages: (value: number) => void,
 	userData: User,
 	selectedPost: Post,
 	page: number
-) : Promise<void> {
+): Promise<void> {
 	try {
 		setComments([]);
 		setCommentsLoading(true);
 
 		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/post/comments/${
-				selectedPost._id
+			`${import.meta.env.VITE_APP_URL}api/v1/post/comments/${selectedPost._id
 			}?page=${page}&limit=15`,
 			{
 				method: 'GET',
@@ -387,7 +386,7 @@ export async function likePost(
 	selectedPost: Post,
 	setIsLiked: (value: boolean) => void,
 	setMessage: (value: string) => void
-) : Promise<void> {
+): Promise<void> {
 	try {
 		setSelectedPost((prev) => {
 			const hasLiked = prev.likes.some(
@@ -428,7 +427,7 @@ export async function unLikePost(
 	selectedPost: Post,
 	setIsLiked: (value: boolean) => void,
 	setMessage: (value: string) => void
-) : Promise<void> {
+): Promise<void> {
 	try {
 		setSelectedPost((prev) => {
 			const hasLiked = prev.likes.some(
@@ -468,7 +467,7 @@ export async function fetchPost(
 	userData: User,
 	setSelectedPost: (value: Post) => void,
 	setIsPostsLoading: (value: boolean) => void
-) : Promise<void> {
+): Promise<void> {
 	try {
 		setIsPostsLoading(true);
 		const response = await fetch(
