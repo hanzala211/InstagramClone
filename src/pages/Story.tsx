@@ -10,21 +10,21 @@ import { formatDate } from "../utils/helper";
 import { useSearch } from "../context/SearchContext";
 import { StoryBar } from "../components/story/StoryBar";
 
-interface StoryPropTypes{
-    isArchive: boolean;
-    isOwnProfile: boolean;
-    isHighLight: boolean;
-    isSearchUser: boolean;
-    isSearchHighLight: boolean;
+interface StoryPropTypes {
+    isArchive?: boolean;
+    isOwnProfile?: boolean;
+    isHighLight?: boolean;
+    isSearchUser?: boolean;
+    isSearchHighLight?: boolean;
 }
 
-interface SoryBarType{
+interface SoryBarType {
     isProfile: boolean;
     story: any;
     currentStory: number
 }
 
-export const Story: React.FC<StoryPropTypes> =({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSearchHighLight }) => {
+export const Story: React.FC<StoryPropTypes> = ({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSearchHighLight }) => {
     const { stories, userData, archives, setCurrentStory, currentStory, highLightStories } = useUser();
     const { searchUserStatus, selectedProfile, searchUserHighLights } = useSearch()
     const [highLightsModal, setHighLightsModal] = useState<boolean>(false)
@@ -67,16 +67,16 @@ export const Story: React.FC<StoryPropTypes> =({ isArchive, isOwnProfile, isHigh
     ]
 
     const storiesButton: boolean | "" = isOwnProfile
-    ? currentStory !== stories.length - 1
-    : isArchive
-        ? currentStory !== archives.length - 1
-        : isHighLight
-            ? currentStory !== highLightStories.length - 1
-            : isSearchUser
-                ? currentStory !== searchUserStatus.length - 1
-                : isSearchHighLight
-                    ? currentStory !== searchUserHighLights.length - 1
-                    : "";
+        ? currentStory !== stories.length - 1
+        : isArchive
+            ? currentStory !== archives.length - 1
+            : isHighLight
+                ? currentStory !== highLightStories.length - 1
+                : isSearchUser
+                    ? currentStory !== searchUserStatus.length - 1
+                    : isSearchHighLight
+                        ? currentStory !== searchUserHighLights.length - 1
+                        : "";
 
     return <section className="bg-[#1A1A1A] w-full h-screen relative p-4 flex flex-col md:flex-row justify-between items-start">
         <img
@@ -126,13 +126,13 @@ export const Story: React.FC<StoryPropTypes> =({ isArchive, isOwnProfile, isHigh
                         : "") && (
                     <>
                         {storiesButton && (
-                                <button
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md hover:scale-110 transition-transform duration-200"
-                                    onClick={handleIncrease}
-                                >
-                                    <FaArrowRight className="fill-black text-lg" />
-                                </button>
-                            )}
+                            <button
+                                className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md hover:scale-110 transition-transform duration-200"
+                                onClick={handleIncrease}
+                            >
+                                <FaArrowRight className="fill-black text-lg" />
+                            </button>
+                        )}
                         {currentStory !== 0 && (
                             <button
                                 className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md hover:scale-110 transition-transform duration-200"

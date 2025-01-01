@@ -9,6 +9,7 @@ import { PageHeader } from "../components/sidebar/PageHeader";
 import { HomeStories } from "../components/story/HomeStories"
 import { useHome } from "../context/HomeContext";
 import { HomePost } from "../components/post/HomePost"
+import { ShadCnSkeleton } from "../components/ui/shadcnSkeleton";
 
 export const Home: React.FC = () => {
     const { homeStories, setHomeStories, homePosts, setHomePosts } = useHome();
@@ -37,7 +38,7 @@ export const Home: React.FC = () => {
             {homeStories.length > 0 && <HomeStories />}
             <section className={`w-full lg:max-w-[40%] sm:max-w-[85%] max-w-[95%] mb-20 md:mb-2 mx-auto ${homeStories.length === 0 ? "mt-16 md:mt-10" : "mt-5"
                 }`}>
-                <div className={`flex flex-col gap-2 w-full ${isPostsLoading || homePosts.length === 0 ? "h-[90vh]" : ""}`}>
+                <div className={`flex flex-col gap-2 w-full`}>
                     {!isPostsLoading ? (
                         <InfiniteScroll
                             dataLength={homePosts.length}
@@ -60,9 +61,22 @@ export const Home: React.FC = () => {
                                 ))
                                 : ""}
                         </InfiniteScroll>
-                    ) : (
-                        <Loader />
-                    )}
+                    ) : <div className="flex gap-10 flex-col">
+                        {Array.from({ length: 6 }, (_, i) => (
+                            <div className="flex gap-2 flex-col">
+                                <div className="flex gap-3 items-center">
+                                    <ShadCnSkeleton className="h-10 rounded-full w-10 bg-[#262626]" />
+                                    <ShadCnSkeleton className="h-3 w-full max-w-[15%] bg-[#262626] rounded-md" />
+                                </div>
+                                <ShadCnSkeleton className="w-full rounded-md max-w-full bg-[#262626] md:h-[40rem] sm:h-[35rem] h-[25rem]" />
+                                <div className="flex flex-col items-center gap-2">
+                                    <ShadCnSkeleton className="h-3 w-full max-w-[95%] bg-[#262626] rounded-md" />
+                                    <ShadCnSkeleton className="h-3 w-full max-w-[95%] bg-[#262626] rounded-md" />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    }
                     {homePosts.length === 0 && !isPostsLoading && (
                         <div className="absolute top-20 left-[50%] -translate-x-1/2 text-center flex flex-col items-center gap-1">
                             <RiUserFollowFill className="text-[40px]" />

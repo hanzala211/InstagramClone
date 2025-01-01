@@ -11,7 +11,7 @@ import { useChat } from "./context/ChatContext";
 import { useSearch } from "./context/SearchContext";
 import { SideBarProvider } from "./context/SideBarContext";
 
-export function Layout({ token } : {token: string}) {
+export function Layout({ token }: { token: string | null }) {
     const { mainLoading, setMainLoading, setUserData, message, setMessage } = useUser();
     const { setSelectedChat } = useChat()
     const { setSelectedProfile } = useSearch();

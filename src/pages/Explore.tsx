@@ -12,6 +12,7 @@ import { fetchExplorePosts } from "../services/post";
 import { useSearch } from "../context/SearchContext";
 import { useHome } from "../context/HomeContext";
 import { Post as PostData } from "../types/postType";
+import { ShadCnSkeleton } from "../components/ui/shadcnSkeleton";
 
 export function Explore() {
     const { userData } = useUser();
@@ -84,7 +85,7 @@ export function Explore() {
     }
 
     return <>
-        <section className={`w-full lg:max-w-[80%] xl:max-w-[60%] sm:max-w-[80%] max-w-[97%] mt-7 mx-auto ${isPostsLoading || explorePagePosts.length === 0 ? "h-[85vh]" : ""} ${explorePagePosts.length < 4 ? "xl:h-[95vh]" : ""}`}>
+        <section className={`w-full lg:max-w-[80%] xl:max-w-[60%] sm:max-w-[95%] max-w-[97%] mt-7 mx-auto `}>
             <div ref={containerRef} className="bg-[#121212] w-full md:hidden flex sm:gap-10 gap-3 items-center p-3 h-[3.5rem] fixed top-0 z-[50] left-0">
                 <input ref={inputRef} type="text" name="search" id="search" placeholder="Search" className={`bg-[#000] border-[1px] border-[#6F6F6F] rounded-md py-1 px-3 outline-none ${isSearching ? "w-[85%]" : "w-full"}`} onFocus={() => setIsSearching(true)} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
                 {isSearching && <button className="text-[14px]" onClick={() => setIsSearching(false)}>Cancel</button>}
@@ -98,7 +99,11 @@ export function Explore() {
                 <p className="text-center text-lg text-gray-500">
                     No posts available. Check back later!
                 </p>
-            ) : isPostsLoading ? <Loader /> : (
+            ) : isPostsLoading ? <div className="grid grid-flow-row grid-cols-3 gap-1 mt-5 mb-20 md:mb-0 md:mt-0">
+                {Array.from({ length: 24 }, (item, i) => (
+                    <ShadCnSkeleton key={i} className="w-full xl:h-[20rem] lg:h-[17rem] sm:h-[12rem] md:h-[15rem] h-[8rem] rounded-md max-w-full bg-[#262626] " />
+                ))}
+            </div> : (
                 <InfiniteScroll dataLength={explorePagePosts.length} next={() => {
                     fetchExplorePosts(setCount, setExplorePagePosts, userData, setHasMore, setIsPostsLoading)
                 }} loader={

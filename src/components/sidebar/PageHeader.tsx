@@ -9,7 +9,7 @@ import { onCropImage } from "../../utils/helper";
 import { createPost, updatePost } from "../../services/post";
 import { useSearch } from "../../context/SearchContext";
 
-interface PageHeaderProps{
+interface PageHeaderProps {
     isArrowNeeded?: boolean;
     isHomePage?: boolean;
     isInbox?: boolean;

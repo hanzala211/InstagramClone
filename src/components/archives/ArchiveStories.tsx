@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { useUser } from "../../context/UserContext";
 import { Loader } from "../helpers/Loader";
+import { ShadCnSkeleton } from "../ui/shadcnSkeleton";
 
 export const ArchiveStories: React.FC = () => {
     const { archives, loadingArchives, setCurrentStory } = useUser()
@@ -30,6 +31,10 @@ export const ArchiveStories: React.FC = () => {
                     <p>Start adding some stories to see them here!</p>
                 </div>}
             </div>
-            : <div className="h-[64vh]"><Loader /> </div >}
+            : <div className="grid md:grid-cols-4 grid-cols-2 w-full max-w-[100%] px-2 md:px-0 gap-5">
+                {Array.from({ length: 24 }, (item, i) => (
+                    <ShadCnSkeleton key={i} className="w-full xl:h-[26rem] sm:h-[38rem] md:h-[19rem] h-[8rem] rounded-md max-w-full bg-[#262626] " />
+                ))}
+            </div>}
     </>
 }

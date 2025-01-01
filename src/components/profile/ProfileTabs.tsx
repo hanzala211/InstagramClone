@@ -10,10 +10,10 @@ import { useSearch } from "../../context/SearchContext";
 import { useHome } from "../../context/HomeContext";
 
 interface ProfileTabsProps {
-    isPosts: boolean;
-    isTagged: boolean;
-    isSaved: boolean;
-    isSearchPosts: boolean;
+    isPosts?: boolean;
+    isTagged?: boolean;
+    isSaved?: boolean;
+    isSearchPosts?: boolean;
 }
 
 export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isSaved, isSearchPosts }) => {

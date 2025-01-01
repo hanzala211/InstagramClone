@@ -194,7 +194,7 @@ export async function deletePost(
 export async function updatePost(
 	setShareLoading: (value: boolean) => void,
 	setIsShared: (value: boolean) => void,
-	setIsEditingOpen: (value: boolean) => void,
+	setIsEditingOpen: ((value: boolean) => void) | null,
 	userData: User,
 	captionValue: string,
 	selectedPost: Post | null,

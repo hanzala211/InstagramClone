@@ -13,7 +13,7 @@ export function Archive() {
     }, [])
 
     return <>
-        <section className="w-full lg:max-w-[75%] grid grid-rows-[22vh,auto] gap-10 mx-auto">
+        <section className="w-full lg:max-w-[80%] max-w-[98%] grid grid-rows-[22vh,auto] gap-10 mx-auto">
             <div className="relative mt-7 border-b-[1px] border-[#262626]">
                 <button onClick={() => navigate(-1)} className="flex gap-2 ml-3 md:ml-0 w-[6rem] items-center cursor-pointer">
                     <LeftArrow />

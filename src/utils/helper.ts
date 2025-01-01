@@ -67,7 +67,7 @@ export function handleFile(fileInputRef: HTMLInputElement) {
 }
 
 export const onCropImage = async (
-	selectedImage: string[] | string,
+	selectedImage: string[] | string | any,
 	croppedAreas: CroppedAreas[],
 	setCroppedImages: (value: any) => void,
 	setLoading: (value: boolean) => void,
