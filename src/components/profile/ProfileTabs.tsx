@@ -1,5 +1,4 @@
 import { SharePhotosIcon, TaggedIcon } from "../../assets/Constants";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useUser } from "../../context/UserContext";
 import { useEffect, useState } from "react";
 import { Post } from "../post/Post";
@@ -8,6 +7,7 @@ import { PostModal } from "../post/PostModal";
 import { usePost } from "../../context/PostContext";
 import { useSearch } from "../../context/SearchContext";
 import { useHome } from "../../context/HomeContext";
+import { PostSliderButtons } from "../post/PostSliderButtons";
 
 interface ProfileTabsProps {
     isPosts?: boolean;
@@ -17,7 +17,7 @@ interface ProfileTabsProps {
 }
 
 export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isSaved, isSearchPosts }) => {
-    const { selectedPost, setSelectedPost, setComments } = usePost()
+    const { setSelectedPost, setComments } = usePost()
     const { setPage, setTotalPages } = useHome()
     const { searchUserPosts, selectedProfile } = useSearch()
     const { userPosts, userData, userSaves } = useUser();
@@ -39,7 +39,7 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isS
     }, [currentPost])
 
     function handleIncrease() {
-        setCurrentPost((prev) => prev + 1)
+        setCurrentPost((prev: number) => prev + 1)
         setCurrentIndex(0)
         setComments([])
         setPage(1);
@@ -47,7 +47,7 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isS
     }
 
     function handleDecrease() {
-        setCurrentPost((prev) => prev - 1)
+        setCurrentPost((prev: number) => prev - 1)
         setCurrentIndex(0)
         setComments([])
         setPage(1);
@@ -63,15 +63,25 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isS
                 <p className="text-[13px]">{isPosts ? "When you share photos, they will appear on your profile." : isTagged ? "When people tag you in photos, they'll appear here." : isSaved ? "When you save posts, they will appear on your profile" : ""}</p>
             </div> :
             <div className="xl:max-w-[100%] mb-16 md:mb-0 h-auto grid lg:grid-cols-3 grid-cols-2 gap-[10px]">
-                {isPosts ? reversedPosts.map((item, i, arr) =>
-                    <PostModal key={i} i={i} arr={arr} item={item} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} setTotalPages={setTotalPages} />) :
-                    isTagged ? reversedPosts.map((item, i, arr) =>
-                        <PostModal key={i} i={i} arr={arr} item={item} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} />) :
-                        isSaved ? reversedSavedPosts.map((item, i, arr) =>
-                            <PostModal key={i} i={i} arr={arr} item={item} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} />) :
-                            isSearchPosts ? reversedUserPosts.map((item, i, arr) =>
-                                <PostModal key={i} i={i} arr={arr} item={item} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} />) :
-                                ""}
+                {
+                    [
+                        isPosts && reversedPosts,
+                        isTagged && reversedPosts,
+                        isSaved && reversedSavedPosts,
+                        isSearchPosts && reversedUserPosts
+                    ]
+                        .find((posts) => posts)
+                        ?.map((item: any, i: number, arr: any[]) => (
+                            <PostModal
+                                key={i}
+                                i={i}
+                                arr={arr}
+                                item={item}
+                                setSelectedPost={setSelectedPost}
+                                setIsPostOpen={setIsPostOpen}
+                                setCurrentPost={setCurrentPost}
+                            />
+                        ))}
             </div>
         }
 
@@ -85,34 +95,7 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isS
             setCurrentPost={setCurrentPost}
         />
 
-
-        {selectedPost !== null &&
-            (
-                (isPosts || isTagged ? reversedPosts && reversedPosts.length > 1 : isSearchPosts ? reversedUserPosts && reversedUserPosts.length > 1 : isSaved ? reversedSavedPosts.length > 1 : false)
-                && (
-                    <>
-                        {((isPosts && currentPost !== userPosts.length - 1) || (isTagged && currentPost !== userPosts.length - 1) || (isSaved && currentPost !== userSaves.length - 1) ||
-                            (isSearchPosts && currentPost !== searchUserPosts.length - 1)) && (
-                                <button
-                                    className={`fixed z-[100] right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none"} xl:block hidden`}
-                                    onClick={handleIncrease}
-                                >
-                                    <FaArrowRight className="fill-black" />
-                                </button>
-                            )}
-
-                        {currentPost !== 0 && (
-                            <button
-                                className={`fixed z-[100] left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none"} xl:block hidden`}
-                                onClick={handleDecrease}
-                            >
-                                <FaArrowLeft className="fill-black" />
-                            </button>
-                        )}
-                    </>
-                )
-            )
-        }
+        <PostSliderButtons posts={isPosts || isTagged ? userPosts : isSaved ? userSaves : isSearchPosts ? searchUserPosts : []} handleDecrease={handleDecrease} handleIncrease={handleIncrease} currentPost={currentPost} />
     </>
 
 }

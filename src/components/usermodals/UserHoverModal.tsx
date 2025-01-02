@@ -5,9 +5,13 @@ import { FullSkeleton } from "../helpers/FullSkeleton";
 import { formatNumber } from "../../utils/helper";
 import { fetchUserDataOnHover } from "../../services/searchProfile";
 import { UserInfo } from "../../types/user";
-import { Post } from "../../types/postType";
+import { Post } from "../../types/postType"
 
-export const UserHoverModal: React.FC = ({ username, isHovered }: { username?: string; isHovered?: boolean }) => {
+interface UserHoverModalProps {
+    username: string;
+    isHovered: any
+}
+export const UserHoverModal: React.FC<UserHoverModalProps> = ({ username, isHovered }) => {
     const { userData } = useUser()
     const [hoverProfile, setHoverProfile] = useState<UserInfo>()
     const [isLoading, setIsLoading] = useState<boolean>(false)

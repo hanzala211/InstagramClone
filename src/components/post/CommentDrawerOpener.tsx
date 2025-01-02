@@ -7,7 +7,7 @@ import { Post } from "../../types/postType"
 import React from "react"
 
 interface CommentDrawerOpenerProps {
-    item: Post | null;
+    item: any;
     setCurrentPost: (value: number) => void;
     index: number;
     setCurrentPostIndex: (value: number) => void;

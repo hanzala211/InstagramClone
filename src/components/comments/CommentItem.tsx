@@ -7,7 +7,7 @@ import { useUser } from "../../context/UserContext"
 import { CommentStructure } from "../../types/postType"
 
 interface CommentItemProps {
-    item: CommentStructure;
+    item: any;
     comments: CommentStructure[];
     handleClick?: (item: any, postData: any) => void;
     i: number;

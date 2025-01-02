@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import { Post } from "../../types/postType";
 
-interface PostModalProps{
+interface PostModalProps {
     arr: Post[];
     i: number;
     setSelectedPost: (value: Post) => void;
@@ -19,7 +19,7 @@ export const PostModal: React.FC<PostModalProps> = ({ arr, i, setSelectedPost, s
     const { userData, innerWidth } = useUser()
     const navigate = useNavigate()
 
-    return <div className="w-full max-w-[35rem] h-full max-h-[35rem] cursor-pointer group relative overflow-hidden" onClick={() => {
+    const handleClick = () => {
         if (innerWidth > 770) {
             setIsPostOpen(true)
             setCurrentPost(i);
@@ -34,7 +34,9 @@ export const PostModal: React.FC<PostModalProps> = ({ arr, i, setSelectedPost, s
                 _id: item.postBy?._id || item.user?._id || userData.data.user._id,
             }
         });
-    }}>
+    }
+
+    return <div className="w-full max-w-[35rem] h-full max-h-[35rem] cursor-pointer group relative overflow-hidden" onClick={handleClick}>
         <div className="absolute md:right-3 md:top-2 right-1 top-1">
             {item?.imageUrls.length > 1 ? <PiCopySimpleLight className="text-[18px] md:text-[25px]" /> : ""}
         </div>

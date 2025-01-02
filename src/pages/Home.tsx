@@ -54,7 +54,6 @@ export const Home: React.FC = () => {
                                         key={index}
                                         index={index}
                                         item={post}
-                                        homePosts={homePosts}
                                         setHomePosts={setHomePosts}
                                         setCurrentPost={setCurrentPost}
                                         setCurrentPostIndex={setCurrentPostIndex}

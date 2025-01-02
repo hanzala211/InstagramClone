@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react"
 import { useUser } from "../context/UserContext";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Loader } from "../components/helpers/Loader";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { Post } from "../components/post/Post";
 import { usePost } from "../context/PostContext";
 import { PostModal } from "../components/post/PostModal";
@@ -12,12 +11,13 @@ import { fetchExplorePosts } from "../services/post";
 import { useSearch } from "../context/SearchContext";
 import { useHome } from "../context/HomeContext";
 import { ShadCnSkeleton } from "../components/ui/shadcnSkeleton";
+import { PostSliderButtons } from "../components/post/PostSliderButtons";
 
 export function Explore() {
     const { userData } = useUser();
     const { searchQuery, setSearchQuery, searchData, setSearchData, setSelectedProfile, explorePagePosts,
         setExplorePagePosts } = useSearch();
-    const { setSelectedPost, selectedPost, setComments } = usePost()
+    const { setSelectedPost, setComments } = usePost()
     const { setPage, setTotalPages } = useHome()
     const [isPostsLoading, setIsPostsLoading] = useState<boolean>(false);
     const [currentPost, setCurrentPost] = useState<number | any>(null);
@@ -122,27 +122,6 @@ export function Explore() {
         </section>
         <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={explorePagePosts[currentPost]?.user} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} />
 
-        {selectedPost !== null && explorePagePosts.length > 1 && <>
-            {currentPost !== explorePagePosts.length - 1 && (
-                <button
-                    className={`fixed z-[100] right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 invisible xl:visible  ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none "
-                        }`}
-                    onClick={handleIncrease}
-                >
-                    <FaArrowRight className="fill-black" />
-                </button>
-            )}
-
-            {currentPost !== 0 && (
-                <button
-                    className={`fixed z-[100] left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full transition-all duration-150 invisible xl:visible ${selectedPost !== null ? "opacity-100" : "opacity-0 pointer-events-none "
-                        }`}
-                    onClick={handleDecrease}
-                >
-                    <FaArrowLeft className="fill-black" />
-                </button>
-            )}
-        </>
-        }
+        <PostSliderButtons posts={explorePagePosts} handleDecrease={handleDecrease} handleIncrease={handleIncrease} currentPost={currentPost} isPostSlider={false} />
     </>
 }

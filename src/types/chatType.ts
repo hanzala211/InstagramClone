@@ -4,7 +4,7 @@ export interface Messages {
     id?: string;
     content?: string;
     senderId?: number;
-    timeStamp?: unknown;
+    timeStamp?: any;
     post?: Post;
     status?: string;
     sender?: string;
@@ -15,7 +15,7 @@ export interface Thread {
     lastMessage: string;
     lastMessageSender: string;
     participants?: string[];
-    timeStamp?: unknown;
+    timeStamp?: any;
     deleted?: {
         userId: boolean;
     }
@@ -24,7 +24,7 @@ export interface Thread {
 export interface Notification {
     messageSender?: string;
     read?: boolean;
-    timeStamp?: unknown;
+    timeStamp?: any;
     userId?: string;
     id?: string;
 }

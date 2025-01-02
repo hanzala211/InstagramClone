@@ -15,7 +15,6 @@ interface PostOptionsProps {
 export const PostOptions: React.FC<PostOptionsProps> = ({ postData, commentRef }) => {
     const { selectedPost, setIsShareOpen } = usePost()
     const [currentPostIndex, setCurrentPostIndex] = useState<number>(0)
-    const [isPostOpen, setIsPostOpen] = useState<boolean>(false)
     const [currentPost, setCurrentPost] = useState<number>(0)
 
     return <div className="flex justify-between pt-5 px-3">
