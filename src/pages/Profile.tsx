@@ -36,11 +36,11 @@ export const Profile: React.FC = () => {
         if (userSaves.length === 0) {
             fetchSaves(userData, setUserSaves);
         }
-        fetchNote(setNoteLoading, userData, setNote);
-        getStatus(userData, setStories);
         if (highlights.length === 0) {
             getHighLights(setHighLightStories, userData, setHighlights)
         }
+        fetchNote(setNoteLoading, userData, setNote);
+        getStatus(userData, setStories);
     }, [])
 
     useEffect(() => {

@@ -64,7 +64,7 @@ export const Home: React.FC = () => {
                         </InfiniteScroll>
                     ) : <div className="flex gap-10 flex-col">
                         {Array.from({ length: 6 }, (_, i) => (
-                            <div className="flex gap-2 flex-col">
+                            <div className="flex gap-2 flex-col" key={i}>
                                 <div className="flex gap-3 items-center">
                                     <ShadCnSkeleton className="h-10 rounded-full w-10 bg-[#262626]" />
                                     <ShadCnSkeleton className="h-3 w-full max-w-[15%] bg-[#262626] rounded-md" />

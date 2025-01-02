@@ -333,6 +333,7 @@ export async function fetchComments(
 	selectedPost: Post,
 	page: number
 ): Promise<void> {
+	if (selectedPost?._id === undefined) return;
 	try {
 		setComments([]);
 		setCommentsLoading(true);
