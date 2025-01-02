@@ -7,6 +7,7 @@ import { fetchPost } from "../services/post";
 import { useUser } from "../context/UserContext";
 import { Loader } from "../components/helpers/Loader";
 import { useHome } from "../context/HomeContext";
+import { HomePostSkeleton } from "../components/helpers/HomePostSkeleton";
 
 
 export const MobilePostPage: React.FC = () => {
@@ -31,6 +32,6 @@ export const MobilePostPage: React.FC = () => {
         {!isPostLoading ?
             <div className="w-full 440:max-w-[27rem] h-[100vh] max-w-[25rem] md:max-w-[60rem] mx-auto mt-14">
                 <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={selectedPost?.postBy ? (typeof selectedPost?.postBy === "object" && selectedPost?.postBy !== null) ? selectedPost?.postBy : selectedPost?.user : selectedPost?.user} currentIndex={currentPostIndex} setCurrentIndex={setCurrentPostIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} isMobile={true} />
-            </div> : <div><Loader height="h-[30vh]" widthHeight={true} /></div>}
+            </div> : <div className="mt-16 mx-2"><HomePostSkeleton /></div>}
     </section>
 }
