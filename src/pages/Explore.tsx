@@ -11,16 +11,15 @@ import { fetchSearch } from "../services/search";
 import { fetchExplorePosts } from "../services/post";
 import { useSearch } from "../context/SearchContext";
 import { useHome } from "../context/HomeContext";
-import { Post as PostData } from "../types/postType";
 import { ShadCnSkeleton } from "../components/ui/shadcnSkeleton";
 
 export function Explore() {
     const { userData } = useUser();
-    const { searchQuery, setSearchQuery, searchData, setSearchData, setSelectedProfile } = useSearch();
+    const { searchQuery, setSearchQuery, searchData, setSearchData, setSelectedProfile, explorePagePosts,
+        setExplorePagePosts } = useSearch();
     const { setSelectedPost, selectedPost, setComments } = usePost()
     const { setPage, setTotalPages } = useHome()
-    const [explorePagePosts, setExplorePagePosts] = useState<PostData[]>([]);
-    const [isPostsLoading, setIsPostsLoading] = useState<boolean>(true);
+    const [isPostsLoading, setIsPostsLoading] = useState<boolean>(false);
     const [currentPost, setCurrentPost] = useState<number | any>(null);
     const [isPostOpen, setIsPostOpen] = useState<boolean>(false);
     const [count, setCount] = useState<number>(0);
@@ -32,8 +31,10 @@ export function Explore() {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        setIsPostsLoading(true)
-        fetchExplorePosts(setCount, setExplorePagePosts, userData, setHasMore, setIsPostsLoading);
+        if (explorePagePosts.length === 0) {
+            setIsPostsLoading(true)
+            fetchExplorePosts(setCount, setExplorePagePosts, userData, setHasMore, setIsPostsLoading);
+        }
     }, [])
 
     useEffect(() => {
@@ -101,14 +102,14 @@ export function Explore() {
                 </p>
             ) : isPostsLoading ? <div className="grid grid-flow-row grid-cols-3 gap-1 mt-5 mb-20 md:mb-0 md:mt-0">
                 {Array.from({ length: 24 }, (item, i) => (
-                    <ShadCnSkeleton key={i} className="w-full xl:h-[20rem] lg:h-[17rem] sm:h-[12rem] md:h-[15rem] h-[8rem] rounded-md max-w-full bg-[#262626] " />
+                    <ShadCnSkeleton key={i} className="w-full xl:h-[15rem] 1280:h-[20rem] lg:h-[17rem] sm:h-[12rem] md:h-[15rem] h-[8rem] rounded-md max-w-full bg-[#262626] " />
                 ))}
             </div> : (
                 <InfiniteScroll dataLength={explorePagePosts.length} next={() => {
                     fetchExplorePosts(setCount, setExplorePagePosts, userData, setHasMore, setIsPostsLoading)
                 }} loader={
                     <div className="flex justify-center items-end py-4">
-                        <Loader height={`${explorePagePosts.length > 10 ? "h-[15vh] mb-5" : "md:h-[30vh] h-[60vh]"} `} />
+                        <Loader height={`${explorePagePosts.length > 10 ? "h-[15vh] mb-5" : "md:h-[40vh] h-[60vh]"} `} />
                     </div>}
                     hasMore={count < 8 && hasMore}>
                     <div className={`grid grid-flow-row grid-cols-3 gap-1 mt-5 mb-20 md:mb-0 md:mt-0`}>

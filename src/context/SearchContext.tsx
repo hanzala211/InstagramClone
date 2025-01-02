@@ -14,6 +14,7 @@ export const SearchProvider: React.FC<ContextChild> = ({ children }) => {
     const [searchUserPosts, setSearchUserPosts] = useState<Post[]>([]);
     const [searchUserStatus, setSearchUserStatus] = useState<StoriesStructure[] | string[]>([]);
     const [searchUserHighLights, setSearchUserHighLights] = useState<Highlights[] | string[]>([]);
+    const [explorePagePosts, setExplorePagePosts] = useState<Post[]>([]);
 
     return (
         <SearchContext.Provider
@@ -30,6 +31,8 @@ export const SearchProvider: React.FC<ContextChild> = ({ children }) => {
                 setSearchUserStatus,
                 searchUserHighLights,
                 setSearchUserHighLights,
+                explorePagePosts,
+                setExplorePagePosts
             }}
         >
             {children}
@@ -39,7 +42,7 @@ export const SearchProvider: React.FC<ContextChild> = ({ children }) => {
 
 export const useSearch = (): SearchContextType => {
     const context = useContext(SearchContext);
-    if(!context){
+    if (!context) {
         throw new Error("use useSearch in Search Provider");
     }
     return context;

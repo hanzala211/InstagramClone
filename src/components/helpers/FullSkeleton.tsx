@@ -1,4 +1,4 @@
-export const FullSkeleton: React.FC = () => { 
+export const FullSkeleton: React.FC = () => {
     return <div>
         <div className="flex items-center space-x-2 max-w-xs w-full px-2 py-4">
             <div className="w-12 h-10 bg-gray-400 rounded-full animate-pulse"></div>

@@ -15,15 +15,17 @@ export const Home: React.FC = () => {
     const { homeStories, setHomeStories, homePosts, setHomePosts } = useHome();
     const { userData } = useUser();
     const [currentPostIndex, setCurrentPostIndex] = useState<number>(0);
-    const [isPostsLoading, setIsPostsLoading] = useState<boolean>(true);
+    const [isPostsLoading, setIsPostsLoading] = useState<boolean>(false);
     const [isPostOpen, setIsPostOpen] = useState<boolean>(false);
     const [currentPost, setCurrentPost] = useState<number | any>(0);
     const [hasMore, setHasMore] = useState<boolean>(true);
 
     useEffect(() => {
-        setIsPostsLoading(true);
-        fetchHomePosts(userData, setHomePosts, setIsPostsLoading, setHasMore);
-        fetchStories(userData, setHomeStories);
+        if (homePosts.length === 0) {
+            setIsPostsLoading(true);
+            fetchHomePosts(userData, setHomePosts, setIsPostsLoading, setHasMore);
+            fetchStories(userData, setHomeStories);
+        }
     }, [userData, setHomePosts, setIsPostsLoading, setHasMore, setHomeStories]);
 
     const fetchNextPosts = () => {
@@ -68,7 +70,7 @@ export const Home: React.FC = () => {
                                     <ShadCnSkeleton className="h-10 rounded-full w-10 bg-[#262626]" />
                                     <ShadCnSkeleton className="h-3 w-full max-w-[15%] bg-[#262626] rounded-md" />
                                 </div>
-                                <ShadCnSkeleton className="w-full rounded-md max-w-full bg-[#262626] md:h-[40rem] sm:h-[35rem] h-[25rem]" />
+                                <ShadCnSkeleton className="w-full rounded-md max-w-full bg-[#262626] lg:h-[25rem] xl:h-[40rem] md:h-[40rem] sm:h-[35rem] h-[25rem]" />
                                 <div className="flex flex-col items-center gap-2">
                                     <ShadCnSkeleton className="h-3 w-full max-w-[95%] bg-[#262626] rounded-md" />
                                     <ShadCnSkeleton className="h-3 w-full max-w-[95%] bg-[#262626] rounded-md" />
