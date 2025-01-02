@@ -33,7 +33,7 @@ export const ArchiveStories: React.FC = () => {
             </div>
             : <div className="grid md:grid-cols-4 grid-cols-2 w-full max-w-[100%] px-2 md:px-0 gap-5">
                 {Array.from({ length: 24 }, (item, i) => (
-                    <ShadCnSkeleton key={i} className="w-full xl:h-[26rem] sm:h-[38rem] md:h-[19rem] h-[8rem] rounded-md max-w-full bg-[#262626] " />
+                    <ShadCnSkeleton key={i} className="w-full xl:h-[26rem] sm:h-[38rem] md:h-[19rem] h-[18rem] rounded-md max-w-full bg-[#262626] " />
                 ))}
             </div>}
     </>
