@@ -1,45 +1,20 @@
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { usePost } from "../../context/PostContext";
 import { User } from "../../types/user";
+import { PostSliderButtons } from "./PostSliderButtons";
 
 interface EditPostProps {
     handleDecrease: () => void;
     handleIncrease: () => void;
     userData: User | null;
-    croppedImage?: string[];
+    croppedImage: string[];
     isCaption: boolean;
 }
 
-export const EditPost: React.FC<EditPostProps> = ({ handleDecrease, handleIncrease, userData, croppedImage, isCaption }) => {
-    const { captionValue, setCaptionValue, currentIndex, loading } = usePost();
+export const EditPost: React.FC<EditPostProps> = ({ handleDecrease, handleIncrease, userData, croppedImage }) => {
+    const { captionValue, setCaptionValue, currentIndex } = usePost();
 
     const handleCaptionChange = (e: any) => {
         setCaptionValue(e.target.value);
-    };
-
-    const renderArrowButtons = () => {
-        if (!croppedImage || croppedImage.length <= 1 || loading || !isCaption) return null;
-
-        return (
-            <>
-                {currentIndex !== croppedImage.length - 1 && (
-                    <button
-                        className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full"
-                        onClick={handleIncrease}
-                    >
-                        <FaArrowRight className="fill-black" />
-                    </button>
-                )}
-                {currentIndex !== 0 && (
-                    <button
-                        className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full"
-                        onClick={handleDecrease}
-                    >
-                        <FaArrowLeft className="fill-black" />
-                    </button>
-                )}
-            </>
-        );
     };
 
     return (
@@ -50,7 +25,7 @@ export const EditPost: React.FC<EditPostProps> = ({ handleDecrease, handleIncrea
                     alt="Selected Images"
                     className="object-contain w-full h-[97%]"
                 />
-                {renderArrowButtons()}
+                <PostSliderButtons posts={croppedImage} currentPost={currentIndex} handleDecrease={handleDecrease} handleIncrease={handleIncrease} isPostSlider={true} />
             </div>
 
             <div className="sm:w-[35%] w-[40%] md:px-4 p-2 md:py-5 border-l-[2px] border-[#363636]">

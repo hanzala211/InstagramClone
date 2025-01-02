@@ -7,13 +7,13 @@ import { ArchivesModal } from "../archives/ArchivesModal"
 import { deleteHighlight } from "../../services/story"
 import { ProfileStories } from "../../types/stories"
 
-interface HighlightsEditorProps{
+interface HighlightsEditorProps {
     highLightsModal: boolean;
     setHighLightsModal: (value: boolean) => void
 }
 
 export const HighlightsEditor: React.FC<HighlightsEditorProps> = ({ highLightsModal, setHighLightsModal }) => {
-    const { currentHighLight, setCurrentHighLight, highlights, userData } = useUser()
+    const { currentHighLight, setCurrentHighLight, highlights, userData, setHighlights } = useUser()
     const [isEditing, setIsEditing] = useState<boolean>(false)
     const [selectStatus, setSelectStatus] = useState<boolean>(false)
     const [highlightName, setHighlightName] = useState<string>("")
@@ -56,7 +56,7 @@ export const HighlightsEditor: React.FC<HighlightsEditorProps> = ({ highLightsMo
             onClick={() => handleClose()}
         ></div>
         <div className={`bg-[#262626] w-[22rem] rounded-2xl h-[8.5rem] fixed z-[1000] opacity-0 transition duration-300 inset-0 top-1/2 -translate-y-1/2 left-[52%] -translate-x-1/2 ${highLightsModal && !isEditing ? "opacity-100" : "pointer-events-none"}`}>
-            <button className="text-red-600 w-full p-3 text-[14px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]" onClick={() => deleteHighlight(highlights, currentHighLight, userData, setHighLightsModal, setCurrentHighLight, navigate)} >Delete</button>
+            <button className="text-red-600 w-full p-3 text-[14px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]" onClick={() => deleteHighlight(highlights, currentHighLight, userData, setHighLightsModal, setCurrentHighLight, navigate, setHighlights)} >Delete</button>
             <button className="w-full p-3 border-b-[1px] text-[14px] active:opacity-70 font-semibold border-[#363636]" onClick={() => {
                 setIsEditing(true)
             }}>Edit</button>

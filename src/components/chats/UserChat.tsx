@@ -102,72 +102,75 @@ export const UserChat: React.FC = () => {
                 </div>
                 <div ref={scrollRef}
                     className="overflow-y-auto h-full max-h-[calc(100vh-230px)] md:max-h-[calc(100vh-130px)] scrollbar-hidden py-3 px-3 flex flex-col gap-5">
-                    {messagesLoading ? <div><Loader height="h-[10vh]" widthHeight={true} /></div> : messages.length > 0 ? messages.map((message, index) => (
-                        <div key={index} onMouseEnter={() => {
-                            setMessagesDelete(Array.from(messages.length).fill(false))
-                            setMessagesDelete((prev) => {
-                                const updated: boolean[] = [...prev];
-                                updated[index] = true;
-                                return updated;
-                            })
-                        }} onMouseLeave={() => {
-                            if (!isClicked[index]) {
-                                setIsClicked(Array.from(messages.length).fill(false))
-                                setMessagesDelete((prev) => {
-                                    const updated: boolean[] = [...prev];
-                                    updated[index] = false;
-                                    return updated;
-                                })
-                            }
-                        }}
-                            onTouchStart={() => {
+                    {messagesLoading ?
+                        <div><Loader height="h-[10vh]" widthHeight={true} /></div>
+                        :
+                        messages.length > 0 ? messages.map((message: any, index: number) => (
+                            <div key={index} onMouseEnter={() => {
                                 setMessagesDelete(Array.from(messages.length).fill(false))
                                 setMessagesDelete((prev) => {
                                     const updated: boolean[] = [...prev];
                                     updated[index] = true;
                                     return updated;
                                 })
-                            }} className={`flex items-end gap-3 ${message?.senderId === userData?.data?.user._id || message?.status === "sending" ? "justify-end" : "justify-start"
-                                }`}>
-                            {messagesDelete[index] && message?.senderId === userData?.data.user._id && <button className="relative" onClick={() => setIsClicked((prev) => {
-                                const updated: boolean[] = [...prev];
-                                updated[index] = !updated[index];
-                                return updated;
-                            })}>
-                                {isClicked[index] && <div ref={deleteDivRef} onClick={() => {
-                                    deleteMessageAndUpdateThread(userData.data.user._id, selectedChat?._id, message?.id);
-                                }} className="absolute md:-left-36 440:-left-[4rem] flex hover:opacity-80 transition duration-200 items-center justify-center rounded-lg bg-[#262626] -top-10 md:-top-6 md:w-32 md:h-12 w-24 h-10 text-red-500">Delete</div>
+                            }} onMouseLeave={() => {
+                                if (!isClicked[index]) {
+                                    setIsClicked(Array.from(messages.length).fill(false))
+                                    setMessagesDelete((prev) => {
+                                        const updated: boolean[] = [...prev];
+                                        updated[index] = false;
+                                        return updated;
+                                    })
                                 }
-                                <div ref={iconRef} className="text-[14px] hover:bg-[#a8a8a8] hover:bg-opacity-50 rounded-full p-1">
-                                    <BsThreeDotsVertical />
-                                </div>
-                            </button>}
-                            {message?.senderId !== userData.data.user._id || message?.status === "sending" && <img src={selectedChat?.profilePic} alt={`Chat User ${message?.userName}`} className="w-6 rounded-full " />}
-                            {message.content && <div className="flex flex-row items-end gap-1">
-                                <div className={`p-2.5 rounded-xl text-sm max-w-xs ${message?.senderId === userData.data.user._id || message?.status === "sending" ? "bg-[#0096f4] text-white" : "bg-[#262626]"}`}>
-                                    {message?.content}
-                                </div>
-                                {message?.status === "sending" && <ShareIcon className="w-4" />}
-                            </div>}
-                            {message.post && <div onClick={() => {
-                                setSelectedPost(message.post)
-                                if (innerWidth > 770) {
-                                    setIsPostOpen(true)
-                                } else {
-                                    navigate(`/${message?.post?.user?.userName}/p/${message.post._id}/`)
-                                }
-                            }} className="md:w-[18rem] w-[13rem] cursor-pointer bg-[#262626] rounded-lg">
-                                <div className="px-3 py-2 flex gap-2 items-center">
-                                    <img src={message?.post?.user?.profilePic} className="w-8 rounded-full" alt="" />
-                                    <button className="text-[14px]">{message?.post?.user?.userName}</button>
-                                </div>
-                                <img src={message?.post?.imageUrls[0]} alt={`${message?.post?.user?.userName} post`} />
-                                <div className={`text-[15px] font-semibold ${message.post.caption !== null && message?.post.caption.length > 0 ? "px-4 py-3" : ""}`}>
-                                    {message.post.caption}
-                                </div>
-                            </div>}
-                        </div>
-                    )) : ""}
+                            }}
+                                onTouchStart={() => {
+                                    setMessagesDelete(Array.from(messages.length).fill(false))
+                                    setMessagesDelete((prev) => {
+                                        const updated: boolean[] = [...prev];
+                                        updated[index] = true;
+                                        return updated;
+                                    })
+                                }} className={`flex items-end gap-3 ${message?.senderId === userData?.data?.user._id || message?.status === "sending" ? "justify-end" : "justify-start"
+                                    }`}>
+                                {messagesDelete[index] && message?.senderId === userData?.data.user._id && <button className="relative" onClick={() => setIsClicked((prev) => {
+                                    const updated: boolean[] = [...prev];
+                                    updated[index] = !updated[index];
+                                    return updated;
+                                })}>
+                                    {isClicked[index] && <div ref={deleteDivRef} onClick={() => {
+                                        deleteMessageAndUpdateThread(userData.data.user._id, selectedChat?._id, message?.id);
+                                    }} className="absolute md:-left-36 440:-left-[4rem] flex hover:opacity-80 transition duration-200 items-center justify-center rounded-lg bg-[#262626] -top-10 md:-top-6 md:w-32 md:h-12 w-24 h-10 text-red-500">Delete</div>
+                                    }
+                                    <div ref={iconRef} className="text-[14px] hover:bg-[#a8a8a8] hover:bg-opacity-50 rounded-full p-1">
+                                        <BsThreeDotsVertical />
+                                    </div>
+                                </button>}
+                                {message?.senderId !== userData.data.user._id || message?.status === "sending" && <img src={selectedChat?.profilePic} alt={`Chat User ${message?.userName}`} className="w-6 rounded-full " />}
+                                {message.content && <div className="flex flex-row items-end gap-1">
+                                    <div className={`p-2.5 rounded-xl text-sm max-w-xs ${message?.senderId === userData.data.user._id || message?.status === "sending" ? "bg-[#0096f4] text-white" : "bg-[#262626]"}`}>
+                                        {message?.content}
+                                    </div>
+                                    {message?.status === "sending" && <ShareIcon className="w-4" />}
+                                </div>}
+                                {message.post && <div onClick={() => {
+                                    setSelectedPost(message.post)
+                                    if (innerWidth > 770) {
+                                        setIsPostOpen(true)
+                                    } else {
+                                        navigate(`/${message?.post?.user?.userName}/p/${message.post._id}/`)
+                                    }
+                                }} className="md:w-[18rem] w-[13rem] cursor-pointer bg-[#262626] rounded-lg">
+                                    <div className="px-3 py-2 flex gap-2 items-center">
+                                        <img src={message?.post?.user?.profilePic} className="w-8 rounded-full" alt="" />
+                                        <button className="text-[14px]">{message?.post?.user?.userName}</button>
+                                    </div>
+                                    <img src={message?.post?.imageUrls[0]} alt={`${message?.post?.user?.userName} post`} />
+                                    <div className={`text-[15px] font-semibold ${message.post.caption !== null && message?.post.caption.length > 0 ? "px-4 py-3" : ""}`}>
+                                        {message.post.caption}
+                                    </div>
+                                </div>}
+                            </div>
+                        )) : ""}
                 </div>
                 <div className="bg-[#000] h-20 md:h-12 w-full px-4 py-3 md:py-2 md:relative fixed md:bottom-0 bottom-10">
                     <button className="absolute left-7 top-5 md:top-4 hover:opacity-55 transition duration-200" ref={emojiIconRef} onClick={() => setIsPickingEmoji((prev) => !prev)}><EmojiIcon /></button>

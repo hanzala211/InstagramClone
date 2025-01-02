@@ -7,14 +7,14 @@ import { useNavigate } from "react-router-dom"
 import { formatDate } from "../../utils/helper"
 import { ProfileStories } from "../../types/stories"
 
-interface SelectedHighLightsProps{
+interface SelectedHighLightsProps {
     selectCover?: boolean;
-    setSelectCover?: (value: boolean) => void;
-    setSelectedIDs?: (value: ProfileStories[]) => void;
+    setSelectCover: (value: boolean) => void;
+    setSelectedIDs: (value: ProfileStories[]) => void;
     isCreatingHighLight: boolean;
-    handleClose?: () => void;
-    selectedIDs?: ProfileStories[];
-    formatMonth: (value: string) => void;
+    handleClose: () => void;
+    selectedIDs: ProfileStories[];
+    formatMonth: (value: string) => any;
     currentID: number;
     sendLoading: boolean;
     setCurrentID: (value: number) => void;
@@ -24,7 +24,8 @@ interface SelectedHighLightsProps{
 }
 
 export const SelectedHighLights: React.FC<SelectedHighLightsProps> = ({ selectCover, setSelectCover, setSelectedIDs, isCreatingHighLight, handleClose, selectedIDs, formatMonth, currentID, sendLoading, setCurrentID, setSendLoading, highlightName, editingHighlight }) => {
-    const { currentHighLight, highlights, highLightStories, userData, setMessage } = useUser()
+
+    const { currentHighLight, highlights, highLightStories, userData, setMessage, setHighlights } = useUser()
     const navigate = useNavigate();
 
     return <>
@@ -39,7 +40,7 @@ export const SelectedHighLights: React.FC<SelectedHighLightsProps> = ({ selectCo
                 <p>Select cover</p>
                 <IoCloseSharp
                     className={`absolute text-[25px] font-extralight top-3 right-2 cursor-pointer opacity-0 transition-all duration-500 ${isCreatingHighLight ? "opacity-100" : "pointer-events-none"}`}
-                    onClick={() => handleClose()}
+                    onClick={handleClose}
                 />
             </div>
             <div className="circle-preview-container ">
@@ -65,9 +66,9 @@ export const SelectedHighLights: React.FC<SelectedHighLightsProps> = ({ selectCo
                 {!sendLoading ?
                     <button onClick={() => {
                         if (!editingHighlight) {
-                            createHighLight(setSendLoading, userData, highlightName, selectedIDs, currentID, handleClose, setMessage)
+                            createHighLight(setSendLoading, userData, highlightName, selectedIDs, currentID, handleClose, setMessage, setHighlights)
                         } else {
-                            editHighLight(setSendLoading, highlights, currentHighLight, userData, highLightStories, highlightName, selectedIDs, currentID, handleClose, navigate, setMessage)
+                            editHighLight(setSendLoading, highlights, currentHighLight, userData, highLightStories, highlightName, selectedIDs, currentID, handleClose, navigate, setMessage, setHighlights)
                         }
                     }} className={`w-full py-3 text-[15px] transition-all duration-150 font-semibold  text-[#0095F6]`} >Done</button>
                     : <Loader height="15vh mt-1.5" widthHeight={false} />}

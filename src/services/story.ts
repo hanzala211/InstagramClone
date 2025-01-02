@@ -51,7 +51,8 @@ export async function createHighLight(
 	selectedIDs: ProfileStories[],
 	currentID: number,
 	handleClose: () => void,
-	setMessage: (value: string) => void
+	setMessage: (value: string) => void,
+	setHighlights: (value: Highlights[]) => void
 ) {
 	try {
 		setSendLoading(true);
@@ -73,8 +74,7 @@ export async function createHighLight(
 		if (result.message === 'Highlight created successfully.') {
 			async function sendStories(storyID: string) {
 				const addStory = await fetch(
-					`${import.meta.env.VITE_APP_URL}api/v1/highlights/${
-						result.highlight._id
+					`${import.meta.env.VITE_APP_URL}api/v1/highlights/${result.highlight._id
 					}/add`,
 					{
 						method: 'POST',
@@ -88,10 +88,10 @@ export async function createHighLight(
 						redirect: 'follow',
 					}
 				);
-				return addStory.json();
+				return await addStory.json();
 			}
-			Promise.all(selectedIDs.map((item) => sendStories(item._id)));
-			postProfile(selectedIDs, currentID, result, userData, setMessage);
+			await Promise.all(selectedIDs.map((item) => sendStories(item._id)));
+			await postProfile(selectedIDs, currentID, result, userData, setMessage, setHighlights);
 		}
 	} catch (error) {
 		console.error(error);
@@ -106,12 +106,12 @@ export async function deleteHighlight(
 	userData: User,
 	setHighLightsModal: (value: boolean) => void,
 	setCurrentHighLight: (value: number) => void,
-	navigate: NavigateFunction
+	navigate: NavigateFunction,
+	setHighlights: (value: any) => void
 ) {
 	try {
 		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/highlights/${
-				highlights[currentHighLight]._id
+			`${import.meta.env.VITE_APP_URL}api/v1/highlights/${highlights[currentHighLight]._id
 			}`,
 			{
 				method: 'DELETE',
@@ -123,6 +123,7 @@ export async function deleteHighlight(
 			}
 		);
 		const result = await response.json();
+		setHighlights((prev: any) => prev.filter((item: any) => item._id !== highlights[currentHighLight]._id))
 		navigate(-1);
 	} catch (error) {
 		console.error(error);
@@ -143,14 +144,14 @@ export async function editHighLight(
 	currentID: number,
 	handleClose: () => void,
 	navigate: NavigateFunction,
-	setMessage: (value: string) => void
+	setMessage: (value: string) => void,
+	setHighlights: (value: any) => void
 ) {
 	async function removeHighLights(storyID: string) {
 		try {
 			setSendLoading(true);
 			const removeHighlight = await fetch(
-				`${import.meta.env.VITE_APP_URL}api/v1/highlights/${
-					highlights[currentHighLight]._id
+				`${import.meta.env.VITE_APP_URL}api/v1/highlights/${highlights[currentHighLight]._id
 				}/remove`,
 				{
 					method: 'PUT',
@@ -174,8 +175,7 @@ export async function editHighLight(
 
 	try {
 		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/highlights/${
-				highlights[currentHighLight]._id
+			`${import.meta.env.VITE_APP_URL}api/v1/highlights/${highlights[currentHighLight]._id
 			}`,
 			{
 				method: 'PUT',
@@ -192,8 +192,7 @@ export async function editHighLight(
 		const result = await response.json();
 		async function sendStories(storyID: string) {
 			const addStory = await fetch(
-				`${import.meta.env.VITE_APP_URL}api/v1/highlights/${
-					result.highlight._id
+				`${import.meta.env.VITE_APP_URL}api/v1/highlights/${result.highlight._id
 				}/add`,
 				{
 					method: 'POST',
@@ -210,7 +209,7 @@ export async function editHighLight(
 			return addStory.json();
 		}
 		Promise.all(selectedIDs.map((item) => sendStories(item._id)));
-		postProfile(selectedIDs, currentID, result, userData, setMessage);
+		postProfile(selectedIDs, currentID, result, userData, setMessage, setHighlights);
 	} catch (error) {
 		console.error(error);
 	} finally {
@@ -223,9 +222,10 @@ export async function editHighLight(
 async function postProfile(
 	selectedIDs: ProfileStories[],
 	currentID: number,
-	result: string,
+	result: any,
 	userData: User,
-	setMessage: (value: string) => void
+	setMessage: (value: string) => void,
+	setHighlights: (value: any) => void
 ) {
 	const formData = new FormData();
 	const blobImage = await fetch(selectedIDs[currentID].imageUrl).then((req) =>
@@ -234,8 +234,7 @@ async function postProfile(
 	formData.append('image', blobImage, 'profileImage');
 	try {
 		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/highlights/${
-				result.highlight._id
+			`${import.meta.env.VITE_APP_URL}api/v1/highlights/${result.highlight._id
 			}/profile-pic`,
 			{
 				method: 'POST',
@@ -247,6 +246,7 @@ async function postProfile(
 			}
 		);
 		const postResult = await response.json();
+		setHighlights((prev: any) => [...prev, postResult.highlight])
 	} catch (error) {
 		console.error(error);
 	} finally {

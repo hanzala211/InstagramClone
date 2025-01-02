@@ -20,7 +20,7 @@ import { PostSlider } from "./PostSlider"
 
 interface HomePostProps {
     index: number;
-    item: Post;
+    item: any;
     setHomePosts: (value: Post[]) => void;
     setCurrentPost: (value: number) => void;
     setCurrentPostIndex: (value: number) => void;

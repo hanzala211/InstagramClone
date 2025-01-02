@@ -96,9 +96,9 @@ export async function changeData(
 	}
 }
 export async function getHighLights(
-	setHighLightStories: (value: Highlight[]) => void,
+	setHighLightStories: (value: any) => void,
 	userData: User,
-	setHighlights: (value: Highlight[]) => void
+	setHighlights: (value: any) => void
 ): Promise<void> {
 	try {
 		setHighLightStories([]);

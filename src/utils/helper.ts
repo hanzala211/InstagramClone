@@ -62,7 +62,7 @@ export function handleFileChange(
 	}
 }
 
-export function handleFile(fileInputRef: HTMLInputElement) {
+export function handleFile(fileInputRef: any) {
 	fileInputRef.current.click();
 }
 
@@ -89,7 +89,7 @@ export const onCropImage = async (
 export function handleFileChangeForStories(
 	event: any,
 	setSelectedImage: (value: any) => void,
-	fileInputRef: HTMLInputElement,
+	fileInputRef: any,
 	innerWidth: number,
 	navigate: NavigateFunction
 ) {
@@ -110,7 +110,7 @@ export function handleFileChangeForStories(
 	}
 }
 
-export function handleClickForStory(fileInputRef: HTMLInputElement) {
+export function handleClickForStory(fileInputRef: any) {
 	if (fileInputRef?.current) {
 		fileInputRef.current.click();
 	} else {

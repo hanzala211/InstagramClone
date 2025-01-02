@@ -19,7 +19,7 @@ import { fetchNote } from "../services/note";
 import { ProfileButton } from "../components/profile/ProfileSettingButton";
 
 export const Profile: React.FC = () => {
-    const { userData, setUserPosts, note, setNote, setStories, stories, setCurrentStory, highlights, setHighlights, setHighLightStories, setCurrentHighLight, setUserSaves, isNoteEditOpen, setIsNoteEditOpen, isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen } = useUser();
+    const { userData, setUserPosts, userPosts, userSaves, note, setNote, setStories, stories, setCurrentStory, highlights, setHighlights, setHighLightStories, setCurrentHighLight, setUserSaves, isNoteEditOpen, setIsNoteEditOpen, isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen } = useUser();
     const [isNoteOpen, setIsNoteOpen] = useState<boolean>(false)
     const [postsLoading, setPostsLoading] = useState<boolean>(false);
     const [noteLoading, setNoteLoading] = useState<boolean>(false);
@@ -30,8 +30,12 @@ export const Profile: React.FC = () => {
     const checkref = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
-        fetchPosts(setPostsLoading, userData, setUserPosts);
-        fetchSaves(userData, setUserSaves);
+        if (userPosts.length === 0) {
+            fetchPosts(setPostsLoading, userData, setUserPosts);
+        }
+        if (userSaves.length === 0) {
+            fetchSaves(userData, setUserSaves);
+        }
         fetchNote(setNoteLoading, userData, setNote);
         getStatus(userData, setStories);
         if (highlights.length === 0) {
@@ -99,7 +103,7 @@ export const Profile: React.FC = () => {
                         </div>
                     </div>
                     <div className="md:flex hidden gap-10 items-center">
-                        <UserFollowDetails />
+                        <UserFollowDetails isSearchProfile={false} />
                     </div>
                     <div className="relative -left-[5.5rem] top-3 sm:left-0 sm:top-0">
                         <p className="font-semibold text-[14px]">{userData.data.user.fullName}</p>
@@ -122,7 +126,7 @@ export const Profile: React.FC = () => {
         </div>
         <LaptopProfileBar />
         <div className="flex  justify-evenly py-2 border-y-[1px] border-[#262626] md:hidden">
-            <UserFollowDetails />
+            <UserFollowDetails isSearchProfile={false} />
         </div>
         <MobileProfileBar />
         <div className="md:mt-[4rem] mt-6">

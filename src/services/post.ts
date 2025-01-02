@@ -5,7 +5,7 @@ import { CommentStructure, Post } from "../types/postType";
 export async function createPost(
 	setShareLoading: (value: boolean) => void,
 	setIsShared: (value: boolean) => void,
-	croppedImages: (value: string[]) => void,
+	croppedImages: string[],
 	userData: User,
 	captionValue: string,
 	setCaptionValue: (value: string) => void,

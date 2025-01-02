@@ -4,7 +4,7 @@ import { Messages, Notification, Thread } from "./chatType";
 import { HomeStories, ProfileStories, StoriesStructure } from "./stories";
 import { CommentStructure, CroppedAreas, Post } from "./postType";
 import { Location } from "react-router-dom";
-import { Highlights } from "./highlightsType";
+import { Highlights, HighlightsStories } from "./highlightsType";
 import { Note } from "./note";
 
 export interface ContextChild {
@@ -145,8 +145,8 @@ export interface UserContextType {
     setLoadingArchives: React.Dispatch<React.SetStateAction<boolean>>;
     highlights: Highlights[];
     setHighlights: React.Dispatch<React.SetStateAction<Highlights[]>>;
-    highLightStories: Highlights[];
-    setHighLightStories: React.Dispatch<React.SetStateAction<Highlights[]>>;
+    highLightStories: HighlightsStories[];
+    setHighLightStories: React.Dispatch<React.SetStateAction<HighlightsStories[]>>;
     currentHighLight: number;
     setCurrentHighLight: React.Dispatch<React.SetStateAction<number>>;
     userSaves: Post[];

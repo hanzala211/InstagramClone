@@ -57,7 +57,7 @@ export const CreatePost: React.FC<CreatePostProps> = ({ isCreating, setIsCreatin
                     <SelectImage
                         handleFile={() => handleFile(fileInputRef)}
                         fileInputRef={fileInputRef}
-                        handleFileChange={(e) =>
+                        handleFileChange={(e: any) =>
                             handleFileChange(e, setSelectedImage, innerWidth, navigate)
                         }
                     />

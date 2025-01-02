@@ -95,7 +95,7 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isS
             setCurrentPost={setCurrentPost}
         />
 
-        <PostSliderButtons posts={isPosts || isTagged ? userPosts : isSaved ? userSaves : isSearchPosts ? searchUserPosts : []} handleDecrease={handleDecrease} handleIncrease={handleIncrease} currentPost={currentPost} />
+        <PostSliderButtons posts={isPosts || isTagged ? userPosts : isSaved ? userSaves : isSearchPosts ? searchUserPosts : []} handleDecrease={handleDecrease} handleIncrease={handleIncrease} currentPost={currentPost} isPostSlider={false} />
     </>
 
 }

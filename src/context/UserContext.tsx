@@ -3,7 +3,7 @@ import { ContextChild, SideBarContextType, UserContextType } from "../types/cont
 import { Post } from "../types/postType";
 import { Note } from "../types/note";
 import { ProfileStories } from "../types/stories";
-import { Highlights } from "../types/highlightsType";
+import { Highlights, HighlightsStories } from "../types/highlightsType";
 import { User, UserFollowDetailsType } from "../types/user";
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -18,7 +18,7 @@ export const UserProvider: React.FC<ContextChild> = ({ children }) => {
     const [currentStory, setCurrentStory] = useState<number>(0);
     const [loadingArchives, setLoadingArchives] = useState<boolean>(false);
     const [highlights, setHighlights] = useState<Highlights[]>([]);
-    const [highLightStories, setHighLightStories] = useState<Highlights[]>([])
+    const [highLightStories, setHighLightStories] = useState<HighlightsStories[]>([])
     const [currentHighLight, setCurrentHighLight] = useState<number>(0)
     const [userSaves, setUserSaves] = useState<Post[]>([]);
     const [userFollowers, setUserFollowers] = useState<UserFollowDetailsType[]>([])
