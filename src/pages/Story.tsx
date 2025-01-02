@@ -19,7 +19,7 @@ interface StoryPropTypes {
 }
 
 interface SoryBarType {
-    isProfile: boolean;
+    isProfile?: boolean;
     story: any;
     currentStory: number
 }
@@ -97,11 +97,11 @@ export const Story: React.FC<StoryPropTypes> = ({ isArchive, isOwnProfile, isHig
                         <div className="flex flex-col gap-0.5">
                             <Link
                                 to={isArchive || isOwnProfile || isHighLight ? `/${userData?.data.user.userName}/` : isSearchUser || isSearchHighLight ? `/search/${selectedProfile?.userName}/` : ""}
-                                className="font-semibold text-[12px] md:text-[14px] flex items-center gap-1 ">
+                                className="font-semibold text-outline text-[12px] md:text-[14px] flex items-center gap-1 ">
                                 {isArchive || isOwnProfile || isHighLight ? userData?.data.user.userName : isSearchUser || isSearchHighLight ? selectedProfile?.userName : ""}
                                 {isOwnProfile || isArchive || isHighLight ? userData?.data.user.followingCount > 10 && <MdVerified className="fill-white" /> : isSearchUser || isSearchHighLight ? selectedProfile?.followingCount > 10 && <MdVerified className="fill-white" /> : ""}
                             </Link>
-                            <p className="text-[#A2A2A2] text-[10px] md:text-[11px] font-semibold">
+                            <p className="text-[#A2A2A2] text-outline text-[10px] md:text-[11px] font-semibold">
                                 {isOwnProfile ? formatDate(stories[currentStory].createdAt) : isArchive ? formatDate(archives[currentStory]?.createdAt) : isHighLight ? formatDate(highLightStories[currentStory]?.createdAt) : isSearchUser ? formatDate(searchUserStatus[currentStory]?.createdAt) : isSearchHighLight ? searchUserHighLights[currentStory]?.createdAt : ""} ago
                             </p>
                         </div>

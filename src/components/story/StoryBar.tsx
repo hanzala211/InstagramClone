@@ -1,13 +1,13 @@
 import { Highlights } from "../../types/highlightsType";
 import { ProfileStories } from "../../types/stories";
 
-interface StoryBarProps{
-    isProfile: boolean;
+interface StoryBarProps {
+    isProfile?: boolean;
     story: ProfileStories[] | Highlights[];
     currentStory: number
 }
 
-export const StoryBar: React.FC<StoryBarProps> = ({isProfile, story, currentStory}) => {
+export const StoryBar: React.FC<StoryBarProps> = ({ isProfile, story, currentStory }) => {
     return <>
-       {isProfile && story.map((item: any, i: number) => ( <div key={i} className={`flex-1 h-[2px] ${currentStory >= i ? "bg-white" : "bg-white opacity-50"}`}></div>))}</>
+        {isProfile && story.map((item: any, i: number) => (<div key={i} className={`flex-1 outline outline-1 rounded-md outline-black h-[2px] ${currentStory >= i ? "bg-white " : "bg-white opacity-50"}`}></div>))}</>
 }
