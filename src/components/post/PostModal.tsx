@@ -12,7 +12,7 @@ interface PostModalProps {
     setSelectedPost: (value: Post) => void;
     setIsPostOpen: (value: boolean) => void;
     setCurrentPost: (value: number | null) => void;
-    item: Post;
+    item: any;
 }
 
 export const PostModal: React.FC<PostModalProps> = ({ arr, i, setSelectedPost, setIsPostOpen, setCurrentPost, item }) => {

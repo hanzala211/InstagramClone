@@ -36,9 +36,9 @@ export const PostSlider: React.FC<PostSliderProps> = ({ currentIndex, setCurrent
     function handleIncrease() {
         setIsAnimating(true);
         if (typeof currentIndex === "number") {
-            setCurrentIndex((prev) => prev + 1);
+            setCurrentIndex((prev: number) => prev + 1);
         } else {
-            setCurrentIndex((prev) => {
+            setCurrentIndex((prev: any) => {
                 const updated = [...prev];
                 updated[index] = updated[index] + 1 < totalIndex[index] ? updated[index] + 1 : updated[index];
                 return updated;
@@ -50,9 +50,9 @@ export const PostSlider: React.FC<PostSliderProps> = ({ currentIndex, setCurrent
     function handleDecrease() {
         setIsAnimating(true);
         if (typeof currentIndex === "number") {
-            setCurrentIndex(prev => prev - 1);
+            setCurrentIndex((prev: number) => prev - 1);
         } else {
-            setCurrentIndex((prev) => {
+            setCurrentIndex((prev: any) => {
                 const updated = [...prev];
                 updated[index] = updated[index] - 1 >= 0 ? updated[index] - 1 : updated[index];
                 return updated;

@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom"
 import { useUser } from "../../context/UserContext";
-import { Loader } from "../helpers/Loader";
 import { ShadCnSkeleton } from "../ui/shadcnSkeleton";
 
 export const ArchiveStories: React.FC = () => {
