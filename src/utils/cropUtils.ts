@@ -30,3 +30,19 @@ export const getCroppedImg = (images: unknown, croppedAreas: CroppedAreas[]) => 
 		});
 	});
 };
+
+export function getImageDimensions(blobUrl: string) {
+	return new Promise((resolve, reject) => {
+		const img = new Image();
+
+		img.onload = () => {
+			resolve({ width: img.width, height: img.height, x: 0, y: 0 });
+		};
+
+		img.onerror = (error) => {
+			reject(error);
+		};
+
+		img.src = blobUrl;
+	});
+}

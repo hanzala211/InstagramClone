@@ -10,7 +10,8 @@ export async function createPost(
 	captionValue: string,
 	setCaptionValue: (value: string) => void,
 	isMobile: boolean,
-	navigate: NavigateFunction
+	navigate: NavigateFunction,
+	setUserPosts: (value: any) => void
 ): Promise<void> {
 	const formData = new FormData();
 	try {
@@ -32,6 +33,9 @@ export async function createPost(
 			redirect: 'follow',
 		});
 		const result = await response.json();
+		setUserPosts((prev: any) => {
+			return [...prev, { ...result.post, caption: captionValue.length > 0 ? captionValue : null }]
+		})
 		if (captionValue.length > 0) {
 			await fetch(
 				`${import.meta.env.VITE_APP_URL}api/v1/post/caption/${result.post._id}`,
@@ -58,16 +62,16 @@ export async function createPost(
 }
 
 export async function savePost(
-	setIsSaved: (value: boolean) => void,
+	setIsSaved: (value: any) => void,
 	userData: User,
-	setUserData: (value: User) => void,
+	setUserData: (value: any) => void,
 	setMessage: (value: string) => void,
 	selectedPost: Post | null
 ): Promise<void> {
 	try {
-		setIsSaved((prev: boolean) => !prev);
+		setIsSaved((prev: any) => !prev);
 		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/save/${selectedPost._id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/save/${selectedPost?._id}`,
 			{
 				method: 'POST',
 				headers: {
@@ -78,7 +82,7 @@ export async function savePost(
 		);
 		const result = await response.json();
 		if (result.status !== 'fail') {
-			setUserData((prev) => ({
+			setUserData((prev: any) => ({
 				...prev,
 				data: {
 					...prev.data,
@@ -95,21 +99,21 @@ export async function savePost(
 	} catch (error) {
 		console.error(error);
 		setMessage('Failed');
-		setIsSaved((prev) => !prev);
+		setIsSaved((prev: any) => !prev);
 	}
 }
 
 export async function unSavePost(
-	setIsSaved: (value: boolean) => void,
+	setIsSaved: (value: any) => void,
 	userData: User,
-	setUserData: (value: User) => void,
+	setUserData: (value: any) => void,
 	setMessage: (value: string) => void,
 	selectedPost: Post | null
 ): Promise<void> {
 	try {
-		setIsSaved((prev) => !prev);
+		setIsSaved((prev: any) => !prev);
 		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/unsave/${selectedPost._id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/unsave/${selectedPost?._id}`,
 			{
 				method: 'POST',
 				headers: {
@@ -120,7 +124,7 @@ export async function unSavePost(
 		);
 		const result = await response.json();
 		if (result.status !== 'fail') {
-			setUserData((prev) => ({
+			setUserData((prev: any) => ({
 				...prev,
 				data: {
 					...prev.data,
@@ -128,7 +132,7 @@ export async function unSavePost(
 						...prev.data.user,
 						savedPosts: prev.data.user.savedPosts.includes(result.savedPosts[0])
 							? prev.data.user.savedPosts.filter(
-								(item) => item !== result.savedPosts[0]
+								(item: any) => item !== result.savedPosts[0]
 							)
 							: [...prev.data.user.savedPosts, ...result.savedPosts],
 					},
@@ -139,23 +143,23 @@ export async function unSavePost(
 	} catch (error) {
 		console.error(error);
 		setMessage('Failed');
-		setIsSaved((prev) => !prev);
+		setIsSaved((prev: any) => !prev);
 	}
 }
 
 export async function deletePost(
 	userData: User,
 	setMessage: (value: string) => void,
-	setUserData: (value: User) => void,
-	setUserPosts: (value: Post[]) => void,
+	setUserData: (value: any) => void,
+	setUserPosts: (value: any) => void,
 	selectedPost: Post | null,
-	setSelectedPost: (value: Post) => void,
+	setSelectedPost: (value: any) => void,
 	setIsPostSettingOpen: (value: boolean) => void,
 	setIsPostOpen: (value: boolean) => void
 ): Promise<void> {
 	try {
 		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/post/${selectedPost._id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/post/${selectedPost?._id}`,
 			{
 				method: 'DELETE',
 				headers: {
@@ -166,21 +170,21 @@ export async function deletePost(
 		);
 		const result = await response.json();
 		setMessage(result.data);
-		setUserData((prev) => ({
+		setUserData((prev: any) => ({
 			...prev,
 			data: {
 				...prev.data,
 				user: {
 					...prev.data.user,
 					posts: prev.data.user.posts.filter(
-						(item) => item !== selectedPost?._id
+						(item: any) => item !== selectedPost?._id
 					),
 					postCount: prev.data.user.postCount - 1,
 				},
 			},
 		}));
-		setUserPosts((prev) =>
-			prev.filter((item) => item._id !== selectedPost._id)
+		setUserPosts((prev: any) =>
+			prev.filter((item: any) => item._id !== selectedPost?._id)
 		);
 	} catch (error) {
 		console.error(error);
@@ -209,7 +213,7 @@ export async function updatePost(
 			setIsEditingOpen(false);
 		}
 		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/post/${selectedPost._id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/post/${selectedPost?._id}`,
 			{
 				method: 'PUT',
 				headers: {
@@ -246,12 +250,12 @@ export async function postComment(
 	selectedPost: Post | null,
 	setMessage: (value: string) => void,
 	setCommentValue: (value: string) => void,
-	setIsCommented: (value: boolean) => void
+	setIsCommented: (value: any) => void
 ): Promise<void> {
 	try {
 		setIsDisabled(true);
 		const respone = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/post/comment/${selectedPost._id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/post/comment/${selectedPost?._id}`,
 			{
 				method: 'POST',
 				headers: {
@@ -268,7 +272,7 @@ export async function postComment(
 		if (result.status !== 'fail') {
 			setMessage('Commented Successfully');
 			setCommentValue('');
-			setIsCommented((prev) => !prev);
+			setIsCommented((prev: boolean) => !prev);
 		}
 	} catch (error) {
 		console.error(error);
@@ -279,14 +283,14 @@ export async function postComment(
 }
 
 export async function fetchExplorePosts(
-	setCount: (value: number) => void,
+	setCount: (value: any) => void,
 	setExplorePagePosts: (value: any) => void,
 	userData: User,
 	setHasMore: (value: boolean) => void,
 	setIsPostsLoading: (value: boolean) => void
 ): Promise<void> {
 	try {
-		setCount((prev) => prev + 1);
+		setCount((prev: number) => prev + 1);
 		const response = await fetch(
 			`${import.meta.env.VITE_APP_URL}api/v1/explore?limit=6`,
 			{
@@ -299,9 +303,9 @@ export async function fetchExplorePosts(
 		);
 		const result = await response.json();
 		if (result.status !== 'fail') {
-			setExplorePagePosts((prev) => {
+			setExplorePagePosts((prev: any) => {
 				const newItems = result.data.filter(
-					(item) => !prev.some((prevItem) => prevItem._id === item._id)
+					(item: any) => !prev.some((prevItem: any) => prevItem._id === item._id)
 				);
 				if (newItems.length === 0) {
 					setHasMore(false);
@@ -322,7 +326,7 @@ export async function fetchExplorePosts(
 
 export async function fetchComments(
 	signal: any,
-	setComments: (value: CommentStructure[]) => void,
+	setComments: (value: any) => void,
 	setCommentsLoading: (value: boolean) => void,
 	setTotalPages: (value: number) => void,
 	userData: User,
@@ -334,7 +338,7 @@ export async function fetchComments(
 		setCommentsLoading(true);
 
 		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/post/comments/${selectedPost._id
+			`${import.meta.env.VITE_APP_URL}api/v1/post/comments/${selectedPost?._id
 			}?page=${page}&limit=15`,
 			{
 				method: 'GET',
@@ -350,17 +354,17 @@ export async function fetchComments(
 			setCommentsLoading(false);
 		}
 		setTotalPages(result.data.totalPages);
-		setComments((prev) => {
-			const newComments = result.data.comments.filter((newComment) => {
+		setComments((prev: any) => {
+			const newComments = result.data.comments.filter((newComment: any) => {
 				return !prev.some(
-					(existingComment) => existingComment._id === newComment._id
+					(existingComment: any) => existingComment._id === newComment._id
 				);
 			});
 			return [...newComments, ...prev];
 		});
 
 		await Promise.all(
-			result.data.comments.map((comment) => {
+			result.data.comments.map((comment: any) => {
 				return new Promise((resolve) => {
 					const img = new Image();
 					img.src = comment.user.profilePic;
@@ -373,7 +377,7 @@ export async function fetchComments(
 				setCommentsLoading(false);
 			}
 		});
-	} catch (error) {
+	} catch (error: any) {
 		if (error.name !== 'AbortError' && error.name !== 'TypeError') {
 			console.error('Fetch failed:', error);
 		}
@@ -381,27 +385,27 @@ export async function fetchComments(
 }
 
 export async function likePost(
-	setSelectedPost: (value: Post) => void,
+	setSelectedPost: (value: any) => void,
 	userData: User,
 	selectedPost: Post | null,
-	setIsLiked: (value: boolean) => void,
+	setIsLiked: (value: any) => void,
 	setMessage: (value: string) => void
 ): Promise<void> {
 	try {
-		setSelectedPost((prev) => {
+		setSelectedPost((prev: any) => {
 			const hasLiked = prev.likes.some(
-				(item) => item === userData.data.user._id
+				(item: any) => item === userData.data.user._id
 			);
 			return {
 				...prev,
 				likeCount: hasLiked ? prev.likeCount - 1 : prev.likeCount + 1,
 				likes: hasLiked
-					? prev.likes.filter((item) => item !== userData.data.user._id)
+					? prev.likes.filter((item: any) => item !== userData.data.user._id)
 					: [...prev.likes, userData.data.user._id],
 			};
 		});
 		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/post/like/${selectedPost._id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/post/like/${selectedPost?._id}`,
 			{
 				method: 'POST',
 				headers: {
@@ -412,7 +416,7 @@ export async function likePost(
 		);
 		const result = await response.json();
 		if (result.message !== 'Post liked successfully.') {
-			setIsLiked((prev) => !prev);
+			setIsLiked((prev: any) => !prev);
 		} else {
 			setMessage(result.message);
 		}
@@ -422,27 +426,27 @@ export async function likePost(
 }
 
 export async function unLikePost(
-	setSelectedPost: (value: Post) => void,
+	setSelectedPost: (value: any) => void,
 	userData: User,
 	selectedPost: Post | null,
-	setIsLiked: (value: boolean) => void,
+	setIsLiked: (value: any) => void,
 	setMessage: (value: string) => void
 ): Promise<void> {
 	try {
-		setSelectedPost((prev) => {
+		setSelectedPost((prev: any) => {
 			const hasLiked = prev.likes.some(
-				(item) => item === userData.data.user._id
+				(item: any) => item === userData.data.user._id
 			);
 			return {
 				...prev,
 				likeCount: hasLiked ? prev.likeCount - 1 : prev.likeCount + 1,
 				likes: hasLiked
-					? prev.likes.filter((item) => item !== userData.data.user._id) // Remove like
+					? prev.likes.filter((item: any) => item !== userData.data.user._id) // Remove like
 					: [...prev.likes, userData.data.user._id], // Add like
 			};
 		});
 		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/post/dislike/${selectedPost._id}`,
+			`${import.meta.env.VITE_APP_URL}api/v1/post/dislike/${selectedPost?._id}`,
 			{
 				method: 'POST',
 				headers: {
@@ -453,7 +457,7 @@ export async function unLikePost(
 		);
 		const result = await response.json();
 		if (result.message !== 'Post disliked successfully.') {
-			setIsLiked((prev) => !prev);
+			setIsLiked((prev: any) => !prev);
 		} else {
 			setMessage(result.message);
 		}

@@ -8,6 +8,7 @@ interface PostSliderButtonsProps {
     handleDecrease: (value: any) => void;
     isPostSlider: boolean;
     isHome?: boolean;
+    isCaption?: boolean;
 }
 
 export const PostSliderButtons: React.FC<PostSliderButtonsProps> = ({
@@ -16,12 +17,13 @@ export const PostSliderButtons: React.FC<PostSliderButtonsProps> = ({
     handleIncrease,
     handleDecrease,
     isPostSlider,
-    isHome
+    isHome,
+    isCaption
 }) => {
 
     const { selectedPost } = usePost();
 
-    const shouldShowButtons = !isHome ? selectedPost !== null && posts.length > 1 : posts !== undefined && posts.length > 1;
+    const shouldShowButtons = !isHome ? selectedPost !== null && posts.length > 1 : isCaption ? posts !== undefined && !isCaption && posts.length > 1 : posts !== undefined && posts.length > 1;
 
     return (
         <>

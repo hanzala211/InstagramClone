@@ -21,9 +21,9 @@ interface PageHeaderProps {
 }
 
 export const PageHeader: React.FC<PageHeaderProps> = ({ isArrowNeeded, isHomePage, isInbox, isChat, isChatting, isCross, isDetails, isCreating }) => {
-    const { setSelectedPost, setComments, setSelectedImage, croppedAreas, setCroppedImages, selectedImage, setCurrentIndex, setLoading, setIsCaption, croppedImages, setIsShared, setCaptionValue, captionValue, isShared, setShareLoading, selectedPost, } = usePost();
+    const { setSelectedPost, setComments, setSelectedImage, croppedAreas, setCroppedImages, selectedImage, setCurrentIndex, setLoading, setIsCaption, croppedImages, setIsShared, setCaptionValue, captionValue, isShared, setShareLoading, selectedPost } = usePost();
     const { setSelectedProfile } = useSearch();
-    const { userData, setMainLoading, setMessage } = useUser();
+    const { userData, setMainLoading, setMessage, setUserPosts } = useUser();
     const { notifications, selectedChat, setIsChatSearch, isInfoOpen, setIsInfoOpen } = useChat();
     const navigate = useNavigate();
 
@@ -54,7 +54,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ isArrowNeeded, isHomePag
 
     function handlePostAction() {
         if (isCreating) {
-            createPost(setShareLoading, setIsShared, croppedImages, userData, captionValue, setCaptionValue, true, navigate);
+            createPost(setShareLoading, setIsShared, croppedImages, userData, captionValue, setCaptionValue, true, navigate, setUserPosts);
         } else {
             updatePost(setShareLoading, setIsShared, null, userData, captionValue, selectedPost, setMessage, navigate, setCaptionValue);
         }

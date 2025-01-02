@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { FaArrowRight } from "react-icons/fa";
 import { Loader } from "../helpers/Loader";
 import { useUser } from "../../context/UserContext";
 import { EditPost } from "./EditPost";
@@ -10,6 +10,7 @@ import { handleFile, handleFileChange, onCropImage } from "../../utils/helper";
 import { usePost } from "../../context/PostContext";
 import { useNavigate } from "react-router-dom";
 import { PostCropper } from "./PostCropper";
+import { PostSliderButtons } from "./PostSliderButtons";
 
 interface CreatePostProps {
     isCreating: boolean;
@@ -18,7 +19,7 @@ interface CreatePostProps {
 
 export const CreatePost: React.FC<CreatePostProps> = ({ isCreating, setIsCreating }) => {
     const { fileInputRef, selectedImage, setSelectedImage, croppedAreas, setCroppedAreas, setCroppedImages, croppedImages, currentIndex, setCurrentIndex, loading, setLoading, isCaption, setIsCaption, captionValue, setCaptionValue, isShared, setIsShared, shareLoading, setShareLoading } = usePost();
-    const { userData, innerWidth } = useUser();
+    const { userData, innerWidth, setUserPosts } = useUser();
     const navigate = useNavigate();
 
     useEffect((): any => {
@@ -36,6 +37,14 @@ export const CreatePost: React.FC<CreatePostProps> = ({ isCreating, setIsCreatin
             setIsShared(false);
         }, 800);
     };
+
+    function handleIncrease() {
+        setCurrentIndex((prev) => prev + 1)
+    }
+
+    function handleDecrease() {
+        setCurrentIndex((prev) => prev - 1)
+    }
 
     return (
         <>
@@ -101,20 +110,8 @@ export const CreatePost: React.FC<CreatePostProps> = ({ isCreating, setIsCreatin
                                 <Loader />
                             )}
 
-                            {(!selectedImage || selectedImage.length > 1) && !isCaption && (
-                                <>
-                                    {currentIndex !== selectedImage.length - 1 && (
-                                        <button className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={() => setCurrentIndex((prev) => prev + 1)}>
-                                            <FaArrowRight className="fill-black" />
-                                        </button>
-                                    )}
-                                    {currentIndex !== 0 && (
-                                        <button className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full" onClick={() => setCurrentIndex((prev) => prev - 1)}>
-                                            <FaArrowLeft className="fill-black" />
-                                        </button>
-                                    )}
-                                </>
-                            )}
+                            <PostSliderButtons posts={selectedImage} currentPost={currentIndex} handleDecrease={handleDecrease} handleIncrease={handleIncrease} isPostSlider={true} isCaption={isCaption} isHome={true} />
+
                         </div>
 
                         {!isCaption && !isShared && (
@@ -126,7 +123,7 @@ export const CreatePost: React.FC<CreatePostProps> = ({ isCreating, setIsCreatin
                         )}
 
                         {!isShared && isCaption && (
-                            <button className="absolute -top-7 right-0 text-[15px] text-[#0096f4] hover:text-white" onClick={() => createPost(setShareLoading, setIsShared, croppedImages, userData, captionValue, setCaptionValue, false, navigate)}>
+                            <button className="absolute -top-7 right-0 text-[15px] text-[#0096f4] hover:text-white" onClick={() => createPost(setShareLoading, setIsShared, croppedImages, userData, captionValue, setCaptionValue, false, navigate, setUserPosts)}>
                                 Share
                             </button>
                         )}

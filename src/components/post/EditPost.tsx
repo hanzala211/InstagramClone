@@ -10,7 +10,7 @@ interface EditPostProps {
     isCaption: boolean;
 }
 
-export const EditPost: React.FC<EditPostProps> = ({ handleDecrease, handleIncrease, userData, croppedImage }) => {
+export const EditPost: React.FC<EditPostProps> = ({ handleDecrease, handleIncrease, userData, croppedImage, isCaption }) => {
     const { captionValue, setCaptionValue, currentIndex } = usePost();
 
     const handleCaptionChange = (e: any) => {
@@ -25,7 +25,7 @@ export const EditPost: React.FC<EditPostProps> = ({ handleDecrease, handleIncrea
                     alt="Selected Images"
                     className="object-contain w-full h-[97%]"
                 />
-                <PostSliderButtons posts={croppedImage} currentPost={currentIndex} handleDecrease={handleDecrease} handleIncrease={handleIncrease} isPostSlider={true} />
+                <PostSliderButtons posts={croppedImage} currentPost={currentIndex} handleDecrease={handleDecrease} handleIncrease={handleIncrease} isPostSlider={true} isHome={true} />
             </div>
 
             <div className="sm:w-[35%] w-[40%] md:px-4 p-2 md:py-5 border-l-[2px] border-[#363636]">

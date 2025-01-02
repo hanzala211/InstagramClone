@@ -1,7 +1,8 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { createContext } from "react";
 import { ContextChild, PostContextType } from "../types/contextTypes";
 import { CommentStructure, CroppedAreas, Post } from "../types/postType";
+import { getImageDimensions } from "../utils/cropUtils";
 
 const PostContext = createContext<PostContextType | undefined>(undefined);
 
@@ -31,6 +32,11 @@ export const PostProvider: React.FC<ContextChild> = ({ children }) => {
     const [shareLoading, setShareLoading] = useState<boolean>(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    useEffect(() => {
+        if (selectedImage !== null) {
+            selectedImage?.map((item) => getImageDimensions(item).then((res) => setCroppedAreas((prev: any) => [...prev, res])))
+        }
+    }, [selectedImage])
 
     return <PostContext.Provider value={{ commentValue, setCommentValue, isAnimating, setIsAnimating, isPostSettingOpen, setIsPostSettingOpen, isDisabled, setIsDisabled, commentsLoading, setCommentsLoading, isSaved, setIsSaved, isMyPost, setIsMyPost, isCommented, setIsCommented, selectedPost, setSelectedPost, isLiked, setIsLiked, comments, setComments, isShareOpen, setIsShareOpen, isShareSearch, setIsShareSearch, isShareOpenHome, setIsShareOpenHome, fileInputRef, selectedImage, setSelectedImage, croppedAreas, setCroppedAreas, setCroppedImages, croppedImages, currentIndex, setCurrentIndex, loading, setLoading, isCaption, setIsCaption, captionValue, setCaptionValue, isShared, setIsShared, shareLoading, setShareLoading }}>{children}</PostContext.Provider>
 }
