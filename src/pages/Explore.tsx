@@ -14,9 +14,8 @@ import { ShadCnSkeleton } from "../components/ui/shadcnSkeleton";
 import { PostSliderButtons } from "../components/post/PostSliderButtons";
 
 export function Explore() {
+    const { searchQuery, setSearchQuery, searchData, setSearchData, setSelectedProfile, explorePagePosts, setExplorePagePosts } = useSearch();
     const { userData } = useUser();
-    const { searchQuery, setSearchQuery, searchData, setSearchData, setSelectedProfile, explorePagePosts,
-        setExplorePagePosts } = useSearch();
     const { setSelectedPost, setComments } = usePost()
     const { setPage, setTotalPages } = useHome()
     const [isPostsLoading, setIsPostsLoading] = useState<boolean>(false);
@@ -91,11 +90,13 @@ export function Explore() {
                 <input ref={inputRef} type="text" name="search" id="search" placeholder="Search" className={`bg-[#000] border-[1px] border-[#6F6F6F] rounded-md py-1 px-3 outline-none ${isSearching ? "w-[85%]" : "w-full"}`} onFocus={() => setIsSearching(true)} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
                 {isSearching && <button className="text-[14px]" onClick={() => setIsSearching(false)}>Cancel</button>}
             </div>
+
             <div className={`w-full flex md:hidden mt-5 flex-col gap-1 bg-[#000] ${isSearching ? "h-[100vh]" : ""}`}>
                 {searchData?.map((item, i) => (
                     <UserModal key={i} item={item} setSelectedProfile={setSelectedProfile} isSearchModal={true} />
                 ))}
             </div>
+
             {explorePagePosts.length === 0 && !isPostsLoading ? (
                 <p className="text-center text-lg text-gray-500">
                     No posts available. Check back later!
@@ -104,22 +105,24 @@ export function Explore() {
                 {Array.from({ length: 24 }, (item, i) => (
                     <ShadCnSkeleton key={i} className="w-full xl:h-[15rem] 1280:h-[20rem] lg:h-[17rem] sm:h-[12rem] md:h-[15rem] h-[8rem] rounded-md max-w-full bg-[#262626] " />
                 ))}
-            </div> : (
-                <InfiniteScroll dataLength={explorePagePosts.length} next={() => {
-                    fetchExplorePosts(setCount, setExplorePagePosts, userData, setHasMore, setIsPostsLoading)
-                }} loader={
-                    <div className="flex justify-center items-end py-4">
-                        <Loader height={`${explorePagePosts.length > 10 ? "h-[15vh] mb-5" : "md:h-[40vh] h-[60vh]"} `} />
-                    </div>}
-                    hasMore={count < 8 && hasMore}>
-                    <div className={`grid grid-flow-row grid-cols-3 gap-1 mt-5 mb-20 md:mb-0 md:mt-0`}>
-                        {explorePagePosts.map((item, index, arr) => (
-                            <PostModal key={index} arr={arr} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} item={item} i={index} />
-                        ))}
-                    </div>
-                </InfiniteScroll>
-            )}
+            </div>
+                : (
+                    <InfiniteScroll dataLength={explorePagePosts.length} next={() => {
+                        fetchExplorePosts(setCount, setExplorePagePosts, userData, setHasMore, setIsPostsLoading)
+                    }} loader={
+                        <div className="flex justify-center items-end py-4">
+                            <Loader height={`${explorePagePosts.length > 10 ? "h-[15vh] mb-5" : "md:h-[40vh] h-[60vh]"} `} />
+                        </div>}
+                        hasMore={count < 8 && hasMore}>
+                        <div className={`grid grid-flow-row grid-cols-3 gap-1 mt-5 mb-20 md:mb-0 md:mt-0`}>
+                            {explorePagePosts.map((item, index, arr) => (
+                                <PostModal key={index} arr={arr} setSelectedPost={setSelectedPost} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} item={item} i={index} />
+                            ))}
+                        </div>
+                    </InfiniteScroll>
+                )}
         </section>
+
         <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={explorePagePosts[currentPost]?.user} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} />
 
         <PostSliderButtons posts={explorePagePosts} handleDecrease={handleDecrease} handleIncrease={handleIncrease} currentPost={currentPost} isPostSlider={false} />

@@ -144,6 +144,7 @@ export const Story: React.FC<StoryPropTypes> = ({ isArchive, isOwnProfile, isHig
                     </>
                 )}
         </div>
+
         <button
             onClick={() => {
                 navigate(-1);
@@ -152,6 +153,7 @@ export const Story: React.FC<StoryPropTypes> = ({ isArchive, isOwnProfile, isHig
         >
             <IoCloseSharp className="text-[28px] md:text-[35px] absolute top-3 right-3" />
         </button>
+
         <HighlightsEditor highLightsModal={highLightsModal} setHighLightsModal={setHighLightsModal} />
     </section>
 
