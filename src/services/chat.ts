@@ -15,7 +15,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import { Messages, Thread } from '../types/chatType';
-import { User, UserData, UserInfo } from '../types/user';
+import { User, UserInfo } from '../types/user';
 import { Post } from '../types/postType';
 import { NavigateFunction } from 'react-router-dom';
 
@@ -300,7 +300,7 @@ export async function deleteChatForUser(
 		setThreads((prev) => prev.filter((item) => item?._id !== selectedId));
 		navigate('/direct/inbox');
 		setIsDeleting(false);
-	} catch (error) {
+	} catch (error: any) {
 		console.error('Error deleting chat for user:', error.message);
 	}
 }
