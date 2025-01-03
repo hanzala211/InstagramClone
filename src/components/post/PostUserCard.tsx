@@ -6,7 +6,7 @@ import { UserHoverModal } from "../usermodals/UserHoverModal"
 import { PostUserData } from "../../types/postType"
 import { UserInfo } from "../../types/user"
 
-interface PostUserCardProps{
+interface PostUserCardProps {
     postData: PostUserData | UserInfo;
     setIsHovered: (value: boolean) => void;
     handleClick: (item: any, postData: PostUserData | UserInfo) => void;

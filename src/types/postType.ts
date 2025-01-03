@@ -17,7 +17,7 @@ export interface Post {
 export interface PostUserData {
     _id?: string;
     profilePic?: string;
-    userName?: string;
+    userName: string;
     email?: string;
     fullName?: string;
 }

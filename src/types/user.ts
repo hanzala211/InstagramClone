@@ -16,7 +16,7 @@ export interface UserData {
 export interface UserInfo {
     _id: string;
     fullName?: string;
-    userName?: string;
+    userName: string;
     profilePic?: string;
     bio?: string;
     followers?: string[];
