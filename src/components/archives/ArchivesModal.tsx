@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import { fetchArchive } from "../../services/archive";
 import { ProfileStories } from "../../types/stories";
+import { formatDateString, formatMonth } from "../../utils/helper";
 
 interface ArchivesModalProps {
     selectStatus: boolean;
@@ -36,16 +37,6 @@ export const ArchivesModal: React.FC<ArchivesModalProps> = ({
     useEffect(() => {
         fetchArchive(setLoadingArchives, userData, setArchives);
     }, [userData]);
-
-    const formatDate = (num: string) => {
-        const date = new Date(num);
-        return date.getDate().toString();
-    };
-
-    const formatMonth = (num: string) => {
-        const date = new Date(num);
-        return date.toLocaleString("default", { month: "short" });
-    };
 
     return (
         <div
@@ -80,7 +71,7 @@ export const ArchivesModal: React.FC<ArchivesModalProps> = ({
                                 >
                                     <img src={item.imageUrl} alt="Story" className="w-96" />
                                     <p className="bg-white text-black w-12 absolute top-2 left-2 rounded-xl text-center font-semibold text-[18px]">
-                                        {formatDate(item.createdAt)}{" "}
+                                        {formatDateString(item.createdAt)}{" "}
                                         <span className="text-black font-light text-[15px]">
                                             {formatMonth(item.createdAt)}
                                         </span>

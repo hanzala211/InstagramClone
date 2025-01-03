@@ -117,3 +117,13 @@ export function handleClickForStory(fileInputRef: any) {
 		console.error('fileInputRef is not connected to an input element.');
 	}
 }
+
+export const formatDateString = (num: string) => {
+	const date = new Date(num);
+	return date.getDate().toString();
+};
+
+export const formatMonth = (num: string) => {
+	const date = new Date(num);
+	return date.toLocaleString("default", { month: "short" });
+};

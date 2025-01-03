@@ -31,10 +31,11 @@ export const PostUserCard: React.FC<PostUserCardProps> = ({ postData, setIsHover
                     <p className="hover:opacity-70 transition duration-200">{postData?.userName}</p>
                 </Link>
             </HoverCardTrigger>
-            <div className="absolute z-[200]" onClick={() => {
-                handleClick(null, postData)
-                navigate(userData?.data.user._id !== postData?._id ? `/search/${postData?.userName}/` : `/${userData?.data.user.userName}/`)
-            }}>
+            <div className="absolute z-[200]"
+                onClick={() => {
+                    handleClick(null, postData)
+                    navigate(userData?.data.user._id !== postData?._id ? `/search/${postData?.userName}/` : `/${userData?.data.user.userName}/`)
+                }}>
                 <HoverCardContent>
                     <UserHoverModal username={postData?.userName} isHovered={isHovered} />
                 </HoverCardContent>
