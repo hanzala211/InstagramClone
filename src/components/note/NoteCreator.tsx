@@ -22,6 +22,14 @@ export const NoteCreator: React.FC<NoteCreatorProps> = ({ isEditing, isNoteOpen,
         setNoteValue("");
     }
 
+    function handleClick() {
+        if (isEditing) {
+            updateNote(setShareLoading, userData, noteValue, setMessage, setNote, setIsNoteEditOpen, setIsNoteOpen)
+        } else {
+            createNote(setShareLoading, userData, noteValue, setMessage, setNote, setNoteValue, setIsNoteOpen)
+        }
+    }
+
     return <>
         <div
             className={`overlay opacity-0 z-[10] transition-all duration-500 ${!isNoteOpen ? "pointer-events-none" : "backdrop-blur-sm opacity-100"
@@ -39,13 +47,7 @@ export const NoteCreator: React.FC<NoteCreatorProps> = ({ isEditing, isNoteOpen,
                 />
                 <h2 className="font-bold text-[20px]">New Note</h2>
                 {!shareLoading ?
-                    <button className={`text-[#0095F6] ${isDisabled ? "opacity-50" : "hover:text-white transition duration-150"}`} disabled={isDisabled} onClick={() => {
-                        if (isEditing) {
-                            updateNote(setShareLoading, userData, noteValue, setMessage, setNote, setIsNoteEditOpen, setIsNoteOpen)
-                        } else {
-                            createNote(setShareLoading, userData, noteValue, setMessage, setNote, setNoteValue, setIsNoteOpen)
-                        }
-                    }}>Share</button> : <div><Loader height="h-[0vh]" widthHeight={true} /></div>}
+                    <button className={`text-[#0095F6] ${isDisabled ? "opacity-50" : "hover:text-white transition duration-150"}`} disabled={isDisabled} onClick={handleClick}>Share</button> : <div><Loader height="h-[0vh]" widthHeight={true} /></div>}
             </div>
             <div className="flex justify-center items-center h-[85%]">
                 <div className="relative">
