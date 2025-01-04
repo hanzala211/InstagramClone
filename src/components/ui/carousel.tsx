@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react"
 
 import { Button } from "./button";
 import { IoIosArrowDropleftCircle, IoIosArrowDroprightCircle } from "react-icons/io";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 const CarouselContext = React.createContext(null)
 
@@ -26,7 +27,7 @@ const Carousel = React.forwardRef((
     className,
     children,
     ...props
-  }: {orientation?: string; opts?: any; setApi?: any; plugins?: any; className?: string; children?: any},
+  }: { orientation?: string; opts?: any; setApi?: any; plugins?: any; className?: string; children?: any },
   ref
 ) => {
   const [carouselRef, api] = useEmblaCarousel({
@@ -163,7 +164,7 @@ const CustomButton = React.forwardRef(({ onClick, disabled, className, children,
 });
 CustomButton.displayName = "CustomButton";
 
-const CarouselPrevious = React.forwardRef(({ className, variant = "outline", size = "icon", ...props }, ref) => {
+const CarouselPrevious = React.forwardRef(({ className, variant = "outline", size = "icon", isHomeStories = false, ...props }, ref) => {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel();
 
   return (
@@ -176,14 +177,16 @@ const CarouselPrevious = React.forwardRef(({ className, variant = "outline", siz
       onClick={scrollPrev}
       {...props}
     >
-      <IoIosArrowDropleftCircle className="h-6 w-6" />
+      {isHomeStories ? <IoIosArrowDropleftCircle className="h-6 w-6" /> : canScrollPrev && <button
+        className={`p-2 bg-white rounded-full absolute left-2 top-1/2`}
+      ><FaArrowLeft className="fill-black" /></button>}
       <span className="sr-only">Previous slide</span>
-    </CustomButton>
+    </CustomButton >
   );
 });
 CarouselPrevious.displayName = "CarouselPrevious";
 
-const CarouselNext = React.forwardRef(({ className, variant = "outline", size = "icon", ...props }, ref) => {
+const CarouselNext = React.forwardRef(({ className, variant = "outline", size = "icon", isHomeStories = false, ...props }, ref) => {
   const { orientation, scrollNext, canScrollNext } = useCarousel();
 
   return (
@@ -196,7 +199,11 @@ const CarouselNext = React.forwardRef(({ className, variant = "outline", size = 
       onClick={scrollNext}
       {...props}
     >
-      <IoIosArrowDroprightCircle className="h-6 w-6" />
+      {isHomeStories ? <IoIosArrowDroprightCircle className="h-6 w-6" /> : canScrollNext && <button
+        className={`p-2 bg-white absolute right-2 top-1/2 rounded-full`}
+      >
+        <FaArrowRight className="fill-black" />
+      </button>}
       <span className="sr-only">Next slide</span>
     </CustomButton>
   );

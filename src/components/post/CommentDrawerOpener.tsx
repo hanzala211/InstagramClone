@@ -10,11 +10,10 @@ interface CommentDrawerOpenerProps {
     item: any;
     setCurrentPost: (value: number) => void;
     index: number;
-    setCurrentPostIndex: (value: number) => void;
     isText?: boolean;
 }
 
-export const CommentDrawerOpener: React.FC<CommentDrawerOpenerProps> = ({ item, setCurrentPost, index, setCurrentPostIndex, isText }) => {
+export const CommentDrawerOpener: React.FC<CommentDrawerOpenerProps> = ({ item, setCurrentPost, index, isText }) => {
     const { innerWidth } = useUser()
     const { setSelectedPost, setComments } = usePost()
 
@@ -24,7 +23,7 @@ export const CommentDrawerOpener: React.FC<CommentDrawerOpenerProps> = ({ item, 
                 <DrawerContent className="bg-[#000] border-t-[1px] border-[#a8a8a8]">
                     <CommentDrawer />
                 </DrawerContent>
-                <DrawerTrigger>{!isText ? <span onClick={() => setSelectedPost(item)}><CommentHome setCurrentIndex={setCurrentPostIndex} item={item} setCurrentPost={setCurrentPost} i={index} /></span> : item.commentsCount > 1 && <button onClick={() => setSelectedPost(item)} className="px-2 text-[#a8a8a8] text-[14px]">View all {item.commentsCount} comments</button>}</DrawerTrigger>
+                <DrawerTrigger>{!isText ? <span onClick={() => setSelectedPost(item)}><CommentHome item={item} setCurrentPost={setCurrentPost} i={index} /></span> : item.commentsCount > 1 && <button onClick={() => setSelectedPost(item)} className="px-2 text-[#a8a8a8] text-[14px]">View all {item.commentsCount} comments</button>}</DrawerTrigger>
             </Drawer>}
     </>
 }   

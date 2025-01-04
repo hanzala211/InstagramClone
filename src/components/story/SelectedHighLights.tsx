@@ -4,7 +4,7 @@ import { Loader } from "../helpers/Loader"
 import { createHighLight, editHighLight } from "../../services/story"
 import { useUser } from "../../context/UserContext"
 import { useNavigate } from "react-router-dom"
-import { formatDate } from "../../utils/helper"
+import { formatDateString, formatMonth } from "../../utils/helper"
 import { ProfileStories } from "../../types/stories"
 
 interface SelectedHighLightsProps {
@@ -14,7 +14,6 @@ interface SelectedHighLightsProps {
     isCreatingHighLight: boolean;
     handleClose: () => void;
     selectedIDs: ProfileStories[];
-    formatMonth: (value: string) => any;
     currentID: number;
     sendLoading: boolean;
     setCurrentID: (value: number) => void;
@@ -23,13 +22,13 @@ interface SelectedHighLightsProps {
     editingHighlight: boolean
 }
 
-export const SelectedHighLights: React.FC<SelectedHighLightsProps> = ({ selectCover, setSelectCover, setSelectedIDs, isCreatingHighLight, handleClose, selectedIDs, formatMonth, currentID, sendLoading, setCurrentID, setSendLoading, highlightName, editingHighlight }) => {
+export const SelectedHighLights: React.FC<SelectedHighLightsProps> = ({ selectCover, setSelectCover, setSelectedIDs, isCreatingHighLight, handleClose, selectedIDs, currentID, sendLoading, setCurrentID, setSendLoading, highlightName, editingHighlight }) => {
 
     const { currentHighLight, highlights, highLightStories, userData, setMessage, setHighlights } = useUser()
     const navigate = useNavigate();
 
     return <>
-        <div className={`w-full max-w-[30rem] overflow-hidden bg-[#262626] rounded-xl h-[75vh] fixed inset-0 z-[100] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition duration-500 ${selectCover ? "opacity-100" : "pointer-events-none"}`}>
+        <div className={`w-full md:max-w-[30rem] max-w-[22rem] 440:max-w-[2rem] overflow-hidden bg-[#262626] rounded-xl  440:h-[76%] h-[85%] fixed inset-0 z-[100] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition duration-500 ${selectCover ? "opacity-100" : "pointer-events-none"}`}>
             <div className="text-center w-full py-3 border-b-[1px] border-[#363636]">
                 <button className="absolute text-[30px] top-2.5 left-0" onClick={() => {
                     setSelectCover(false)
@@ -53,7 +52,7 @@ export const SelectedHighLights: React.FC<SelectedHighLightsProps> = ({ selectCo
                 {selectedIDs.map((item, i) => {
                     return <label key={i} className={`relative`} onClick={() => setCurrentID(i)}>
                         <img src={item.imageUrl} alt="Story Image" className="w-32" />
-                        <p className="bg-white text-black w-10 absolute top-1 left-1 rounded-xl text-center font-semibold text-[15px] ">{formatDate(item.createdAt)} <p className="text-black font-light text-[12px]">{formatMonth(item.createdAt)}</p></p>
+                        <p className="bg-white text-black w-10 absolute top-1 left-1 rounded-xl text-center font-semibold text-[15px] ">{formatDateString(item.createdAt)} <p className="text-black font-light text-[12px]">{formatMonth(item.createdAt)}</p></p>
                         <input
                             type="checkbox"
                             className="absolute right-2 bottom-2 w-4 h-4 appearance-none border border-gray-400 rounded-full bg-transparent checked:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"

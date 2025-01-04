@@ -12,13 +12,12 @@ interface HomePostOptionsProps {
     item: any;
     setLikedPosts: (value: boolean[]) => void;
     savedPosts: boolean[];
-    setCurrentPostIndex: (value: number) => void;
     setCurrentPost: (value: any) => void;
     setSavedPosts: (value: boolean[]) => void;
     setIsPostOpen: (value: boolean) => void
 }
 
-export const HomePostOptions: React.FC<HomePostOptionsProps> = ({ likedPosts, index, item, setLikedPosts, savedPosts, setCurrentPostIndex, setCurrentPost, setSavedPosts, setIsPostOpen }) => {
+export const HomePostOptions: React.FC<HomePostOptionsProps> = ({ likedPosts, index, item, setLikedPosts, savedPosts, setCurrentPost, setSavedPosts, setIsPostOpen }) => {
     const { userData, setUserData, setMessage, innerWidth } = useUser()
     const { setSelectedPost, setIsShareOpenHome } = usePost()
     const { setHomePosts } = useHome()
@@ -31,9 +30,9 @@ export const HomePostOptions: React.FC<HomePostOptionsProps> = ({ likedPosts, in
                     setHomePosts,
                     userData,
                     setMessage)}><UnLike className={`hover:opacity-80 fill-red-700 mb-1 transition-all duration-150 cursor-pointer`} /></button>}
-            {innerWidth >= 770 && <span onClick={() => setSelectedPost(item)}><CommentHome setCurrentIndex={setCurrentPostIndex} setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} i={index} /></span>}
+            {innerWidth >= 770 && <span onClick={() => setSelectedPost(item)}><CommentHome setIsPostOpen={setIsPostOpen} setCurrentPost={setCurrentPost} i={index} /></span>}
 
-            <CommentDrawerOpener item={item} setCurrentPost={setCurrentPost} index={index} setCurrentPostIndex={setCurrentPostIndex} isText={false} />
+            <CommentDrawerOpener item={item} setCurrentPost={setCurrentPost} index={index} isText={false} />
 
             <button onClick={() => {
                 setSelectedPost(item)

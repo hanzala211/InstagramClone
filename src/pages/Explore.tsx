@@ -22,7 +22,6 @@ export function Explore() {
     const [currentPost, setCurrentPost] = useState<number | any>(null);
     const [isPostOpen, setIsPostOpen] = useState<boolean>(false);
     const [count, setCount] = useState<number>(0);
-    const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [hasMore, setHasMore] = useState<boolean>(true)
     const [isSearching, setIsSearching] = useState<boolean>(false)
     const [searchLoading, setSearchLoading] = useState<boolean>(false);
@@ -70,7 +69,6 @@ export function Explore() {
 
     function handleIncrease() {
         setCurrentPost((prev: any) => prev + 1)
-        setCurrentIndex(0)
         setComments([])
         setPage(1);
         setTotalPages(0)
@@ -78,7 +76,6 @@ export function Explore() {
 
     function handleDecrease() {
         setCurrentPost((prev: any) => prev - 1)
-        setCurrentIndex(0)
         setComments([])
         setPage(1);
         setTotalPages(0)
@@ -123,7 +120,7 @@ export function Explore() {
                 )}
         </section>
 
-        <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={explorePagePosts[currentPost]?.user} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} currentPost={currentPost} setCurrentPost={setCurrentPost} />
+        <Post isPostOpen={isPostOpen} setIsPostOpen={setIsPostOpen} postData={explorePagePosts[currentPost]?.user} currentPost={currentPost} setCurrentPost={setCurrentPost} />
 
         <PostSliderButtons posts={explorePagePosts} handleDecrease={handleDecrease} handleIncrease={handleIncrease} currentPost={currentPost} isPostSlider={false} />
     </>

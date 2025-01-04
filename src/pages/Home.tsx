@@ -14,7 +14,6 @@ import { HomePostSkeleton } from "../components/helpers/HomePostSkeleton";
 export const Home: React.FC = () => {
     const { homeStories, setHomeStories, homePosts, setHomePosts } = useHome();
     const { userData } = useUser();
-    const [currentPostIndex, setCurrentPostIndex] = useState<number>(0);
     const [isPostsLoading, setIsPostsLoading] = useState<boolean>(false);
     const [isPostOpen, setIsPostOpen] = useState<boolean>(false);
     const [currentPost, setCurrentPost] = useState<number | any>(0);
@@ -56,7 +55,6 @@ export const Home: React.FC = () => {
                                         item={post}
                                         setHomePosts={setHomePosts}
                                         setCurrentPost={setCurrentPost}
-                                        setCurrentPostIndex={setCurrentPostIndex}
                                         setIsPostOpen={setIsPostOpen}
                                     />
                                 ))
@@ -80,8 +78,6 @@ export const Home: React.FC = () => {
                 isPostOpen={isPostOpen}
                 setIsPostOpen={setIsPostOpen}
                 postData={homePosts[currentPost]?.user}
-                currentIndex={currentPostIndex}
-                setCurrentIndex={setCurrentPostIndex}
                 currentPost={currentPost}
                 setCurrentPost={setCurrentPost}
             />

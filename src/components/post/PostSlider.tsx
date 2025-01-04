@@ -1,26 +1,22 @@
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { usePost } from "../../context/PostContext";
 import { useRef, useState, useEffect } from "react";
 import { useUser } from "../../context/UserContext";
 import { LikeAnimation } from "./LikeAnimation";
 import { likePost } from "../../services/post";
 import { likePost as likePosts } from "../../services/homePage"
-import { PostSliderButtons } from "./PostSliderButtons";
 import { useHome } from "../../context/HomeContext";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel";
 
 interface PostSliderProps {
-    currentIndex: any;
-    setCurrentIndex: (value: any) => void;
     post: any;
     isLiked: any;
     setIsLiked: (value: any) => void;
     index?: number;
-    totalIndex?: any[];
     isHome: boolean
 }
 
-export const PostSlider: React.FC<PostSliderProps> = ({ currentIndex, setCurrentIndex, post, isLiked, setIsLiked, index, totalIndex, isHome }) => {
-    const { selectedPost, setSelectedPost, isAnimating, setIsAnimating } = usePost();
+export const PostSlider: React.FC<PostSliderProps> = ({ post, isLiked, setIsLiked, index, isHome }) => {
+    const { selectedPost, setSelectedPost } = usePost();
     const { userData, setMessage } = useUser();
     const { homePosts, setHomePosts } = useHome()
     const [showHeart, setShowHeart] = useState<boolean>(false);
@@ -32,34 +28,6 @@ export const PostSlider: React.FC<PostSliderProps> = ({ currentIndex, setCurrent
             lastTouchTime.current = 0;
         };
     }, []);
-
-    function handleIncrease() {
-        setIsAnimating(true);
-        if (typeof currentIndex === "number") {
-            setCurrentIndex((prev: number) => prev + 1);
-        } else {
-            setCurrentIndex((prev: any) => {
-                const updated = [...prev];
-                updated[index] = updated[index] + 1 < totalIndex[index] ? updated[index] + 1 : updated[index];
-                return updated;
-            });
-        }
-        setTimeout(() => setIsAnimating(false), 400);
-    };
-
-    function handleDecrease() {
-        setIsAnimating(true);
-        if (typeof currentIndex === "number") {
-            setCurrentIndex((prev: number) => prev - 1);
-        } else {
-            setCurrentIndex((prev: any) => {
-                const updated = [...prev];
-                updated[index] = updated[index] - 1 >= 0 ? updated[index] - 1 : updated[index];
-                return updated;
-            });
-        }
-        setTimeout(() => setIsAnimating(false), 400);
-    };
 
     function handleDoubleClick(indexForClick: number) {
         setHeartIndex(indexForClick);
@@ -86,26 +54,27 @@ export const PostSlider: React.FC<PostSliderProps> = ({ currentIndex, setCurrent
 
     return (
         <div className={`${isHome ? "w-full bg-[#000000] border-[1px] border-[#2B2B2D] relative overflow-hidden" : "1280:w-[50rem] lg:w-[65rem] md:w-[85rem] w-[100vw] 440:w-[26.9rem] relative overflow-hidden"} `}>
-            <div
-                className={`w-full relative flex h-full ${isAnimating ? "transition-transform duration-300 ease-in-out" : ""}`}
-                style={{ transform: `translateX(${(isHome ? -currentIndex[index] : -currentIndex) * 100}%)` }}
-            >
-                {post?.imageUrls?.map((item: any, index: number) => (
-                    <div key={index} className="relative flex-shrink-0 w-full h-full">
-                        <img
-                            src={item}
-                            alt="Post"
-                            onDoubleClick={() => handleDoubleClick(index)}
-                            onTouchStart={() => handleTouchStart(index)}
-                            className="object-fill h-full w-full"
-                        />
-                        <LikeAnimation showHeart={showHeart} heartIndex={heartIndex} index={index} />
-                    </div>
-                ))}
-            </div>
-
-            <PostSliderButtons posts={post?.imageUrls} handleDecrease={handleDecrease} handleIncrease={handleIncrease} currentPost={isHome ? currentIndex[index] : currentIndex} isPostSlider={true} isHome={isHome} />
-
+            <Carousel>
+                <CarouselContent className={`relative ${isHome ? "h-full" : "lg:h-[67vh] md:h-[61vh] 1280:h-[87vh] h-auto"} flex`}>
+                    {post?.imageUrls?.map((item: any, index: number) => (
+                        <CarouselItem key={index} className="relative flex-shrink-0 w-full h-full">
+                            <img
+                                src={item}
+                                alt="Post"
+                                onDoubleClick={() => handleDoubleClick(index)}
+                                onTouchStart={() => handleTouchStart(index)}
+                                className="object-fill h-full w-full"
+                            />
+                            <LikeAnimation showHeart={showHeart} heartIndex={heartIndex} index={index} />
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+                {post?.imageUrls.length > 1 && <>
+                    <CarouselNext isHomeStories={false} />
+                    <CarouselPrevious isHomeStories={false} />
+                </>
+                }
+            </Carousel>
         </div>
     );
 }

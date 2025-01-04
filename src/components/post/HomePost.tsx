@@ -23,18 +23,15 @@ interface HomePostProps {
     item: any;
     setHomePosts: (value: Post[]) => void;
     setCurrentPost: (value: number) => void;
-    setCurrentPostIndex: (value: number) => void;
     setIsPostOpen: (value: boolean) => void;
     isPost?: boolean;
 }
 
-export const HomePost: React.FC<HomePostProps> = ({ index, item, setCurrentPost, setCurrentPostIndex, setIsPostOpen, isPost }) => {
+export const HomePost: React.FC<HomePostProps> = ({ index, item, setCurrentPost, setIsPostOpen, isPost }) => {
     const { selectedPost, setComments, setCommentsLoading, isCommented, setIsShareOpenHome } = usePost()
     const { userData, setMainLoading } = useUser()
     const { setSelectedProfile } = useSearch()
     const { page, setTotalPages, homePosts } = useHome()
-    const [currentIndex, setCurrentIndex] = useState<number[]>(Array(homePosts.length).fill(0))
-    const [totalIndex, setTotalIndex] = useState<number[]>(Array(homePosts.length).fill(0))
     const [savedPosts, setSavedPosts] = useState<boolean[]>(Array(homePosts.length).fill(false))
     const [likedPosts, setLikedPosts] = useState<boolean[]>(Array(homePosts.length).fill(false))
     const [isHovered, setIsHovered] = useState<boolean[]>(Array(homePosts.length).fill(false))
@@ -45,12 +42,9 @@ export const HomePost: React.FC<HomePostProps> = ({ index, item, setCurrentPost,
         if (homePosts !== null) {
             const updatedLikedPosts = homePosts.map(post => post.likes.includes(userData?.data.user._id))
             const updatedSavedPosts = homePosts.map(post => userData.data.user.savedPosts.includes(post._id))
-            const updatedCurrentIndex = homePosts.map(post => post?.imageUrls.length)
 
             setLikedPosts(updatedLikedPosts)
             setSavedPosts(updatedSavedPosts)
-            setTotalIndex(updatedCurrentIndex)
-            setCurrentIndex(Array(homePosts.length).fill(0))
             setIsHovered(Array(homePosts.length).fill(false))
             setIsShareOpenHome(Array(homePosts.length).fill(false))
         }
@@ -108,17 +102,17 @@ export const HomePost: React.FC<HomePostProps> = ({ index, item, setCurrentPost,
                 </div>
             </div>
 
-            <PostSlider currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} post={item} isLiked={likedPosts} setIsLiked={setLikedPosts} index={index} totalIndex={totalIndex} isHome={true} />
+            <PostSlider post={item} isLiked={likedPosts} setIsLiked={setLikedPosts} index={index} isHome={true} />
 
             <div className="flex flex-col gap-2 w-full">
 
-                <HomePostOptions likedPosts={likedPosts} index={index} item={item} setLikedPosts={setLikedPosts} savedPosts={savedPosts} setCurrentPostIndex={setCurrentPostIndex} setCurrentPost={setCurrentPost} setSavedPosts={setSavedPosts} setIsPostOpen={setIsPostOpen} />
+                <HomePostOptions likedPosts={likedPosts} index={index} item={item} setLikedPosts={setLikedPosts} savedPosts={savedPosts} setCurrentPost={setCurrentPost} setSavedPosts={setSavedPosts} setIsPostOpen={setIsPostOpen} />
 
                 <p className="text-[14px] font-medium">{item.likeCount} likes</p>
                 <div className="w-full text-[15px]">
                     <PostCaption selectedPost={item} postData={item?.user || item?.postBy || userData?.data?.user} isImg={false} />
 
-                    <CommentDrawerOpener item={item} setCurrentPost={setCurrentPost} index={index} setCurrentPostIndex={setCurrentPostIndex} isText={true} />
+                    <CommentDrawerOpener item={item} setCurrentPost={setCurrentPost} index={index} isText={true} />
 
                     {!isPost &&
                         <div className={`md:hidden ${item.commentsCount > 1 ? "" : "-mt-3"}`}>

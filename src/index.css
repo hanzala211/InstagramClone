@@ -135,7 +135,6 @@ body::-webkit-scrollbar {
 		bottom: 10px;
 	}
 }
-
 .text-outline{ 
 	-webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.5);
 }

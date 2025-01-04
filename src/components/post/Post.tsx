@@ -21,14 +21,12 @@ interface PostProps {
     isPostOpen: boolean;
     setIsPostOpen: (value: boolean) => void;
     postData: PostUserData | UserInfo | any;
-    currentIndex: number;
-    setCurrentIndex: (value: number) => void;
     setCurrentPost: (value: number | null) => void;
     currentPost: number | null;
     isMobile?: boolean
 }
 
-export const Post: React.FC<PostProps> = ({ isPostOpen, setIsPostOpen, postData, currentIndex, setCurrentIndex, setCurrentPost, currentPost, isMobile }) => {
+export const Post: React.FC<PostProps> = ({ isPostOpen, setIsPostOpen, postData, setCurrentPost, currentPost, isMobile }) => {
     const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, setCommentValue, setIsPostSettingOpen, isCommented, commentsLoading, setCommentsLoading, isPostSettingOpen, isMyPost, comments, setComments, isLiked, setIsLiked } = usePost();
     const { userData, setMainLoading } = useUser();
     const { setSelectedProfile } = useSearch();
@@ -60,7 +58,6 @@ export const Post: React.FC<PostProps> = ({ isPostOpen, setIsPostOpen, postData,
         setIsPostOpen(false);
         setTimeout(() => {
             setCurrentPost(null);
-            setCurrentIndex(0);
             setSelectedPost(null);
             setCommentValue("");
             setComments([]);
@@ -93,8 +90,7 @@ export const Post: React.FC<PostProps> = ({ isPostOpen, setIsPostOpen, postData,
                             setIsPostSettingOpen={setIsPostSettingOpen}
                         />
                     </div>
-
-                    <PostSlider post={selectedPost} isLiked={isLiked} setIsLiked={setIsLiked} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} isHome={false} />
+                    <PostSlider post={selectedPost} isLiked={isLiked} setIsLiked={setIsLiked} isHome={false} />
 
                     <div className="1280:w-[45rem] lg:w-[60rem] md:w-[65rem] hidden md:block w-[22rem] bg-[#000000]">
                         <div className="flex relative justify-between items-center p-5 border-b-[1px] border-[#262626]">

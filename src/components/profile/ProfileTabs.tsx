@@ -23,7 +23,6 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isS
     const { userPosts, userData, userSaves } = useUser();
     const [isPostOpen, setIsPostOpen] = useState<boolean>(false);
     const [currentPost, setCurrentPost] = useState<number | any>(null);
-    const [currentIndex, setCurrentIndex] = useState<number>(0);
     const reversedPosts = userPosts?.slice().reverse() || [];
     const reversedUserPosts = searchUserPosts?.slice().reverse() || [];
     const reversedSavedPosts = userSaves?.slice().reverse() || [];
@@ -40,7 +39,6 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isS
 
     function handleIncrease() {
         setCurrentPost((prev: number) => prev + 1)
-        setCurrentIndex(0)
         setComments([])
         setPage(1);
         setTotalPages(0)
@@ -48,7 +46,6 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isS
 
     function handleDecrease() {
         setCurrentPost((prev: number) => prev - 1)
-        setCurrentIndex(0)
         setComments([])
         setPage(1);
         setTotalPages(0)
@@ -89,8 +86,6 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isS
             isPostOpen={isPostOpen}
             setIsPostOpen={setIsPostOpen}
             postData={isPosts || isTagged ? userData?.data?.user ?? {} : isSearchPosts ? selectedProfile ?? {} : isSaved ? userSaves?.[currentPost]?.postBy ?? {} : {}}
-            currentIndex={currentIndex}
-            setCurrentIndex={setCurrentIndex}
             currentPost={currentPost}
             setCurrentPost={setCurrentPost}
         />

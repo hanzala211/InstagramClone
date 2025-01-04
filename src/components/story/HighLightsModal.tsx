@@ -33,25 +33,13 @@ export const HighLightsModal: React.FC<HighLightsModalProps> = ({ setIsCreatingH
         setHighlightName("")
     }
 
-    function formatDate(num: number) {
-        const date = new Date(num);
-        const day = date.getDate();
-        return `${day}`
-    }
-
-    function formatMonth(num: number) {
-        const date = new Date(num);
-        const month = date.toLocaleString('default', { month: "short" });
-        return `${month} `
-    }
-
     return <>
         <div
             className={`overlay opacity-0 z-[50] transition-all duration-500 ${!isCreatingHighLight ? "pointer-events-none" : "backdrop-blur-sm opacity-100"
                 }`}
             onClick={handleClose}
         ></div>
-        <div className={`fixed inset-0 z-50 top-[50%] -translate-y-1/2 left-[55%] -translate-x-1/2 w-[70%] md:w-[30%] h-[19%] ${isCreatingHighLight && !selectStatus ? "opacity-100" : "opacity-0 pointer-events-none"} transition-all duration-500`}>
+        <div className={`fixed inset-0 z-50 top-[50%] -translate-y-1/2 left-1/2 md:left-[55%] -translate-x-1/2 w-[80%] md:w-[30%] h-[19%] ${isCreatingHighLight && !selectStatus ? "opacity-100" : "opacity-0 pointer-events-none"} transition-all duration-500`}>
             <div className="bg-[#262626] w-full max-w-[400px] rounded-xl">
                 <div className="text-center w-full py-3 border-b-[1px] border-[#363636] relative">
                     <p>New highlight</p>
@@ -81,6 +69,6 @@ export const HighLightsModal: React.FC<HighLightsModalProps> = ({ setIsCreatingH
 
         <ArchivesModal selectStatus={selectStatus} setSelectCover={setSelectCover} selectedIDs={selectedIDs} selectCover={selectCover} setSelectStatus={setSelectStatus} isCreatingHighLight={isCreatingHighLight} handleClose={handleClose} setSelectedIDs={setSelectedIDs} left="left-1/2" />
 
-        <SelectedHighLights selectCover={selectCover} setSelectCover={setSelectCover} setSelectedIDs={setSelectedIDs} isCreatingHighLight={isCreatingHighLight} handleClose={handleClose} selectedIDs={selectedIDs} formatDate={formatDate} formatMonth={formatMonth} currentID={currentID} setSendLoading={setSendLoading} highlightName={highlightName} sendLoading={sendLoading} setCurrentID={setCurrentID} />
+        <SelectedHighLights selectCover={selectCover} setSelectCover={setSelectCover} setSelectedIDs={setSelectedIDs} isCreatingHighLight={isCreatingHighLight} handleClose={handleClose} selectedIDs={selectedIDs} currentID={currentID} setSendLoading={setSendLoading} highlightName={highlightName} sendLoading={sendLoading} setCurrentID={setCurrentID} />
     </>
 }
