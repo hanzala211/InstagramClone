@@ -59,7 +59,7 @@ const NoteTooltip: React.FC<NoteTooltipProps> = ({ isProfile, noteValue, setNote
                         }`}
                 ></div>
                 <div
-                    className={`w-1.5 h-1.5 bg-[#363636] rounded-full absolute -z-10 -bottom-3 left-3 ${isProfile ? "" : "w-[0.5vw] h-[1vh] left-[1rem] -bottom-3.5"
+                    className={`w-1.5 h-1.5 bg-[#363636] rounded-full absolute -z-10 -bottom-3 left-3 ${isProfile ? "" : "w-[2vw] md:w-[0.5vw] h-[1vh] left-[1rem] -bottom-3.5"
                         }`}
                 ></div>
             </div>
