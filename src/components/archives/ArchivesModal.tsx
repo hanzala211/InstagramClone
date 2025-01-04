@@ -40,7 +40,7 @@ export const ArchivesModal: React.FC<ArchivesModalProps> = ({
 
     return (
         <div
-            className={`w-full md:max-w-[30rem] max-w-[25rem] overflow-hidden bg-[#262626] rounded-xl h-[76vh] 1280:h-[76vh] fixed inset-0 z-[100] top-1/2 ${left} -translate-x-1/2 -translate-y-1/2 opacity-0 transition duration-500 ${selectStatus && !selectCover ? "opacity-100" : "pointer-events-none"
+            className={`w-full md:max-w-[30rem] max-w-[24rem] sm:max-w-[25rem] overflow-hidden bg-[#262626] rounded-xl 440:h-[76%] h-[80%] fixed inset-0 z-[100] top-1/2 ${left} -translate-x-1/2 -translate-y-1/2 opacity-0 transition duration-500 ${selectStatus && !selectCover ? "opacity-100" : "pointer-events-none"
                 }`}
         >
             <div className="text-center w-full py-3 border-b-[1px] border-[#363636]">
@@ -60,7 +60,7 @@ export const ArchivesModal: React.FC<ArchivesModalProps> = ({
             <div className="overflow-auto h-[65vh]">
                 {!loadingArchives ? (
                     archives.length > 0 ? (
-                        <div className="md:grid md:grid-cols-3 md:gap-[3px]">
+                        <div className="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-[3px]">
                             {archives.map((item, i) => (
                                 <label
                                     key={i}
