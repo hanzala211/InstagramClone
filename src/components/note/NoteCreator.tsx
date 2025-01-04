@@ -5,7 +5,7 @@ import { Loader } from "../helpers/Loader";
 import { useState } from "react";
 import { updateNote, createNote } from "../../services/note";
 
-interface NoteCreatorProps{
+interface NoteCreatorProps {
     isEditing: boolean;
     isNoteOpen: boolean;
     setIsNoteOpen: (value: boolean) => void;
@@ -30,7 +30,7 @@ export const NoteCreator: React.FC<NoteCreatorProps> = ({ isEditing, isNoteOpen,
         ></div>
         <div
             className={`fixed opacity-0 top-[50%] -translate-y-1/2 -translate-x-1/2 left-1/2 transition-all duration-500 z-[150] ${isNoteOpen ? "opacity-100" : "pointer-events-none"
-                } border-y-[1px] border-[#363636] h-[65vh] w-full max-w-[25rem] xl:max-w-[28vw] p-4 bg-[#262626] rounded-2xl`}
+                } border-y-[1px] border-[#363636] h-[65vh] w-full max-w-[22rem] xl:max-w-[28vw] p-4 bg-[#262626] rounded-2xl`}
         >
             <div className="flex justify-between items-center">
                 <IoCloseSharp
