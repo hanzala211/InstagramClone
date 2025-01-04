@@ -40,7 +40,7 @@ export const ArchivesModal: React.FC<ArchivesModalProps> = ({
 
     return (
         <div
-            className={`w-full md:max-w-[30rem] max-w-[22rem] sm:max-w-[25rem] overflow-hidden bg-[#262626] rounded-xl 440:h-[76%] h-[85%] fixed inset-0 z-[100] top-1/2 ${left} -translate-x-1/2 -translate-y-1/2 opacity-0 transition duration-500 ${selectStatus && !selectCover ? "opacity-100" : "pointer-events-none"
+            className={`w-full md:max-w-[30rem] max-w-[22rem] sm:max-w-[25rem] overflow-hidden bg-[#262626] rounded-xl 440:h-[76vh] h-[79vh] fixed inset-0 z-[100] top-1/2 ${left} -translate-x-1/2 -translate-y-1/2 opacity-0 transition duration-500 ${selectStatus && !selectCover ? "opacity-100" : "pointer-events-none"
                 }`}
         >
             <div className="text-center w-full py-3 border-b-[1px] border-[#363636]">
