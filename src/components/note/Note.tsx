@@ -16,11 +16,11 @@ const NoteTooltip: React.FC<NoteTooltipProps> = ({ isProfile, noteValue, setNote
     return (
         <div className={`relative ${isProfile ? "" : "md:w-48 w-36"}`}>
             <div
-                className={`absolute -top-6 md:-top-8 left-[45%] transform -translate-x-1/2 bg-[rgb(54,54,54)] text-white text-sm md:rounded-2xl rounded-xl md:p-3 p-2 space-x-1 ${note?.length === 0 ? "" : "w-[4.5rem] md:w-auto"} shadow-lg ${isProfile ? "" : "w-full pt-3 md:pt-5"}`}>
+                className={`absolute -top-6 md:-top-8 left-[45%] transform -translate-x-1/2 bg-[rgb(54,54,54)] text-white text-sm md:rounded-2xl rounded-xl md:p-3 p-2 space-x-1 ${note?.length === 0 ? "" : "w-[5rem] md:w-auto"} shadow-lg ${isProfile ? "" : "w-full pt-3 md:pt-5"}`}>
                 {!noteLoading ? (
                     isProfile ? (
                         <span
-                            className={`text-[#A8A8A8] ${note?.content?.length > 12 && !isEditor ? "text-[10px] line-clamp-3" : "text-[12px] md:text-[15px]"} ${note && note.length !== 0 ? "text-white px-2 " : ""} ${className}`}
+                            className={`text-[#A8A8A8] ${note?.content?.length > 12 && !isEditor ? "text-[10px] line-clamp-3" : "text-[12px] md:text-[15px]"} ${note && note.length !== 0 ? "text-white md:px-2" : ""} ${className}`}
                             style={{
                                 lineHeight: "1.3"
                             }}
