@@ -28,7 +28,7 @@ export const SelectedHighLights: React.FC<SelectedHighLightsProps> = ({ selectCo
     const navigate = useNavigate();
 
     return <>
-        <div className={`w-full md:max-w-[30rem] max-w-[22rem] 440:max-w-[2rem] overflow-hidden bg-[#262626] rounded-xl  440:h-[76%] h-[85%] fixed inset-0 z-[100] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition duration-500 ${selectCover ? "opacity-100" : "pointer-events-none"}`}>
+        <div className={`w-full md:max-w-[30rem] max-w-[22rem] 440:max-w-[2rem] overflow-hidden bg-[#262626] rounded-xl  440:h-[76vh] h-[78vh] fixed inset-0 z-[100] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition duration-500 ${selectCover ? "opacity-100" : "pointer-events-none"}`}>
             <div className="text-center w-full py-3 border-b-[1px] border-[#363636]">
                 <button className="absolute text-[30px] top-2.5 left-0" onClick={() => {
                     setSelectCover(false)
