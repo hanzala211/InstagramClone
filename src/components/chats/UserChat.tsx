@@ -100,7 +100,7 @@ export const UserChat: React.FC = () => {
                     <button onClick={() => setIsInfoOpen((prev) => !prev)}>{isInfoOpen ? <ActiveChatInfoSVG /> : <ChatInfoSVG />}</button>
                 </div>
                 <div ref={scrollRef}
-                    className="overflow-y-auto h-full max-h-[calc(100vh-24vh)] md:max-h-[calc(100vh-130px)] scrollbar-hidden py-3 px-3 flex flex-col gap-5">
+                    className="overflow-y-auto h-full max-h-[calc(100dvh-24vh)] md:max-h-[calc(100dvh-130px)] scrollbar-hidden py-3 px-3 flex flex-col gap-5">
                     {messagesLoading ?
                         <div><Loader height="h-[10vh]" widthHeight={true} /></div>
                         :
