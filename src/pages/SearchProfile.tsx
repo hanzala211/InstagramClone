@@ -8,7 +8,7 @@ import { HighLights } from "../components/story/Highlights"
 import { LoadingPage } from "./LoadingPage";
 import { UserFollowDetails } from "../components/usermodals/UserFollowDetails";
 import { NoteDiv } from "../components/note/NoteDiv";
-import { follow, getDataOnClick } from "../services/searchProfile";
+import { follow, getDataOnClick, unfollow } from "../services/searchProfile";
 import { useChat } from "../context/ChatContext";
 import { useSearch } from "../context/SearchContext";
 import { FollowButton } from "../components/profile/FollowButtons";
@@ -32,6 +32,7 @@ export function SearchProfile() {
     const [isDisabled, setIsDisabled] = useState<boolean>(false)
     const navigate = useNavigate();
     const params = useParams();
+
 
     useEffect(() => {
         if (params.username === userData?.data.user.userName) {
@@ -118,7 +119,7 @@ export function SearchProfile() {
                 ...prev,
                 followersCount: prev.followersCount - 1,
             }));
-            const res = await follow({
+            const res = await unfollow({
                 selectedProfile,
                 token
             })
