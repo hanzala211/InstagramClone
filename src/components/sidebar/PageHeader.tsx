@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { usePost } from "../../context/PostContext";
 import { ActiveChatInfoSVG, ChatIcon, ChatInfoSVG, ChatSearchIcon, CrossIcon } from "../../assets/Constants";
 import { useChat } from "../../context/ChatContext";
-import { useUser } from "../../context/UserContext";
 import { onCropImage } from "../../utils/helper";
 import { useAuth } from "../../context/AuthContext";
 import { getDataOnClick } from "../../services/searchProfile";
@@ -20,8 +19,7 @@ interface PageHeaderProps {
 }
 
 export const PageHeader: React.FC<PageHeaderProps> = ({ isArrowNeeded, isHomePage, isInbox, isChat, isChatting, isCross, isDetails, isCreating }) => {
-    const { setSelectedPost, setComments, setSelectedImage, croppedAreas, setCroppedImages, selectedImage, setCurrentIndex, setLoading, setIsCaption, setIsShared, setCaptionValue, captionValue, isShared, setShareLoading, selectedPost, createPosts, updatePost } = usePost();
-    const { setMessage } = useUser();
+    const { setSelectedPost, setComments, setSelectedImage, croppedAreas, setCroppedImages, selectedImage, setCurrentIndex, setLoading, setIsCaption, isShared, createPosts, updatePost } = usePost();
     const { userData, setMainLoading, setSelectedProfile, token } = useAuth();
     const { notifications, selectedChat, setIsChatSearch, isInfoOpen, setIsInfoOpen } = useChat();
     const navigate = useNavigate();
