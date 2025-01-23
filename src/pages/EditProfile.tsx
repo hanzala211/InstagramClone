@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { useUser } from "../context/UserContext";
 import { ProfileSettingInput } from "../components/profile/ProfileSettingInput";
-import { changeData } from "../services/profile";
 import { Loader } from "../components/helpers/Loader";
 import { EditForm } from "../types/user";
+import { useAuth } from "../context/AuthContext";
+import { profileDataChange, profilePicChange } from "../services/profile";
 
 interface InitialData {
     userName: string;
@@ -12,7 +12,7 @@ interface InitialData {
 }
 
 export const EditProfile: React.FC = () => {
-    const { setUserData, userData } = useUser();
+    const { setUserData, userData, token } = useAuth();
     const [selectedImage, setSelectedImage] = useState<null | string>(null);
     const [changeUserName, setChangeUserName] = useState<string>(userData.data.user.userName);
     const [changeBio, setChangeBio] = useState<string>(userData.data.user.bio)
@@ -42,12 +42,77 @@ export const EditProfile: React.FC = () => {
         fileInputRef.current.click();
     }
 
-    function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    function handleFileChange(event: any) {
         const file = event.target.files[0];
         if (file && file.type.startsWith("image/")) {
             setSelectedImage(URL.createObjectURL(file));
         }
         fileInputRef.current.value = null;
+    }
+
+    const changeData = async () => {
+        try {
+            setErrorMessage('');
+            setSuccessMessage('');
+            setIsDisabled(true);
+            const res = await profileDataChange({
+                token,
+                raw: {
+                    userName: changeUserName,
+                    fullName: userData?.data.user.fullName,
+                    websiteUrl: userData?.data.user.websiteUrl,
+                    gender: "Male",
+                    bio: changeBio
+                }
+            })
+            console.log(res)
+            if (res.message === 'Profile updated successfully') {
+                setSuccessMessage(res.message);
+                setUserData((prev: any) => {
+                    return {
+                        ...prev,
+                        data: {
+                            ...prev.data,
+                            user: {
+                                ...res.data,
+                            },
+                        },
+                    };
+                });
+            } else {
+                setErrorMessage(res.message);
+            }
+            if (selectedImage !== null) {
+                const changeProfile = await profilePicChange({
+                    token,
+                    selectedImage
+                })
+                if (changeProfile.message === 'Profile picture updated successfully') {
+                    setUserData((prev: any) => {
+                        return {
+                            ...prev,
+                            data: {
+                                ...prev.data,
+                                user: {
+                                    ...prev.data.user,
+                                    profilePic: changeProfile.profilePic,
+                                },
+                            },
+                        };
+                    });
+                } else {
+                    setErrorMessage(changeProfile.data);
+                }
+            }
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setIsDisabled(false);
+            setTimeout(() => {
+                setSuccessMessage('');
+                setErrorMessage('');
+            }, 900);
+        }
     }
 
     const editForm: EditForm[] = [{

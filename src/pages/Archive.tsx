@@ -1,15 +1,15 @@
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { LeftArrow, StorySVG } from "../assets/Constants";
 import { useUser } from "../context/UserContext";
 import { useEffect } from "react";
-import { fetchArchive } from "../services/archive";
+import { useAuth } from "../context/AuthContext";
 
 export function Archive() {
-    const { userData, setArchives, setLoadingArchives } = useUser()
+    const { fetchArchives } = useUser()
     const navigate = useNavigate()
 
     useEffect(() => {
-        fetchArchive(setLoadingArchives, userData, setArchives)
+        fetchArchives()
     }, [])
 
     return <>

@@ -3,7 +3,8 @@ import { useUser } from "../../context/UserContext";
 import NoteTooltip from "./Note";
 import { Loader } from "../helpers/Loader";
 import { useState } from "react";
-import { updateNote, createNote } from "../../services/note";
+import { noteCreate, noteUpdate } from "../../services/note";
+import { useAuth } from "../../context/AuthContext";
 
 interface NoteCreatorProps {
     isEditing: boolean;
@@ -12,7 +13,8 @@ interface NoteCreatorProps {
 }
 
 export const NoteCreator: React.FC<NoteCreatorProps> = ({ isEditing, isNoteOpen, setIsNoteOpen }) => {
-    const { userData, setMessage, setNote, setIsNoteEditOpen } = useUser();
+    const { setMessage, setNote, setIsNoteEditOpen } = useUser();
+    const { userData, token } = useAuth()
     const [shareLoading, setShareLoading] = useState<boolean>(false);
     const [noteValue, setNoteValue] = useState<string>("");
     const isDisabled: boolean = noteValue.length === 0;
@@ -24,9 +26,49 @@ export const NoteCreator: React.FC<NoteCreatorProps> = ({ isEditing, isNoteOpen,
 
     function handleClick() {
         if (isEditing) {
-            updateNote(setShareLoading, userData, noteValue, setMessage, setNote, setIsNoteEditOpen, setIsNoteOpen)
+            updateNote()
         } else {
-            createNote(setShareLoading, userData, noteValue, setMessage, setNote, setNoteValue, setIsNoteOpen)
+            createNote()
+        }
+    }
+
+    async function createNote() {
+        try {
+            setShareLoading(true);
+            const res = await noteCreate({
+                token,
+                raw: {
+                    content: noteValue
+                }
+            })
+            setMessage(res.message);
+            setNote(res.note);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setNoteValue('');
+            setShareLoading(false);
+            setIsNoteOpen(false);
+        }
+    }
+
+    async function updateNote() {
+        try {
+            setShareLoading(true);
+            const res = await noteUpdate({
+                token,
+                raw: {
+                    content: noteValue
+                }
+            })
+            setMessage(res.message);
+            setNote(res.note);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setShareLoading(false);
+            setIsNoteOpen(false);
+            setIsNoteEditOpen(false);
         }
     }
 

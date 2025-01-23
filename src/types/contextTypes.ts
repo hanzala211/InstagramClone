@@ -39,15 +39,21 @@ export interface ChatContextType {
 export interface HomeContextType {
     homeStories: HomeStories[];
     setHomeStories: React.Dispatch<React.SetStateAction<HomeStories[]>>;
-    totalPages: number;
-    setTotalPages: React.Dispatch<React.SetStateAction<number>>;
     homePosts: Post[];
     setHomePosts: React.Dispatch<React.SetStateAction<Post[]>>;
-    page: number;
-    setPage: React.Dispatch<React.SetStateAction<number>>;
+    savedPosts: boolean[];
+    setSavedPosts: React.Dispatch<React.SetStateAction<boolean[]>>;
+    likedPosts: boolean[];
+    setLikedPosts: React.Dispatch<React.SetStateAction<boolean[]>>;
+    isHovered: boolean[],
+    setIsHovered: React.Dispatch<React.SetStateAction<boolean[]>>;
+    likeHomePost: (id: string, index: number) => Promise<void>,
+    disLikeHomePost: (id: string, index: number) => Promise<void>,
 }
 
 export interface PostContextType {
+    userPosts: Post[];
+    setUserPosts: React.Dispatch<React.SetStateAction<Post[]>>;
     commentValue: string;
     setCommentValue: React.Dispatch<React.SetStateAction<string>>;
     isAnimating: boolean;
@@ -95,6 +101,15 @@ export interface PostContextType {
     shareLoading: boolean;
     setShareLoading: React.Dispatch<React.SetStateAction<boolean>>;
     fileInputRef: React.RefObject<HTMLInputElement>;
+    createPosts: (isMobile: boolean) => Promise<void>,
+    updatePost: (setIsEditingOpen: any) => Promise<void>,
+    totalPages: number;
+    setTotalPages: React.Dispatch<React.SetStateAction<number>>;
+    page: number;
+    setPage: React.Dispatch<React.SetStateAction<number>>;
+    fetchComments: (signal: any) => Promise<void>,
+    likePost: () => void,
+    disLikePost: () => void
 }
 
 export interface SearchContextType {
@@ -102,8 +117,6 @@ export interface SearchContextType {
     setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
     searchData: UserInfo[];
     setSearchData: React.Dispatch<React.SetStateAction<UserInfo[]>>;
-    selectedProfile: UserInfo | null;
-    setSelectedProfile: React.Dispatch<React.SetStateAction<UserInfo | null>>;
     searchUserPosts: Post[];
     setSearchUserPosts: React.Dispatch<React.SetStateAction<Post[]>>;
     searchUserStatus: StoriesStructure[] | string[];
@@ -111,7 +124,13 @@ export interface SearchContextType {
     searchUserHighLights: Highlights[] | string[];
     setSearchUserHighLights: React.Dispatch<React.SetStateAction<Highlights[] | string[]>>
     explorePagePosts: Post[];
-    setExplorePagePosts: React.Dispatch<React.SetStateAction<Post[]>>
+    setExplorePagePosts: React.Dispatch<React.SetStateAction<Post[]>>,
+    postsLoading: boolean,
+    setPostsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+    fetchPosts: (postID: string) => Promise<any>,
+    fetchSearch: (signal: any, searchQuery: string, token: any) => Promise<void>,
+    searchLoading: boolean,
+    setSearchLoading: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 export interface StoriesContextType {
@@ -125,12 +144,6 @@ export interface StoriesContextType {
 }
 
 export interface UserContextType {
-    userData: User | any;
-    setUserData: React.Dispatch<React.SetStateAction<User | any>>;
-    mainLoading: boolean;
-    setMainLoading: React.Dispatch<React.SetStateAction<boolean>>;
-    userPosts: Post[];
-    setUserPosts: React.Dispatch<React.SetStateAction<Post[]>>;
     message: any;
     setMessage: React.Dispatch<React.SetStateAction<string>>;
     note: Note | [];
@@ -163,6 +176,10 @@ export interface UserContextType {
     setIsFollowingModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     innerWidth: number;
     setInnerWidth: React.Dispatch<React.SetStateAction<number>>;
+    noteLoading: boolean,
+    setNoteLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    fetchNote: () => void,
+    fetchArchives: () => void,
 }
 
 export interface SideBarContextType {
@@ -172,4 +189,36 @@ export interface SideBarContextType {
     setIsCreating: React.Dispatch<React.SetStateAction<boolean>>;
     createStory: boolean;
     setCreateStory: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface AuthContextType {
+    userData: User | any;
+    setUserData: React.Dispatch<React.SetStateAction<User | any>>;
+    token: string | null;
+    setToken: React.Dispatch<React.SetStateAction<string | null>>;
+    userValue: string,
+    setUserValue: React.Dispatch<React.SetStateAction<string>>;
+    password: string,
+    setPassword: React.Dispatch<React.SetStateAction<string>>;
+    mainLoading: boolean;
+    setMainLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    loading: boolean;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    fetchLogin: () => void,
+    fetchSignup: () => void;
+    succesMessage: string,
+    setSuccessMessage: React.Dispatch<React.SetStateAction<string>>,
+    fullName: string,
+    setFullName: React.Dispatch<React.SetStateAction<string>>;
+    email: string,
+    setEmail: React.Dispatch<React.SetStateAction<string>>;
+    forgotResult: any;
+    setForgotResult: React.Dispatch<React.SetStateAction<string>>;
+    codeValue: string;
+    setCodeValue: React.Dispatch<React.SetStateAction<string>>;
+    forgotPassword: () => void;
+    resetPassword: () => void,
+    selectedProfile: UserInfo | null;
+    setSelectedProfile: React.Dispatch<React.SetStateAction<UserInfo | null>>;
+    fetchMe: (localitem: string | null) => Promise<void>
 }

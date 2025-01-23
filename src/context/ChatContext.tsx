@@ -1,19 +1,19 @@
 import { createContext, useContext, useEffect, useState } from "react"
-import { useUser } from "./UserContext"
 import { useLocation } from "react-router-dom"
-import { fetchSelectedChat, fetchUserById } from "../services/chat"
+import { getSelectedChat, getUserById } from "../services/chat"
 import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore"
 import { db } from "../firebaseConfig"
 import { ChatContextType } from "../types/contextTypes"
 import { ContextChild } from "../types/contextTypes"
 import { UserInfo } from "../types/user"
 import { Messages, Notification, Thread } from "../types/chatType"
+import { useAuth } from "./AuthContext"
 
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined)
 
 export const ChatProvider: React.FC<ContextChild> = ({ children }) => {
-    const { userData } = useUser();
+    const { userData, token } = useAuth();
     const [isChatSearch, setIsChatSearch] = useState<boolean>(false)
     const [selectedChat, setSelectedChat] = useState<UserInfo | null>(null)
     const [searchData, setSearchData] = useState<UserInfo[]>([])
@@ -28,7 +28,7 @@ export const ChatProvider: React.FC<ContextChild> = ({ children }) => {
 
     useEffect(() => {
         if (location.pathname.slice(16, -1) !== "" && selectedChat === null && location.pathname.slice(0, 7) === '/direct') {
-            fetchSelectedChat(userData, setSelectedChat, location)
+            fetchSelectedChat()
         }
     }, [location.pathname, selectedChat, userData])
 
@@ -43,8 +43,8 @@ export const ChatProvider: React.FC<ContextChild> = ({ children }) => {
                         ...item.data(),
                         id: item.id
                     }))
-                    .filter((item) => {
-                        const deleted = item?.deleted || {};
+                    .filter((item: any) => {
+                        const deleted = item.deleted || {};
                         return !(deleted[userData.data.user._id]);
                     }))
                 setMessagesLoading(false)
@@ -68,7 +68,7 @@ export const ChatProvider: React.FC<ContextChild> = ({ children }) => {
                 })
             const foundIds = foundArr.map((item) => item.participants.find((id: string) => userData.data.user._id !== id))
             if (foundIds.length > 0) {
-                Promise.all(foundIds.map((item, index) => fetchUserById(item, index, userData, foundArr))).then((res: any[]) => {
+                Promise.all(foundIds.map((item, index) => fetchUserById(item, index, foundArr))).then((res: any[]) => {
                     setThreads(res)
                 }).finally(() => setTimeout(() => {
                     setThreadsLoading(false)
@@ -92,6 +92,35 @@ export const ChatProvider: React.FC<ContextChild> = ({ children }) => {
         })
         return () => unsubscribe()
     }, [userData?.data?.user?._id])
+
+    async function fetchSelectedChat() {
+        try {
+            const res = await getSelectedChat({
+                token,
+                path: location.pathname.slice(16)
+            })
+            setSelectedChat(res?.data.user);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function fetchUserById(item: any, index: any, foundArr: any) {
+        try {
+            const res = await getUserById({
+                token,
+                id: item
+            })
+            const returnObj = {
+                ...res?.data.user,
+                lastMessage: foundArr[index].lastMessage,
+                lastMessageSender: foundArr[index].lastMessageSender,
+            };
+            return returnObj;
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return <ChatContext.Provider value={{ isChatSearch, setIsChatSearch, selectedChat, setSelectedChat, searchChatValue, setSearchChatValue, searchData, setSearchData, messages, setMessages, threads, setThreads, notifications, setNotifications, messagesLoading, setMessagesLoading, threadsLoading, setThreadsLoading, isInfoOpen, setIsInfoOpen, location, userData }}>{children}</ChatContext.Provider>
 }

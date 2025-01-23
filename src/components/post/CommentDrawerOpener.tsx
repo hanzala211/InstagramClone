@@ -15,7 +15,7 @@ interface CommentDrawerOpenerProps {
 
 export const CommentDrawerOpener: React.FC<CommentDrawerOpenerProps> = ({ item, setCurrentPost, index, isText }) => {
     const { innerWidth } = useUser()
-    const { setSelectedPost, setComments } = usePost()
+    const { setSelectedPost } = usePost()
 
     return <>
         {innerWidth < 770 &&

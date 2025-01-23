@@ -1,22 +1,19 @@
 import { Link, useNavigate } from "react-router-dom"
-import { useUser } from "../../context/UserContext"
 import { usePost } from "../../context/PostContext"
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 import { formatDate } from "../../utils/helper"
 import { useEffect, useRef, useState } from "react"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card"
 import { PostComment } from "../comments/PostComment"
-import { fetchComments } from "../../services/post"
-import { fetchUserDataOnClick } from "../../services/searchProfile"
 import { SearchChat } from "../chats/SearchChat"
 import { PostCaption } from "./PostCaption"
 import { useHome } from "../../context/HomeContext"
-import { useSearch } from "../../context/SearchContext"
 import { CommentDrawerOpener } from "./CommentDrawerOpener"
 import { Post } from "../../types/postType"
 import { UserHoverModal } from "../usermodals/UserHoverModal"
 import { HomePostOptions } from "./HomePostOptions"
 import { PostSlider } from "./PostSlider"
+import { getDataOnClick } from "../../services/searchProfile"
+import { useAuth } from "../../context/AuthContext"
 
 interface HomePostProps {
     index: number;
@@ -28,13 +25,9 @@ interface HomePostProps {
 }
 
 export const HomePost: React.FC<HomePostProps> = ({ index, item, setCurrentPost, setIsPostOpen, isPost }) => {
-    const { selectedPost, setComments, setCommentsLoading, isCommented, setIsShareOpenHome } = usePost()
-    const { userData, setMainLoading } = useUser()
-    const { setSelectedProfile } = useSearch()
-    const { page, setTotalPages, homePosts } = useHome()
-    const [savedPosts, setSavedPosts] = useState<boolean[]>(Array(homePosts.length).fill(false))
-    const [likedPosts, setLikedPosts] = useState<boolean[]>(Array(homePosts.length).fill(false))
-    const [isHovered, setIsHovered] = useState<boolean[]>(Array(homePosts.length).fill(false))
+    const { selectedPost, isCommented, setIsShareOpenHome, page, fetchComments } = usePost()
+    const { userData, setMainLoading, token, setSelectedProfile } = useAuth()
+    const { homePosts, likedPosts, setLikedPosts, savedPosts, setSavedPosts, isHovered, setIsHovered } = useHome()
     const commentRef = useRef<HTMLInputElement>(null)
     const navigate = useNavigate()
 
@@ -54,7 +47,7 @@ export const HomePost: React.FC<HomePostProps> = ({ index, item, setCurrentPost,
     useEffect(() => {
         const controller = new AbortController();
         const signal = controller.signal;
-        fetchComments(signal, setComments, setCommentsLoading, setTotalPages, userData, selectedPost, page);
+        fetchComments(signal);
         return () => {
             controller.abort();
         };
@@ -76,8 +69,25 @@ export const HomePost: React.FC<HomePostProps> = ({ index, item, setCurrentPost,
         })
     };
 
+    const fetchUserDataOnClick = async () => {
+        try {
+            setMainLoading(true);
+            const res = await getDataOnClick({
+                username: item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName,
+                token
+            })
+            setSelectedProfile(res.data[0]);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setTimeout(() => {
+                setMainLoading(false);
+            }, 1000);
+        }
+    }
+
     const handleHoverCardClick = () => {
-        fetchUserDataOnClick(item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName, userData, null, setSelectedProfile, setMainLoading)
+        fetchUserDataOnClick()
         setMainLoading(true)
         navigate(`/search/${item?.user?.userName || item?.postBy?.userName || userData?.data.user?.userName}/`)
     }
@@ -102,7 +112,7 @@ export const HomePost: React.FC<HomePostProps> = ({ index, item, setCurrentPost,
                 </div>
             </div>
 
-            <PostSlider post={item} isLiked={likedPosts} setIsLiked={setLikedPosts} index={index} isHome={true} />
+            <PostSlider post={item} isLiked={likedPosts} index={index} isHome={true} />
 
             <div className="flex flex-col gap-2 w-full">
 

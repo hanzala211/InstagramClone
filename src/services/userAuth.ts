@@ -1,229 +1,102 @@
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
-import { User, UserInfo } from '../types/user';
-import { NavigateFunction } from 'react-router-dom';
+import { sendRequest } from '../utils/sendRequest';
 
-export async function fetchUser(
-	userValue: string,
-	password: string,
-	setLoading: (value: boolean) => void,
-	setUserData: (value: User | null) => void,
-	setUserValue: (value: string) => void,
-	setPassword: (value: string) => void,
-	setMainLoading: (value: boolean) => void,
-	navigate: NavigateFunction
-): Promise<void> {
-	const userId = {
-		identifier: userValue,
-		password: password,
-	};
-	const raw = JSON.stringify(userId);
+export const login = async (data: any) => {
+	const raw = JSON.stringify(data);
 	try {
-		setLoading(true);
-		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/auth/login`,
-			{
-				method: 'POST',
+		const res = await sendRequest({
+			baseUrl: `${import.meta.env.VITE_APP_URL}`,
+			endPoint: "auth/login",
+			configs: {
+				method: "POST",
 				headers: {
 					'Content-Type': 'application/json',
 				},
 				body: raw,
-				redirect: 'follow',
 			}
-		);
+		})
 
-		const result = await response.json();
-		setUserData(result);
-		if (result && result.status === 'success' && result.data) {
-			setMainLoading(true);
-			setUserValue('');
-			setPassword('');
-			setDoc(doc(db, 'users', `${result.data.user._id}`), {
-				userName: `${result.data.user.userName}`,
-				id: `${result.data.user._id}`,
-			});
-			navigate('/home');
-			localStorage.setItem('token', JSON.stringify(result.data.token));
-		}
+		return res;
 	} catch (error) {
-		setUserData({
-			status: 'fail',
-			data: 'Server Is Down.Please try after sometime',
-			error: error,
-		});
-	} finally {
-		setMainLoading(false);
-		setLoading(false);
+		console.error(error)
 	}
 }
 
-export async function fetchData(
-	fullName: string,
-	userName: string,
-	emailAddress: string,
-	signupPassword: string,
-	setMainLoading: (value: boolean) => void,
-	setLoading: (value: boolean) => void,
-	setUserData: (value: User |null) => void,
-	setSuccessMessage: (value: string) => void,
-	setEmailAddress: (value: string) => void,
-	setSignupPassword: (value: string) => void,
-	setFullName: (value: string) => void,
-	setUserName: (value: string) => void,
-	navigate: NavigateFunction
-) {
-	const data = JSON.stringify({
-		fullName: fullName,
-		userName: userName,
-		email: emailAddress,
-		password: signupPassword,
-	});
+export const signup = async (data: any) => {
+	const raw = JSON.stringify(data);
 	try {
-		setMainLoading(true);
-		setLoading(true);
-		setUserData({});
-		setSuccessMessage('');
-		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/auth/signup`,
-			{
-				method: 'POST',
+		const res = await sendRequest({
+			baseUrl: `${import.meta.env.VITE_APP_URL}`,
+			endPoint: "auth/signup",
+			configs: {
+				method: "POST",
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: data,
-				redirect: 'follow',
+				body: raw,
 			}
-		);
-		const result = await response.json();
-		setUserData(result);
-		if (result.status === 'success') {
-			setEmailAddress('');
-			setSignupPassword('');
-			setFullName('');
-			setUserName('');
-			navigate('/home');
-			setDoc(doc(db, 'users', `${result.data.user._id}`), {
-				userName: `${result.data.user.userName}`,
-				id: `${result.data.user._id}`,
-			});
-			localStorage.setItem('token', JSON.stringify(result.data.token));
-			setSuccessMessage(result.status);
-		}
+		})
+
+		return res;
 	} catch (error) {
-		setUserData({
-			status: 'fail',
-			data: 'Server Is Down.Please try after sometime',
-			error: error,
-		});
-	} finally {
-		setLoading(false);
-		setMainLoading(false);
+		console.error(error)
 	}
 }
 
-export async function fetchMe(
-	setMainLoading: (value: boolean) => void,
-	setUserData: (value: User | null) => void,
-	token: any,
-	params: any,
-	fetchUserDataOnClick: (value: any) => void,
-	setSelectedProfile: (value: UserInfo) => void
-) {
+
+export const me = async (data: any) => {
 	try {
-		setMainLoading(true);
-		setUserData(null);
-		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/auth/me`,
-			{
-				method: 'GET',
+		const res = await sendRequest({
+			baseUrl: `${import.meta.env.VITE_APP_URL}`,
+			endPoint: "auth/me",
+			configs: {
+				method: "GET",
 				headers: {
-					Authorization: `${token}`,
+					"Authorization": `${data.token}`,
 				},
-				redirect: 'follow',
 			}
-		);
-		const result = await response.json();
-		setUserData({
-			status: result.status,
-			data: {
-				token: token,
-				user: {
-					...result.data,
+		})
+		return res;
+	} catch (error) {
+		console.error(error)
+	}
+}
+
+export const forgot = async (data: any) => {
+	const raw = JSON.stringify(data)
+	try {
+		const res = await sendRequest({
+			baseUrl: `${import.meta.env.VITE_APP_URL}`,
+			endPoint: "auth/forgot-password",
+			configs: {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
 				},
+				body: raw
 			},
-		});
+		})
+		return res;
 	} catch (error) {
-		console.error(error);
-	} finally {
-		setMainLoading(false);
-		if (params) {
-			fetchUserDataOnClick(
-				params.username,
-				null,
-				token,
-				setSelectedProfile,
-				setMainLoading
-			);
-		}
+		console.error(error)
 	}
 }
 
-export async function forgotPassword(emailValue: string, setLoading: (value: boolean) => void, setForgotResult: (value: any) => void) {
+export const reset = async (data: any) => {
+	const raw = JSON.stringify(data)
 	try {
-		setLoading(true);
-		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/auth/forgot-password`,
-			{
-				method: 'POST',
+		const res = await sendRequest({
+			baseUrl: `${import.meta.env.VITE_APP_URL}`,
+			endPoint: "auth/reset-password",
+			configs: {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json"
 				},
-				body: JSON.stringify({
-					email: emailValue,
-				}),
-				redirect: 'follow',
-			}
-		);
-		const result = await response.json();
-		setForgotResult(result);
+				body: raw
+			},
+		})
+		return res;
 	} catch (error) {
-		console.error(error);
-	} finally {
-		setLoading(false);
-	}
-}
-
-export async function resetPassword(
-	emailValue: string,
-	codeValue: string,
-	newPassword: string,
-	setLoading: (value: boolean) => void,
-	navigate: NavigateFunction
-) {
-	try {
-		setLoading(true);
-		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/auth/reset-password`,
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					email: emailValue,
-					forgotPasswordCode: codeValue,
-					newPassword: newPassword,
-				}),
-				redirect: 'follow',
-			}
-		);
-		const result = await response.json();
-		if (result.status === 'success') {
-			navigate('/login');
-		}
-	} catch (error) {
-		console.error(error);
-	} finally {
-		setLoading(false);
+		console.error(error)
 	}
 }

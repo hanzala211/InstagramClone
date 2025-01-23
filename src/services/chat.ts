@@ -18,6 +18,7 @@ import { Messages, Thread } from '../types/chatType';
 import { User, UserInfo } from '../types/user';
 import { Post } from '../types/postType';
 import { NavigateFunction } from 'react-router-dom';
+import { sendRequest } from '../utils/sendRequest';
 
 export function handleSendMessage(
 	setMessages: (value: Messages[]) => void,
@@ -142,48 +143,40 @@ export async function deleteMessageAndUpdateThread(
 	}
 }
 
-export async function fetchSelectedChat(userData: User | null, setSelectedChat: (value: UserInfo) => void, location: any): Promise<void> {
+export const getSelectedChat = async (data: any) => {
 	try {
-		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/auth/${location.pathname.slice(
-				16
-			)}`,
-			{
-				method: 'GET',
+		const response = await sendRequest({
+			baseUrl: `${import.meta.env.VITE_APP_URL}`,
+			endPoint: `auth/${data.path}`,
+			configs: {
+				method: "GET",
 				headers: {
-					Authorization: `${userData?.data?.token}`,
-				},
-				redirect: 'follow',
+					"Authorization": `${data.token}`,
+				}
 			}
-		);
-		const result = await response.json();
-		setSelectedChat(result.data.user);
+		})
+		return response;
 	} catch (error) {
-		console.error(error);
+		console.error(error)
 	}
 }
 
-export async function fetchUserById(id: string, index: number, userData: User | null, foundArr: any[]): Promise<void> {
+
+export const getUserById = async (data: any) => {
 	try {
-		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/auth/${id}`,
-			{
-				method: 'GET',
+		const response = await sendRequest({
+			baseUrl: `${import.meta.env.VITE_APP_URL}`,
+			endPoint: `auth/${data.id}`,
+			configs: {
+				method: "GET",
 				headers: {
-					Authorization: `${userData.data.token}`,
-				},
-				redirect: 'follow',
+					"Authorization": `${data.token}`,
+				}
 			}
-		);
-		const result = await response.json();
-		const returnObj = {
-			...result.data.user,
-			lastMessage: foundArr[index].lastMessage,
-			lastMessageSender: foundArr[index].lastMessageSender,
-		};
-		return returnObj;
+		})
+		return response
 	} catch (error) {
-		console.error(error);
+		console.error(error)
 	}
 }
 

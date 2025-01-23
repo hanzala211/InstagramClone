@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { usePost } from "../../context/PostContext";
 import { useUser } from "../../context/UserContext";
-import { postComment } from "../../services/post";
 import { Post } from "../../types/postType";
+import { useAuth } from "../../context/AuthContext";
+import { commentPost } from "../../services/post";
 
 interface PostCommentProps {
     commentRef?: any;
@@ -12,7 +13,8 @@ interface PostCommentProps {
 
 export const PostComment: React.FC<PostCommentProps> = ({ commentRef, className, item }) => {
     const { setIsDisabled, isDisabled, commentValue, setCommentValue, setIsCommented, selectedPost, setSelectedPost } = usePost()
-    const { userData, setMessage } = useUser()
+    const { setMessage } = useUser()
+    const { userData, token } = useAuth()
 
     useEffect(() => {
         if (commentValue.length > 0) {
@@ -21,6 +23,29 @@ export const PostComment: React.FC<PostCommentProps> = ({ commentRef, className,
             setIsDisabled(true);
         }
     }, [commentValue])
+
+    const postComment = async () => {
+        try {
+            setIsDisabled(true);
+            const res = await commentPost({
+                token,
+                selectedPost,
+                raw: {
+                    comment: commentValue
+                }
+            })
+            if (res.status !== 'fail') {
+                setMessage('Commented Successfully');
+                setCommentValue('');
+                setIsCommented((prev: boolean) => !prev);
+            }
+        } catch (error) {
+            console.error(error);
+            setMessage('Failed');
+        } finally {
+            setIsDisabled(commentValue.length === 0);
+        }
+    }
 
     return <div className={`mt-5 border-t-[1px] flex items-center border-[#262626] px-3 py-2 ${className}`}>
         <input
@@ -39,7 +64,7 @@ export const PostComment: React.FC<PostCommentProps> = ({ commentRef, className,
         <button
             className={`text-[#0095F6] ml-5 text-[12px] transition-all duration-150 ${isDisabled ? "opacity-50 " : "cursor-pointer hover:opacity-70"}`}
             disabled={isDisabled}
-            onClick={() => postComment(setIsDisabled, userData, commentValue, selectedPost, setMessage, setCommentValue, setIsCommented)}
+            onClick={postComment}
         >
             POST
         </button>

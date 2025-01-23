@@ -1,37 +1,34 @@
 import { useEffect, useRef, useState } from "react"
-import { useUser } from "../context/UserContext";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Loader } from "../components/helpers/Loader";
 import { Post } from "../components/post/Post";
 import { usePost } from "../context/PostContext";
 import { PostModal } from "../components/post/PostModal";
 import { UserModal } from "../components/usermodals/UserModal";
-import { fetchSearch } from "../services/search";
-import { fetchExplorePosts } from "../services/post";
 import { useSearch } from "../context/SearchContext";
 import { useHome } from "../context/HomeContext";
 import { ShadCnSkeleton } from "../components/ui/shadcnSkeleton";
 import { PostSliderButtons } from "../components/post/PostSliderButtons";
+import { useAuth } from "../context/AuthContext";
+import { getExplorePosts } from "../services/post";
 
 export function Explore() {
-    const { searchQuery, setSearchQuery, searchData, setSearchData, setSelectedProfile, explorePagePosts, setExplorePagePosts } = useSearch();
-    const { userData } = useUser();
-    const { setSelectedPost, setComments } = usePost()
-    const { setPage, setTotalPages } = useHome()
+    const { searchQuery, setSearchQuery, searchData, setSearchData, explorePagePosts, setExplorePagePosts, setSearchLoading, fetchSearch } = useSearch();
+    const { setSelectedProfile, token } = useAuth();
+    const { setSelectedPost, setComments, setPage, setTotalPages } = usePost()
     const [isPostsLoading, setIsPostsLoading] = useState<boolean>(false);
     const [currentPost, setCurrentPost] = useState<number | any>(null);
     const [isPostOpen, setIsPostOpen] = useState<boolean>(false);
     const [count, setCount] = useState<number>(0);
     const [hasMore, setHasMore] = useState<boolean>(true)
     const [isSearching, setIsSearching] = useState<boolean>(false)
-    const [searchLoading, setSearchLoading] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (explorePagePosts.length === 0) {
             setIsPostsLoading(true)
-            fetchExplorePosts(setCount, setExplorePagePosts, userData, setHasMore, setIsPostsLoading);
+            fetchExplorePosts();
         }
     }, [])
 
@@ -46,7 +43,7 @@ export function Explore() {
         const signal = abortController.signal;
         if (searchQuery.length > 0) {
             setSearchLoading(true);
-            fetchSearch(signal, setSearchData, searchQuery, userData, setSearchLoading);
+            fetchSearch(signal, searchQuery, token);
         } else if (searchQuery.length === 0) {
             setSearchLoading(false)
             setSearchData([]);
@@ -81,6 +78,34 @@ export function Explore() {
         setTotalPages(0)
     }
 
+    async function fetchExplorePosts() {
+        try {
+            setCount((prev: number) => prev + 1);
+            const res = await getExplorePosts({
+                token
+            })
+            if (res.status !== 'fail') {
+                setExplorePagePosts((prev: any) => {
+                    const newItems = res.data.filter(
+                        (item: any) => !prev.some((prevItem: any) => prevItem._id === item._id)
+                    );
+                    if (newItems.length === 0) {
+                        setHasMore(false);
+                        return [...prev];
+                    } else {
+                        return [...prev, ...newItems];
+                    }
+                });
+            } else {
+                setHasMore(false);
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsPostsLoading(false);
+        }
+    }
+
     return <>
         <section className={`w-full lg:max-w-[80%] xl:max-w-[60%] sm:max-w-[95%] max-w-[97%] mt-7 mx-auto `}>
             <div ref={containerRef} className="bg-[#121212] w-full md:hidden flex sm:gap-10 gap-3 items-center p-3 h-[3.5rem] fixed top-0 z-[50] left-0">
@@ -104,11 +129,9 @@ export function Explore() {
                 ))}
             </div>
                 : (
-                    <InfiniteScroll dataLength={explorePagePosts.length} next={() => {
-                        fetchExplorePosts(setCount, setExplorePagePosts, userData, setHasMore, setIsPostsLoading)
-                    }} loader={
+                    <InfiniteScroll dataLength={explorePagePosts.length} next={fetchExplorePosts} loader={
                         <div className="flex justify-center items-end py-4">
-                            <Loader height={`${explorePagePosts.length > 10 ? "h-[15vh] mb-5" : "md:h-[50vh] h-[60vh]"} `} />
+                            <Loader height={`${explorePagePosts.length > 10 ? "h-[15vh] mb-5" : "md:h-[60vh] h-[60vh]"} `} />
                         </div>}
                         hasMore={count < 8 && hasMore}>
                         <div className={`grid grid-flow-row grid-cols-3 gap-1 mt-5 mb-20 md:mb-0 md:mt-0`}>

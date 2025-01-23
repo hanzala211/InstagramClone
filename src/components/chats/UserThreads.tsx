@@ -9,6 +9,7 @@ import { usePost } from "../../context/PostContext";
 import { UserInfo } from "../../types/user";
 import { Post } from "../../types/postType";
 import { Notification } from "../../types/chatType";
+import { useAuth } from "../../context/AuthContext";
 
 interface UserThreadsProp {
     isNewChat?: boolean;
@@ -20,7 +21,8 @@ interface UserThreadsProp {
 export const UserThreads: React.FC<UserThreadsProp> = ({ isNewChat, item, isChat, handleClose }) => {
     const { setSelectedChat, notifications, setIsInfoOpen, setIsChatSearch } = useChat()
     const { selectedPost, setIsShareOpen, setIsShareSearch } = usePost()
-    const { userData, setMessage } = useUser()
+    const { setMessage } = useUser()
+    const { userData } = useAuth()
     const [isReceived, setIsReceived] = useState<boolean>(false);
     const [foundNotification, setFoundNotification] = useState<Notification>();
     const [selectedPostToSend, setSelectedPostToSend] = useState<Post>();

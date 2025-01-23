@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
-import { useUser } from "../../context/UserContext"
 import { ReportIcon, SaveIcon } from "../../assets/Constants"
+import { useAuth } from "../../context/AuthContext";
 
 interface LogOutDivProps {
     isOpen?: boolean;
@@ -9,13 +9,13 @@ interface LogOutDivProps {
 }
 
 export const LogOutDiv: React.FC<LogOutDivProps> = ({ isOpen, dropdownRef, isMobile }) => {
-    const { setMainLoading, setUserData, userData } = useUser()
+    const { setMainLoading, setUserData, userData } = useAuth()
 
     const moreArr = [
         {
             icon: <SaveIcon />,
             title: "Saved",
-            to: `/${userData.data.user.userName}/saved/`
+            to: `/${userData?.data.user.userName}/saved/`
         },
         {
             icon: <ReportIcon />,

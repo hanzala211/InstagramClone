@@ -1,24 +1,19 @@
 import { usePost } from "../../context/PostContext";
 import { useRef, useState, useEffect } from "react";
-import { useUser } from "../../context/UserContext";
 import { LikeAnimation } from "./LikeAnimation";
-import { likePost } from "../../services/post";
-import { likePost as likePosts } from "../../services/homePage"
 import { useHome } from "../../context/HomeContext";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel";
 
 interface PostSliderProps {
     post: any;
     isLiked: any;
-    setIsLiked: (value: any) => void;
     index?: number;
     isHome: boolean
 }
 
-export const PostSlider: React.FC<PostSliderProps> = ({ post, isLiked, setIsLiked, index, isHome }) => {
-    const { selectedPost, setSelectedPost } = usePost();
-    const { userData, setMessage } = useUser();
-    const { homePosts, setHomePosts } = useHome()
+export const PostSlider: React.FC<PostSliderProps> = ({ post, isLiked, index, isHome }) => {
+    const { likePost } = usePost();
+    const { homePosts, setHomePosts, likeHomePost } = useHome()
     const [showHeart, setShowHeart] = useState<boolean>(false);
     const [heartIndex, setHeartIndex] = useState<number>(0);
     const lastTouchTime = useRef<number>(0);
@@ -34,12 +29,9 @@ export const PostSlider: React.FC<PostSliderProps> = ({ post, isLiked, setIsLike
         setShowHeart(true);
         setTimeout(() => setShowHeart(false), 800);
         if (!isLiked && typeof isLiked === "boolean") {
-            likePost(setSelectedPost, userData, selectedPost, setIsLiked, setMessage);
-        } else if (!isLiked[index]) {
-            likePosts(homePosts[index]._id, index, setIsLiked,
-                setHomePosts,
-                userData,
-                setMessage)
+            likePost();
+        } else if (!isLiked[index || 0]) {
+            likeHomePost(homePosts[index || 0]._id, index || 0)
         }
     };
 

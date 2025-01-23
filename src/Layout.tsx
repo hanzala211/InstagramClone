@@ -1,22 +1,41 @@
-import { Outlet, useLocation, useParams } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import { SideBar } from "./components/sidebar/SideBar"
 import { useUser } from "./context/UserContext";
 import { LoadingPage } from "./pages/LoadingPage";
 import { Footer } from "./components/helpers/Footer";
 import { useEffect } from "react";
 import { MobileBar } from "./components/sidebar/MobileBar"
-import { fetchMe } from "./services/userAuth";
-import { fetchUserDataOnClick } from "./services/searchProfile";
 import { useChat } from "./context/ChatContext";
-import { useSearch } from "./context/SearchContext";
 import { SideBarProvider } from "./context/SideBarContext";
+import { useAuth } from "./context/AuthContext";
+import { getDataOnClick } from "./services/searchProfile";
 
-export function Layout({ token }: { token: string | null }) {
-    const { mainLoading, setMainLoading, setUserData, message, setMessage } = useUser();
+export function Layout() {
+    const { message, setMessage } = useUser();
     const { setSelectedChat } = useChat()
-    const { setSelectedProfile } = useSearch();
-    const params = useParams()
+    const { mainLoading, setMainLoading, setToken, setSelectedProfile, fetchMe } = useAuth()
     const location = useLocation()
+    const navigate = useNavigate()
+    const params = useParams()
+
+    useEffect(() => {
+        const localitem: string | null = JSON.parse(localStorage.getItem("token") || "null");
+        if (localitem) {
+            setToken(localitem)
+            fetchMe(localitem);
+            if (params.username && location.pathname.split("/")[1] === "search") {
+                fetchUserDataOnClick(params.username, localitem)
+            }
+            else {
+                setTimeout(() => {
+                    setMainLoading(false);
+                }, 1000);
+            }
+        } else {
+            navigate("/login");
+        }
+    }, []);
+
 
     useEffect(() => {
         if (location.pathname.slice(0, 14) !== "/direct/inbox/") {
@@ -25,16 +44,28 @@ export function Layout({ token }: { token: string | null }) {
     }, [location.pathname])
 
     useEffect(() => {
-        if (token !== null) {
-            fetchMe(setMainLoading, setUserData, token, params, fetchUserDataOnClick, setSelectedProfile);
-        }
-    }, [token])
-
-    useEffect(() => {
         setTimeout(() => {
             setMessage("")
         }, 1500);
     }, [message])
+
+    async function fetchUserDataOnClick(username: any, localitem: any) {
+        try {
+            setMainLoading(true);
+            const res = await getDataOnClick({
+                username: username,
+                token: localitem
+            })
+            setSelectedProfile(res.data[0]);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setTimeout(() => {
+                setMainLoading(false);
+            }, 1000);
+        }
+    }
+
 
     return <>
         {!mainLoading ? <section className="flex flex-row w-full items-center">

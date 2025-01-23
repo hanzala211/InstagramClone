@@ -1,21 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { MoreCommentsSVG } from "../../assets/Constants";
 import { PostSettings } from "./PostSettings";
-import { useUser } from "../../context/UserContext";
 import { usePost } from "../../context/PostContext";
 import { Overlay } from "../helpers/Overlay";
 import { PostSlider } from "./PostSlider";
 import { CommentsStructure } from "../comments/CommentsStructure";
-import { fetchComments } from "../../services/post";
-import { fetchUserDataOnClick } from "../../services/searchProfile";
 import { PostUserCard } from "./PostUserCard";
 import { PostCaption } from "./PostCaption";
-import { useSearch } from "../../context/SearchContext";
 import { SearchChat } from "../chats/SearchChat";
 import { PostUserData } from "../../types/postType";
 import { UserInfo } from "../../types/user";
-import { useHome } from "../../context/HomeContext";
 import { PostInteractionSection } from "./PostInteractionSection";
+import { useAuth } from "../../context/AuthContext";
+import { getDataOnClick } from "../../services/searchProfile";
 
 interface PostProps {
     isPostOpen: boolean;
@@ -27,13 +24,10 @@ interface PostProps {
 }
 
 export const Post: React.FC<PostProps> = ({ isPostOpen, setIsPostOpen, postData, setCurrentPost, currentPost, isMobile }) => {
-    const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, setCommentValue, setIsPostSettingOpen, isCommented, commentsLoading, setCommentsLoading, isPostSettingOpen, isMyPost, comments, setComments, isLiked, setIsLiked } = usePost();
-    const { userData, setMainLoading } = useUser();
-    const { setSelectedProfile } = useSearch();
-    const { page, setPage, totalPages, setTotalPages } = useHome()
+    const { selectedPost, setSelectedPost, setIsMyPost, setIsSaved, setCommentValue, setIsPostSettingOpen, isCommented, commentsLoading, isPostSettingOpen, isMyPost, comments, setComments, isLiked, page, setPage, totalPages, setTotalPages, fetchComments } = usePost();
+    const { userData, setMainLoading, token, setSelectedProfile } = useAuth();
     const [isHovered, setIsHovered] = useState<boolean>(false);
     const commentRef = useRef<HTMLInputElement | null>(null);
-
     useEffect(() => {
         if (selectedPost !== null) {
             const isUserPost = selectedPost?.postBy?._id === userData.data.user._id;
@@ -47,12 +41,12 @@ export const Post: React.FC<PostProps> = ({ isPostOpen, setIsPostOpen, postData,
         const controller = new AbortController();
         const signal = controller.signal;
         if (selectedPost !== null) {
-            fetchComments(signal, setComments, setCommentsLoading, setTotalPages, userData, selectedPost, page);
+            fetchComments(signal);
         }
         return () => {
             controller.abort();
         };
-    }, [page, selectedPost?._id, currentPost, userData.data.token, isCommented]);
+    }, [page, selectedPost?._id, currentPost, userData?.data.token, isCommented]);
 
     function handleClose() {
         setIsPostOpen(false);
@@ -67,9 +61,27 @@ export const Post: React.FC<PostProps> = ({ isPostOpen, setIsPostOpen, postData,
         setIsPostSettingOpen(false);
     }
 
+    const fetchUserDataOnClick = async (item: any) => {
+        try {
+            setMainLoading(true);
+            const res = await getDataOnClick({
+                username: item ? item?.user.userName : postData?.userName,
+                token
+            })
+            setSelectedProfile(res.data[0]);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setTimeout(() => {
+                setMainLoading(false);
+            }, 1000);
+        }
+    }
+
+
     function handleClick(item: any, postData: any) {
         setMainLoading(true);
-        fetchUserDataOnClick(item ? item?.user.userName : postData?.userName, userData, null, setSelectedProfile, setMainLoading);
+        fetchUserDataOnClick(item);
         setSelectedPost(null);
     }
 
@@ -90,7 +102,7 @@ export const Post: React.FC<PostProps> = ({ isPostOpen, setIsPostOpen, postData,
                             setIsPostSettingOpen={setIsPostSettingOpen}
                         />
                     </div>
-                    <PostSlider post={selectedPost} isLiked={isLiked} setIsLiked={setIsLiked} isHome={false} />
+                    <PostSlider post={selectedPost} isLiked={isLiked} isHome={false} />
 
                     <div className="1280:w-[45rem] lg:w-[60rem] md:w-[65rem] hidden md:block w-[22rem] bg-[#000000]">
                         <div className="flex relative justify-between items-center p-5 border-b-[1px] border-[#262626]">

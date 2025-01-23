@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { SettingIcon } from "../assets/Constants";
 import { HighLights } from "../components/story/Highlights"
@@ -14,33 +14,43 @@ import { LogOutDiv } from "../components/profile/LogOutDiv";
 import { MobileProfileBar } from "../components/profile/MobileProfileBar";
 import { UserFollowDetails } from "../components/usermodals/UserFollowDetails";
 import { LaptopProfileBar } from "../components/profile/LaptopProfileBar";
-import { fetchPosts, fetchSaves, getHighLights, getStatus } from "../services/profile";
-import { fetchNote } from "../services/note";
+import { fetchHighlights, fetchStories, getPosts, getSaves } from "../services/profile";
 import { ProfileButton } from "../components/profile/ProfileSettingButton";
+import { useAuth } from "../context/AuthContext";
+import { usePost } from "../context/PostContext";
 
 export const Profile: React.FC = () => {
-    const { userData, setUserPosts, userPosts, userSaves, note, setNote, setStories, stories, setCurrentStory, highlights, setHighlights, setHighLightStories, setCurrentHighLight, setUserSaves, isNoteEditOpen, setIsNoteEditOpen, isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen } = useUser();
+    const { userSaves, note, setNote, setStories, stories, setCurrentStory, highlights, setHighlights, setHighLightStories, setCurrentHighLight, setUserSaves, isNoteEditOpen, setIsNoteEditOpen, isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen, noteLoading, setNoteLoading, fetchNote } = useUser();
+    const { userData, token } = useAuth()
+    const { setUserPosts, userPosts } = usePost()
     const [isNoteOpen, setIsNoteOpen] = useState<boolean>(false)
     const [postsLoading, setPostsLoading] = useState<boolean>(false);
-    const [noteLoading, setNoteLoading] = useState<boolean>(false);
     const [isCreatingHighLight, setIsCreatingHighLight] = useState<boolean>(false);
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const noteEditorRef = useRef<HTMLDivElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const checkref = useRef<HTMLButtonElement>(null);
+    const params = useParams();
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (params.username !== userData.data.user.userName) {
+            navigate(`/${userData.data.user.userName}/`)
+        }
+    }, [])
 
     useEffect(() => {
         if (userPosts.length === 0) {
-            fetchPosts(setPostsLoading, userData, setUserPosts);
+            fetchPosts();
         }
         if (userSaves.length === 0) {
-            fetchSaves(userData, setUserSaves);
+            fetchSaves();
         }
         if (highlights.length === 0) {
-            getHighLights(setHighLightStories, userData, setHighlights)
+            getHighLights()
         }
-        fetchNote(setNoteLoading, userData, setNote);
-        getStatus(userData, setStories);
+        fetchNote();
+        getStatus();
     }, [])
 
     useEffect(() => {
@@ -56,6 +66,58 @@ export const Profile: React.FC = () => {
         }
         if (checkref.current && dropdownRef.current && !checkref.current.contains(event.target) && !dropdownRef.current.contains(event.target)) {
             setIsOpen(false);
+        }
+    }
+
+    async function getHighLights() {
+        try {
+            setHighLightStories([]);
+            const res = await fetchHighlights({
+                token
+            })
+            setHighlights(res.highlights);
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    async function getStatus() {
+        try {
+            setHighLightStories([]);
+            const res = await fetchStories({
+                token
+            })
+            setStories(res.stories);
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    async function fetchSaves() {
+        try {
+            setHighLightStories([]);
+            const res = await getSaves({
+                token
+            })
+            setUserSaves(res.data);
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    async function fetchPosts() {
+        try {
+            setPostsLoading(true);
+            const res = await getPosts({
+                token
+            })
+            setUserPosts(res.data);
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setTimeout(() => {
+                setPostsLoading(false);
+            }, 500);
         }
     }
 
@@ -106,8 +168,8 @@ export const Profile: React.FC = () => {
                         <UserFollowDetails isSearchProfile={false} />
                     </div>
                     <div className="relative -left-[5.5rem] top-3 sm:left-0 sm:top-0">
-                        <p className="font-semibold text-[14px]">{userData.data.user.fullName}</p>
-                        <p className="font-semibold text-[14px] text-[#a8a8a8] w-[200px] break-words">{userData.data.user.bio}</p>
+                        <p className="font-semibold text-[14px]">{userData?.data.user.fullName}</p>
+                        <p className="font-semibold text-[14px] text-[#a8a8a8] w-[200px] break-words">{userData?.data.user.bio}</p>
                     </div>
                 </div>
             </div>

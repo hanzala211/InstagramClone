@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react";
-import { useUser } from "../context/UserContext";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Loader } from "../components/helpers/Loader";
 import { RiUserFollowFill } from "react-icons/ri";
 import { Post } from "../components/post/Post";
-import { fetchHomePosts, fetchStories } from "../services/homePage";
+import { getHomePosts, getHomeStories } from "../services/homePage";
 import { PageHeader } from "../components/sidebar/PageHeader";
-import { HomeStories } from "../components/story/HomeStories"
 import { useHome } from "../context/HomeContext";
 import { HomePost } from "../components/post/HomePost"
 import { HomePostSkeleton } from "../components/helpers/HomePostSkeleton";
+import { useAuth } from "../context/AuthContext";
 
 export const Home: React.FC = () => {
     const { homeStories, setHomeStories, homePosts, setHomePosts } = useHome();
-    const { userData } = useUser();
+    const { userData, token } = useAuth();
     const [isPostsLoading, setIsPostsLoading] = useState<boolean>(false);
     const [isPostOpen, setIsPostOpen] = useState<boolean>(false);
     const [currentPost, setCurrentPost] = useState<number | any>(0);
@@ -22,14 +21,56 @@ export const Home: React.FC = () => {
     useEffect(() => {
         if (homePosts.length === 0) {
             setIsPostsLoading(true);
-            fetchHomePosts(userData, setHomePosts, setIsPostsLoading, setHasMore);
-            fetchStories(userData, setHomeStories);
+            fetchHomePosts();
+            fetchHomeStories();
         }
     }, [userData, setHomePosts, setIsPostsLoading, setHasMore, setHomeStories]);
 
     const fetchNextPosts = () => {
         if (!isPostsLoading) {
-            fetchHomePosts(userData, setHomePosts, setIsPostsLoading, setHasMore);
+            fetchHomePosts();
+        }
+    }
+
+    async function fetchHomePosts() {
+        try {
+            const res = await getHomePosts({
+                token
+            })
+
+            if (res.status !== 'fail') {
+                setHomePosts((prev) => {
+                    const newItems = res.data.filter(
+                        (item: any) => !prev.some((prevItem) => prevItem._id === item._id)
+                    );
+                    if (newItems.length === 0) {
+                        setHasMore(false);
+                        return [...prev];
+                    } else {
+                        return [...prev, ...newItems];
+                    }
+                });
+            } else {
+                setHasMore(false);
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsPostsLoading(false);
+        }
+    }
+
+    async function fetchHomeStories() {
+        try {
+            const res = await getHomeStories({
+                token
+            })
+
+            setHomeStories(
+                res.stories.filter((item: any) => item.user.stories.length > 0)
+            );
+        } catch (error) {
+            console.error(error);
         }
     }
 

@@ -1,11 +1,12 @@
 import { IoCloseSharp } from "react-icons/io5"
 import { MdKeyboardArrowLeft } from "react-icons/md"
 import { Loader } from "../helpers/Loader"
-import { createHighLight, editHighLight } from "../../services/story"
+import { highlightCreate, highlightEdit } from "../../services/story"
 import { useUser } from "../../context/UserContext"
 import { useNavigate } from "react-router-dom"
 import { formatDateString, formatMonth } from "../../utils/helper"
 import { ProfileStories } from "../../types/stories"
+import { useAuth } from "../../context/AuthContext"
 
 interface SelectedHighLightsProps {
     selectCover?: boolean;
@@ -24,8 +25,44 @@ interface SelectedHighLightsProps {
 
 export const SelectedHighLights: React.FC<SelectedHighLightsProps> = ({ selectCover, setSelectCover, setSelectedIDs, isCreatingHighLight, handleClose, selectedIDs, currentID, sendLoading, setCurrentID, setSendLoading, highlightName, editingHighlight }) => {
 
-    const { currentHighLight, highlights, highLightStories, userData, setMessage, setHighlights } = useUser()
+    const { currentHighLight, highlights, highLightStories, setMessage, setHighlights } = useUser()
+    const { token } = useAuth()
     const navigate = useNavigate();
+
+    const createHighLight = async () => {
+        try {
+            setSendLoading(true);
+            const res = await highlightCreate({ token, selectedIDs, currentID, name: highlightName, });
+            setHighlights((prev: any) => [...prev, res.highlight])
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setSendLoading(false);
+            handleClose();
+            setMessage('Highligh Added Successfully');
+        }
+    }
+
+    const editHighlight = async () => {
+        try {
+            setSendLoading(true)
+            const res = await highlightEdit({
+                highLightStories,
+                currentHighLight,
+                highlights,
+                token,
+                selectedIDs
+            })
+            setHighlights((prev: any) => [...prev, res.highlight])
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setSendLoading(false);
+            navigate(-1);
+            handleClose();
+        }
+    }
+
 
     return <>
         <div className={`w-full md:max-w-[30rem] max-w-[22rem] 440:max-w-[2rem] overflow-hidden bg-[#262626] rounded-xl  440:h-[76vh] h-[78vh] fixed inset-0 z-[100] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition duration-500 ${selectCover ? "opacity-100" : "pointer-events-none"}`}>
@@ -65,9 +102,9 @@ export const SelectedHighLights: React.FC<SelectedHighLightsProps> = ({ selectCo
                 {!sendLoading ?
                     <button onClick={() => {
                         if (!editingHighlight) {
-                            createHighLight(setSendLoading, userData, highlightName, selectedIDs, currentID, handleClose, setMessage, setHighlights)
+                            createHighLight()
                         } else {
-                            editHighLight(setSendLoading, highlights, currentHighLight, userData, highLightStories, highlightName, selectedIDs, currentID, handleClose, navigate, setMessage, setHighlights)
+                            editHighlight()
                         }
                     }} className={`w-full py-3 text-[15px] transition-all duration-150 font-semibold  text-[#0095F6]`} >Done</button>
                     : <Loader height="15vh mt-1.5" widthHeight={false} />}

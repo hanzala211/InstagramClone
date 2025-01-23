@@ -1,18 +1,19 @@
-import { Link } from "react-router-dom";
-import { useUser } from "../../context/UserContext";
 import { useEffect, useState } from "react";
 import { FullSkeleton } from "../helpers/FullSkeleton";
 import { formatNumber } from "../../utils/helper";
-import { fetchUserDataOnHover } from "../../services/searchProfile";
 import { UserInfo } from "../../types/user";
 import { Post } from "../../types/postType"
+import { useAuth } from "../../context/AuthContext";
+import { getDataOnHover } from "../../services/searchProfile";
+import { useSearch } from "../../context/SearchContext";
 
 interface UserHoverModalProps {
     username: string;
     isHovered: any
 }
 export const UserHoverModal: React.FC<UserHoverModalProps> = ({ username, isHovered }) => {
-    const { userData } = useUser()
+    const { token } = useAuth()
+    const { fetchPosts } = useSearch()
     const [hoverProfile, setHoverProfile] = useState<UserInfo>()
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [posts, setPosts] = useState<Post[]>([])
@@ -21,12 +22,39 @@ export const UserHoverModal: React.FC<UserHoverModalProps> = ({ username, isHove
         const abortController = new AbortController();
         if (isHovered) {
             setIsLoading(true)
-            fetchUserDataOnHover(abortController.signal, username, userData, setHoverProfile, setPosts, setIsLoading)
+            fetchUserDataOnHover(abortController.signal)
         }
         return () => {
             abortController.abort();
         }
     }, [])
+
+    async function fetchUserDataOnHover(signal: any) {
+        try {
+            const res = await getDataOnHover({
+                signal,
+                token,
+                username
+            })
+            setHoverProfile(res.data[0]);
+            if (res.data[0].posts) {
+                await Promise.all(
+                    res.data[0]?.posts
+                        .slice(0, 3)
+                        .map((item: string) => fetchPosts(item))
+                )
+                    .then((res) => {
+                        setPosts((prev) => [...prev, ...res.map((item) => item.post)])
+                    })
+                    .catch((err) => console.error(err))
+                    .finally(() => setIsLoading(false));
+            }
+        } catch (error: any) {
+            if (error.name !== 'AbortError') {
+                console.error('Error fetching user' + error);
+            }
+        }
+    }
 
     return <div className="bg-[#000] w-[20rem] rounded-lg shadow-sm shadow-gray-200  hidden md:block">
         {isLoading ? <FullSkeleton /> :

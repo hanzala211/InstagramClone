@@ -14,7 +14,7 @@ export const StoriesProvider: React.FC<ContextChild> = ({ children }) => {
 
 export const useStories = (): StoriesContextType => {
     const context = useContext(StoriesContext)
-    if(!context){
+    if (!context) {
         throw new Error("use useStories within Stories Provider");
     }
     return context;

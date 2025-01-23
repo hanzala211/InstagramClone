@@ -26,60 +26,71 @@ import { HomeProvider } from './context/HomeContext'
 import { SearchProvider } from './context/SearchContext'
 import { ForgotPassword } from './pages/ForgotPassword'
 import { EditProfile } from './pages/EditProfile'
+import { AuthProvider } from './context/AuthContext'
 
 function App() {
-  const localitem: string | null = JSON.parse(localStorage.getItem("token") || "null");
 
   return (
     <BrowserRouter>
-      <UserProvider>
-        <SearchProvider>
-          <PostProvider>
-            <ChatProvider>
-              <StoriesProvider>
-                <HomeProvider>
-                  <Routes>
-                    <Route path='/stories/:username/:_id/' element={<Story isOwnProfile={true} />} />
-                    <Route path='/stories/archive/:_id/' element={<Story isArchive={true} />} />
-                    <Route path='/stories/highlight/:id/' element={<Story isHighLight={true} />} />
-                    <Route path='/search/stories/:username/:id/' element={<Story isSearchUser={true} />} />
-                    <Route path='/search/stories/highlight/:id/' element={<Story isSearchHighLight={true} />} />
-                    <Route path='/accounts/password/forgot/' element={<ForgotPassword />} />
-                    <Route index element={<Navigate to={localitem === null ? "/login" : "/home"} />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path='/signup' element={<SignUp />} />
-                    <Route path='/' element={<Layout token={localitem} />}>
-                      <Route path="accounts/edit/" element={<EditProfile />} />
-                      <Route path="create/post/" element={<MobilePostCreator />} />
-                      <Route path="create/story/" element={<StoryMobileCreator />} />
-                      <Route path="create/details/" element={<CaptionMobileCreator />} />
-                      <Route path="edit/details/" element={<CaptionMobileCreator />} />
-                      <Route path='direct/inbox/' element={<Chat />}>
-                        <Route index element={<ChatDiv />} />
-                        <Route path='t/:id' element={<UserChat />} />
+      <AuthProvider>
+        <UserProvider>
+          <SearchProvider>
+            <PostProvider>
+              <ChatProvider>
+                <StoriesProvider>
+                  <HomeProvider>
+                    <Routes>
+                      <Route path='/stories/:username/:_id/' element={<Story isOwnProfile={true} />} />
+                      <Route path='/stories/archive/:_id/' element={<Story isArchive={true} />} />
+                      <Route path='/stories/highlight/:id/' element={<Story isHighLight={true} />} />
+                      <Route path='/search/stories/:username/:id/' element={<Story isSearchUser={true} />} />
+                      <Route path='/search/stories/highlight/:id/' element={<Story isSearchHighLight={true} />} />
+                      <Route path='/accounts/password/forgot/' element={<ForgotPassword />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path='/signup' element={<SignUp />} />
+                      <Route path='/' element={<Layout />}>
+                        <Route path="accounts/edit/" element={<EditProfile />} />
+                        <Route path="create/post/" element={<MobilePostCreator />} />
+                        <Route path="create/story/" element={<StoryMobileCreator />} />
+                        <Route path="create/details/" element={<CaptionMobileCreator />} />
+                        <Route path="edit/details/" element={<CaptionMobileCreator />} />
+                        <Route path='direct/inbox/' element={<Chat />}>
+                          <Route index element={<ChatDiv />} />
+                          <Route path='t/:id' element={<UserChat />} />
+                        </Route>
+                        <Route path=':username/p/:id/' element={<MobilePostPage />} />
+                        <Route path='explore/' element={<Explore />} />
+                        <Route path="search/:username/" element={<SearchProfile />}>
+                          <Route
+                            index
+                            element={
+                              <ProfileTabs
+                                isSearchPosts={true}
+                                isPosts={false}
+                                isTagged={false}
+                                isSaved={false}
+                              />
+                            }
+                          />
+                        </Route>
+                        <Route path='archive/' element={<Archive />}>
+                          <Route path="stories/" element={<ArchiveStories />} />
+                        </Route>
+                        <Route path='home' element={<Home />} />
+                        <Route path=':username/' element={<Profile />}>
+                          <Route index element={<ProfileTabs isPosts={true} />} />
+                          <Route path='tagged/' element={<ProfileTabs isPosts={false} isTagged={true} />} />
+                          <Route path='saved/' element={<ProfileTabs isPosts={false} isTagged={false} isSaved={true} />} />
+                        </Route>
                       </Route>
-                      <Route path=':username/p/:id/' element={<MobilePostPage />} />
-                      <Route path='explore/' element={<Explore />} />
-                      <Route path='/search/:username/' element={<SearchProfile />}>
-                        <Route index element={<ProfileTabs isSearchPosts={true} isPosts={false} isTagged={false} isSaved={false} />} />
-                      </Route>
-                      <Route path='/archive/' element={<Archive />}>
-                        <Route path="stories/" element={<ArchiveStories />} />
-                      </Route>
-                      <Route path='home' element={<Home />} />
-                      <Route path=':username/' element={<Profile />}>
-                        <Route index element={<ProfileTabs isPosts={true} />} />
-                        <Route path='tagged/' element={<ProfileTabs isPosts={false} isTagged={true} />} />
-                        <Route path='saved/' element={<ProfileTabs isPosts={false} isTagged={false} isSaved={true} />} />
-                      </Route>
-                    </Route>
-                  </Routes>
-                </HomeProvider>
-              </StoriesProvider>
-            </ChatProvider>
-          </PostProvider>
-        </SearchProvider>
-      </UserProvider>
+                    </Routes>
+                  </HomeProvider>
+                </StoriesProvider>
+              </ChatProvider>
+            </PostProvider>
+          </SearchProvider>
+        </UserProvider>
+      </AuthProvider>
     </BrowserRouter >
   )
 }

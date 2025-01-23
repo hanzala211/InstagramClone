@@ -1,16 +1,17 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { ContextChild, SideBarContextType, UserContextType } from "../types/contextTypes";
+import { ContextChild, UserContextType } from "../types/contextTypes";
 import { Post } from "../types/postType";
 import { Note } from "../types/note";
 import { ProfileStories } from "../types/stories";
 import { Highlights, HighlightsStories } from "../types/highlightsType";
 import { User, UserFollowDetailsType } from "../types/user";
+import { getNote } from "../services/note";
+import { useAuth } from "./AuthContext";
+import { getArchives } from "../services/archive";
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<ContextChild> = ({ children }) => {
-    const [userData, setUserData] = useState<User | any>(null);
-    const [mainLoading, setMainLoading] = useState<boolean>(true);
-    const [userPosts, setUserPosts] = useState<Post[]>([]);
+    const { token } = useAuth()
     const [message, setMessage] = useState<any>("");
     const [note, setNote] = useState<Note | []>([]);
     const [stories, setStories] = useState<ProfileStories[]>([]);
@@ -27,6 +28,7 @@ export const UserProvider: React.FC<ContextChild> = ({ children }) => {
     const [isFollowerModalOpen, setIsFollowerModalOpen] = useState<boolean>(false)
     const [isFollowingModalOpen, setIsFollowingModalOpen] = useState<boolean>(false)
     const [innerWidth, setInnerWidth] = useState<number>(window.innerWidth)
+    const [noteLoading, setNoteLoading] = useState<boolean>(false)
 
     useEffect(() => {
         const handleResize = () => {
@@ -36,7 +38,41 @@ export const UserProvider: React.FC<ContextChild> = ({ children }) => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    return <UserContext.Provider value={{ userData, setUserData, mainLoading, setMainLoading, userPosts, setUserPosts, message, setMessage, note, setNote, stories, setStories, archives, setArchives, loadingArchives, setLoadingArchives, currentStory, setCurrentStory, highlights, setHighlights, highLightStories, setHighLightStories, currentHighLight, setCurrentHighLight, userSaves, setUserSaves, userFollowers, setUserFollowers, userFollowing, setUserFollowing, isNoteEditOpen, setIsNoteEditOpen, isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen, innerWidth, setInnerWidth }}>{children}</UserContext.Provider>
+
+    const fetchNote = async () => {
+        try {
+            setNoteLoading(true);
+            const res = await getNote({
+                token
+            })
+            if (res.message !== 'Note not found or expired.') {
+                setNote(res.note);
+            }
+        } catch (error: any) {
+            console.error(error)
+        } finally {
+            setNoteLoading(false);
+        }
+    }
+
+    const fetchArchives = async () => {
+        try {
+            setLoadingArchives(true);
+            const res = await getArchives({
+                token
+            })
+
+            if (res.message !== 'No archives found.') {
+                setArchives(res.archives);
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoadingArchives(false);
+        }
+    }
+
+    return <UserContext.Provider value={{ message, setMessage, note, setNote, stories, setStories, archives, setArchives, loadingArchives, setLoadingArchives, currentStory, setCurrentStory, highlights, setHighlights, highLightStories, setHighLightStories, currentHighLight, setCurrentHighLight, userSaves, setUserSaves, userFollowers, setUserFollowers, userFollowing, setUserFollowing, isNoteEditOpen, setIsNoteEditOpen, isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen, innerWidth, setInnerWidth, noteLoading, setNoteLoading, fetchNote, fetchArchives }}>{children}</UserContext.Provider>
 }
 
 export const useUser = (): UserContextType => {

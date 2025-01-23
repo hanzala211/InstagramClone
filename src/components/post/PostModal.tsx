@@ -5,6 +5,7 @@ import { formatNumber } from "../../utils/helper";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import { Post } from "../../types/postType";
+import { useAuth } from "../../context/AuthContext";
 
 interface PostModalProps {
     arr: Post[];
@@ -16,7 +17,8 @@ interface PostModalProps {
 }
 
 export const PostModal: React.FC<PostModalProps> = ({ arr, i, setSelectedPost, setIsPostOpen, setCurrentPost, item }) => {
-    const { userData, innerWidth } = useUser()
+    const { innerWidth } = useUser()
+    const { userData } = useAuth()
     const navigate = useNavigate()
 
     const handleClick = () => {

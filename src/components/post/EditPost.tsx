@@ -1,3 +1,4 @@
+import { useAuth } from "../../context/AuthContext";
 import { usePost } from "../../context/PostContext";
 import { User } from "../../types/user";
 import { PostSliderButtons } from "./PostSliderButtons";
@@ -5,13 +6,12 @@ import { PostSliderButtons } from "./PostSliderButtons";
 interface EditPostProps {
     handleDecrease: () => void;
     handleIncrease: () => void;
-    userData: User | null;
     croppedImage: string[];
-    isCaption: boolean;
 }
 
-export const EditPost: React.FC<EditPostProps> = ({ handleDecrease, handleIncrease, userData, croppedImage, isCaption }) => {
+export const EditPost: React.FC<EditPostProps> = ({ handleDecrease, handleIncrease, croppedImage }) => {
     const { captionValue, setCaptionValue, currentIndex } = usePost();
+    const { userData } = useAuth()
 
     const handleCaptionChange = (e: any) => {
         setCaptionValue(e.target.value);
@@ -31,12 +31,12 @@ export const EditPost: React.FC<EditPostProps> = ({ handleDecrease, handleIncrea
             <div className="sm:w-[35%] w-[40%] md:px-4 p-2 md:py-5 border-l-[2px] border-[#363636]">
                 <div className="flex flex-row md:gap-4 gap-2 items-center">
                     <img
-                        src={userData.data.user.profilePic}
+                        src={userData?.data.user.profilePic}
                         className="md:w-8 w-5 rounded-full"
                         alt="Profile Pic"
                     />
                     <p className="md:text-[14px] text-[12px] font-semibold">
-                        {userData.data.user.userName}
+                        {userData?.data.user.userName}
                     </p>
                 </div>
 

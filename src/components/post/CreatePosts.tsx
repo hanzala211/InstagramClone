@@ -5,12 +5,12 @@ import { useUser } from "../../context/UserContext";
 import { EditPost } from "./EditPost";
 import { SelectImage } from "./SelectImage";
 import { Overlay } from "../helpers/Overlay";
-import { createPost } from "../../services/post";
 import { handleFile, handleFileChange, onCropImage } from "../../utils/helper";
 import { usePost } from "../../context/PostContext";
 import { useNavigate } from "react-router-dom";
 import { PostCropper } from "./PostCropper";
 import { PostSliderButtons } from "./PostSliderButtons";
+import { useAuth } from "../../context/AuthContext";
 
 interface CreatePostProps {
     isCreating: boolean;
@@ -18,8 +18,9 @@ interface CreatePostProps {
 }
 
 export const CreatePost: React.FC<CreatePostProps> = ({ isCreating, setIsCreating }) => {
-    const { fileInputRef, selectedImage, setSelectedImage, croppedAreas, setCroppedAreas, setCroppedImages, croppedImages, currentIndex, setCurrentIndex, loading, setLoading, isCaption, setIsCaption, captionValue, setCaptionValue, isShared, setIsShared, shareLoading, setShareLoading } = usePost();
-    const { userData, innerWidth, setUserPosts } = useUser();
+    const { fileInputRef, selectedImage, setSelectedImage, croppedAreas, setCroppedAreas, setCroppedImages, croppedImages, currentIndex, setCurrentIndex, loading, setLoading, isCaption, setIsCaption, isShared, setIsShared, shareLoading, createPosts } = usePost();
+    const { innerWidth } = useUser();
+    const { userData } = useAuth()
     const navigate = useNavigate();
 
     useEffect((): any => {
@@ -84,11 +85,10 @@ export const CreatePost: React.FC<CreatePostProps> = ({ isCreating, setIsCreatin
                                     setCroppedAreas={setCroppedAreas}
                                 />
                             ) : isCaption && !isShared ? (
-                                <EditPost isCaption={isCaption}
+                                <EditPost
                                     croppedImage={croppedImages}
                                     handleDecrease={() => setCurrentIndex((prev) => prev - 1)}
-                                    handleIncrease={() => setCurrentIndex((prev) => prev + 1)}
-                                    userData={userData} />
+                                    handleIncrease={() => setCurrentIndex((prev) => prev + 1)} />
                             ) : isShared ? (
                                 <div className="bg-[#262626] w-full h-[60vh] flex flex-col justify-center items-center">
                                     {shareLoading ? (
@@ -123,7 +123,7 @@ export const CreatePost: React.FC<CreatePostProps> = ({ isCreating, setIsCreatin
                         )}
 
                         {!isShared && isCaption && (
-                            <button className="absolute -top-7 right-0 text-[15px] text-[#0096f4] hover:text-white" onClick={() => createPost(setShareLoading, setIsShared, croppedImages, userData, captionValue, setCaptionValue, false, navigate, setUserPosts)}>
+                            <button className="absolute -top-7 right-0 text-[15px] text-[#0096f4] hover:text-white" onClick={() => createPosts(false)}>
                                 Share
                             </button>
                         )}

@@ -1,33 +1,25 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useUser } from "../context/UserContext";
 import { Footer } from "../components/helpers/Footer";
 import { Loader } from "../components/helpers/Loader";
-import { fetchData } from "../services/userAuth";
 import { InputLabel } from "../components/helpers/InputLabel";
 import { FormType } from "../types/authType";
+import { useAuth } from "../context/AuthContext";
 
 export const SignUp: React.FC = () => {
-    const { setUserData, userData, setMainLoading } = useUser();
-    const [emailAddress, setEmailAddress] = useState<string>("");
-    const [signupPassword, setSignupPassword] = useState<string>("");
-    const [fullName, setFullName] = useState<string>("");
-    const [userName, setUserName] = useState<string>("");
-    const [succesMessage, setSuccessMessage] = useState<string>("");
-    const [loading, setLoading] = useState<boolean>(false)
-    const navigate = useNavigate()
+    const { userData, setEmail, email, setPassword, password, fullName, setFullName, userValue, setUserValue, succesMessage, fetchSignup, loading } = useAuth();
 
     const signupForm: FormType[] = [
         {
-            onChange: (e: any) => setEmailAddress(e.target.value),
+            onChange: (e: any) => setEmail(e.target.value),
             text: "Email Address",
-            value: emailAddress,
+            value: email,
             type: "email"
         },
         {
-            onChange: (e: any) => setSignupPassword(e.target.value),
+            onChange: (e: any) => setPassword(e.target.value),
             text: "Password",
-            value: signupPassword,
+            value: password,
             type: "password"
         },
         {
@@ -37,12 +29,19 @@ export const SignUp: React.FC = () => {
             type: "text"
         },
         {
-            onChange: (e: any) => setUserName(e.target.value),
+            onChange: (e: any) => setUserValue(e.target.value),
             text: "Username",
-            value: userName,
+            value: userValue,
             type: "text"
         }
     ]
+
+    const handleClick = () => {
+        setUserValue("")
+        setPassword("")
+        setEmail("")
+        setFullName("")
+    }
 
     return <div className="flex flex-col h-[100vh] justify-between">
         <section className="flex justify-center items-center w-full sm:mt-12 mt-2">
@@ -59,9 +58,7 @@ export const SignUp: React.FC = () => {
                             {signupForm.map((item, index) => (
                                 <InputLabel key={index} onChange={item.onChange} value={item.value} text={item.text} type={item.type} />
                             ))}
-                            <Link to={(emailAddress.length > 0 && signupPassword.length > 0 && fullName.length > 0 && userName.length > 0) ? "#" : "#"} className="text-center bg-[#0069AD] text-[14px] py-2 rounded-lg mt-3 opacity-90" onClick={() => {
-                                fetchData(fullName, userName, emailAddress, signupPassword, setMainLoading, setLoading, setUserData, setSuccessMessage, setEmailAddress, setSignupPassword, setFullName, setUserName, navigate);
-                            }}>Sign up</Link>
+                            <Link to={(email.length > 0 && password.length > 0 && fullName.length > 0 && userValue.length > 0) ? "#" : "#"} onClick={fetchSignup} className="text-center bg-[#0069AD] text-[14px] py-2 rounded-lg mt-3 opacity-90" >Sign up</Link>
                         </div>
                         <p className="text-center mx-[2.5rem] text-[13px] text-[#A8A8A8]">People who use our service may have uploaded your contact information to Instagram. Learn more</p></> : <div className="mt-10"><Loader /></div>}
                     {succesMessage === "success" && <p className="text-green-600 uppercase">{succesMessage}</p>}
@@ -69,7 +66,7 @@ export const SignUp: React.FC = () => {
                 {userData?.status === "fail" && <p className="text-red-500">{userData.data}</p>}
                 <div className="flex items-center justify-center border-[2px] border-[#363636] py-6 sm:w-[23.7rem] w-[22rem] gap-1">
                     <p>Have an account?</p>
-                    <Link to="/login" onClick={() => setUserData([])} className="text-[#3897F1]">Log in</Link>
+                    <Link to="/login" onClick={handleClick} className="text-[#3897F1]">Log in</Link>
                 </div>
                 <p>Get the app.</p>
                 <div className="flex gap-2">

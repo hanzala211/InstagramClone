@@ -2,10 +2,11 @@ import { IoCloseSharp } from "react-icons/io5"
 import { useChat } from "../../context/ChatContext"
 import { UserThreads } from "./UserThreads"
 import { useEffect, useState } from "react"
-import { useUser } from "../../context/UserContext"
 import { Skeleton } from "../helpers/Skeleton"
-import { fetchSearch } from "../../services/search"
 import { usePost } from "../../context/PostContext"
+import { useAuth } from "../../context/AuthContext"
+import { getSearch } from "../../services/search"
+import { useSearch } from "../../context/SearchContext"
 
 interface SearchChatProps {
     header: string;
@@ -16,16 +17,16 @@ interface SearchChatProps {
 export const SearchChat: React.FC<SearchChatProps> = ({ header, isChat, index }) => {
     const { setIsChatSearch, threads, isChatSearch, searchChatValue, setSearchChatValue, searchData, setSearchData } = useChat()
     const { isShareOpen, setIsShareOpen, isShareSearch, setIsShareSearch, isShareOpenHome, setIsShareOpenHome } = usePost()
-    const { userData } = useUser()
-    const [searchLoading, setSearchLoading] = useState(false)
-    const isVisible = isChat ? isChatSearch : isShareOpen || isShareOpenHome[index];
+    const { fetchSearch, searchLoading, setSearchLoading } = useSearch()
+    const { token } = useAuth()
+    const isVisible = isChat ? isChatSearch : isShareOpen || isShareOpenHome[index || 0];
 
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
         if (searchChatValue.length > 0 || isShareSearch.length > 0) {
             setSearchLoading(true);
-            fetchSearch(signal, setSearchData, isChat ? searchChatValue : isShareSearch, userData, setSearchLoading);
+            fetchSearch(signal, isChat ? searchChatValue : isShareSearch, token);
         } else if (searchChatValue.length === 0) {
             setSearchLoading(false)
             setSearchData([]);
@@ -41,7 +42,7 @@ export const SearchChat: React.FC<SearchChatProps> = ({ header, isChat, index })
         setIsShareOpen(false)
         setIsShareOpenHome((prev) => {
             const updated = [...prev]
-            updated[index] = false;
+            updated[index || 0] = false;
             return updated;
         })
     }

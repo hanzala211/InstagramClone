@@ -3,8 +3,9 @@ import { useUser } from "../../context/UserContext";
 import { EditPost } from "./EditPost";
 import { usePost } from "../../context/PostContext";
 import { Overlay } from "../helpers/Overlay";
-import { deletePost, updatePost } from "../../services/post";
+import { postDelete } from "../../services/post";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 interface PostSettingsProps {
     isPostSettingOpen: boolean;
@@ -14,8 +15,9 @@ interface PostSettingsProps {
 }
 
 export const PostSettings: React.FC<PostSettingsProps> = ({ isPostSettingOpen, setIsPostSettingOpen, setIsPostOpen, isMyPost }) => {
-    const { userData, setMessage, setUserData, setUserPosts, innerWidth } = useUser();
-    const { selectedPost, setSelectedPost, setCurrentIndex, captionValue, setCaptionValue, setCroppedImages } = usePost();
+    const { setMessage, innerWidth } = useUser();
+    const { userData, setUserData, token } = useAuth()
+    const { selectedPost, setSelectedPost, setCurrentIndex, captionValue, setCaptionValue, setCroppedImages, setUserPosts, updatePost } = usePost();
     const [isEditingOpen, setIsEditingOpen] = useState<boolean>(false)
     const [isShared, setIsShared] = useState<boolean>(false)
     const [shareLoading, setShareLoading] = useState<boolean>(false);
@@ -39,6 +41,38 @@ export const PostSettings: React.FC<PostSettingsProps> = ({ isPostSettingOpen, s
         setCurrentIndex((prev) => prev - 1)
     }
 
+    const deletePost = async () => {
+        try {
+            const res = await postDelete({
+                token,
+                selectedPost
+            })
+            setMessage(res.data);
+            setUserData((prev: any) => ({
+                ...prev,
+                data: {
+                    ...prev.data,
+                    user: {
+                        ...prev.data.user,
+                        posts: prev.data.user.posts.filter(
+                            (item: any) => item !== selectedPost?._id
+                        ),
+                        postCount: prev.data.user.postCount - 1,
+                    },
+                },
+            }));
+            setUserPosts((prev: any) =>
+                prev.filter((item: any) => item._id !== selectedPost?._id)
+            );
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setSelectedPost(null);
+            setIsPostSettingOpen(false);
+            setIsPostOpen(false);
+        }
+    }
+
     return <>
         <div
             className={`overlay opacity-0 transition-all z-[200] duration-500 ${!isPostSettingOpen ? "pointer-events-none" : "opacity-100"
@@ -56,13 +90,13 @@ export const PostSettings: React.FC<PostSettingsProps> = ({ isPostSettingOpen, s
         >
             {isMyPost && (
                 <>
-                    <button className="text-red-600 w-full p-3 xl:text-[14px] text-[10px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]" onClick={() => deletePost(userData, setMessage, setUserData, setUserPosts, selectedPost, setSelectedPost, setIsPostSettingOpen, setIsPostOpen)}>Delete
+                    <button className="text-red-600 w-full p-3 xl:text-[14px] text-[10px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]" onClick={deletePost}>Delete
                     </button>
                     <button className="w-full p-3 border-b-[1px] xl:text-[14px] text-[10px] active:opacity-70 font-semibold border-[#363636]" onClick={() => {
                         if (innerWidth > 770) {
                             setIsEditingOpen(true);
                         } else {
-                            setCroppedImages(selectedPost?.imageUrls)
+                            setCroppedImages(selectedPost.imageUrls)
                             navigate("/edit/details/")
                         }
                         setIsPostSettingOpen(false);
@@ -88,9 +122,9 @@ export const PostSettings: React.FC<PostSettingsProps> = ({ isPostSettingOpen, s
                 } border-y-[1px] border-[#363636]`}
         >
             <div className={`bg-[#262626] xl:w-[70vw] w-[85vw] h-[92vh] transition-all duration-300 flex flex-col opacity-0 ${isEditingOpen ? "opacity-100" : "pointer-events-none"}`}>
-                <EditPost croppedImage={selectedPost !== null ? selectedPost.imageUrls : []} handleIncrease={handleIncrease} handleDecrease={handleDecrease} isCaption={isEditingOpen} userData={userData} />
+                <EditPost croppedImage={selectedPost !== null ? selectedPost.imageUrls : []} handleIncrease={handleIncrease} handleDecrease={handleDecrease} />
             </div>
-            <button className="text-[#0095F6] absolute z-[200] -top-7 right-0 hover:text-white text-[15px]" onClick={() => updatePost(setShareLoading, setIsShared, setIsEditingOpen, userData, captionValue, selectedPost, setMessage, navigate, setCaptionValue)}>Update</button>
+            <button className="text-[#0095F6] absolute z-[200] -top-7 right-0 hover:text-white text-[15px]" onClick={() => updatePost(setIsEditingOpen)}>Update</button>
         </div>
         <div
             className={`overlay opacity-0 transition-all z-[150] backdrop-blur-sm duration-500 ${!isShared ? "pointer-events-none" : "opacity-100"

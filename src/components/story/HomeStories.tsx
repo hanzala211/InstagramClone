@@ -2,10 +2,12 @@ import { Link } from "react-router-dom";
 import { Carousel, CarouselContent, CarouselNext, CarouselPrevious } from "../ui/carousel"
 import { useHome } from "../../context/HomeContext";
 import { useSearch } from "../../context/SearchContext";
+import { useAuth } from "../../context/AuthContext";
 
 export const HomeStories = () => {
     const { homeStories } = useHome()
-    const { setSearchUserStatus, setSelectedProfile } = useSearch()
+    const { setSearchUserStatus } = useSearch()
+    const { setSelectedProfile } = useAuth()
 
     return <div className="w-full lg:max-w-[45%] max-w-[100%] px-1 border-b-[2px] border-[#363636] md:border-[0] pb-2 mt-[3.8rem] md:mt-5 mx-auto relative">
         <Carousel>

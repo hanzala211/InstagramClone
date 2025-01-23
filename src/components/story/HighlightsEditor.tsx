@@ -4,8 +4,9 @@ import { useEffect, useState } from "react"
 import { IoCloseSharp } from "react-icons/io5"
 import { SelectedHighLights } from "./SelectedHighLights"
 import { ArchivesModal } from "../archives/ArchivesModal"
-import { deleteHighlight } from "../../services/story"
 import { ProfileStories } from "../../types/stories"
+import { useAuth } from "../../context/AuthContext"
+import { highlightDelete } from "../../services/story"
 
 interface HighlightsEditorProps {
     highLightsModal: boolean;
@@ -13,7 +14,8 @@ interface HighlightsEditorProps {
 }
 
 export const HighlightsEditor: React.FC<HighlightsEditorProps> = ({ highLightsModal, setHighLightsModal }) => {
-    const { currentHighLight, setCurrentHighLight, highlights, userData, setHighlights } = useUser()
+    const { currentHighLight, setCurrentHighLight, highlights, setHighlights } = useUser()
+    const { token } = useAuth()
     const [isEditing, setIsEditing] = useState<boolean>(false)
     const [selectStatus, setSelectStatus] = useState<boolean>(false)
     const [highlightName, setHighlightName] = useState<string>("")
@@ -49,14 +51,27 @@ export const HighlightsEditor: React.FC<HighlightsEditorProps> = ({ highLightsMo
         return `${month} `
     }
 
+    const deleteHighlight = async () => {
+        try {
+            const res = await highlightDelete({ token, highlights, currentHighLight })
+            setHighlights((prev: any) => prev.filter((item: any) => item._id !== highlights[currentHighLight]._id))
+            navigate(-1);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setHighLightsModal(false);
+            setCurrentHighLight(0);
+        }
+    }
+
     return <>
         <div
             className={`overlay opacity-0 z-[50] transition-all duration-500 ${!highLightsModal && !isEditing ? "pointer-events-none" : "opacity-100"
                 }`}
-            onClick={() => handleClose()}
+            onClick={handleClose}
         ></div>
         <div className={`bg-[#262626] w-[22rem] rounded-2xl h-[8.5rem] fixed z-[1000] opacity-0 transition duration-300 inset-0 top-1/2 -translate-y-1/2 left-[52%] -translate-x-1/2 ${highLightsModal && !isEditing ? "opacity-100" : "pointer-events-none"}`}>
-            <button className="text-red-600 w-full p-3 text-[14px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]" onClick={() => deleteHighlight(highlights, currentHighLight, userData, setHighLightsModal, setCurrentHighLight, navigate, setHighlights)} >Delete</button>
+            <button className="text-red-600 w-full p-3 text-[14px] active:opacity-70 font-semibold border-b-[1px] border-[#363636]" onClick={deleteHighlight} >Delete</button>
             <button className="w-full p-3 border-b-[1px] text-[14px] active:opacity-70 font-semibold border-[#363636]" onClick={() => {
                 setIsEditing(true)
             }}>Edit</button>

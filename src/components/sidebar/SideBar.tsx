@@ -1,7 +1,6 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { ActiveChatIcon, ActiveExplore, ActiveHome, ChatIcon, CreateIcon, ExploreIcon, HomeIcon, InstagramSvg, MoreIcon, SearchIcon } from "../../assets/Constants";
 import { useEffect, useRef, useState } from "react";
-import { useUser } from "../../context/UserContext";
 import { SearchBox } from "./SearchBox"
 import { CreatePost } from "../post/CreatePosts";
 import { FaHistory } from "react-icons/fa";
@@ -11,11 +10,12 @@ import { LogOutDiv } from "../profile/LogOutDiv";
 import { useSearch } from "../../context/SearchContext";
 import { useSideBar } from "../../context/SideBarContext";
 import { SideBarItemsType } from "../../types/sideBarTypes";
+import { useAuth } from "../../context/AuthContext";
 
 export const SideBar = () => {
     const { isSearching, setIsSearching, isCreating, setIsCreating, createStory, setCreateStory } = useSideBar();
     const { setSearchQuery, setSearchData } = useSearch();
-    const { userData } = useUser();
+    const { userData } = useAuth();
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const checkref = useRef<HTMLDivElement>(null);
     const searchRef = useRef<HTMLInputElement>(null);
@@ -71,8 +71,8 @@ export const SideBar = () => {
         {
             text: "Profile",
             isImg: true,
-            profileImg: userData.data.user.profilePic,
-            to: `/${userData.data.user.userName}/`
+            profileImg: userData?.data.user.profilePic,
+            to: `/${userData?.data.user.userName}/`
         }
     ]
 

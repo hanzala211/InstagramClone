@@ -4,20 +4,20 @@ import { ActiveChatInfoSVG, ChatInfoSVG, EmojiIcon, ShareIcon } from "../../asse
 import { useEffect, useRef, useState } from "react";
 import { useChat } from "../../context/ChatContext";
 import { useUser } from "../../context/UserContext";
-import { fetchUserDataOnClick } from "../../services/searchProfile";
 import { deleteMessageAndUpdateThread, handleSendMessage } from "../../services/chat";
 import { Loader } from "../helpers/Loader";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { Post } from "../post/Post";
 import { usePost } from "../../context/PostContext";
 import { UserChatInfo } from "./UserChatInfo";
-import { useSearch } from "../../context/SearchContext";
+import { getDataOnClick } from "../../services/searchProfile";
+import { useAuth } from "../../context/AuthContext";
 
 export const UserChat: React.FC = () => {
     const { selectedChat, messages, setMessages, messagesLoading, isInfoOpen, setIsInfoOpen } = useChat()
-    const { userData, setMainLoading, innerWidth } = useUser()
+    const { innerWidth } = useUser()
+    const { userData, setMainLoading, token, setSelectedProfile } = useAuth()
     const { setSelectedPost, selectedPost } = usePost()
-    const { setSelectedProfile } = useSearch()
     const [isPostOpen, setIsPostOpen] = useState<boolean>(false)
     const [currentPost, setCurrentPost] = useState<number | any>(0)
     const [isPickingEmoji, setIsPickingEmoji] = useState<boolean>(false)
@@ -84,14 +84,32 @@ export const UserChat: React.FC = () => {
 
     const handleBlur = () => {
         setIsKeyboardOpen(false);
-    };
+    }
+
+    const fetchUserDataOnClick = async () => {
+        try {
+            setMainLoading(true);
+            const res = await getDataOnClick({
+                username: selectedChat?.userName,
+                token
+            })
+            setSelectedProfile(res.data[0]);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setTimeout(() => {
+                setMainLoading(false);
+            }, 1000);
+        }
+    }
+
 
     return <>
         <div className={`mt-12 md:mt-0 transition-[width] duration-200 ${isInfoOpen ? "w-0" : "w-[100%] "} md:w-[80%]  bg-[#000] overflow-hidden flex`}>
             <div className={`${isInfoOpen ? "w-[80%] lg:w-full" : " w-full"}`}>
                 <div className="py-2 px-4 border-b-[2px] md:flex justify-between items-center hidden border-[#262626]">
                     <Link to={`/search/${selectedChat?.userName}/`} onClick={() => {
-                        fetchUserDataOnClick(selectedChat?.userName, userData, null, setSelectedProfile, setMainLoading)
+                        fetchUserDataOnClick()
                         setMainLoading(true)
                     }} className="flex items-center gap-3">
                         <img src={selectedChat?.profilePic} className="w-12 rounded-full" alt="Profile Image" />

@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useUser } from "../../context/UserContext";
 import { Skeleton } from "../helpers/Skeleton";
 import { UserModal } from "../usermodals/UserModal";
 import { useLocation } from "react-router-dom";
-import { fetchSearch } from "../../services/search";
+import { getSearch } from "../../services/search";
 import { useSearch } from "../../context/SearchContext";
+import { useAuth } from "../../context/AuthContext";
 
-interface SearchBoxProps{
+interface SearchBoxProps {
     refere?: any;
     isSearching?: boolean;
 }
 
-export const SearchBox: React.FC<SearchBoxProps> = ({ refere, isSearching }) => { 
-    const { userData } = useUser();
-    const { searchQuery, setSearchQuery, searchData, setSearchData, setSelectedProfile } = useSearch();
-    const [searchLoading, setSearchLoading] = useState<boolean>(false);
+export const SearchBox: React.FC<SearchBoxProps> = ({ refere, isSearching }) => {
+    const { userData, setSelectedProfile, token } = useAuth();
+    const { searchQuery, setSearchQuery, searchData, setSearchData, fetchSearch, searchLoading, setSearchLoading } = useSearch();
     const location = useLocation();
 
     useEffect(() => {
@@ -22,7 +21,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ refere, isSearching }) => 
         const signal = abortController.signal;
         if (searchQuery) {
             setSearchLoading(true);
-            fetchSearch(signal, setSearchData, searchQuery, userData, setSearchLoading);
+            fetchSearch(signal, searchQuery, token);
         } else {
             setSearchLoading(false);
             setSearchData([]);

@@ -1,9 +1,9 @@
 import { MobilePostIcon, MobileSaveIcon, MobileTagIcon } from "../../assets/Constants";
 import { ProfileNavLink } from "./ProfileNavLink";
-import { useUser } from "../../context/UserContext";
+import { useAuth } from "../../context/AuthContext";
 
 export const MobileProfileBar = () => {
-    const { userData } = useUser()
+    const { userData } = useAuth()
 
     return <div className="md:hidden flex border-b-[1px] border-[#262626] flex-row justify-evenly gap-2 md:gap-12 mt-0">
         <ProfileNavLink

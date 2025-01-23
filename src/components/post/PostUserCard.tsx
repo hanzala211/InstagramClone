@@ -1,10 +1,10 @@
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card"
 import { Link, useNavigate } from "react-router-dom"
-import { useUser } from "../../context/UserContext"
 import { MoreSVG } from "../../assets/Constants"
 import { UserHoverModal } from "../usermodals/UserHoverModal"
 import { PostUserData } from "../../types/postType"
 import { UserInfo } from "../../types/user"
+import { useAuth } from "../../context/AuthContext"
 
 interface PostUserCardProps {
     postData: PostUserData | UserInfo;
@@ -15,7 +15,7 @@ interface PostUserCardProps {
 }
 
 export const PostUserCard: React.FC<PostUserCardProps> = ({ postData, setIsHovered, handleClick, isHovered, setIsPostSettingOpen }) => {
-    const { userData } = useUser()
+    const { userData } = useAuth()
     const navigate = useNavigate()
 
     return <>

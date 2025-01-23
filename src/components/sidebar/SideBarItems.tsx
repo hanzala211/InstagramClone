@@ -2,8 +2,8 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useChat } from "../../context/ChatContext";
 import { SideBarItemsType } from "../../types/sideBarTypes";
 
-interface SideBarItemsProps{
-    item: SideBarItemsType;
+interface SideBarItemsProps {
+    item: any;
     isSearching?: boolean
 }
 
@@ -11,7 +11,7 @@ export const SideBarItems: React.FC<SideBarItemsProps> = ({ item, isSearching })
     const { notifications } = useChat();
     const location = useLocation();
 
-    const isActiveClass = (isActive) => {
+    const isActiveClass = (isActive: any) => {
         if (isActive) {
             if (["Home", "Profile", "Explore"].includes(item.text)) {
                 return "font-bold";

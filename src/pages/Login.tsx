@@ -1,22 +1,17 @@
 import { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { imagesArr } from "../assets/Constants";
 import { Footer } from "../components/helpers/Footer";
-import { useUser } from "../context/UserContext";
 import { Loader } from "../components/helpers/Loader";
 import { LoadingPage } from "./LoadingPage";
-import { fetchUser } from "../services/userAuth";
 import { InputLabel } from "../components/helpers/InputLabel";
 import { FormType } from "../types/authType";
+import { useAuth } from "../context/AuthContext";
 
 export const Login: React.FC = () => {
-    const { setMainLoading, setUserData, userData, mainLoading } = useUser();
-    const [userValue, setUserValue] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
+    const { setMainLoading, userData, mainLoading, userValue, setUserValue, password, setPassword, loading, fetchLogin } = useAuth();
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(false)
-    const navigate = useNavigate();
 
     useEffect(() => {
         setTimeout(() => {
@@ -35,6 +30,11 @@ export const Login: React.FC = () => {
 
         return () => clearInterval(interval);
     }, [imagesArr.length]);
+
+    const handleClick = () => {
+        setUserValue("")
+        setPassword("")
+    }
 
     const loginForm: FormType[] = [
         {
@@ -68,9 +68,7 @@ export const Login: React.FC = () => {
                                         {loginForm.map((item, index) => (
                                             <InputLabel key={index} onChange={item.onChange} value={item.value} text={item.text} type={item.type} />
                                         ))}
-                                        <Link to={userData?.status === "success" ? "/home" : "#"} className="text-center bg-[#0069AD] text-[14px] py-2 rounded-lg mt-3 opacity-90" onClick={() => {
-                                            fetchUser(userValue, password, setLoading, setUserData, setUserValue, setPassword, setMainLoading, navigate);
-                                        }}>Log in</Link>
+                                        <Link onClick={fetchLogin} to={userData?.status === "success" ? "/home" : "#"} className="text-center bg-[#0069AD] text-[14px] py-2 rounded-lg mt-3 opacity-90">Log in</Link>
                                     </div>
                                     <div className="relative">
                                         <h2 className="absolute z-[20] left-1/2 -translate-x-1/2 -top-[2.8rem] bg-[#000] p-3 text-[13px] rounded-full text-[#A8A8A8]">OR</h2>
@@ -81,7 +79,7 @@ export const Login: React.FC = () => {
                             </div>
                             <div className="flex items-center justify-center border-[2px] border-[#363636] py-6 lg:w-[23.7rem] w-[22rem] gap-1">
                                 <p>Don't have an account?</p>
-                                <Link to="/signup" className="text-[#3897F1]">Sign up</Link>
+                                <Link to="/signup" onClick={handleClick} className="text-[#3897F1]">Sign up</Link>
                             </div>
                             <p>Get the app.</p>
                             <div className="flex gap-2">
@@ -89,8 +87,8 @@ export const Login: React.FC = () => {
                                 <img src="/images/microsoft.png" alt="Get on Microsoft" className="w-32 h-11 rounded-[2px]" />
                             </div>
                         </div>
-                    </section>
-                    <Footer /></div>
+                    </section >
+                    <Footer /></div >
                 : <LoadingPage />}
         </>
     );

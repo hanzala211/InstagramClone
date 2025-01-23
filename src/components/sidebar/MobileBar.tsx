@@ -1,15 +1,15 @@
 import { FaHistory } from "react-icons/fa"
 import { ActiveExplore, ActiveHome, CreateIcon, ExploreIcon, HomeIcon } from "../../assets/Constants"
-import { useUser } from "../../context/UserContext"
 import { NavLink } from "react-router-dom"
 import { handleClickForStory, handleFile } from "../../utils/helper"
 import { usePost } from "../../context/PostContext"
 import { useStories } from "../../context/StoriesContext"
+import { useAuth } from "../../context/AuthContext"
 
 export const MobileBar = () => {
     const { fileInputRef: fileStoriesRef } = useStories()
     const { fileInputRef } = usePost()
-    const { userData } = useUser()
+    const { userData } = useAuth()
 
     const sideBarItems = [
         {
@@ -31,8 +31,8 @@ export const MobileBar = () => {
             onClick: () => handleClickForStory(fileStoriesRef)
         }, {
             isImg: true,
-            profileImg: userData.data.user.profilePic,
-            to: `/${userData.data.user.userName}/`
+            profileImg: userData?.data.user.profilePic,
+            to: `/${userData?.data.user.userName}/`
         }
     ]
 

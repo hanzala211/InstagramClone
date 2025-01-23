@@ -8,24 +8,25 @@ import { HighLights } from "../components/story/Highlights"
 import { LoadingPage } from "./LoadingPage";
 import { UserFollowDetails } from "../components/usermodals/UserFollowDetails";
 import { NoteDiv } from "../components/note/NoteDiv";
-import { followUser, unfollowUser, fetchPosts, fetchUserDataOnClick } from "../services/searchProfile";
+import { follow, getDataOnClick } from "../services/searchProfile";
 import { useChat } from "../context/ChatContext";
 import { useSearch } from "../context/SearchContext";
 import { FollowButton } from "../components/profile/FollowButtons";
 import { ProfileNavLink } from "../components/profile/ProfileNavLink";
 import { Post } from "../types/postType";
 import { Note } from "../types/note";
+import { useAuth } from "../context/AuthContext";
 
-interface PostObj{
+interface PostObj {
     message: string;
     post: Post;
 }
 
 export function SearchProfile() {
-    const { setSearchUserPosts, selectedProfile, searchUserStatus, setSearchUserStatus, searchUserHighLights, setSearchUserHighLights, setSelectedProfile } = useSearch();
+    const { setSearchUserPosts, searchUserStatus, setSearchUserStatus, searchUserHighLights, setSearchUserHighLights, postsLoading, setPostsLoading, fetchPosts } = useSearch();
     const { setSelectedChat } = useChat()
-    const { userData, setUserData, setHighLightStories, setCurrentHighLight, setCurrentStory, mainLoading, setMessage, setMainLoading } = useUser()
-    const [postsLoading, setPostsLoading] = useState<boolean>(false);
+    const { setHighLightStories, setCurrentHighLight, setCurrentStory, setMessage } = useUser()
+    const { userData, setUserData, mainLoading, setMainLoading, token, setSelectedProfile, selectedProfile } = useAuth()
     const [isFollowed, setIsFollowed] = useState<boolean>(false);
     const [searchUserNotes, setSearchUserNotes] = useState<Note[] | string[]>([])
     const [isDisabled, setIsDisabled] = useState<boolean>(false)
@@ -39,19 +40,6 @@ export function SearchProfile() {
     }, [params.username, userData?.data.user.userName, navigate])
 
     useEffect(() => {
-        if (selectedProfile?.followersCount === undefined) {
-            console.log("TEST")
-            fetchUserDataOnClick(
-                selectedProfile?.userName,
-                userData,
-                null,
-                setSelectedProfile,
-                setMainLoading
-            );
-        }
-    }, [selectedProfile])
-
-    useEffect(() => {
         if (userData?.data?.user?.following && selectedProfile?._id) {
             setIsFollowed(userData.data.user.following.includes(selectedProfile._id));
         }
@@ -63,19 +51,84 @@ export function SearchProfile() {
     useEffect(() => {
         if (selectedProfile?.posts && selectedProfile.posts.length > 0) {
             Promise.all(
-                selectedProfile.posts.map((item: string) => 
-                    fetchPosts(item, setPostsLoading, userData)
+                selectedProfile.posts.map((item: string) =>
+                    fetchPosts(item)
                 )
             )
-            .then((res: PostObj[]) => {
-                setSearchUserPosts(res.map((item) => item?.post));
-            })
-            .finally(() => setPostsLoading(false));
+                .then((res: PostObj[]) => {
+                    setSearchUserPosts(res.map((item) => item?.post));
+                })
+                .finally(() => setPostsLoading(false));
         } else {
             setSearchUserPosts([]);
             setPostsLoading(false);
         }
     }, [selectedProfile?.posts, userData?.data.token]);
+
+    const followUser = async () => {
+        try {
+            setUserData((prev: any) => ({
+                ...prev,
+                data: {
+                    ...prev.data,
+                    user: {
+                        ...prev.data.user,
+                        following: [...prev.data.user.following, selectedProfile?._id],
+                        followingCount: prev.data.user.followingCount + 1,
+                    },
+                },
+            }));
+            setIsDisabled(true);
+            setSelectedProfile((prev: any) => ({
+                ...prev,
+                followersCount: prev.followersCount + 1,
+            }));
+            setIsDisabled(true);
+            const res = await follow({
+                selectedProfile,
+                token
+            })
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setIsDisabled(false);
+            setMessage('User Followed Successfully');
+        }
+    }
+
+    const unFollowUser = async () => {
+        try {
+            setUserData((prev: any) => ({
+                ...prev,
+                data: {
+                    ...prev.data,
+                    user: {
+                        ...prev.data.user,
+                        following: [
+                            prev.data.user.following.filter(
+                                (item: string) => item !== selectedProfile?._id
+                            ),
+                        ],
+                        followingCount: prev.data.user.followingCount - 1,
+                    },
+                },
+            }));
+            setIsDisabled(true);
+            setSelectedProfile((prev: any) => ({
+                ...prev,
+                followersCount: prev.followersCount - 1,
+            }));
+            const res = await follow({
+                selectedProfile,
+                token
+            })
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setIsDisabled(false);
+            setMessage('User UnFollowed Successfully');
+        }
+    }
 
     return <>
         {!mainLoading ?
@@ -85,22 +138,22 @@ export function SearchProfile() {
                         {searchUserNotes.length > 0 &&
                             <NoteDiv notes={searchUserNotes[0]} />
                         }
-                        <Link to={searchUserStatus.length > 0 ? `/search/stories/${selectedProfile.userName}/${searchUserStatus[0]._id}/` : ""}
+                        <Link to={searchUserStatus.length > 0 ? `/search/stories/${selectedProfile?.userName}/${searchUserStatus[0]._id}/` : ""}
                             className={`p-2 ${searchUserStatus.length > 0 ? "relative rounded-full multicolor-border" : ""} h-[5.9rem] sm:h-32 md:h-auto flex justify-center items-center`}
                             onClick={() => setCurrentStory(0)}>
-                            <img src={selectedProfile.profilePic} alt="User Profile" className="rounded-full w-[5rem] h-full sm:w-28 lg:w-40 lg:min-w-[10rem] min-w-[5rem] sm:h-28 lg:h-40 object-cover" />
+                            <img src={selectedProfile?.profilePic} alt="User Profile" className="rounded-full w-[5rem] h-full sm:w-28 lg:w-40 lg:min-w-[10rem] min-w-[5rem] sm:h-28 lg:h-40 object-cover" />
                         </Link>
                         <div className="flex flex-col gap-2 sm:gap-5 mt-2 xl:mt-0">
                             <div className="flex md:flex-row flex-col gap-3 sm:gap-6 md:items-center">
                                 <button className="text-[20px] flex items-center gap-1">
                                     {selectedProfile?.userName}
-                                    {selectedProfile.followers.length > 10 && <MdVerified className="fill-[#0095F6]" />}
+                                    {selectedProfile?.followers.length > 10 && <MdVerified className="fill-[#0095F6]" />}
                                 </button>
                                 <div className="flex gap-3">
                                     <FollowButton
                                         isFollowed={isFollowed}
                                         isDisabled={isDisabled}
-                                        onClick={isFollowed ? () => unfollowUser(setUserData, selectedProfile, setIsDisabled, setSelectedProfile, userData, setMessage) : () => followUser(setUserData, selectedProfile, setIsDisabled, setSelectedProfile, setMessage, userData)}
+                                        onClick={isFollowed ? () => unFollowUser() : () => followUser()}
                                     />
                                     <button onClick={() => {
                                         setSelectedChat(selectedProfile)
@@ -112,8 +165,8 @@ export function SearchProfile() {
                                 <UserFollowDetails isSearchProfile={true} />
                             </div>
                             <div className="relative -left-[5.5rem] top-3 sm:left-0 sm:top-0">
-                                <p className="font-semibold text-[14px]">{selectedProfile.fullName}</p>
-                                <p className="font-semibold text-[14px] text-[#a8a8a8] w-[250px] break-words">{selectedProfile.bio}</p>
+                                <p className="font-semibold text-[14px]">{selectedProfile?.fullName}</p>
+                                <p className="font-semibold text-[14px] text-[#a8a8a8] w-[250px] break-words">{selectedProfile?.bio}</p>
                             </div>
                         </div>
                     </div>
@@ -135,7 +188,7 @@ export function SearchProfile() {
                 <ProfileNavLink
                     icon={innerWidth > 770 ? PostsIcon : MobilePostIcon}
                     label={innerWidth > 770 ? "POSTS" : ""}
-                    to={`/search/${selectedProfile.userName}/`}
+                    to={`/search/${selectedProfile?.userName}/`}
                 />
                 <div className="md:mt-[4rem] mt-6">
                     {!postsLoading ? <Outlet /> : <Loader height="h-[34vh]" />}

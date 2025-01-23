@@ -1,22 +1,22 @@
-import { useSearch } from "../../context/SearchContext";
+import { useAuth } from "../../context/AuthContext";
 import { useUser } from "../../context/UserContext";
 import { formatNumber } from "../../utils/helper";
 
 export const UserFollowDetails = ({ isSearchProfile }: { isSearchProfile: boolean }) => {
-    const { setIsFollowerModalOpen, setIsFollowingModalOpen, userData } = useUser();
-    const { selectedProfile } = useSearch()
+    const { setIsFollowerModalOpen, setIsFollowingModalOpen } = useUser();
+    const { userData, selectedProfile } = useAuth()
 
     return <>
-        <p className="flex md:flex-row md:gap-1.5 flex-col items-center md:items-start gap-0.5 w-[33%] md:w-auto"><span className="font-semibold">{formatNumber(!isSearchProfile ? userData.data.user.postCount : selectedProfile.postCount)}</span><span className="text-[13px] text-[#a8a8a8] md:text-[16px] md:text-white">posts</span></p>
+        <p className="flex md:flex-row md:gap-1.5 flex-col items-center md:items-start gap-0.5 w-[33%] md:w-auto"><span className="font-semibold">{formatNumber(!isSearchProfile ? userData.data.user.postCount : selectedProfile?.postCount)}</span><span className="text-[13px] text-[#a8a8a8] md:text-[16px] md:text-white">posts</span></p>
         <button onClick={() => {
             if (!isSearchProfile) {
                 setIsFollowerModalOpen(true)
             }
-        }} className="flex md:flex-row md:gap-1.5 flex-col items-center md:items-start gap-0.5 w-[33%] md:w-auto"><span className="font-semibold">{formatNumber(!isSearchProfile ? userData.data.user.followersCount : selectedProfile.followersCount)}</span><span className="text-[13px] text-[#a8a8a8] md:text-[16px] md:text-white">followers</span></button>
+        }} className="flex md:flex-row md:gap-1.5 flex-col items-center md:items-start gap-0.5 w-[33%] md:w-auto"><span className="font-semibold">{formatNumber(!isSearchProfile ? userData.data.user.followersCount : selectedProfile?.followersCount)}</span><span className="text-[13px] text-[#a8a8a8] md:text-[16px] md:text-white">followers</span></button>
         <button onClick={() => {
             if (!isSearchProfile) {
                 setIsFollowingModalOpen(true)
             }
-        }} className="flex md:flex-row md:gap-1.5 flex-col items-center md:items-start gap-0.5 w-[33%] md:w-auto"><span className="font-semibold">{formatNumber(!isSearchProfile ? userData.data.user.followingCount : selectedProfile.followingCount)}</span><span className="text-[13px] text-[#a8a8a8] md:text-[16px] md:text-white">following</span></button>
+        }} className="flex md:flex-row md:gap-1.5 flex-col items-center md:items-start gap-0.5 w-[33%] md:w-auto"><span className="font-semibold">{formatNumber(!isSearchProfile ? userData.data.user.followingCount : selectedProfile?.followingCount)}</span><span className="text-[13px] text-[#a8a8a8] md:text-[16px] md:text-white">following</span></button>
     </>
 }

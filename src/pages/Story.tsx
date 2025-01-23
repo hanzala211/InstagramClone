@@ -9,6 +9,7 @@ import { HighlightsEditor } from "../components/story/HighlightsEditor";
 import { formatDate } from "../utils/helper";
 import { useSearch } from "../context/SearchContext";
 import { StoryBar } from "../components/story/StoryBar";
+import { useAuth } from "../context/AuthContext";
 
 interface StoryPropTypes {
     isArchive?: boolean;
@@ -25,8 +26,9 @@ interface SoryBarType {
 }
 
 export const Story: React.FC<StoryPropTypes> = ({ isArchive, isOwnProfile, isHighLight, isSearchUser, isSearchHighLight }) => {
-    const { stories, userData, archives, setCurrentStory, currentStory, highLightStories } = useUser();
-    const { searchUserStatus, selectedProfile, searchUserHighLights } = useSearch()
+    const { stories, archives, setCurrentStory, currentStory, highLightStories } = useUser();
+    const { userData, selectedProfile } = useAuth()
+    const { searchUserStatus, searchUserHighLights } = useSearch()
     const [highLightsModal, setHighLightsModal] = useState<boolean>(false)
     const navigate = useNavigate();
 

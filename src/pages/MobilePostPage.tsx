@@ -3,16 +3,14 @@ import { PageHeader } from "../components/sidebar/PageHeader";
 import { usePost } from "../context/PostContext";
 import { Post } from "../components/post/Post";
 import { useLocation } from "react-router-dom";
-import { fetchPost } from "../services/post";
-import { useUser } from "../context/UserContext";
-import { Loader } from "../components/helpers/Loader";
-import { useHome } from "../context/HomeContext";
 import { HomePostSkeleton } from "../components/helpers/HomePostSkeleton";
+import { useAuth } from "../context/AuthContext";
+import { getPost } from "../services/searchProfile";
 
 
 export const MobilePostPage: React.FC = () => {
     const { selectedPost, setSelectedPost } = usePost()
-    const { userData } = useUser()
+    const { token } = useAuth()
     const [isPostOpen, setIsPostOpen] = useState<boolean>(true)
     const [currentPost, setCurrentPost] = useState<number | any>(0)
     const [isPostLoading, setIsPostLoading] = useState<boolean>(false)
@@ -22,9 +20,23 @@ export const MobilePostPage: React.FC = () => {
     useEffect(() => {
         if (selectedPost === null) {
             setIsPostLoading(true)
-            fetchPost(location.pathname.split('/p/')[1].split('/')[0], userData, setSelectedPost, setIsPostLoading)
+            fetchPost()
         }
     }, [selectedPost])
+
+    async function fetchPost() {
+        try {
+            const res = await getPost({
+                postID: location.pathname.split('/p/')[1].split('/')[0],
+                token
+            });
+            setSelectedPost(res.post);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsPostLoading(false);
+        }
+    }
 
     return <section className="w-full min-h-screen">
         <PageHeader isArrowNeeded={true} />

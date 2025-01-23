@@ -1,255 +1,156 @@
-import { NavigateFunction } from "react-router-dom";
-import { User } from "../types/user";
-import { ProfileStories } from "../types/stories";
-import { Highlights } from "../types/highlightsType";
+import { sendRequest } from "../utils/sendRequest";
 
-export async function uploadStory(
-	result: string,
-	userData: User,
-	setUploaded: (value: boolean) => void,
-	innerWidth: number,
-	navigate: NavigateFunction,
-	setSelectedImage: (value: string | null) => void,
-	setIsUploading: (value: boolean) => void
-): Promise<void> {
+export const storyUpload = async (data: any) => {
 	const formdata = new FormData();
-	const blobImage = await fetch(result).then((req) => req.blob());
+	const blobImage = await fetch(data.images).then((req) => req.blob());
 	formdata.append('image', blobImage, 'storyImage.jpg');
 	try {
-		setIsUploading(true);
-		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/story`,
-			{
-				method: 'POST',
+		const res = await sendRequest({
+			baseUrl: `${import.meta.env.VITE_APP_URL}`,
+			endPoint: '/story',
+			configs: {
+				method: "POST",
 				headers: {
-					Authorization: `${userData.data.token}`,
+					"Authorization": data.token,
 				},
-				body: formdata,
-				redirect: 'follow',
+				body: formdata
 			}
-		);
-		const resultAwait = await response.json();
-		if (
-			resultAwait.message === 'Story created successfully.' &&
-			innerWidth < 770
-		) {
-			navigate('/home');
-			setSelectedImage(null);
-			setIsUploading(false);
-		}
+		})
+		return res;
 	} catch (error) {
-		console.error(error);
-	} finally {
-		setUploaded(true);
+		console.error(error)
 	}
 }
 
-export async function createHighLight(
-	setSendLoading: (value: boolean) => void,
-	userData: User,
-	highlightName: string,
-	selectedIDs: ProfileStories[],
-	currentID: number,
-	handleClose: () => void,
-	setMessage: (value: string) => void,
-	setHighlights: (value: Highlights[]) => void
-) {
+export const highlightCreate = async (data: any) => {
+	const raw = JSON.stringify(data)
 	try {
-		setSendLoading(true);
-		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/highlights`,
-			{
-				method: 'POST',
+		const res = await sendRequest({
+			baseUrl: `${import.meta.env.VITE_APP_URL}`,
+			endPoint: '/highlights',
+			configs: {
+				method: "POST",
 				headers: {
-					Authorization: `${userData.data.token}`,
+					"Authorization": data.token,
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify({
-					name: highlightName,
-				}),
-				redirect: 'follow',
+				body: raw
 			}
-		);
-		const result = await response.json();
-		if (result.message === 'Highlight created successfully.') {
-			async function sendStories(storyID: string) {
-				const addStory = await fetch(
-					`${import.meta.env.VITE_APP_URL}api/v1/highlights/${result.highlight._id
-					}/add`,
-					{
-						method: 'POST',
-						headers: {
-							Authorization: `${userData.data.token}`,
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({
-							storyId: storyID,
-						}),
-						redirect: 'follow',
-					}
-				);
-				return await addStory.json();
-			}
-			await Promise.all(selectedIDs.map((item) => sendStories(item._id)));
-			await postProfile(selectedIDs, currentID, result, userData, setMessage, setHighlights);
-		}
+		})
+		await Promise.all(data.selectedIDs.map((item: any) => sendStoriesToHighlight({ storyId: item._id }, res)));
+		const result = await postHighlightsProfile(data, res)
+		return result;
 	} catch (error) {
-		console.error(error);
-	} finally {
-		setSendLoading(false);
-		handleClose();
+		console.error(error)
 	}
 }
-export async function deleteHighlight(
-	highlights: Highlights[],
-	currentHighLight: number,
-	userData: User,
-	setHighLightsModal: (value: boolean) => void,
-	setCurrentHighLight: (value: number) => void,
-	navigate: NavigateFunction,
-	setHighlights: (value: any) => void
-) {
+
+export const sendStoriesToHighlight = async (data: any, result: any) => {
+	const raw = JSON.stringify(data)
 	try {
-		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/highlights/${highlights[currentHighLight]._id
-			}`,
-			{
-				method: 'DELETE',
+		const res = await sendRequest({
+			baseUrl: `${import.meta.env.VITE_APP_URL}`,
+			endPoint: `/highlights/${result.highlight._id}/add`,
+			configs: {
+				method: "POST",
 				headers: {
-					Authorization: `${userData.data.token}`,
+					"Authorization": data.token,
 					'Content-Type': 'application/json',
 				},
-				redirect: 'follow',
+				body: raw
 			}
-		);
-		const result = await response.json();
-		setHighlights((prev: any) => prev.filter((item: any) => item._id !== highlights[currentHighLight]._id))
-		navigate(-1);
+		})
+		return res;
 	} catch (error) {
-		console.error(error);
-	} finally {
-		setHighLightsModal(false);
-		setCurrentHighLight(0);
+		console.error(error)
 	}
 }
 
-export async function editHighLight(
-	setSendLoading: (value: boolean) => void,
-	highlights: Highlights[],
-	currentHighLight: number,
-	userData: User,
-	highLightStories: ProfileStories[],
-	highlightName: string,
-	selectedIDs: ProfileStories[],
-	currentID: number,
-	handleClose: () => void,
-	navigate: NavigateFunction,
-	setMessage: (value: string) => void,
-	setHighlights: (value: any) => void
-) {
-	async function removeHighLights(storyID: string) {
-		try {
-			setSendLoading(true);
-			const removeHighlight = await fetch(
-				`${import.meta.env.VITE_APP_URL}api/v1/highlights/${highlights[currentHighLight]._id
-				}/remove`,
-				{
-					method: 'PUT',
-					headers: {
-						Authorization: `${userData.data.token}`,
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						storyId: storyID,
-					}),
-					redirect: 'follow',
-				}
-			);
-			const highlightResult = await removeHighlight.json();
-		} catch (error) {
-			console.error(error);
-		}
-	}
-
-	Promise.all(highLightStories.map((item) => removeHighLights(item._id)));
-
-	try {
-		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/highlights/${highlights[currentHighLight]._id
-			}`,
-			{
-				method: 'PUT',
-				headers: {
-					Authorization: `${userData.data.token}`,
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					name: highlightName,
-				}),
-				redirect: 'follow',
-			}
-		);
-		const result = await response.json();
-		async function sendStories(storyID: string) {
-			const addStory = await fetch(
-				`${import.meta.env.VITE_APP_URL}api/v1/highlights/${result.highlight._id
-				}/add`,
-				{
-					method: 'POST',
-					headers: {
-						Authorization: `${userData.data.token}`,
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						storyId: storyID,
-					}),
-					redirect: 'follow',
-				}
-			);
-			return addStory.json();
-		}
-		Promise.all(selectedIDs.map((item) => sendStories(item._id)));
-		postProfile(selectedIDs, currentID, result, userData, setMessage, setHighlights);
-	} catch (error) {
-		console.error(error);
-	} finally {
-		setSendLoading(false);
-		navigate(-1);
-		handleClose();
-	}
-}
-
-async function postProfile(
-	selectedIDs: ProfileStories[],
-	currentID: number,
-	result: any,
-	userData: User,
-	setMessage: (value: string) => void,
-	setHighlights: (value: any) => void
-) {
+export const postHighlightsProfile = async (data: any, result: any) => {
 	const formData = new FormData();
-	const blobImage = await fetch(selectedIDs[currentID].imageUrl).then((req) =>
+	const blobImage = await fetch(data.selectedIDs[data.currentID].imageUrl).then((req) =>
 		req.blob()
 	);
 	formData.append('image', blobImage, 'profileImage');
 	try {
-		const response = await fetch(
-			`${import.meta.env.VITE_APP_URL}api/v1/highlights/${result.highlight._id
-			}/profile-pic`,
-			{
-				method: 'POST',
+		const res = await sendRequest({
+			baseUrl: `${import.meta.env.VITE_APP_URL}`,
+			endPoint: `/highlights/${result.highlight._id}/profile-pic`,
+			configs: {
+				method: "POST",
 				headers: {
-					Authorization: `${userData.data.token}`,
+					"Authorization": data.token,
 				},
-				body: formData,
-				redirect: 'follow',
+				body: formData
 			}
-		);
-		const postResult = await response.json();
-		setHighlights((prev: any) => [...prev, postResult.highlight])
+		})
+		return res;
 	} catch (error) {
-		console.error(error);
-	} finally {
-		setMessage('Highligh Added Successfully');
+		console.error(error)
+	}
+}
+
+export const highlightDelete = async (data: any) => {
+	try {
+		const res = await sendRequest({
+			baseUrl: `${import.meta.env.VITE_APP_URL}`,
+			endPoint: `/highlights/${data.highlights[data.currentHighLight]._id}`,
+			configs: {
+				method: "DELETE",
+				headers: {
+					"Authorization": data.token,
+					'Content-Type': 'application/json',
+				},
+			}
+		})
+		return res;
+	} catch (error) {
+		console.error(error)
+	}
+}
+
+const removeHighlight = async (data: any, storyId: string) => {
+	const raw = JSON.stringify({
+		storyId: storyId
+	})
+	try {
+		const res = await sendRequest({
+			baseUrl: `${import.meta.env.VITE_APP_URL}`,
+			endPoint: `highlights/${data.highlights[data.currentHighLight]._id}/remove`,
+			configs: {
+				method: "PUT",
+				headers: {
+					Authorization: `${data.token}`,
+					'Content-Type': 'application/json',
+				},
+				body: raw
+			}
+		})
+		return res;
+	} catch (error) {
+		console.error(error)
+	}
+}
+
+export const highlightEdit = async (data: any) => {
+	const raw = JSON.stringify(data)
+	try {
+		const res = await sendRequest({
+			baseUrl: `${import.meta.env.VITE_APP_URL}`,
+			endPoint: `highlights/${data.highlights[data.currentHighLight]._id}`,
+			configs: {
+				method: "PUT",
+				headers: {
+					Authorization: `${data.token}`,
+					'Content-Type': 'application/json',
+				},
+				body: raw
+			}
+		})
+		await Promise.all(data.highLightStories.map((item: any) => removeHighlight(data, item._id)));
+		const result = await postHighlightsProfile(data, res)
+		return result;
+	} catch (error) {
+		console.error(error)
 	}
 }

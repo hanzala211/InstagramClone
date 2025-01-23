@@ -4,10 +4,9 @@ import { usePost } from "../../context/PostContext";
 import { ActiveChatInfoSVG, ChatIcon, ChatInfoSVG, ChatSearchIcon, CrossIcon } from "../../assets/Constants";
 import { useChat } from "../../context/ChatContext";
 import { useUser } from "../../context/UserContext";
-import { fetchUserDataOnClick } from "../../services/searchProfile";
 import { onCropImage } from "../../utils/helper";
-import { createPost, updatePost } from "../../services/post";
-import { useSearch } from "../../context/SearchContext";
+import { useAuth } from "../../context/AuthContext";
+import { getDataOnClick } from "../../services/searchProfile";
 
 interface PageHeaderProps {
     isArrowNeeded?: boolean;
@@ -21,9 +20,9 @@ interface PageHeaderProps {
 }
 
 export const PageHeader: React.FC<PageHeaderProps> = ({ isArrowNeeded, isHomePage, isInbox, isChat, isChatting, isCross, isDetails, isCreating }) => {
-    const { setSelectedPost, setComments, setSelectedImage, croppedAreas, setCroppedImages, selectedImage, setCurrentIndex, setLoading, setIsCaption, croppedImages, setIsShared, setCaptionValue, captionValue, isShared, setShareLoading, selectedPost } = usePost();
-    const { setSelectedProfile } = useSearch();
-    const { userData, setMainLoading, setMessage, setUserPosts } = useUser();
+    const { setSelectedPost, setComments, setSelectedImage, croppedAreas, setCroppedImages, selectedImage, setCurrentIndex, setLoading, setIsCaption, setIsShared, setCaptionValue, captionValue, isShared, setShareLoading, selectedPost, createPosts, updatePost } = usePost();
+    const { setMessage } = useUser();
+    const { userData, setMainLoading, setSelectedProfile, token } = useAuth();
     const { notifications, selectedChat, setIsChatSearch, isInfoOpen, setIsInfoOpen } = useChat();
     const navigate = useNavigate();
 
@@ -43,8 +42,25 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ isArrowNeeded, isHomePag
         }, 300);
     };
 
+    const fetchUserDataOnClick = async () => {
+        try {
+            setMainLoading(true);
+            const res = await getDataOnClick({
+                username: selectedChat?.userName,
+                token
+            })
+            setSelectedProfile(res.data[0]);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setTimeout(() => {
+                setMainLoading(false);
+            }, 1000);
+        }
+    }
+
     function handleUserClick() {
-        fetchUserDataOnClick(selectedChat?.userName, userData, null, setSelectedProfile, setMainLoading);
+        fetchUserDataOnClick();
         setMainLoading(true);
     };
 
@@ -54,9 +70,9 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ isArrowNeeded, isHomePag
 
     function handlePostAction() {
         if (isCreating) {
-            createPost(setShareLoading, setIsShared, croppedImages, userData, captionValue, setCaptionValue, true, navigate, setUserPosts);
+            createPosts(true)
         } else {
-            updatePost(setShareLoading, setIsShared, null, userData, captionValue, selectedPost, setMessage, navigate, setCaptionValue);
+            updatePost(null);
         }
     };
 

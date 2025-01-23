@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { UserModal } from "./UserModal";
 import { Skeleton } from "../helpers/Skeleton";
 import { Overlay } from "../helpers/Overlay";
-import { fetchFollowers, fetchFollowing } from "../../services/followerModal";
-import { useSearch } from "../../context/SearchContext";
+import { getFollowers } from "../../services/followerModal";
+import { useAuth } from "../../context/AuthContext";
 
 interface UserFollowModalProps {
     isFollowerModalOpen: boolean;
@@ -13,9 +13,9 @@ interface UserFollowModalProps {
     setIsFollowingModalOpen: (value: boolean) => void
 }
 
-export const UserFollowModal: React.FC<UserFollowModalProps> =({ isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen }) => {
-    const { userData, userFollowers, setUserFollowers, userFollowing, setUserFollowing } = useUser();
-    const { setSelectedProfile } = useSearch();
+export const UserFollowModal: React.FC<UserFollowModalProps> = ({ isFollowerModalOpen, setIsFollowerModalOpen, isFollowingModalOpen, setIsFollowingModalOpen }) => {
+    const { userFollowers, setUserFollowers, userFollowing, setUserFollowing } = useUser();
+    const { userData, setSelectedProfile, token } = useAuth()
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [modalType, setModalType] = useState<string>("");
 
@@ -29,10 +29,10 @@ export const UserFollowModal: React.FC<UserFollowModalProps> =({ isFollowerModal
     useEffect(() => {
         if (isFollowerModalOpen) {
             setModalType("followers");
-            fetchFollowers(setIsLoading, userData, setUserFollowers);
+            fetchFollowers();
         } else if (isFollowingModalOpen) {
             setModalType("following");
-            fetchFollowing(setIsLoading, userData, setUserFollowing);
+            fetchFollowing();
         }
     }, [isFollowerModalOpen, isFollowingModalOpen, userData, setUserFollowers, setUserFollowing]);
 
@@ -43,6 +43,34 @@ export const UserFollowModal: React.FC<UserFollowModalProps> =({ isFollowerModal
         } else if (isFollowingModalOpen) {
             setIsFollowingModalOpen(false);
             setTimeout(() => setUserFollowing([]), 900);
+        }
+    }
+
+    async function fetchFollowers() {
+        try {
+            setIsLoading(true);
+            const res = await getFollowers({
+                token
+            })
+            setUserFollowers(res.data);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    async function fetchFollowing() {
+        try {
+            setIsLoading(true);
+            const res = await getFollowers({
+                token
+            })
+            setUserFollowing(res.data);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
         }
     }
 

@@ -3,9 +3,9 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { Loader } from "../helpers/Loader";
 import { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
-import { fetchArchive } from "../../services/archive";
 import { ProfileStories } from "../../types/stories";
 import { formatDateString, formatMonth } from "../../utils/helper";
+import { useAuth } from "../../context/AuthContext";
 
 interface ArchivesModalProps {
     selectStatus: boolean;
@@ -30,12 +30,12 @@ export const ArchivesModal: React.FC<ArchivesModalProps> = ({
     setSelectedIDs,
     left,
 }) => {
-    const { userData } = useUser();
-    const [loadingArchives, setLoadingArchives] = useState<boolean>(false);
+    const { userData } = useAuth();
+    const { fetchArchives, loadingArchives } = useUser()
     const [archives, setArchives] = useState<ProfileStories[]>([]);
 
     useEffect(() => {
-        fetchArchive(setLoadingArchives, userData, setArchives);
+        fetchArchives();
     }, [userData]);
 
     return (

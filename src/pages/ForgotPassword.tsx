@@ -1,32 +1,19 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useUser } from "../context/UserContext";
+import { Link } from "react-router-dom";
 import { Footer } from "../components/helpers/Footer";
 import { Loader } from "../components/helpers/Loader";
 import { InputLabel } from "../components/helpers/InputLabel";
 import { ForgetPassword } from "../assets/Constants";
-import { forgotPassword, resetPassword } from "../services/userAuth";
 import { FormType } from "../types/authType";
-
-interface ForgotResultType {
-    status: string;
-    data: string;
-}
+import { useAuth } from "../context/AuthContext";
 
 export const ForgotPassword: React.FC = () => {
-    const { setUserData } = useUser();
-    const [emailAddress, setEmailAddress] = useState<string>("");
-    const [codeValue, setCodeValue] = useState<string>("")
-    const [newPassword, setNewPassword] = useState<string>("")
-    const [loading, setLoading] = useState<boolean>(false)
-    const [forgotResult, setForgotResult] = useState<ForgotResultType | null>(null)
-    const navigate = useNavigate()
+    const { forgotResult, email, setEmail, codeValue, setCodeValue, password, setPassword, forgotPassword, loading, resetPassword } = useAuth()
 
     const forgotForm: FormType[] = [
         {
-            onChange: (e: any) => setEmailAddress(e.target.value),
+            onChange: (e: any) => setEmail(e.target.value),
             text: "Email Address",
-            value: emailAddress,
+            value: email,
             type: "email"
         }
     ]
@@ -40,9 +27,9 @@ export const ForgotPassword: React.FC = () => {
             type: "email"
         },
         {
-            onChange: (e: any) => setNewPassword(e.target.value),
+            onChange: (e: any) => setPassword(e.target.value),
             text: "New Password",
-            value: newPassword,
+            value: password,
             type: "password"
         }
     ]
@@ -61,13 +48,13 @@ export const ForgotPassword: React.FC = () => {
                                 {forgotForm.map((item, index) => (
                                     <InputLabel key={index} onChange={item.onChange} value={item.value} text={item.text} type={item.type} />
                                 ))}
-                                <button onClick={() => forgotPassword(emailAddress, setLoading, setForgotResult)} className="my-3 bg-[#0094f4] py-1.5 hover:opacity-60 transition duration-200 rounded-lg">Send Reset Code</button></>
+                                <button onClick={forgotPassword} className="my-3 bg-[#0094f4] py-1.5 hover:opacity-60 transition duration-200 rounded-lg">Send Reset Code</button></>
                                 :
                                 <>
                                     {resetForm.map((item, index) => (
                                         <InputLabel key={index} onChange={item.onChange} value={item.value} text={item.text} type={item.type} />
                                     ))}
-                                    <button onClick={() => resetPassword(emailAddress, codeValue, newPassword, setLoading, navigate)} className="my-3 bg-[#0094f4] py-1.5 hover:opacity-60 transition duration-200 rounded-lg">Change Password</button></>
+                                    <button onClick={resetPassword} className="my-3 bg-[#0094f4] py-1.5 hover:opacity-60 transition duration-200 rounded-lg">Change Password</button></>
                             }
                             <div className="relative">
                                 <h2 className="absolute z-[20] left-1/2 -translate-x-1/2 -top-[0.5rem] bg-[#000] p-3 text-[13px] rounded-full text-[#A8A8A8]">OR</h2>

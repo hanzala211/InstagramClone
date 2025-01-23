@@ -6,8 +6,8 @@ import { IoSaveOutline } from "react-icons/io5";
 import { PostModal } from "../post/PostModal";
 import { usePost } from "../../context/PostContext";
 import { useSearch } from "../../context/SearchContext";
-import { useHome } from "../../context/HomeContext";
 import { PostSliderButtons } from "../post/PostSliderButtons";
+import { useAuth } from "../../context/AuthContext";
 
 interface ProfileTabsProps {
     isPosts?: boolean;
@@ -17,10 +17,10 @@ interface ProfileTabsProps {
 }
 
 export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isSaved, isSearchPosts }) => {
-    const { setSelectedPost, setComments } = usePost()
-    const { setPage, setTotalPages } = useHome()
-    const { searchUserPosts, selectedProfile } = useSearch()
-    const { userPosts, userData, userSaves } = useUser();
+    const { setSelectedPost, setComments, userPosts, setPage, setTotalPages } = usePost()
+    const { searchUserPosts } = useSearch()
+    const { userSaves } = useUser();
+    const { selectedProfile, userData } = useAuth()
     const [isPostOpen, setIsPostOpen] = useState<boolean>(false);
     const [currentPost, setCurrentPost] = useState<number | any>(null);
     const reversedPosts = userPosts?.slice().reverse() || [];
