@@ -99,6 +99,9 @@ export const AuthProvider: React.FC<ContextChild> = ({ children }) => {
             setMainLoading(true);
             setUserData(null);
             const res = await me({ token: localitem })
+            if (res.status !== "success") {
+                navigate("/login")
+            }
             setUserData({
                 status: res.status,
                 data: {

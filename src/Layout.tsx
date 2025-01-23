@@ -21,12 +21,16 @@ export function Layout() {
     useEffect(() => {
         const localitem: string | null = JSON.parse(localStorage.getItem("token") || "null");
         if (localitem) {
-            setToken(localitem)
+            setToken(localitem);
             fetchMe(localitem);
-            if (params.username && location.pathname.split("/")[1] === "search") {
-                fetchUserDataOnClick(params.username, localitem)
-            }
-            else {
+
+            const currentPath = location.pathname;
+
+            if (currentPath === "/") {
+                navigate("/home");
+            } else if (params.username && currentPath.split("/")[1] === "search") {
+                fetchUserDataOnClick(params.username, localitem);
+            } else {
                 setTimeout(() => {
                     setMainLoading(false);
                 }, 1000);
@@ -35,6 +39,7 @@ export function Layout() {
             navigate("/login");
         }
     }, []);
+
 
 
     useEffect(() => {

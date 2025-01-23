@@ -42,18 +42,20 @@ export const UserProvider: React.FC<ContextChild> = ({ children }) => {
     const fetchNote = async () => {
         try {
             setNoteLoading(true);
-            const res = await getNote({
-                token
-            })
-            if (res.message !== 'Note not found or expired.') {
+
+            const res = await getNote({ token });
+
+            if (res.message === 'Note not found or expired.') {
+                setNote([]);
+            } else {
                 setNote(res.note);
             }
         } catch (error: any) {
-            console.error(error)
+            console.error('An error occurred while fetching the note:', error);
         } finally {
             setNoteLoading(false);
         }
-    }
+    };
 
     const fetchArchives = async () => {
         try {
@@ -61,7 +63,6 @@ export const UserProvider: React.FC<ContextChild> = ({ children }) => {
             const res = await getArchives({
                 token
             })
-
             if (res.message !== 'No archives found.') {
                 setArchives(res.archives);
             }

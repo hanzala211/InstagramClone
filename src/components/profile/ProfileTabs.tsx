@@ -64,7 +64,7 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ isPosts, isTagged, isS
                     [
                         isPosts && reversedPosts,
                         isTagged && reversedPosts,
-                        isSaved && reversedSavedPosts,
+                        isSaved && userSaves,
                         isSearchPosts && reversedUserPosts
                     ]
                         .find((posts) => posts)

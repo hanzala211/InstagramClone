@@ -108,41 +108,43 @@ export const PostProvider: React.FC<ContextChild> = ({ children }) => {
 
     const fetchComments = async (signal: any) => {
         try {
-            setComments([]);
-            setCommentsLoading(true);
-            const res = await getComments({
-                selectedPost,
-                token,
-                signal,
-                page: page
-            })
-            if (res.data.comments.length === 0) {
-                setCommentsLoading(false);
-            }
-            setTotalPages(res.data.totalPages);
-            setComments((prev: any) => {
-                const newComments = res.data.comments.filter((newComment: any) => {
-                    return !prev.some(
-                        (existingComment: any) => existingComment._id === newComment._id
-                    );
-                });
-                return [...newComments, ...prev];
-            });
-
-            await Promise.all(
-                res.data.comments.map((comment: any) => {
-                    return new Promise((resolve) => {
-                        const img = new Image();
-                        img.src = comment.user.profilePic;
-                        img.onload = resolve;
-                        img.onerror = resolve;
-                    });
+            if (selectedPost !== null) {
+                setComments([]);
+                setCommentsLoading(true);
+                const res = await getComments({
+                    selectedPost,
+                    token,
+                    signal,
+                    page: page
                 })
-            ).finally(() => {
-                if (!signal.aborted) {
+                if (res.data.comments.length === 0) {
                     setCommentsLoading(false);
                 }
-            });
+                setTotalPages(res.data.totalPages);
+                setComments((prev: any) => {
+                    const newComments = res.data.comments.filter((newComment: any) => {
+                        return !prev.some(
+                            (existingComment: any) => existingComment._id === newComment._id
+                        );
+                    });
+                    return [...newComments, ...prev];
+                });
+
+                await Promise.all(
+                    res.data.comments.map((comment: any) => {
+                        return new Promise((resolve) => {
+                            const img = new Image();
+                            img.src = comment.user.profilePic;
+                            img.onload = resolve;
+                            img.onerror = resolve;
+                        });
+                    })
+                ).finally(() => {
+                    if (!signal.aborted) {
+                        setCommentsLoading(false);
+                    }
+                });
+            }
         } catch (error: any) {
             if (error.name !== 'AbortError' && error.name !== 'TypeError') {
                 console.error('Fetch failed:', error);
@@ -201,8 +203,10 @@ export const PostProvider: React.FC<ContextChild> = ({ children }) => {
             } else {
                 setMessage(res.message);
             }
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            if (error.message !== "AbortError: signal is aborted without reason") {
+                console.error(error);
+            }
         }
     }
 
