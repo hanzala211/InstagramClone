@@ -7,14 +7,15 @@ import { postSave, postUnsave } from "../../services/post";
 export const SavedComponent = () => {
     const { selectedPost, isSaved, setIsSaved } = usePost()
     const { setMessage } = useUser()
-    const { userData, setUserData, token } = useAuth()
+    const { setUserData, token } = useAuth()
 
     const savePost = async () => {
         try {
+            setIsSaved(true);
             const res = await postSave({
                 token,
                 selectedPost
-            })
+            });
             if (res.status !== 'fail') {
                 setUserData((prev: any) => ({
                     ...prev,
@@ -22,9 +23,8 @@ export const SavedComponent = () => {
                         ...prev.data,
                         user: {
                             ...prev.data.user,
-                            savedPosts: prev.data.user.savedPosts.includes(res.savedPosts[0])
-                                ? [...prev.data.user.savedPosts]
-                                : [...prev.data.user.savedPosts, ...res.savedPosts],
+                            savedPosts: prev.data.user.savedPosts.includes(res.savedPosts[res.savedPosts.length - 1])
+                                ? [...prev.data.user.savedPosts] : [...prev.data.user.savedPosts, res.savedPosts[res.savedPosts.length - 1]],
                         },
                     },
                 }));
@@ -33,16 +33,18 @@ export const SavedComponent = () => {
         } catch (error) {
             console.error(error);
             setMessage('Failed');
-            setIsSaved((prev: any) => !prev);
+            setIsSaved(false);
         }
-    }
+    };
 
     const unSavePost = async () => {
         try {
+            setIsSaved(false);
             const res = await postUnsave({
                 token,
                 selectedPost
-            })
+            });
+            console.log(res);
             if (res.status !== 'fail') {
                 setUserData((prev: any) => ({
                     ...prev,
@@ -50,11 +52,9 @@ export const SavedComponent = () => {
                         ...prev.data,
                         user: {
                             ...prev.data.user,
-                            savedPosts: prev.data.user.savedPosts.includes(res.savedPosts[0])
-                                ? prev.data.user.savedPosts.filter(
-                                    (item: any) => item !== res.savedPosts[0]
-                                )
-                                : [...prev.data.user.savedPosts, ...res.savedPosts],
+                            savedPosts: prev.data.user.savedPosts.filter(
+                                (item: any) => item !== selectedPost?._id
+                            ),
                         },
                     },
                 }));
@@ -63,9 +63,9 @@ export const SavedComponent = () => {
         } catch (error) {
             console.error(error);
             setMessage('Failed');
-            setIsSaved((prev: any) => !prev);
+            setIsSaved(true);
         }
-    }
+    };
 
     return <>
         {!isSaved ?

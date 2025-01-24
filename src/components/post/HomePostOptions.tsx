@@ -21,9 +21,9 @@ interface HomePostOptionsProps {
 
 export const HomePostOptions: React.FC<HomePostOptionsProps> = ({ likedPosts, index, item, setLikedPosts, savedPosts, setCurrentPost, setSavedPosts, setIsPostOpen }) => {
     const { setMessage, innerWidth } = useUser()
-    const { userData, setUserData, token } = useAuth()
+    const { setUserData, token } = useAuth()
     const { setSelectedPost, setIsShareOpenHome } = usePost()
-    const { setHomePosts, likeHomePost, disLikeHomePost } = useHome()
+    const { likeHomePost, disLikeHomePost } = useHome()
 
     const savePost = async () => {
         try {

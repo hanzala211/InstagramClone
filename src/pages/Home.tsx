@@ -10,14 +10,29 @@ import { HomePost } from "../components/post/HomePost"
 import { HomePostSkeleton } from "../components/helpers/HomePostSkeleton";
 import { useAuth } from "../context/AuthContext";
 import { HomeStories } from "../components/story/HomeStories";
+import { useLocation } from "react-router-dom";
 
 export const Home: React.FC = () => {
     const { homeStories, setHomeStories, homePosts, setHomePosts } = useHome();
     const { userData, token } = useAuth();
-    const [isPostsLoading, setIsPostsLoading] = useState<boolean>(false);
+    const [isPostsLoading, setIsPostsLoading] = useState<boolean>(true);
     const [isPostOpen, setIsPostOpen] = useState<boolean>(false);
     const [currentPost, setCurrentPost] = useState<number | any>(0);
     const [hasMore, setHasMore] = useState<boolean>(true);
+    const location = useLocation()
+
+    useEffect(() => {
+        if (location.pathname === '/home') {
+            const firstVisit = sessionStorage.getItem('firstVisitHome');
+
+            if (!firstVisit) {
+                sessionStorage.setItem('firstVisitHome', 'true');
+            } else {
+                setIsPostsLoading(false);
+            }
+        }
+    }, [location.pathname]);
+
 
     useEffect(() => {
         if (homePosts.length === 0) {

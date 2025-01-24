@@ -28,6 +28,7 @@ export const Post: React.FC<PostProps> = ({ isPostOpen, setIsPostOpen, postData,
     const { userData, setMainLoading, token, setSelectedProfile } = useAuth();
     const [isHovered, setIsHovered] = useState<boolean>(false);
     const commentRef = useRef<HTMLInputElement | null>(null);
+
     useEffect(() => {
         if (selectedPost !== null) {
             const isUserPost = selectedPost?.postBy?._id === userData.data.user._id;
