@@ -1,5 +1,3 @@
-import { ProfileStories } from "../types/stories";
-import { User } from "../types/user";
 import { sendRequest } from "../utils/sendRequest";
 
 export const getArchives = async (data: any) => {

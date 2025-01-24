@@ -9,6 +9,7 @@ import { useHome } from "../context/HomeContext";
 import { HomePost } from "../components/post/HomePost"
 import { HomePostSkeleton } from "../components/helpers/HomePostSkeleton";
 import { useAuth } from "../context/AuthContext";
+import { HomeStories } from "../components/story/HomeStories";
 
 export const Home: React.FC = () => {
     const { homeStories, setHomeStories, homePosts, setHomePosts } = useHome();
