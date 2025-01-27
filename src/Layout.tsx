@@ -37,6 +37,7 @@ export function Layout() {
             }
         } else {
             navigate("/login");
+            setMainLoading(false)
         }
     }, []);
 
@@ -62,12 +63,13 @@ export function Layout() {
                 token: localitem
             })
             setSelectedProfile(res.data[0]);
+            if (res) {
+                setTimeout(() => {
+                    setMainLoading(false);
+                }, 1000);
+            }
         } catch (error) {
             console.error(error);
-        } finally {
-            setTimeout(() => {
-                setMainLoading(false);
-            }, 1000);
         }
     }
 

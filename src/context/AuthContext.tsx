@@ -111,6 +111,7 @@ export const AuthProvider: React.FC<ContextChild> = ({ children }) => {
                     },
                 },
             });
+            setMainLoading(false)
         } catch (error) {
             console.error(error);
             navigate("/login")
