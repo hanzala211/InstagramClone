@@ -5,11 +5,12 @@ import { deleteChatForUser } from "../../services/chat"
 import { UserThreads } from "./UserThreads"
 import { useState } from "react"
 import { Loader } from "../helpers/Loader"
+import { useAuth } from "../../context/AuthContext"
 
 export const UserChatInfo: React.FC = () => {
     const { isInfoOpen, selectedChat, setThreads } = useChat()
-    const { userData } = useUser()
     const [isDeleting, setIsDeleting] = useState<boolean>(false)
+    const { userData } = useAuth()
     const navigate = useNavigate()
 
     return <div

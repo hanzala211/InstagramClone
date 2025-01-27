@@ -6,7 +6,6 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { handleSharePost } from "../../services/chat";
 import { usePost } from "../../context/PostContext";
-import { UserInfo } from "../../types/user";
 import { Post } from "../../types/postType";
 import { Notification } from "../../types/chatType";
 import { useAuth } from "../../context/AuthContext";
