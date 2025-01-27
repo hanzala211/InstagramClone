@@ -39,7 +39,7 @@ export function ChatUsersSidebar() {
                 }} className={`${note?.length === 0 ? "cursor-pointer" : ""}`}>
                     <NoteDiv notes={note} isChat={true} />
                 </span>
-                <img src={userData.data.user.profilePic} className="w-16 rounded-full" alt="ProfilePic" />
+                <img src={userData?.data?.user.profilePic} className="w-16 rounded-full" alt="ProfilePic" />
                 <p className="text-[#A8A8A8] text-[13px] ml-1 mt-1">Your Note</p>
             </div>
             <h1 className="md:mt-8 md:mb-3 text-[17px] w-full px-5 font-semibold">Messages</h1>

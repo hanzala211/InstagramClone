@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { UserModal } from "./UserModal";
 import { Skeleton } from "../helpers/Skeleton";
 import { Overlay } from "../helpers/Overlay";
-import { getFollowers } from "../../services/followerModal";
+import { getFollowers, getFollowing } from "../../services/followerModal";
 import { useAuth } from "../../context/AuthContext";
 
 interface UserFollowModalProps {
@@ -63,7 +63,7 @@ export const UserFollowModal: React.FC<UserFollowModalProps> = ({ isFollowerModa
     async function fetchFollowing() {
         try {
             setIsLoading(true);
-            const res = await getFollowers({
+            const res = await getFollowing({
                 token
             })
             setUserFollowing(res.data);
